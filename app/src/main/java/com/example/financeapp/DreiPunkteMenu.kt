@@ -1,0 +1,123 @@
+package com.example.financeapp
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.financeapp.ui.theme.Emerald
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+
+@Composable
+fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverviewClicked: () -> Unit, onGoalHistoryClicked: () -> Unit, onYourQuotesClicked: () -> Unit) {
+
+    var isExpanded by remember { mutableStateOf(expanded) }
+
+    DropdownMenu (
+        expanded = expanded,
+        onDismissRequest = onDismissRequested,
+        modifier = Modifier
+            .background (
+                color = Emerald,
+                shape = RoundedCornerShape(12.dp)
+            ),
+        containerColor = Color.Transparent
+
+    ) {
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "Overview",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onOverviewClicked()
+                }
+            )
+
+            Divider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "Goal History",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onGoalHistoryClicked()
+                }
+            )
+
+            Divider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "Your Quotes",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onYourQuotesClicked()
+                }
+            )
+        }
+    }
+}
