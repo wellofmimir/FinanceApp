@@ -56,8 +56,11 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
     )
 
     var isExpanded by remember { mutableStateOf(expanded) }
+    var errorInInput by remember { mutableStateOf(false) }
     var nameOfGoalText by remember { mutableStateOf("") }
-    var amount by remember { mutableStateOf(123.2f) }
+    var amount by remember { mutableStateOf(0.0f) }
+    var feedbackTrigger by remember { mutableStateOf(0) } // für den LaunchedEffect weiter unten
+    var amountText by remember { mutableStateOf("") }
 
     DropdownMenu (
         expanded = expanded,
@@ -127,7 +130,10 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
                 TextField (
                     value = nameOfGoalText,
-                    onValueChange = { newText -> nameOfGoalText = newText },
+                    onValueChange = { newText ->
+
+                        nameOfGoalText = newText
+                    },
                     singleLine = true,
                     colors = TextFieldDefaults.colors (
                         unfocusedContainerColor = Color.Transparent,
@@ -160,11 +166,13 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .fillMaxWidth(0.3f)
                 )
 
-                var amountText by remember { mutableStateOf("") }
 
                 TextField (
                     value = amountText,
                     onValueChange = { newText ->
+
+                        if (amountText.isEmpty())
+                            amount = 0.0f
 
                         val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
@@ -206,8 +214,19 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
             ) {
                 Button (
                     onClick = {
-                        addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount)
-                        confirmed = true
+
+                        if (!nameOfGoalText.isEmpty() && amount > 0.0f) {
+
+                            confirmed = true
+                            addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount)
+
+                            amount = 0.0f
+                            nameOfGoalText = ""
+                        } else {
+                            errorInInput = true
+                        }
+
+                        feedbackTrigger++
                     },
                     colors = ButtonDefaults.buttonColors (
                         containerColor = Color.Transparent,
@@ -219,15 +238,23 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     )
                 ) {
                     Text (
-                        text = if (confirmed) "✓" else "Add"
+                        text = when {
+                            errorInInput -> "x"
+                            confirmed -> "✓"
+                            else -> "Add"
+                        }
                     )
                 }
 
-                if (confirmed) {
-                    LaunchedEffect (
-                        Unit
-                    ) {
-                        delay (1000)
+                LaunchedEffect (
+                    feedbackTrigger
+                ) {
+                    delay (1000)
+                    errorInInput = false
+
+                    if (confirmed) {
+                        amountText = ""
+                        nameOfGoalText = ""
                         onFinished()
                     }
                 }

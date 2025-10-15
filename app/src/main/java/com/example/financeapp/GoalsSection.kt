@@ -116,11 +116,11 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
             if (allGoals.isEmpty()) {
 
-                goals.add(Goal(1, "my awesome goal", 0.0f))
-                goals.add(Goal(2, "example goal #2", 0.0f))
-                goals.add(Goal(3, "pay the Loch Ness Monster", 0.0f))
-                goals.add(Goal(4, "buy a Toyota Corolla", 0.0f))
-                goals.add(Goal(5, "etf investment", 0.0f))
+                goals.add(Goal(1, "my awesome goal", 1100.0f))
+                goals.add(Goal(2, "example goal #2", 12.0f))
+                goals.add(Goal(3, "pay the Loch Ness Monster", 3.50f))
+                goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f))
+                goals.add(Goal(5, "etf invest", 400.0f))
             }
             else {
                 goals.addAll(allGoals)
@@ -161,7 +161,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
                     Text(
                         fontSize = 18.sp,
-                        text = item.goal
+                        text = item.goal + ": " + item.amount
                     )
                 }
             }
