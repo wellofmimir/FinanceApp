@@ -54,6 +54,13 @@ class MainActivity : ComponentActivity() {
                 )
 
                 GoalsSection()
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(1.dp)
+                )
+
+                RecemtlyCompletedGoalsSection()
             }
         }
     }

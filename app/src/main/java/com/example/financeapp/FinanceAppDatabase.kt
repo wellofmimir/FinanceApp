@@ -3,14 +3,19 @@ package com.example.financeapp
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.remember
 
 data class Goal (
+
     val id: Int,
     val goal: String,
-    val amount: Float
+    val amount: Float,
+    val idStatus: Int
+)
+
+data class GoalStatus (
+
+    val id: Int,
+    val description: String
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
@@ -32,10 +37,19 @@ class FinanceAppDatabase private constructor(context: Context) {
     private val databasePath = context.getDatabasePath("userdatabase.sqlite")
 
     init {
+
+        //in SQLite sind Foreign-Keys standardmäßig ausgestellt, also müssen wir diese anschalten
+        database.execSQL("PRAGMA foreign_keys = ON;")
+
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, idStatus INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, goalID INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL)".trimIndent())
+
+        //einfügen von Werten in die goalStatus-Tabelle
+        database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
+        database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
     }
 
     fun updateUser(name: String) {
@@ -96,6 +110,23 @@ class FinanceAppDatabase private constructor(context: Context) {
         return user
     }
 
+    fun getIDGoalStatus(description: String): GoalStatus? {
+
+        val cursor = database.rawQuery("SELECT id, description FROM goalStatus WHERE description = ?", arrayOf(description))
+        var status: GoalStatus? = null
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+                val id = it.getInt(it.getColumnIndexOrThrow("id"))
+                val descriptionFromQuery = it.getString(it.getColumnIndexOrThrow("description"))
+                return GoalStatus(id, descriptionFromQuery)
+            }
+        }
+
+        return null
+    }
+
     fun getGoals(): List<Goal> {
 
         val cursor = database.rawQuery("SELECT * FROM goals", null)
@@ -106,8 +137,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val goal = cursor.getString(cursor.getColumnIndexOrThrow("goal"))
             val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
+            val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
 
-            goals.add(Goal (id, goal, amount))
+            goals.add(Goal (id, goal, amount, idStatus))
         }
 
         cursor.close()

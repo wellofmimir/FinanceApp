@@ -103,7 +103,6 @@ fun HeaderSection(context: Context = LocalContext.current) {
                     text = headerText,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
-
                 )
             }
 

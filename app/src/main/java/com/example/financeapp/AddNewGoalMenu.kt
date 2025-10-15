@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -235,7 +236,9 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     border = BorderStroke (
                         width = 1.dp,
                         color = Color.White
-                    )
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(0.3f)
                 ) {
                     Text (
                         text = when {

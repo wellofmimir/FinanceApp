@@ -33,7 +33,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.LaunchedEffect
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun GoalsSection(context: Context = LocalContext.current) {
 
@@ -51,13 +51,13 @@ fun GoalsSection(context: Context = LocalContext.current) {
     var newGoalEntered by remember { mutableStateOf(true) }
 
     Column (
-        modifier = Modifier.padding(2.dp)
     ) {
         Row (
             modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = Pistachio
+                color = Pistachio,
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             ),
         verticalAlignment = Alignment.CenterVertically
         ) {
@@ -116,11 +116,11 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
             if (allGoals.isEmpty()) {
 
-                goals.add(Goal(1, "my awesome goal", 1100.0f))
-                goals.add(Goal(2, "example goal #2", 12.0f))
-                goals.add(Goal(3, "pay the Loch Ness Monster", 3.50f))
-                goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f))
-                goals.add(Goal(5, "etf invest", 400.0f))
+                goals.add(Goal(1, "my awesome goal", 1100.0f, 1))
+                goals.add(Goal(2, "example goal #2", 12.0f, 2))
+                goals.add(Goal(3, "pay the Loch Ness Monster", 3.50f, 1))
+                goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f, 2))
+                goals.add(Goal(5, "etf invest", 400.0f, 2))
             }
             else {
                 goals.addAll(allGoals)
@@ -130,7 +130,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
         if (newGoalEntered) {
 
             goals.take(5).forEach { item ->
-                Row(
+                Row (
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
@@ -143,7 +143,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
                         .padding(horizontal = 36.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
+                    Image (
                         painter = painterResource(R.drawable.bulletpoint_foreground),
                         contentDescription = "Bulletpoint",
                         modifier = Modifier
@@ -154,14 +154,14 @@ fun GoalsSection(context: Context = LocalContext.current) {
                         colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Emerald)
                     )
 
-                    Spacer(
+                    Spacer (
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                     )
 
-                    Text(
+                    Text (
                         fontSize = 18.sp,
-                        text = item.goal + ": " + item.amount
+                        text = item.goal
                     )
                 }
             }
