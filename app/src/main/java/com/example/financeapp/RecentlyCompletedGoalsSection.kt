@@ -30,11 +30,11 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
 
-    val database = remember { FinanceAppDatabase.getInstance(context) }
 
     val recentlyCompletedGoalsSectionViewModel: RecentlyCompletedGoalsSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
+                val database = FinanceAppDatabase.getInstance(context)
                 return RecentlyCompletedGoalsSectionViewModel(database) as T
             }
         }
@@ -92,8 +92,8 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
         goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f, 2))
         goals.add(Goal(5, "etf invest", 400.0f, 2))
 
-        val statusCompleted = database.getIDGoalStatus("Completed")!!
-        goals.removeAll { it.idStatus != statusCompleted.id }
+        val statusCompleted = recentlyCompletedGoalsSectionViewModel.getIDGoalStatus("Completed")
+        goals.removeAll{ it.idStatus != statusCompleted.id }
 
         goals.take(5).forEach { item ->
             Row (

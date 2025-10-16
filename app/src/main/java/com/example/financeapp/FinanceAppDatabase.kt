@@ -146,7 +146,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         return goals
     }
 
-    fun insertGoal(nameOfGoal: String, amount: Float) {
+    fun insertGoal(nameOfGoal: String, amount: Float, goalStatus: GoalStatus) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(nameOfGoal))
         val exists = cursor.moveToFirst()
@@ -155,6 +155,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         val values = ContentValues()
         values.put("goal", nameOfGoal)
         values.put("amount", amount)
+        values.put("idStatus", goalStatus.id)
 
         if (exists) {
              return

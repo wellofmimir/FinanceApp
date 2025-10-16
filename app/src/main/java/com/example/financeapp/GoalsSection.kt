@@ -23,7 +23,6 @@ import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
@@ -33,21 +32,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+
 @Composable
 fun GoalsSection(context: Context = LocalContext.current) {
-
-    val database = remember { FinanceAppDatabase.getInstance(context) }
 
     val goalSectionViewModel: GoalsSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
-                return GoalsSectionViewModel(database) as T
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = GoalRepository(database)
+
+                return GoalsSectionViewModel(repository) as T
             }
         }
     )
 
-    var goals = remember { mutableStateListOf<Goal>() }
+    val goals by goalSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
 
     Column (
@@ -103,8 +105,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
                     AddNewGoalMenu (expanded, onDismissRequest = { expanded = false }, onFinished = {
                         expanded  = false
                         newGoalEntered = true
-                        goals.clear()
-                        goals.addAll(database.getGoals())
+                        goalSectionViewModel.reloadGoals()
                     })
                 }
             }
@@ -112,19 +113,8 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
         LaunchedEffect(Unit) {
 
-            val allGoals = database.getGoals()
-
-            if (allGoals.isEmpty()) {
-
-                goals.add(Goal(1, "my awesome goal", 1100.0f, 1))
-                goals.add(Goal(2, "example goal #2", 12.0f, 2))
-                goals.add(Goal(3, "pay the Loch Ness Monster", 3.50f, 1))
-                goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f, 2))
-                goals.add(Goal(5, "etf invest", 400.0f, 2))
-            }
-            else {
-                goals.addAll(allGoals)
-            }
+            if (goalSectionViewModel.goals.value.isEmpty())
+                goalSectionViewModel.insertExampleGoals()
         }
 
         if (newGoalEntered) {

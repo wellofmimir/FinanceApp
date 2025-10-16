@@ -46,17 +46,16 @@ import androidx.compose.ui.draw.shadow
 @Composable
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
 
-    val database = remember { FinanceAppDatabase.getInstance(context) }
 
     val addNewGoalMenuViewModel: AddNewGoalMenuViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
+                val database = FinanceAppDatabase.getInstance(context)
                 return AddNewGoalMenuViewModel(database) as T
             }
         }
     )
 
-    var isExpanded by remember { mutableStateOf(expanded) }
     var errorInInput by remember { mutableStateOf(false) }
     var nameOfGoalText by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf(0.0f) }
@@ -132,7 +131,6 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 TextField (
                     value = nameOfGoalText,
                     onValueChange = { newText ->
-
                         nameOfGoalText = newText
                     },
                     singleLine = true,
@@ -249,9 +247,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     )
                 }
 
-                LaunchedEffect (
-                    feedbackTrigger
-                ) {
+                LaunchedEffect (feedbackTrigger) {
                     delay (1000)
                     errorInInput = false
 

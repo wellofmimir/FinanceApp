@@ -10,6 +10,9 @@ class AddNewGoalMenuViewModel(private val database: FinanceAppDatabase) : ViewMo
 
     fun newGoalAdded(goal: String, amount: Float) {
 
-        database.insertGoal(goal, amount)
+        database.run {
+            val goalStatus = getIDGoalStatus("InProgress")!!
+            insertGoal(goal, amount, goalStatus)
+        }
     }
 }
