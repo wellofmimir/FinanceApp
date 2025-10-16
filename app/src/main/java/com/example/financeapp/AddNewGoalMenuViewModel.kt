@@ -6,13 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
-class AddNewGoalMenuViewModel(private val database: FinanceAppDatabase) : ViewModel() {
+class AddNewGoalMenuViewModel(private val repository: GoalRepository) : ViewModel() {
 
-    fun newGoalAdded(goal: String, amount: Float) {
-
-        database.run {
-            val goalStatus = getIDGoalStatus("InProgress")!!
-            insertGoal(goal, amount, goalStatus)
-        }
+    fun newGoalAdded(goal: String, amount: Float, statusDescription: String) {
+        repository.insertGoal(goal, amount, statusDescription)
     }
 }

@@ -40,11 +40,10 @@ fun HeaderSection(context: Context = LocalContext.current) {
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
     //Aber der Context darf nicht in dem HeaderSectionViewModel selbst angelegt werden (geht nicht in Compose).
 
-    val database = remember { FinanceAppDatabase.getInstance(context) }
-
     val headersectionViewModel: HeaderSectionViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                val database = FinanceAppDatabase.getInstance(context)
                 return HeaderSectionViewModel(database) as T
             }
         }

@@ -113,6 +113,8 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
         LaunchedEffect(Unit) {
 
+            goalSectionViewModel.reloadGoals()
+
             if (goalSectionViewModel.goals.value.isEmpty())
                 goalSectionViewModel.insertExampleGoals()
         }

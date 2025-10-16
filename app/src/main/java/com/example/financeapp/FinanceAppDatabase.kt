@@ -146,7 +146,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         return goals
     }
 
-    fun insertGoal(nameOfGoal: String, amount: Float, goalStatus: GoalStatus) {
+    fun insertGoal(nameOfGoal: String, amount: Float, goalStatus: String) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(nameOfGoal))
         val exists = cursor.moveToFirst()
@@ -155,10 +155,28 @@ class FinanceAppDatabase private constructor(context: Context) {
         val values = ContentValues()
         values.put("goal", nameOfGoal)
         values.put("amount", amount)
-        values.put("idStatus", goalStatus.id)
+        values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
 
         if (exists) {
              return
+        } else {
+            database.insert("goals", null, values)
+        }
+    }
+
+    fun insertGoal(goal: Goal) {
+
+        val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(goal.goal))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues()
+        values.put("goal", goal.goal)
+        values.put("amount", goal.amount)
+        values.put("idStatus", goal.idStatus)
+
+        if (exists) {
+            return
         } else {
             database.insert("goals", null, values)
         }

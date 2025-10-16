@@ -10,6 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
@@ -23,19 +25,19 @@ import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.graphics.Color
 
 @Composable
 fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
 
-
     val recentlyCompletedGoalsSectionViewModel: RecentlyCompletedGoalsSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
                 val database = FinanceAppDatabase.getInstance(context)
-                return RecentlyCompletedGoalsSectionViewModel(database) as T
+                val repository = GoalRepository(database)
+                return RecentlyCompletedGoalsSectionViewModel(repository) as T
             }
         }
     )
@@ -83,17 +85,8 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
             }
         }
 
-        val goals = remember { mutableStateListOf<Goal>() }
-        //goals.addAll(database.getGoals())
-
-        goals.add(Goal(1, "my awesome goal", 1100.0f, 1))
-        goals.add(Goal(2, "example goal #2", 12.0f, 2))
-        goals.add(Goal(3, "pay the Loch Ness Monster", 3.50f, 1))
-        goals.add(Goal(4, "buy a Toyota Corolla", 19999.0f, 2))
-        goals.add(Goal(5, "etf invest", 400.0f, 2))
-
-        val statusCompleted = recentlyCompletedGoalsSectionViewModel.getIDGoalStatus("Completed")
-        goals.removeAll{ it.idStatus != statusCompleted.id }
+        val goals by recentlyCompletedGoalsSectionViewModel.goals.collectAsState()
+        recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
 
         goals.take(5).forEach { item ->
             Row (

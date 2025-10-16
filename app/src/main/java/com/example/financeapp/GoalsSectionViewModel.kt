@@ -33,7 +33,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun reloadGoals() {
         viewModelScope.launch {
-            val result = repository.getCompletedGoals()
+            val result = repository.getInProgressGoals()
             internGoals.value = result
         }
 

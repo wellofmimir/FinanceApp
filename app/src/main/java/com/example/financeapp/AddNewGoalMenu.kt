@@ -51,7 +51,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
                 val database = FinanceAppDatabase.getInstance(context)
-                return AddNewGoalMenuViewModel(database) as T
+                val repository = GoalRepository(database)
+                return AddNewGoalMenuViewModel(repository) as T
             }
         }
     )
@@ -217,7 +218,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         if (!nameOfGoalText.isEmpty() && amount > 0.0f) {
 
                             confirmed = true
-                            addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount)
+                            addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount, "InProgress")
 
                             amount = 0.0f
                             nameOfGoalText = ""
