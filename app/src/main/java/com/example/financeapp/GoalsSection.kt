@@ -83,7 +83,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
             ) {
                 Image (
                     painter = painterResource(R.drawable.pluszeichen_foreground),
-                    contentDescription = "Punktemenu",
+                    contentDescription = "Pluszeichen",
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
                         .size(80.dp)

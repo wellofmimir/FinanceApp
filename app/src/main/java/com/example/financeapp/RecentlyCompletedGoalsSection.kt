@@ -89,6 +89,7 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
         recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
 
         goals.take(5).forEach { item ->
+
             Row (
                 modifier = Modifier
                     .fillMaxWidth()

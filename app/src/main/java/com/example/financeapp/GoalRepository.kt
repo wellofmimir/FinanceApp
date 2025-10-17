@@ -27,4 +27,18 @@ class GoalRepository(private val database: FinanceAppDatabase) {
 
         return database.getGoals().filter{it.idStatus == completedStatus.id}
     }
+
+    fun getCurrentGoal(): Goal? {
+
+        val goal = database.currentGoal()
+        if (goal == null)
+            return Goal(1, "Test", 12.0f, 1)
+
+        return goal!!
+    }
+
+    fun setCurrentGoal(goal: Goal) {
+
+        return database.setCurrentGoal(goal)
+    }
 }

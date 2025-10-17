@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 class AddNewGoalMenuViewModel(private val repository: GoalRepository) : ViewModel() {
 
     fun newGoalAdded(goal: String, amount: Float, statusDescription: String) {
+
         repository.insertGoal(goal, amount, statusDescription)
     }
 }

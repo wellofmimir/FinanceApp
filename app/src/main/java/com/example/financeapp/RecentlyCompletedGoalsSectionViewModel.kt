@@ -23,6 +23,7 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
     }
 
     fun getCompletedGoals() {
+
         viewModelScope.launch {
             val result = repository.getCompletedGoals()
             internGoals.value = result
