@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,8 +30,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.ColorFilter
 
 @Composable
 fun GoalsSection(context: Context = LocalContext.current) {
@@ -51,68 +53,65 @@ fun GoalsSection(context: Context = LocalContext.current) {
 
     val goals by goalSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
+    var expanded by remember { mutableStateOf(false) }
+    var visible by remember { mutableStateOf(true) }
 
     Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Row (
             modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight(0.15f)
             .background(
                 color = Pistachio,
                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             ),
-        verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
             Text (
                 text = "Stuff you're working on:",
                 fontSize = 22.sp,
                 modifier = Modifier
-                    .weight(0.7f)
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = Pistachio
                     )
-                    .padding(horizontal = 24.dp),
+                    .padding(start = 0.dp, top = 26.dp, end = 0.dp, bottom = 0.dp)
             )
 
-            var expanded by remember { mutableStateOf(false) }
-            var visible by remember { mutableStateOf(true) }
+            Image (
+                painter = painterResource(R.drawable.pluszeichen_foreground),
+                contentDescription = "Pluszeichen",
+                modifier = Modifier
+                    .size(64.dp)
+                    .offset(y = 8.dp, x = 50.dp)
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ){
+                        expanded = true
+                        visible = true
+                    },
+                alignment = Alignment.TopEnd
+            )
 
-            Box (
-
+            this@Row.AnimatedVisibility (
+                visible = visible,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
             ) {
-                Image (
-                    painter = painterResource(R.drawable.pluszeichen_foreground),
-                    contentDescription = "Pluszeichen",
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .size(80.dp)
-                        .padding(top = 12.dp)
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ){
-                            expanded = true
-                            visible = true
-                        }
-                )
-
-                this@Row.AnimatedVisibility (
-                    visible = visible,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    AddNewGoalMenu (expanded, onDismissRequest = { expanded = false }, onFinished = {
-                        expanded  = false
-                        newGoalEntered = true
-                        goalSectionViewModel.reloadGoals()
-                    })
-                }
+                AddNewGoalMenu (expanded, onDismissRequest = { expanded = false }, onFinished = {
+                    expanded  = false
+                    newGoalEntered = true
+                    goalSectionViewModel.reloadGoals()
+                })
             }
         }
 
         LaunchedEffect(Unit) {
-
             goalSectionViewModel.reloadGoals()
 
             if (goalSectionViewModel.goals.value.isEmpty())
@@ -143,7 +142,7 @@ fun GoalsSection(context: Context = LocalContext.current) {
                                 color = Pistachio
                             )
                             .size(24.dp),
-                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Emerald)
+                        colorFilter = ColorFilter.tint(Emerald)
                     )
 
                     Spacer (

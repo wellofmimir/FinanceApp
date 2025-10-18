@@ -1,32 +1,36 @@
 package com.example.financeapp
 
-import androidx.compose.foundation.Image
+import android.content.Context
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.financeapp.ui.theme.Pistachio
-import android.content.Context
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.res.painterResource
+import com.example.financeapp.ui.theme.Pistachio
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import kotlin.math.exp
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
@@ -43,7 +47,18 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
         }
     )
 
-    var currentGoal by remember { mutableStateOf("Save $500") }
+    val currentGoal by goalprogressSectionViewModel.currentGoal.collectAsState()
+    goalprogressSectionViewModel.getCurrentGoal()
+    var currentGoalText by remember { mutableStateOf("") }
+    var currentGoalAmount by remember { mutableStateOf("") }
+    var currentGoalAmountAlreadySaved by remember { mutableStateOf("14000.50") }
+
+    LaunchedEffect(currentGoal) {
+        currentGoal?.let {
+            currentGoalText = it.goal
+            currentGoalAmount = it.amount.toString()
+        }
+    }
 
     Column (
         modifier = modifier
@@ -54,12 +69,12 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(2f)
                 .background(
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                     color = Pistachio
                 )
-                .padding(8.dp)
+                .padding(top = 8.dp, bottom = 0.dp, start = 8.dp, end = 8.dp)
         ) {
             Box (
                 modifier = Modifier
@@ -67,13 +82,33 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                     .background(
                         shape = RoundedCornerShape(12.dp),
                         color = Pistachio
-                    )
+                    ),
             ) {
-                Text (
-                    text = "Current goal:\n$currentGoal",
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
+                Column (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 0.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Current goal:",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+
+                    Text(
+                        text = currentGoalText,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 2.dp, start = 2.dp, end = 2.dp)
+                    )
+                }
             }
 
             var expanded by remember {mutableStateOf(false)}
@@ -94,19 +129,36 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
 
             SwapCurrentGoalMenu (
                 expanded = expanded,
-                onCurrentGoalChanged = {newText -> currentGoal = newText},
+                onCurrentGoalChanged = {newText -> currentGoalText = newText},
                 onDissmissRequest = { expanded = false},
                 onFinished = { expanded = false }
             )
         }
 
-        Row ( //1
+        Row (
             modifier = Modifier
-                .fillMaxHeight()
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(0.7f)
                 .background(
-                    shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+                    color = Pistachio
+                )
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text (
+                text = "Amount: $currentGoalAmount\nSaved: $currentGoalAmountAlreadySaved",
+                fontSize = 16.sp,
+                textAlign = TextAlign.Left,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1.5f)
+                .background(
                     color = Pistachio
                 ),
             horizontalArrangement = Arrangement.End,

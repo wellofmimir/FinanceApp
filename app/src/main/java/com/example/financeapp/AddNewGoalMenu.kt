@@ -61,6 +61,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
     var amount by remember { mutableStateOf(0.0f) }
     var feedbackTrigger by remember { mutableStateOf(0) } // für den LaunchedEffect weiter unten
     var amountText by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     DropdownMenu (
         expanded = expanded,
@@ -165,13 +166,9 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .fillMaxWidth(0.3f)
                 )
 
-
                 TextField (
                     value = amountText,
                     onValueChange = { newText ->
-
-                        if (amountText.isEmpty())
-                            amount = 0.0f
 
                         val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
@@ -214,15 +211,24 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 Button (
                     onClick = {
 
-                        if (!nameOfGoalText.isEmpty() && amount > 0.0f) {
+                        if (amountText.isEmpty()) {
+                            errorMessage = "Please fill in all fields."
+                            amount = 0.0f
+
+                            errorInInput = true
+
+                        } else if (nameOfGoalText.length > 30) {
+                            errorMessage = "Goal name too long (max. 30 characters)."
+                            errorInInput = true
+                        }
+
+                        if (!nameOfGoalText.isEmpty() && amount > 0.0f && !errorInInput) {
 
                             confirmed = true
                             addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount, "InProgress")
 
                             amount = 0.0f
                             nameOfGoalText = ""
-                        } else {
-                            errorInInput = true
                         }
 
                         feedbackTrigger++
@@ -240,7 +246,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 ) {
                     Text (
                         text = when {
-                            errorInInput -> "x"
+                            errorInInput -> "X"
                             confirmed -> "✓"
                             else -> "Add"
                         }
@@ -248,14 +254,32 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 }
 
                 LaunchedEffect (feedbackTrigger) {
-                    delay (1000)
+                    delay (3000)
                     errorInInput = false
+                    errorMessage = null
 
                     if (confirmed) {
                         amountText = ""
                         nameOfGoalText = ""
                         onFinished()
                     }
+                }
+            }
+
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (errorMessage != null) {
+                    Text (
+                        text = errorMessage!!,
+                        color = Color.Red,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    )
                 }
             }
         }

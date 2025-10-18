@@ -10,7 +10,6 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
 
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
-
     private fun insertExampleGoals() {
 
         val exampleGoals = listOf (
@@ -21,7 +20,6 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
 
         internGoals.value = exampleGoals
     }
-
     fun getCompletedGoals() {
 
         viewModelScope.launch {

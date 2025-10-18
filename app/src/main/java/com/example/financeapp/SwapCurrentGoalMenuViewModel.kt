@@ -10,10 +10,8 @@ class SwapCurrentGoalMenuViewModel(private val repository: GoalRepository) : Vie
 
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     private val internCurrentGoal = MutableStateFlow<Goal?>(null)
-
     val goals = internGoals.asStateFlow()
     val currentGoal = internCurrentGoal.asStateFlow()
-
     fun getInProgressGoals() {
 
         viewModelScope.launch {
@@ -21,7 +19,6 @@ class SwapCurrentGoalMenuViewModel(private val repository: GoalRepository) : Vie
             internGoals.value = result
         }
     }
-
     fun getCurrentGoal() {
 
         viewModelScope.launch {
@@ -29,7 +26,6 @@ class SwapCurrentGoalMenuViewModel(private val repository: GoalRepository) : Vie
             internCurrentGoal.value = result
         }
     }
-
     fun setCurrentGoal(goal: Goal) {
 
         viewModelScope.launch {

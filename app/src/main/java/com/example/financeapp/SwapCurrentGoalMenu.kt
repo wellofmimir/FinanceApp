@@ -32,12 +32,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
-import com.example.financeapp.R
 import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
