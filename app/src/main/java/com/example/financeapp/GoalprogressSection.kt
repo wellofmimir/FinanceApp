@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import kotlin.math.exp
 
 @Composable
 fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
@@ -91,7 +92,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Current goal:",
+                        text = "Current goal:\n",
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         textDecoration = TextDecoration.Underline,
@@ -130,27 +131,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
             SwapCurrentGoalMenu (
                 expanded = expanded,
                 onCurrentGoalChanged = {newText -> currentGoalText = newText},
-                onDissmissRequest = { expanded = false},
-                onFinished = { expanded = false }
-            )
-        }
-
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.7f)
-                .background(
-                    color = Pistachio
-                )
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text (
-                text = "Amount: $currentGoalAmount\nSaved: $currentGoalAmountAlreadySaved",
-                fontSize = 16.sp,
-                textAlign = TextAlign.Left,
-                fontWeight = FontWeight.Bold
+                onDissmissRequest = { expanded = false}
             )
         }
 
@@ -159,16 +140,35 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                 .fillMaxWidth()
                 .weight(1.5f)
                 .background(
-                    color = Pistachio
+                    color = Pistachio,
+                    shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
                 ),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            var expanded by remember { mutableStateOf(false) }
+
             Text (
                 text = "90%",
                 fontSize = 64.sp,
                 textAlign = TextAlign.Right,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember {MutableInteractionSource()}
+                    ) {
+                        expanded = true
+                    }
+            )
+
+            EditGoalMenu (
+                expanded,
+                onDismissRequest = {expanded = false},
+                onNewAmount = {},
+                onSaved = {},
+                currentGoalText
             )
         }
     }

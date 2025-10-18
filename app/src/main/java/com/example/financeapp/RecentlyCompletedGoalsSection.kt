@@ -10,24 +10,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
@@ -41,6 +39,9 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
             }
         }
     )
+
+    val goals by recentlyCompletedGoalsSectionViewModel.goals.collectAsState()
+    recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
 
     Column (
     ) {
@@ -65,30 +66,31 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
                     .padding(horizontal = 24.dp),
             )
 
-            Box (
-
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image (
-                    painter = painterResource(R.drawable.pluszeichen_foreground),
-                    contentDescription = "Punktemenu",
+                Text (
+                    text = "${goals.size}",
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Emerald,
                     modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .size(80.dp)
-                        .padding(top = 12.dp)
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ){
+                        .padding(end = 24.dp)
+                )
 
-                        }
+                Text (
+                    text = "total",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Emerald,
+                    modifier = Modifier
+                        .padding(end = 24.dp)
                 )
             }
         }
 
-        val goals by recentlyCompletedGoalsSectionViewModel.goals.collectAsState()
-        recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
-
-        goals.take(5).forEach { item ->
+        goals.take(3).forEach { item ->
 
             Row (
                 modifier = Modifier

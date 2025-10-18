@@ -26,8 +26,6 @@ import androidx.compose.runtime.remember
 @Composable
 fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverviewClicked: () -> Unit, onGoalHistoryClicked: () -> Unit, onYourQuotesClicked: () -> Unit) {
 
-    var isExpanded by remember { mutableStateOf(expanded) }
-
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = onDismissRequested,

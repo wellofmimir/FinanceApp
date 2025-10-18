@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
+fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, context: Context = LocalContext.current) {
 
     val swapCurrentGoalMenuViewModel: SwapCurrentGoalMenuViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {

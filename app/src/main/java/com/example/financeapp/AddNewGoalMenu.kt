@@ -45,7 +45,6 @@ import androidx.compose.ui.draw.shadow
 @Composable
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
 
-
     val addNewGoalMenuViewModel: AddNewGoalMenuViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
