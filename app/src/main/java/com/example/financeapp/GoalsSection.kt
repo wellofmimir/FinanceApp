@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.ColorFilter
 fun GoalsSection(context: Context = LocalContext.current) {
 
     val goalSectionViewModel: GoalsSectionViewModel = viewModel (
-        factory = object : ViewModelProvider.Factory {
+        factory = object: ViewModelProvider.Factory {
             override fun<T : ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.getInstance(context)

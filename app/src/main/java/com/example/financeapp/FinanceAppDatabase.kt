@@ -19,6 +19,13 @@ data class GoalStatus (
     val description: String
 )
 
+data class Quote (
+
+    val id: Int,
+    val quote: String,
+    val name: String
+)
+
 class FinanceAppDatabase private constructor(context: Context) {
     companion object {
         private var instance: FinanceAppDatabase? = null
