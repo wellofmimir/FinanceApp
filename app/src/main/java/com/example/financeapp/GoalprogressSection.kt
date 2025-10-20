@@ -31,7 +31,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import kotlin.math.exp
 
 @Composable
 fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
@@ -48,18 +47,26 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
         }
     )
 
+    val currentGoalPercentage by goalprogressSectionViewModel.percentageOfCurrentGoal.collectAsState()
     val currentGoal by goalprogressSectionViewModel.currentGoal.collectAsState()
     goalprogressSectionViewModel.getCurrentGoal()
+
     var currentGoalText by remember { mutableStateOf("") }
-    var currentGoalAmount by remember { mutableStateOf("") }
-    var currentGoalAmountAlreadySaved by remember { mutableStateOf("14000.50") }
 
     LaunchedEffect(currentGoal) {
         currentGoal?.let {
             currentGoalText = it.goal
-            currentGoalAmount = it.amount.toString()
+            goalprogressSectionViewModel.calculateCurrentGoalPercentage()
         }
     }
+
+    LaunchedEffect(currentGoalText) {
+        currentGoal?.let {
+            currentGoalText = it.goal
+            goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+        }
+    }
+
 
     Column (
         modifier = modifier
@@ -150,7 +157,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
             var expanded by remember { mutableStateOf(false) }
 
             Text (
-                text = "90%",
+                text = currentGoalPercentage.toString() + "%",
                 fontSize = 64.sp,
                 textAlign = TextAlign.Right,
                 fontWeight = FontWeight.Bold,
@@ -165,9 +172,26 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
 
             EditGoalMenu (
                 expanded,
+                goal = currentGoal,
                 onDismissRequest = {expanded = false},
-                onNewAmount = {},
-                onSaved = {},
+                onNewAmount = { amount ->
+
+                    val newAmount = amount.toFloat()
+                    val updatedCurrentGoal = currentGoal
+                    updatedCurrentGoal!!.amount = newAmount
+
+                    goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
+                },
+                onSaved = { savedAmount ->
+
+                    val newSavedAmount = savedAmount.toFloat()
+                    val updatedCurrentGoal = currentGoal
+                    updatedCurrentGoal!!.saved = newSavedAmount
+
+                    goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
+
+                    goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+                },
                 currentGoalText
             )
         }

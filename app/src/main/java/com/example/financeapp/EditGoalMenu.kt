@@ -1,5 +1,6 @@
 package com.example.financeapp
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,25 +26,75 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.runtime.*
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue@Composable
 
-@Composable
-fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (String) -> Unit, onSaved: (String) -> Unit, currentGoalText: String) {
+fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, onNewAmount: (String) -> Unit, onSaved: (String) -> Unit, currentGoalText: String) {
 
-    var isEditing by remember { mutableStateOf(false) }
-    var amountText by remember { mutableStateOf("500.50") }
-    val originalAmountText by remember { mutableStateOf(amountText) } //einfach nur der Erinnerungswert, falls das Editieren verworfen wird
+    var isEditingInitialAmount by remember { mutableStateOf(false) }
+    var isEditingSavedAmount by remember { mutableStateOf(false) }
+
+    var amountText by remember { mutableStateOf("") }
+    var originalAmountText by remember { mutableStateOf(amountText) } //einfach nur der Erinnerungswert, falls das Editieren verworfen wird
+
+    var amountTextAsTextFieldValue by remember { //wird benötigt, um den Curson ans Ende des TextFields zu setzen bei anclicken
+        mutableStateOf(TextFieldValue(originalAmountText))
+    }
+
+    var savedAmountText by remember { mutableStateOf("" ) }
+    var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
+
+    var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Curson ans Ende des TextFields zu setzen bei anclicken
+        mutableStateOf(TextFieldValue(originalSavedAmountText))
+    }
+
+    var hasChanged by remember { mutableStateOf(false) }
+
+    LaunchedEffect(expanded) {
+        goal?.let {
+
+            amountText = goal.amount.toString()
+            originalAmountText = amountText
+
+            savedAmountText = goal.saved.toString()
+            originalSavedAmountText = savedAmountText
+        }
+    }
+
+    LaunchedEffect(goal) {
+        goal?.let {
+
+            amountText = goal.amount.toString()
+            originalAmountText = amountText
+
+            savedAmountText = goal.saved.toString()
+            originalSavedAmountText = savedAmountText
+        }
+    }
 
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = {
-            isEditing = false
+
+            isEditingSavedAmount = false
+            isEditingInitialAmount = false
+
+            amountText = originalAmountText
+            savedAmountText = originalSavedAmountText
+
             onDismissRequest()
         },
         modifier = Modifier
@@ -56,9 +107,20 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                if (isEditing) {
-                    isEditing = false
+                if (isEditingSavedAmount) {
+
+                    savedAmountText = originalSavedAmountText
+
+                    isEditingSavedAmount = false
+                    isEditingInitialAmount = false
+                }
+
+                if (isEditingInitialAmount) {
+
                     amountText = originalAmountText
+
+                    isEditingSavedAmount = false
+                    isEditingInitialAmount = false
                 }
             },
         containerColor = Color.Transparent,
@@ -107,7 +169,6 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-
             }
 
             Spacer (
@@ -122,6 +183,7 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                         color = Emerald
                     )
                     .fillMaxWidth()
+                    .animateContentSize()
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -132,44 +194,27 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                     fontSize = 24.sp
                 )
 
-                Text (
-                    text = "10000.50",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
+                val focusRequester = remember { FocusRequester() }
+                var hasFocus by remember { mutableStateOf(false) }
 
-                        }
-                )
-            }
+                if (isEditingInitialAmount) {
 
-            Row (
-                modifier = Modifier
-                    .background (
-                        shape = RoundedCornerShape(12.dp),
-                        color = Emerald
-                    )
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text (
-                    text = "Already saved: ",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                )
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
 
-                if (isEditing) {
+                        amountTextAsTextFieldValue = amountTextAsTextFieldValue.copy (
+                            selection = TextRange(originalAmountText.length),
+                            text = originalAmountText
+                        )
+                    }
 
                     TextField (
-                        value = amountText,
+                        value = amountTextAsTextFieldValue,
                         onValueChange = { newText ->
-                            amountText = newText
+
+                            amountTextAsTextFieldValue = newText
+                            amountText = amountTextAsTextFieldValue.text
+                            hasChanged = true
                         },
                         singleLine = true,
                         colors = TextFieldDefaults.colors (
@@ -183,6 +228,22 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                             unfocusedTextColor = Color.White
                         ),
                         modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+
+                                if (focusState.hasFocus) {
+                                    isEditingSavedAmount = false
+
+                                    if (!isEditingInitialAmount)
+                                        isEditingInitialAmount = true
+                                }
+
+                                if (!focusState.hasFocus){
+
+                                    amountTextAsTextFieldValue = TextFieldValue(originalAmountText)
+                                    amountText = originalAmountText
+                                }
+                            }
                             .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
@@ -202,11 +263,105 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
-                                isEditing = true
+                                isEditingInitialAmount = true
+                                isEditingSavedAmount = false
                             }
                     )
                 }
+            }
 
+            Row (
+                modifier = Modifier
+                    .background (
+                        shape = RoundedCornerShape(12.dp),
+                        color = Emerald
+                    )
+                    .fillMaxWidth()
+                    .animateContentSize()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text (
+                    text = "Already saved: ",
+                    color = Color.White,
+                    fontSize = 24.sp,
+                )
+
+                val focusRequester = remember { FocusRequester() }
+                var hasFocus by remember { mutableStateOf(false) }
+
+                if (isEditingSavedAmount) {
+
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
+
+                        savedAmountTextAsFieldValue = savedAmountTextAsFieldValue.copy (
+                            selection = TextRange(originalSavedAmountText.length),
+                            text = originalSavedAmountText
+                        )
+                    }
+
+                    TextField (
+                        value = savedAmountTextAsFieldValue,
+                        onValueChange = { newText ->
+
+                            savedAmountTextAsFieldValue = newText
+                            savedAmountText = savedAmountTextAsFieldValue.text
+                            hasChanged = true
+                        },
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors (
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.White,
+                            focusedIndicatorColor = Color.White,
+                            cursorColor = Color.White,
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+
+                                if (focusState.hasFocus) {
+                                    isEditingInitialAmount = false
+
+                                    if (!isEditingSavedAmount)
+                                        isEditingSavedAmount = true
+                                }
+
+                                if (!focusState.hasFocus){
+
+                                    savedAmountTextAsFieldValue = TextFieldValue(originalSavedAmountText)
+                                    savedAmountText = originalSavedAmountText
+                                }
+                            }
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                            }
+                    )
+
+                } else {
+
+                    Text (
+                        text = savedAmountText,
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                isEditingSavedAmount = true
+                                isEditingInitialAmount = false
+                            }
+                    )
+                }
             }
 
             Spacer (
@@ -227,12 +382,21 @@ fun EditGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onNewAmount: (
             ) {
                 Button (
                     onClick = {
+                        if (hasChanged) {
 
-                        if (isEditing) {
-                            isEditing = false
+                            isEditingSavedAmount = false
+                            isEditingInitialAmount = false
+
+                            onNewAmount(amountText)
+                            onSaved(savedAmountText)
+                            onDismissRequest()
+
                         } else {
+
                             onDismissRequest()
                         }
+
+                        hasChanged = false //resettet alles oben im LaunchedEffect dann
                     },
                     colors = ButtonDefaults.buttonColors (
                         containerColor = Color.Transparent,

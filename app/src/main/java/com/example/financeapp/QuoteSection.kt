@@ -31,7 +31,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-
 @Composable
 fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
 

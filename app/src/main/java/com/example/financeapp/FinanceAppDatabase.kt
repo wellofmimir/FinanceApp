@@ -3,13 +3,13 @@ package com.example.financeapp
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 
 data class Goal (
 
     val id: Int,
     val goal: String,
-    val amount: Float,
+    var amount: Float,
+    var saved: Float,
     val idStatus: Int
 )
 
@@ -40,7 +40,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("PRAGMA foreign_keys = ON;")
 
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, idStatus INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL)".trimIndent())
@@ -117,7 +117,6 @@ class FinanceAppDatabase private constructor(context: Context) {
     fun getIDGoalStatus(description: String): GoalStatus? {
 
         val cursor = database.rawQuery("SELECT id, description FROM goalStatus WHERE description = ?", arrayOf(description))
-        var status: GoalStatus? = null
 
         cursor.use {
 
@@ -163,6 +162,25 @@ class FinanceAppDatabase private constructor(context: Context) {
         return null
     }
 
+    fun updateGoal(goal: Goal) {
+
+        val cursor = database.rawQuery("SELECT id FROM goals WHERE id = ?", arrayOf(goal.id.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("id",       goal.id)
+            put("goal",     goal.goal)
+            put("amount",   goal.amount)
+            put("saved",    goal.saved)
+            put("idStatus", goal.idStatus)
+        }
+
+        if (exists) {
+            database.update("goals", values, "id = ?", arrayOf(goal.id.toString()))
+        }
+    }
+
     fun getGoal(id: Int): Goal? {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE id = ?", arrayOf(id.toString()))
@@ -174,9 +192,10 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val id = it.getInt(it.getColumnIndexOrThrow("id"))
                 val goal = it.getString(it.getColumnIndexOrThrow("goal"))
                 val amount = it.getFloat(it.getColumnIndexOrThrow("amount"))
+                val savedAmount = it.getFloat(it.getColumnIndexOrThrow("saved"))
                 val idStatus = it.getInt(it.getColumnIndexOrThrow("idStatus"))
 
-                return Goal(id, goal, amount, idStatus)
+                return Goal(id, goal, amount, savedAmount, idStatus)
             }
         }
 
@@ -193,16 +212,17 @@ class FinanceAppDatabase private constructor(context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val goal = cursor.getString(cursor.getColumnIndexOrThrow("goal"))
             val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
+            val savedAmount = cursor.getFloat(cursor.getColumnIndexOrThrow("saved"))
             val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
 
-            goals.add(Goal (id, goal, amount, idStatus))
+            goals.add(Goal (id, goal, amount, savedAmount, idStatus))
         }
 
         cursor.close()
         return goals
     }
 
-    fun insertGoal(nameOfGoal: String, amount: Float, goalStatus: String) {
+    fun insertGoal(nameOfGoal: String, amount: Float, savedAmount: Float, goalStatus: String) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(nameOfGoal))
         val exists = cursor.moveToFirst()
@@ -211,6 +231,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         val values = ContentValues()
         values.put("goal", nameOfGoal)
         values.put("amount", amount)
+        values.put("saved", savedAmount)
         values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
 
         if (exists) {
@@ -229,6 +250,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         val values = ContentValues()
         values.put("goal", goal.goal)
         values.put("amount", goal.amount)
+        values.put("saved", goal.saved)
         values.put("idStatus", goal.idStatus)
 
         if (exists) {

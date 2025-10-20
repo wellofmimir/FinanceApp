@@ -10,6 +10,6 @@ class AddNewGoalMenuViewModel(private val repository: GoalRepository) : ViewMode
 
     fun newGoalAdded(goal: String, amount: Float, statusDescription: String) {
 
-        repository.insertGoal(goal, amount, statusDescription)
+        repository.insertGoal(goal, amount, 0f, statusDescription)
     }
 }

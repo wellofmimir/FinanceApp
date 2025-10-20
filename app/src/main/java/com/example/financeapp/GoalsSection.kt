@@ -103,11 +103,15 @@ fun GoalsSection(context: Context = LocalContext.current) {
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
-                AddNewGoalMenu (expanded, onDismissRequest = { expanded = false }, onFinished = {
-                    expanded  = false
-                    newGoalEntered = true
-                    goalSectionViewModel.reloadGoals()
-                })
+                AddNewGoalMenu (
+                    expanded,
+                    onDismissRequest = { expanded = false },
+                    onFinished = {
+                        expanded  = false
+                        newGoalEntered = true
+                        goalSectionViewModel.reloadGoals()
+                    }
+                )
             }
         }
 

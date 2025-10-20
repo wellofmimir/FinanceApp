@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
-
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -155,5 +154,4 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
             }
         }
     }
-
 }

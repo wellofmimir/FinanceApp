@@ -1,6 +1,5 @@
 package com.example.financeapp
 
-import com.example.financeapp.Goal
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

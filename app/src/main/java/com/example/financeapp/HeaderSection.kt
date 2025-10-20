@@ -30,8 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
-import kotlin.math.exp
-
 
 @Composable
 fun HeaderSection(context: Context = LocalContext.current) {

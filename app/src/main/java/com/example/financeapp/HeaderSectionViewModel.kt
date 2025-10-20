@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 
 class HeaderSectionViewModel(private val database: FinanceAppDatabase) : ViewModel() {
 
-    private val internUser = MutableStateFlow("DUMMYY")
+    private val internUser = MutableStateFlow("DUMMY")
     val user = internUser.asStateFlow()
 
     fun getUser() {
