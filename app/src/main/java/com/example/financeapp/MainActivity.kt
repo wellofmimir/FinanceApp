@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -22,13 +21,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
-
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.AdRequest
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.AdSize
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            //AdMob von Google initialisieren
+            MobileAds.initialize(this)
 
             val navController = rememberNavController()
             var sectionIdentifier by remember { mutableStateOf(0) }
@@ -141,19 +146,16 @@ fun LikedQuotesScreen() {
 @Composable
 fun AdSection() {
 
-    Row (
+    AndroidView (
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box (
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Werbung")
+        factory = { context ->
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
+            }
         }
-    }
+    )
 }
