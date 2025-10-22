@@ -91,7 +91,12 @@ class MainActivity : ComponentActivity() {
                         .padding(1.dp)
                 )
 
-                AdSection()
+                when (sectionIdentifier) {
+
+                    0 -> AdSection()
+                    1 -> Unit
+                    else -> Unit
+                }
             }
         }
     }
@@ -143,19 +148,3 @@ fun LikedQuotesScreen() {
     LikedQuotesSection()
 }
 
-@Composable
-fun AdSection() {
-
-    AndroidView (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        factory = { context ->
-            AdView(context).apply {
-                setAdSize(AdSize.BANNER)
-                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
-                loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
-            }
-        }
-    )
-}

@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import com.example.financeapp.ui.theme.Emerald
@@ -42,83 +41,120 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
 
     val likedQuotes = likedQuotesSectionViewModel.getLikedQuotes()
 
-    Column (
+    Box (
         modifier = Modifier
-            .background(
-                color = Emerald
+            .fillMaxSize()
+            .background (
+                Emerald
             )
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center
     ) {
+        Column(
+            modifier = Modifier
+                .background(
+                    color = Emerald
+                )
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center
+        ) {
+            likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
-        likedQuotes.take(likedQuotes.size).forEach { quote ->
-
-            Column (
-                modifier = Modifier
-                    .height(180.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row (
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.4f)
-                        .background (
-                            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                            color = Pistachio
-                        )
-                        .padding(top = 12.dp, start = 12.dp)
+                        .height(180.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Text (
-                        text = "October 6, 2025",
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Left
-                    )
+
+                    if (index == 3) {
+                        AdSection()
+                    } else if (index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
+                        AdSection()
+                    } else {
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.4f)
+                                .background(
+                                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+                                    color = Pistachio
+                                )
+                                .padding(top = 12.dp, start = 12.dp)
+                        ) {
+                            Text(
+                                text = "October 6, 2025",
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Left
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.8f)
+                                .background(
+                                    color = Pistachio
+                                )
+                                .padding(start = 12.dp)
+                        ) {
+                            Text(
+                                text = quote.quote,
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Left,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.3f)
+                                .background(
+                                    shape = RoundedCornerShape(
+                                        bottomStart = 12.dp,
+                                        bottomEnd = 12.dp
+                                    ),
+                                    color = Pistachio
+                                )
+                                .padding(end = 12.dp, bottom = 12.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = quote.name,
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Right,
+                                fontStyle = FontStyle.Italic
+                            )
+                        }
+                    }
                 }
 
-                Row (
+                Spacer(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.8f)
-                        .background (
-                            color = Pistachio
-                        )
-                        .padding(start = 12.dp)
-                ) {
-                    Text (
-                        text = quote.quote,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Left,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                }
-
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.3f)
-                        .background (
-                            shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-                            color = Pistachio
-                        )
-                        .padding(end = 12.dp, bottom = 12.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text (
-                        text = quote.name,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Right,
-                        fontStyle = FontStyle.Italic
-                    )
-                }
+                        .padding(2.dp)
+                )
             }
 
-            Spacer (
-                modifier = Modifier
-                    .padding(2.dp)
-            )
+            if (likedQuotes.size < 3) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = Emerald
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AdSection()
+                    }
+                }
+            }
         }
     }
-
 }

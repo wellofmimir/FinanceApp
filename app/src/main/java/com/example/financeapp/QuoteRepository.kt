@@ -7,7 +7,6 @@ class QuoteRepository(private val database: FinanceAppDatabase) {
         return listOf (
             Quote(1, "'Ficken'", "Patryk"),
             Quote(2, "'Fickenblasem'", "Mleczko"),
-            Quote(2, "'Fickenblasem'", "Mleczko"),
             Quote(1, "'Ficken'", "Patryk"),
             Quote(2, "'Fickenblasem'", "Mleczko"),
             Quote(1, "'Ficken'", "Patryk"),
@@ -15,7 +14,11 @@ class QuoteRepository(private val database: FinanceAppDatabase) {
             Quote(1, "'Ficken'", "Patryk"),
             Quote(2, "'Fickenblasem'", "Mleczko"),
             Quote(1, "'Ficken'", "Patryk"),
-            Quote(2, "'Fickenblasem'", "Mleczko")
+            Quote(2, "'Fickenblasem'", "Mleczko"),
+            Quote(1, "'Ficken'", "Patryk"),
+            Quote(2, "'Fickenblasem'", "Mleczko"),
+            Quote(1, "'Ficken'", "Patryk"),
+            Quote(2, "'Fickenblasem'", "Mleczko"),
         )
     }
 }
