@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import android.content.Context
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -65,7 +66,7 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                     color = Pistachio
                 )
-                .padding(8.dp)
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp)
         ) {
             Box (
                 contentAlignment = Alignment.Center
@@ -91,7 +92,9 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box (
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(start = 8.dp)
             ) {
                 var herzZumLikenClicked by remember { mutableStateOf(true) }
 
@@ -113,7 +116,7 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
 
             Box (
                 modifier = Modifier
-                    .padding(4.dp),
+                    .padding(4.dp, end = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text (

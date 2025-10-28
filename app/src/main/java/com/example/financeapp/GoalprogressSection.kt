@@ -82,7 +82,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                     color = Pistachio
                 )
-                .padding(top = 8.dp, bottom = 0.dp, start = 8.dp, end = 8.dp)
+                .padding(top = 8.dp, bottom = 1.dp, start = 8.dp, end = 8.dp)
         ) {
             Box (
                 modifier = Modifier
@@ -98,7 +98,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                         .padding(bottom = 0.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
+                    Text (
                         text = "Current goal:\n",
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
@@ -108,7 +108,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                             .fillMaxWidth()
                     )
 
-                    Text(
+                    Text (
                         text = currentGoalText,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
@@ -189,7 +189,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
                     updatedCurrentGoal!!.saved = newSavedAmount
 
                     goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
-
                     goalprogressSectionViewModel.calculateCurrentGoalPercentage()
                 },
                 currentGoalText

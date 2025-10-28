@@ -27,6 +27,7 @@ data class Quote (
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
+
     companion object {
         private var instance: FinanceAppDatabase? = null
         fun getInstance(context: Context): FinanceAppDatabase {

@@ -11,21 +11,19 @@ interface QuoteClientCallback {
 }
 
 class QuoteClient {
-
     private val client = OkHttpClient()
-
     fun getQuote(callback: QuoteClientCallback) {
 
         val request = Request.Builder()
             .get()
-            .url("https://webhook-test.com/327ac6d0ae5ab0b8d936d67b0d17948e")
+            .url("https://shortlyfi.me/api/quote")
             .build()
 
         Thread {
             try {
-                //val response = client.newCall(request).execute()
-                val responseBody = "”Money is only a tool. It will take you wherever you wish, but it will not replace you as the driver.”" //response.body?.string()
-                //response.close()
+                val response = client.newCall(request).execute()
+                val responseBody = response.body?.string()
+                response.close()
 
                 Handler (Looper.getMainLooper()).post {
                     callback.onResult(responseBody)

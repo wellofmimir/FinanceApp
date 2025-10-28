@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
 
             Column (
                 modifier = Modifier
-                    .statusBarsPadding()
                     .background (
                         color = Emerald
                     ),
@@ -70,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
                 Spacer (
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(1.dp)
                 )
 
                 NavHost (
@@ -107,34 +106,33 @@ fun HomeScreen() {
 
     Column (
         modifier = Modifier
-            .statusBarsPadding()
             .background(
                 color = Emerald
             ),
         verticalArrangement = Arrangement.Center
     ) {
-        Row(
+        Row (
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            GoalprogressSection(
+            GoalprogressSection (
                 modifier = Modifier.weight(1f)
             )
 
-            QuoteSection(
+            QuoteSection (
                 modifier = Modifier.weight(1f)
             )
         }
 
-        Spacer(
+        Spacer (
             modifier = Modifier
                 .padding(1.dp)
         )
 
         GoalsSection()
 
-        Spacer(
+        Spacer (
             modifier = Modifier
                 .padding(1.dp)
         )

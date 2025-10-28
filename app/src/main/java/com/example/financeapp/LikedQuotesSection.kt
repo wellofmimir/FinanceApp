@@ -132,7 +132,7 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
 
                 Spacer(
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(1.dp)
                 )
             }
 
