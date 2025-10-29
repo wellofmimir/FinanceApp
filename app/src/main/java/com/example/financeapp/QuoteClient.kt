@@ -9,8 +9,18 @@ import java.lang.Exception
 interface QuoteClientCallback {
     fun onResult(response: String?)
 }
+class QuoteClient private constructor(){
+    companion object {
+        private var instance: QuoteClient? = null
 
-class QuoteClient {
+        fun getInstance(): QuoteClient {
+            if (instance == null)
+                instance = QuoteClient()
+
+            return instance!!
+        }
+    }
+
     private val client = OkHttpClient()
     fun getQuote(callback: QuoteClientCallback) {
 
@@ -22,6 +32,7 @@ class QuoteClient {
         Thread {
             try {
                 val response = client.newCall(request).execute()
+                //val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}" //response.body?.string()
                 val responseBody = response.body?.string()
                 response.close()
 

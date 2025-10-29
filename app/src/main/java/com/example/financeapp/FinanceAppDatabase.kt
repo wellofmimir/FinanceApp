@@ -80,6 +80,24 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
+    fun getAllQuotes(): List<Quote> {
+
+        val cursor = database.rawQuery("SELECT * FROM quotes", null)
+        val quotes = mutableListOf<Quote>()
+
+        while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val quote = cursor.getString(cursor.getColumnIndexOrThrow("quote"))
+            val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+
+            quotes.add(Quote(id, quote, name))
+        }
+
+        cursor.close()
+        return quotes
+    }
+
     fun insertQuote(quote: String, name: String) {
 
         val cursor = database.rawQuery("SELECT * FROM quotes WHERE quote = ?", arrayOf(quote))

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
@@ -32,14 +33,14 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
             override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.getInstance(context)
-                val repository = QuoteRepository(database)
+                val repository = QuoteRepository.getInstance(database)
 
                 return LikedQuotesSectionViewModel(repository) as T
             }
         }
     )
 
-    val likedQuotes = likedQuotesSectionViewModel.getLikedQuotes()
+    var likedQuotes = likedQuotesSectionViewModel.getLikedQuotes()
 
     Box (
         modifier = Modifier
@@ -58,6 +59,16 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
         ) {
             likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
+                if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
+                    AdSection()
+
+                    Spacer (
+                        modifier = Modifier
+                            .padding(1.dp)
+                    )
+                }
+
+
                 Column(
                     modifier = Modifier
                         .height(180.dp),
@@ -65,68 +76,61 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
                     verticalArrangement = Arrangement.Center
                 ) {
 
-                    if (index == 3) {
-                        AdSection()
-                    } else if (index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
-                        AdSection()
-                    } else {
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.4f)
-                                .background(
-                                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                                    color = Pistachio
-                                )
-                                .padding(top = 12.dp, start = 12.dp)
-                        ) {
-                            Text(
-                                text = "October 6, 2025",
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Left
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.4f)
+                            .background(
+                                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+                                color = Pistachio
                             )
-                        }
+                            .padding(top = 12.dp, start = 12.dp)
+                    ) {
+                        Text(
+                            text = "October 6, 2025",
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Left
+                        )
+                    }
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.8f)
-                                .background(
-                                    color = Pistachio
-                                )
-                                .padding(start = 12.dp)
-                        ) {
-                            Text(
-                                text = quote.quote,
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Left,
-                                fontWeight = FontWeight.ExtraBold
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.8f)
+                            .background(
+                                color = Pistachio
                             )
-                        }
+                            .padding(start = 12.dp)
+                    ) {
+                        Text(
+                            text = quote.quote,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Left,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.3f)
-                                .background(
-                                    shape = RoundedCornerShape(
-                                        bottomStart = 12.dp,
-                                        bottomEnd = 12.dp
-                                    ),
-                                    color = Pistachio
-                                )
-                                .padding(end = 12.dp, bottom = 12.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = quote.name,
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Right,
-                                fontStyle = FontStyle.Italic
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.3f)
+                            .background(
+                                shape = RoundedCornerShape(
+                                    bottomStart = 12.dp,
+                                    bottomEnd = 12.dp
+                                ),
+                                color = Pistachio
                             )
-                        }
+                            .padding(end = 12.dp, bottom = 12.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = quote.name,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Right,
+                            fontStyle = FontStyle.Italic
+                        )
                     }
                 }
 
@@ -136,9 +140,9 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
                 )
             }
 
-            if (likedQuotes.size < 3) {
+            if (likedQuotes.size <= 3) {
 
-                Box(
+                Box (
                     modifier = Modifier
                         .fillMaxSize()
                         .background(

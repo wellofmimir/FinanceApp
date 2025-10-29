@@ -3,28 +3,24 @@ package com.example.financeapp
 class GoalRepository(private val database: FinanceAppDatabase) {
 
     fun insertGoal(goal: String, amount: Float, saved: Float, statusDescription: String) {
-
         database.run {
             insertGoal(goal, amount, saved,statusDescription)
         }
     }
 
     fun insertGoal(goal: Goal) {
-
         database.run {
             insertGoal(goal)
         }
     }
 
     fun updateGoal(goal: Goal) {
-
         database.run {
             updateGoal(goal)
         }
     }
 
     fun getInProgressGoals(): List<Goal> {
-
         val inProgressStatus = database.getIDGoalStatus("InProgress")
             ?: return emptyList()
 
@@ -32,7 +28,6 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
 
     fun getCompletedGoals(): List<Goal> {
-
        val completedStatus = database.getIDGoalStatus("Completed")
            ?: return emptyList()
 
@@ -40,7 +35,6 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
 
     fun getCurrentGoal(): Goal? {
-
         val goal = database.currentGoal()
 
         if (goal == null)
@@ -50,7 +44,6 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
 
     fun setCurrentGoal(goal: Goal) {
-
         return database.setCurrentGoal(goal)
     }
 }

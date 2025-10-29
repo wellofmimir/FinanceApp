@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,9 +27,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import android.content.Context
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.foundation.layout.Arrangement
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
@@ -39,12 +39,14 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
     //Aber der Context darf nicht in dem QuoteViewModel selbst angelegt werden (geht nicht in Compose).
 
-    val database = remember { FinanceAppDatabase.getInstance(context) }
-
-    val quoteViewModel: QuoteViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return QuoteViewModel(database) as T
+    val quoteViewModel: QuoteViewModel = viewModel (
+        factory = remember {
+            object : ViewModelProvider.Factory {
+                override fun <T: ViewModel> create(modelClass: Class<T>): T {
+                    val database = FinanceAppDatabase.getInstance(context)
+                    val repository = QuoteRepository.getInstance(database)
+                    return QuoteViewModel(repository) as T
+                }
             }
         }
     )
@@ -83,7 +85,7 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.2f)
+                .weight(0.3f)
                 .background(
                     shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
                     color = Pistachio
@@ -117,12 +119,12 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
             Box (
                 modifier = Modifier
                     .padding(4.dp, end = 16.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text (
                     text = quotedPersonState.value,
                     fontSize = 20.sp,
-                    textAlign = TextAlign.Right,
+                    textAlign = TextAlign.End,
                     fontStyle = FontStyle.Italic
                 )
             }
