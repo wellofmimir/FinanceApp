@@ -12,7 +12,6 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     val goals = internGoals.asStateFlow()
 
     fun insertGoal(goal: Goal) {
-
         viewModelScope.launch {
             repository.insertGoal(goal)
             reloadGoals()

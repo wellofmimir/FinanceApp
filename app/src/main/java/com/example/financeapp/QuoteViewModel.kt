@@ -29,4 +29,8 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
             repository.deleteQuote(quote)
         }
     }
+
+    fun getLikedQuotes(): List<Quote> {
+        return repository.getLikedQuotes()
+    }
 }

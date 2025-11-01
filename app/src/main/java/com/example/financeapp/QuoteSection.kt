@@ -98,12 +98,18 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
                 modifier = Modifier
                     .padding(start = 8.dp)
             ) {
-                var herzZumLikenClicked by remember { mutableStateOf(true) }
+                var herzZumLikenClicked by remember { mutableStateOf(false) }
+
+                quoteViewModel.getLikedQuotes().forEach { quote ->
+
+                    if (quote.quote == quoteState.value)
+                        herzZumLikenClicked = true
+                }
 
                 Image (
                     painter = painterResource(com.example.financeapp.R.drawable.herzzumliken_foreground),
                     contentDescription = "HerzZumLiken",
-                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(if (herzZumLikenClicked) Color.Black else Color.Red),
+                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(if (herzZumLikenClicked) Color.Red else Color.Black),
                     modifier = Modifier
                         .aspectRatio(1f)
                         .clickable (

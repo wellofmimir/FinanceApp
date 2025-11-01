@@ -18,7 +18,6 @@ class HeaderSectionViewModel(private val database: FinanceAppDatabase) : ViewMod
     val user = internUser.asStateFlow()
 
     fun getUser() {
-
         internUser.value = database.getUser()
     }
 }
