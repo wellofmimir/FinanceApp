@@ -1,17 +1,13 @@
 package com.example.financeapp
 
-import android.content.Context
-import android.graphics.Paint
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -20,15 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
@@ -37,24 +30,16 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.window.Popup
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.IntOffset
 import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.Alignment
 
 
 @Composable
@@ -65,7 +50,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
         onDismissRequest = onDismissRequested,
         modifier = Modifier
             .fillMaxWidth()
-            .background(
+            .background (
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -75,7 +60,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
+                .background (
                     color = Emerald,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -416,7 +401,13 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
                         Image(
                             modifier = Modifier
                                 .weight(1f)
-                                .aspectRatio(1f),
+                                .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    onDismissRequested()
+                                },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
                             contentDescription = "Ring1_5",
                         )
@@ -428,6 +419,375 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
 }
 
 @Composable
+fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
+
+    DropdownMenu (
+        expanded = expanded,
+        onDismissRequest = onDismissRequested,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f)
+            .background(
+                color = Pistachio,
+                shape = RoundedCornerShape(12.dp)
+            ),
+        containerColor = Color.Transparent
+    ) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background (
+                    color = Pistachio,
+                    shape = RoundedCornerShape(12.dp)
+                )
+        ) {
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background (
+                        color = Pistachio,
+                        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                    )
+            ) {
+                Spacer (
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
+
+                Text (
+                    text = "Greeen makes goal setting worth-while with tokens.",
+                    color = Emerald,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    HorizontalDivider (
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f),
+                        thickness = 1.dp,
+                        color = Color.Black
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Text (
+                        text = "Every goal you create is worth tokens. You decide how much your goals are worth, up to five tokens.",
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Justify
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Spacer (
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+
+                    HorizontalDivider (
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f),
+                        thickness = 1.dp,
+                        color = Color.Black
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Text (
+                        text = "How much is this goal worth?",
+                        color = Emerald,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Justify
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Spacer (
+                        modifier = Modifier
+                            .padding(10.dp)
+                    )
+                }
+
+                var tokenIdentifier by remember { mutableStateOf(0) }
+                var tokenText by remember { mutableStateOf("") }
+
+                tokenText = when (tokenIdentifier) {
+
+                    0 -> "One token: Baby steps get you there."
+                    1 -> "Two tokens: Just a little goal."
+                    2 -> "Three tokens: Something to strive for."
+                    3 -> "Four tokens: A true achievement."
+                    4 -> "Five tokens: Extraordinary!"
+                    else -> ""
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                    ) {
+                        Canvas (
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                        ) {
+                            drawCircle (
+                                color = Emerald,
+                                style = Fill
+                            )
+                        }
+
+                        Canvas (
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                        ) {
+                            drawCircle (
+                                color = Emerald,
+                                style = if (tokenIdentifier >= 1) Fill else Stroke(4f)
+                            )
+                        }
+
+                        Canvas (
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                        ) {
+                            drawCircle (
+                                color = Emerald,
+                                style = if (tokenIdentifier >= 2) Fill else Stroke(4f)
+                            )
+                        }
+
+                        Canvas (
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                        ) {
+                            drawCircle (
+                                color = Emerald,
+                                style = if (tokenIdentifier >= 3) Fill else Stroke(4f)
+                            )
+                        }
+
+                        Canvas (
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                        ) {
+                            drawCircle (
+                                color = Emerald,
+                                style = if (tokenIdentifier >= 4) Fill else Stroke(4f)
+                            )
+                        }
+
+                        Spacer (
+                            modifier = Modifier
+                                .padding(5.dp)
+                        )
+                    }
+                }
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth(0.25f)
+                        .fillMaxHeight(0.3f)
+                        .background (
+                            color = Pistachio
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                    ) {
+                        Image (
+                            painter = painterResource(R.drawable.minuszeichenstandard_foreground),
+                            contentDescription = "Minuszeichen_Token",
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    if (tokenIdentifier > 0 && tokenIdentifier <= 4)
+                                        --tokenIdentifier
+                                    }
+                        )
+
+                        Spacer (
+                            modifier = Modifier
+                                .padding(15.dp)
+                        )
+
+                        Image (
+                            painter = painterResource(R.drawable.pluszeichenstandard_foreground),
+                            contentDescription = "Pluszeichen_Token",
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    if (tokenIdentifier >= 0 && tokenIdentifier < 4)
+                                        ++tokenIdentifier
+                                }
+                        )
+                    }
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background (
+                            color = Pistachio,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Text (
+                        text = tokenText,
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End,
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background (
+                            color = Pistachio,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier
+                            .height(45.dp)
+                    ) {
+                        Image (
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    onDismissRequested()
+                                },
+                            painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+                            contentDescription = "Ring1_5",
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
 fun WelcomeScreen() {
 
     val density = LocalDensity.current
@@ -435,7 +795,8 @@ fun WelcomeScreen() {
     var imagePosition by remember { mutableStateOf(Offset.Zero) }
     var imageSize by remember { mutableStateOf(IntSize.Zero) }
 
-    var expanded by remember { mutableStateOf(false) }
+    var firstGoalMenuExpanded by remember { mutableStateOf(false) }
+    var firstTokenMenuExpanded by remember { mutableStateOf(false) }
 
     Box (
         modifier = Modifier
@@ -725,9 +1086,20 @@ fun WelcomeScreen() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 FirstGoalMenu (
-                    expanded = expanded,
+                    expanded = firstGoalMenuExpanded,
                     onDismissRequested = {
-                        expanded = false
+
+                        if (firstGoalMenuExpanded) {
+                            firstGoalMenuExpanded = false
+                            firstTokenMenuExpanded = true
+                        }
+                    }
+                )
+
+                FirstTokenMenu (
+                    expanded = firstTokenMenuExpanded,
+                    onDismissRequested = {
+                        firstTokenMenuExpanded = false
                     }
                 )
             }
@@ -789,7 +1161,7 @@ fun WelcomeScreen() {
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
-                            expanded = true
+                            firstGoalMenuExpanded = true
                         }
                 ) {
                     Row (
