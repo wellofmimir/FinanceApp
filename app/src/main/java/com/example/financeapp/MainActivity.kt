@@ -22,8 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.AdRequest
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.AdSize
 
-enum class Screen(id: Int) {
+enum class Screen (id: Int) {
     HOME(0),
     LIKEDQUOTES(1),
     WELCOME(2),
@@ -35,8 +39,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
-            
 
             MobileAds.initialize(this)
 
@@ -55,12 +57,12 @@ class MainActivity : ComponentActivity() {
 
                 // Aktueller Screen
                 when (sectionIdentifier) {
-                    Screen.WELCOME -> WelcomeScreen (
+                    Screen.WELCOME -> WelcomeScreen(
                         onFinished = { sectionIdentifier = Screen.HOME }
                     )
                     Screen.HOME -> HomeScreen()
                     Screen.LIKEDQUOTES -> LikedQuotesScreen()
-                    else -> HomeScreen()
+                    else -> HomeScreen() //TODO: ErrorScreen einbauen
                 }
 
                 Spacer(modifier = Modifier.height(1.dp))

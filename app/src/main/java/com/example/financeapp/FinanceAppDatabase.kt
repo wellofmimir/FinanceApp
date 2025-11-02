@@ -285,7 +285,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             database.insert("goals", null, values)
         }
     }
-
+    
     fun deleteDatabase() {
 
         if (databasePath.exists()) {
