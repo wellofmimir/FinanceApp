@@ -419,7 +419,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
 }
 
 @Composable
-fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
+fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: () -> Unit) {
 
     DropdownMenu (
         expanded = expanded,
@@ -774,7 +774,7 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    onDismissRequested()
+                                    onFinished()
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechts_foreground),
                             contentDescription = "Ring1_5",
@@ -786,9 +786,8 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
     }
 }
 
-
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(onFinished: () -> Unit) {
 
     val density = LocalDensity.current
 
@@ -1100,6 +1099,11 @@ fun WelcomeScreen() {
                     expanded = firstTokenMenuExpanded,
                     onDismissRequested = {
                         firstTokenMenuExpanded = false
+                    },
+                    onFinished = {
+                        firstTokenMenuExpanded = false
+                        onFinished()
+                        //TODO: etwas logik einbauen
                     }
                 )
             }

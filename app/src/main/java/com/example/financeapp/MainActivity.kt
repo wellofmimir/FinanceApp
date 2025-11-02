@@ -71,15 +71,15 @@ class MainActivity : ComponentActivity() {
             ){
                 if (sectionIdentifier == 2) {
 
-
-                }
-                else {
-
+                } else {
                     HeaderSection(onNewSectionIdentifier = { newSectionIdentifier ->
                         sectionIdentifier = newSectionIdentifier
                     })
 
-
+                    Spacer (
+                        modifier = Modifier
+                            .padding(1.dp)
+                    )
                 }
 
                 NavHost (
@@ -87,7 +87,11 @@ class MainActivity : ComponentActivity() {
                     startDestination = "WelcomeScreen"
                 ) {
                     composable("WelcomeScreen") {
-                        WelcomeScreen()
+                        WelcomeScreen (
+                            onFinished = {
+                                sectionIdentifier = 0 //Jetzt wird zum HomeScreen umgeschalten
+                            }
+                        )
                     }
 
                     composable("HomeScreen") {
