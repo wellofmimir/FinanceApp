@@ -101,7 +101,6 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
                 var herzZumLikenClicked by remember { mutableStateOf(false) }
 
                 quoteViewModel.getLikedQuotes().forEach { quote ->
-
                     if (quote.quote == quoteState.value)
                         herzZumLikenClicked = true
                 }

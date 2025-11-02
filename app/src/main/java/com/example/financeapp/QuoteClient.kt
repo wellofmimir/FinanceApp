@@ -31,10 +31,10 @@ class QuoteClient private constructor(){
 
         Thread {
             try {
-                val response = client.newCall(request).execute()
-                //val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}" //response.body?.string()
-                val responseBody = response.body?.string()
-                response.close()
+                //val response = client.newCall(request).execute()
+                val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}" //response.body?.string()
+                //val responseBody = response.body?.string()
+                //response.close()
 
                 Handler (Looper.getMainLooper()).post {
                     callback.onResult(responseBody)

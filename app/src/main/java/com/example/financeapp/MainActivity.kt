@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             MobileAds.initialize(this)
 
             val navController = rememberNavController()
-            var sectionIdentifier by remember { mutableStateOf(0) }
+            var sectionIdentifier by remember { mutableStateOf(2) }
 
             LaunchedEffect(sectionIdentifier) {
 
@@ -53,6 +53,12 @@ class MainActivity : ComponentActivity() {
                             inclusive = true
                         }
                     }
+
+                    2 -> navController.navigate("WelcomeScreen") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
 
@@ -63,19 +69,27 @@ class MainActivity : ComponentActivity() {
                     ),
                 verticalArrangement = Arrangement.Center
             ){
-                HeaderSection(onNewSectionIdentifier = { newSectionIdentifier ->
-                    sectionIdentifier = newSectionIdentifier
-                })
+                if (sectionIdentifier == 2) {
 
-                Spacer (
-                    modifier = Modifier
-                        .padding(1.dp)
-                )
+
+                }
+                else {
+
+                    HeaderSection(onNewSectionIdentifier = { newSectionIdentifier ->
+                        sectionIdentifier = newSectionIdentifier
+                    })
+
+
+                }
 
                 NavHost (
                     navController = navController,
-                    startDestination = "HomeScreen"
+                    startDestination = "WelcomeScreen"
                 ) {
+                    composable("WelcomeScreen") {
+                        WelcomeScreen()
+                    }
+
                     composable("HomeScreen") {
                         HomeScreen()
                     }
@@ -145,4 +159,3 @@ fun HomeScreen() {
 fun LikedQuotesScreen() {
     LikedQuotesSection()
 }
-
