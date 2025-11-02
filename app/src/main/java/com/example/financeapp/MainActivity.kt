@@ -22,97 +22,52 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.AdRequest
-import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.AdSize
+
+enum class Screen(id: Int) {
+    HOME(0),
+    LIKEDQUOTES(1),
+    WELCOME(2),
+    GOALHISTORY(3)
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
 
-            //AdMob von Google initialisieren
+            
+
             MobileAds.initialize(this)
 
-            val navController = rememberNavController()
-            var sectionIdentifier by remember { mutableStateOf(2) }
+            var sectionIdentifier by remember { mutableStateOf(Screen.WELCOME) }
 
-            LaunchedEffect(sectionIdentifier) {
-
-                when (sectionIdentifier) {
-
-                    0 -> navController.navigate("HomeScreen") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-
-                    1 -> navController.navigate("LikedQuotesScreen") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-
-                    2 -> navController.navigate("WelcomeScreen") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-                }
-            }
-
-            Column (
+            Column(
                 modifier = Modifier
-                    .background (
-                        color = Emerald
-                    ),
-                verticalArrangement = Arrangement.Center
-            ){
-                if (sectionIdentifier == 2) {
-
-                } else {
-                    HeaderSection(onNewSectionIdentifier = { newSectionIdentifier ->
-                        sectionIdentifier = newSectionIdentifier
-                    })
-
-                    Spacer (
-                        modifier = Modifier
-                            .padding(1.dp)
-                    )
+                    .background(Emerald)
+                    .fillMaxSize()
+            ) {
+                // Header nur, wenn nicht Welcome
+                if (sectionIdentifier != Screen.WELCOME) {
+                    HeaderSection(onNewSectionIdentifier = { sectionIdentifier = it })
+                    Spacer(modifier = Modifier.height(1.dp))
                 }
 
-                NavHost (
-                    navController = navController,
-                    startDestination = "WelcomeScreen"
-                ) {
-                    composable("WelcomeScreen") {
-                        WelcomeScreen (
-                            onFinished = {
-                                sectionIdentifier = 0 //Jetzt wird zum HomeScreen umgeschalten
-                            }
-                        )
-                    }
-
-                    composable("HomeScreen") {
-                        HomeScreen()
-                    }
-
-                    composable("LikedQuotesScreen") {
-                        LikedQuotesScreen()
-                    }
-                }
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(1.dp)
-                )
-
+                // Aktueller Screen
                 when (sectionIdentifier) {
+                    Screen.WELCOME -> WelcomeScreen (
+                        onFinished = { sectionIdentifier = Screen.HOME }
+                    )
+                    Screen.HOME -> HomeScreen()
+                    Screen.LIKEDQUOTES -> LikedQuotesScreen()
+                    else -> HomeScreen()
+                }
 
-                    0 -> AdSection()
-                    1 -> Unit
-                    else -> Unit
+                Spacer(modifier = Modifier.height(1.dp))
+
+                // AdSection nur auf Home
+                if (sectionIdentifier == Screen.HOME) {
+                    AdSection()
                 }
             }
         }

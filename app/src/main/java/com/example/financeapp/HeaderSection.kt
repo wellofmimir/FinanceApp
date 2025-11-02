@@ -32,7 +32,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
 
 @Composable
-fun HeaderSection(onNewSectionIdentifier: (Int) -> Unit, context: Context = LocalContext.current) {
+fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, context: Context = LocalContext.current) {
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -130,17 +130,17 @@ fun HeaderSection(onNewSectionIdentifier: (Int) -> Unit, context: Context = Loca
                     },
                     onOverviewClicked = {
                         sectionIdentifier = 0
-                        onNewSectionIdentifier(sectionIdentifier)
+                        onNewSectionIdentifier(Screen.HOME)
                         expanded = false
                     },
                     onGoalHistoryClicked = {
                         sectionIdentifier = 2
-                        onNewSectionIdentifier(sectionIdentifier)
+                        onNewSectionIdentifier(Screen.GOALHISTORY)
                         expanded = false
                     },
                     onYourQuotesClicked = {
                         sectionIdentifier = 1
-                        onNewSectionIdentifier(sectionIdentifier)
+                        onNewSectionIdentifier(Screen.LIKEDQUOTES)
                         expanded = false
                     }
                 )
