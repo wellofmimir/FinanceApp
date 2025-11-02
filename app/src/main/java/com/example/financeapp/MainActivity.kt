@@ -29,9 +29,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.delay
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.estimateAnimationDurationMillis
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.*
+import androidx.compose.animation.core.tween
+
 
 
 enum class Screen (id: Int) {
@@ -66,11 +70,11 @@ class MainActivity : ComponentActivity() {
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
 
-            var sectionIdentifier by remember { mutableStateOf(Screen.SPLASH)}
+            var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
 
             LaunchedEffect(user) {
 
-                if (sectionIdentifier == Screen.SPLASH)
+                if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
                     delay(2000)
 
                 sectionIdentifier = when (user) {
@@ -97,10 +101,12 @@ class MainActivity : ComponentActivity() {
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.WELCOME,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = fadeIn (
+                        animationSpec = tween (
+                            durationMillis = 1000
+                        )
+                    )
                 ) {
-
                     WelcomeScreen (
                         onFinished = {
                             mainActivityViewModel.loadUser()
@@ -111,28 +117,30 @@ class MainActivity : ComponentActivity() {
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.HOME,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = fadeIn (
+                        animationSpec = tween (
+                            durationMillis = 1000
+                        )
+                    )
                 ) {
                     HomeScreen ()
                 }
 
-                AnimatedVisibility (
-                    visible = sectionIdentifier == Screen.LIKEDQUOTES,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
+                if (sectionIdentifier == Screen.LIKEDQUOTES)
                     LikedQuotesScreen()
-                }
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.SPLASH,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = fadeIn (
+                        animationSpec = tween (
+                            durationMillis = 1000
+                        )
+                    )
                 ) {
-
                     WelcomeScreen (
-                        onFinished = {Unit},
+                        onFinished = {
+                            mainActivityViewModel.loadUser()
+                        },
                         true
                     )
                 }

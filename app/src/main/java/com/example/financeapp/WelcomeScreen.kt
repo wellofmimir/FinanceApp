@@ -1226,7 +1226,7 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
         }
     }
 
-    Box(
+    Box (
         modifier = Modifier
             .offset(
                 x = with(density) { imagePosition.x.toDp() },
