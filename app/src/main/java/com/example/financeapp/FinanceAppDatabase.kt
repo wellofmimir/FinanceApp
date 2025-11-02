@@ -131,7 +131,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         val cursor = database.rawQuery("SELECT name FROM userinformation WHERE id = 1", null)
 
         val user = if (cursor.moveToFirst()) {
-            cursor.getString(0)
+            cursor.getString(cursor.getColumnIndexOrThrow("name"))
         } else {
             "DUMMY"
         }

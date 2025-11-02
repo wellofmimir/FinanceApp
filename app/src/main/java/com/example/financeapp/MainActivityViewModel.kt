@@ -11,8 +11,6 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
     var user = internUser.asStateFlow()
 
     fun loadUser() {
-        viewModelScope.launch {
-            internUser.value = repository.getUser()
-        }
+        internUser.value = repository.getUser()
     }
 }

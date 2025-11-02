@@ -40,10 +40,16 @@ import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.Alignment
-
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
+import android.content.Context
 
 @Composable
-fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
+fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (String) -> Unit) {
+
+    var username by remember { mutableStateOf("") }
 
     DropdownMenu (
         expanded = expanded,
@@ -74,12 +80,10 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
-                var nameText by remember { mutableStateOf("") }
-
                 TextField (
-                    value = nameText,
+                    value = username,
                     onValueChange = {
-                        nameText = it
+                        username = it
                     },
                     placeholder = {
                         Text (
@@ -406,7 +410,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    onDismissRequested()
+                                    onFinished(username)
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
                             contentDescription = "Ring1_5",
@@ -420,6 +424,8 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit) {
 
 @Composable
 fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: () -> Unit) {
+
+    val username by remember { mutableStateOf("") }
 
     DropdownMenu (
         expanded = expanded,
@@ -787,7 +793,21 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished
 }
 
 @Composable
-fun WelcomeScreen(onFinished: () -> Unit) {
+fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context = LocalContext.current) {
+
+    val welcomeScreenViewModel: WelcomeScreenViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = UserRepository(database)
+
+                return WelcomeScreenViewModel(repository) as T
+            }
+        }
+    )
+
+    var username by remember { mutableStateOf("") }
 
     val density = LocalDensity.current
 
@@ -1087,11 +1107,15 @@ fun WelcomeScreen(onFinished: () -> Unit) {
                 FirstGoalMenu (
                     expanded = firstGoalMenuExpanded,
                     onDismissRequested = {
-
                         if (firstGoalMenuExpanded) {
                             firstGoalMenuExpanded = false
                             firstTokenMenuExpanded = true
                         }
+                    },
+                    onFinished = {
+                        username = it
+                        firstGoalMenuExpanded = false
+                        firstTokenMenuExpanded = true
                     }
                 )
 
@@ -1102,8 +1126,13 @@ fun WelcomeScreen(onFinished: () -> Unit) {
                     },
                     onFinished = {
                         firstTokenMenuExpanded = false
-                        onFinished()
-                        //TODO: etwas logik einbauen
+
+                        if (username.isEmpty() || username == "DUMMY") {
+                            //TODO: Fehlermeldung anzeigen
+                        } else {
+                            welcomeScreenViewModel.updateUser(username)
+                            onFinished()
+                        }
                     }
                 )
             }
@@ -1119,75 +1148,78 @@ fun WelcomeScreen(onFinished: () -> Unit) {
                 Text (
                     modifier = Modifier
                         .padding(start = 25.dp),
-                    text = "Welcome to Greeen.",
+                    text = if (splashMode) "Greeen." else "Welcome to Greeen.",
                     color = Pistachio,
-                    fontSize = 35.sp,
+                    fontSize = if (splashMode) 48.sp else 35.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Column (
-                verticalArrangement = Arrangement.Center
-            ) {
-                Spacer (
-                    modifier = Modifier
-                        .padding(10.dp)
-                )
+            if (!splashMode) {
 
-                Text (
-                    modifier = Modifier
-                        .padding(start = 25.dp, end = 25.dp),
-                    text = "To get started, please tell us a few details about you...",
-                    color = Pistachio,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Light
-                )
-            }
-
-            Column (
-                modifier = Modifier
-                    .offset(x = (LocalConfiguration.current.screenWidthDp * 0.34).dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Spacer (
-                    modifier = Modifier
-                        .padding(20.dp)
-                )
-
-                Box (
-                    modifier = Modifier
-                        .background(
-                            color = Pistachio,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .height(65.dp)
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            firstGoalMenuExpanded = true
-                        }
+                Column (
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
+                    Spacer (
                         modifier = Modifier
-                            .padding(5.dp)
+                            .padding(10.dp)
+                    )
+
+                    Text (
+                        modifier = Modifier
+                            .padding(start = 25.dp, end = 25.dp),
+                        text = "To get started, please tell us a few details about you...",
+                        color = Pistachio,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Light
+                    )
+                }
+
+                Column (
+                    modifier = Modifier
+                        .offset(x = (LocalConfiguration.current.screenWidthDp * 0.34).dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Spacer (
+                        modifier = Modifier
+                            .padding(20.dp)
+                    )
+
+                    Box (
+                        modifier = Modifier
+                            .background(
+                                color = Pistachio,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .height(65.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                firstGoalMenuExpanded = true
+                            }
                     ) {
-
-                        Text (
+                        Row (
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .padding(start = 25.dp, end = 25.dp),
-                            text = "Let's go!",
-                            color = Emerald,
-                            fontSize = 36.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                                .padding(5.dp)
+                        ) {
 
-                        Image (
-                            painter = painterResource(R.drawable.pfeilnachrechts_foreground),
-                            contentDescription = "PfeilNachRechts"
-                        )
+                            Text (
+                                modifier = Modifier
+                                    .padding(start = 25.dp, end = 25.dp),
+                                text = "Let's go!",
+                                color = Emerald,
+                                fontSize = 36.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Image (
+                                painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+                                contentDescription = "PfeilNachRechts"
+                            )
+                        }
                     }
                 }
             }
