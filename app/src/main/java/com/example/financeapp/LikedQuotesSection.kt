@@ -60,7 +60,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
             likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
-                    AdSection (
+                    AdSectionLargeBanner (
                         tutorialInformation = tutorialInformation
                     )
 
@@ -157,7 +157,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AdSection (
+                        AdSectionLargeBanner (
                             tutorialInformation = tutorialInformation
                         )
                     }

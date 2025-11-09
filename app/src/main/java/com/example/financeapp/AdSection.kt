@@ -10,7 +10,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 @Composable
-fun AdSection(tutorialInformation: TutorialInformation) {
+fun AdSectionLargeBanner(tutorialInformation: TutorialInformation) {
 
     AndroidView (
         modifier = Modifier
@@ -20,6 +20,24 @@ fun AdSection(tutorialInformation: TutorialInformation) {
         factory = { context ->
             AdView(context).apply {
                 setAdSize(AdSize.LARGE_BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
+            }
+        }
+    )
+}
+
+@Composable
+fun AdSectionMiddleBanner(tutorialInformation: TutorialInformation) {
+
+    AndroidView (
+        modifier = Modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        factory = { context ->
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
                 adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
                 loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
             }

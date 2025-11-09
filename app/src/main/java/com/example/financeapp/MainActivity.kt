@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,6 +35,9 @@ import androidx.compose.ui.platform.LocalDensity
 import android.graphics.Rect
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.ui.Alignment
 
 enum class Screen (id: Int) {
@@ -85,7 +87,7 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
-            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(true, TutorialStep.NONE))}
+            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
@@ -179,6 +181,10 @@ class MainActivity : ComponentActivity() {
                         tutorialInformation = tutorialInformation
                     )
 
+                if (sectionIdentifier == Screen.GOALHISTORY)
+                    GoalHistorySection (
+                    )
+
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.SPLASH,
                     enter = fadeIn (
@@ -192,15 +198,6 @@ class MainActivity : ComponentActivity() {
                             mainActivityViewModel.loadUser()
                         },
                         true
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(1.dp))
-
-                // AdSection nur auf Home
-                if (sectionIdentifier == Screen.HOME) {
-                    AdSection (
-                        tutorialInformation = tutorialInformation
                     )
                 }
             }
@@ -318,7 +315,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation) {
             .background(
                 color = Emerald
             ),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         Row (
             modifier = Modifier
@@ -355,5 +352,76 @@ fun HomeScreen(tutorialInformation: TutorialInformation) {
         RecentlyCompletedGoalsSection (
             tutorialInformation = tutorialInformation
         )
+
+        Spacer (
+            modifier = Modifier
+                .padding(1.dp)
+        )
+
+        AdSectionMiddleBanner (
+            tutorialInformation = tutorialInformation
+        )
     }
+}
+
+@Composable
+fun GoalHistorySection() {
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.5f),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+
+            PunchCardSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
+                TotalGoalsAchievedSection (
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                )
+
+                TotalTokensEarnedSection (
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                )
+            }
+        }
+
+        Spacer (
+            modifier = Modifier
+                .padding(1.dp)
+        )
+
+        AchievementsSection (
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.65f)
+        )
+
+        Spacer (
+            modifier = Modifier
+                .padding(1.dp)
+        )
+
+        AdSectionLargeBanner (
+            tutorialInformation = TutorialInformation (
+                isActive = false,
+                tutorialStep = TutorialStep.NONE
+            )
+        )
 }
