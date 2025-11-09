@@ -4,15 +4,17 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 @Composable
-fun AdSection() {
+fun AdSection(tutorialInformation: TutorialInformation) {
 
     AndroidView (
         modifier = Modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .fillMaxWidth()
             .fillMaxHeight(),
         factory = { context ->

@@ -22,12 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
-fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
+fun RecentlyCompletedGoalsSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val recentlyCompletedGoalsSectionViewModel: RecentlyCompletedGoalsSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
@@ -43,6 +44,8 @@ fun RecemtlyCompletedGoalsSection(context: Context = LocalContext.current) {
     recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
 
     Column (
+        modifier = Modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECENTLY_COMPLETED_GOALS) 0.1f else 1.0f)
     ) {
         Row (
             modifier = Modifier

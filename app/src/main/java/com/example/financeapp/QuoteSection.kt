@@ -30,10 +30,10 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.draw.alpha
 
 @Composable
-fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -56,7 +56,8 @@ fun QuoteSection(modifier: Modifier = Modifier, context: Context = LocalContext.
 
     Column (
         modifier = modifier
-            .aspectRatio(1f),
+            .aspectRatio(1f)
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.QUOTE) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

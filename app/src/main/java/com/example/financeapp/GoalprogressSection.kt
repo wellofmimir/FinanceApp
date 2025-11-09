@@ -28,12 +28,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val goalprogressSectionViewModel: GoalprogressSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
@@ -70,7 +72,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, context: Context = LocalC
 
     Column (
         modifier = modifier
-            .aspectRatio(1f),
+            .aspectRatio(1f)
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOAL) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

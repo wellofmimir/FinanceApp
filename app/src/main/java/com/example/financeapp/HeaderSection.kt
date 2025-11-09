@@ -21,7 +21,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
@@ -30,9 +29,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 
 @Composable
-fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, context: Context = LocalContext.current) {
+fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -64,6 +65,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, context: Context = L
     Column (
         modifier = Modifier
             .fillMaxWidth()
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)

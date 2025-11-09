@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
@@ -28,15 +29,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.delay
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.estimateAnimationDurationMillis
+import androidx.compose.material3.Text
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.*
-import androidx.compose.animation.core.tween
-
-
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalDensity
+import android.graphics.Rect
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.Alignment
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -45,6 +45,24 @@ enum class Screen (id: Int) {
     GOALHISTORY(3),
     SPLASH(4)
 }
+
+enum class TutorialStep (id: Int) {
+
+    NONE (0),
+    RECENTLY_COMPLETED_GOALS (1),
+    CURRENT_GOALS (2),
+    CURRENT_GOALS_BUTTON (3),
+    CURRENT_GOAL (4),
+    QUOTE (5),
+
+    DONE (6)
+}
+
+data class TutorialInformation (
+
+    var isActive: Boolean,
+    var tutorialStep: TutorialStep
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +85,8 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
+            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(true, TutorialStep.NONE))}
+
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
 
@@ -88,13 +108,39 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .background(Emerald)
                     .fillMaxSize()
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        tutorialInformation = tutorialInformation.copy (
+                            isActive = tutorialInformation.isActive,
+                            tutorialStep =  when (tutorialInformation.tutorialStep) {
+                                TutorialStep.NONE -> TutorialStep.RECENTLY_COMPLETED_GOALS
+                                TutorialStep.RECENTLY_COMPLETED_GOALS -> TutorialStep.CURRENT_GOALS
+                                TutorialStep.CURRENT_GOALS -> TutorialStep.CURRENT_GOAL
+                                TutorialStep.CURRENT_GOAL -> TutorialStep.QUOTE
+                                TutorialStep.QUOTE -> TutorialStep.DONE
+                                else -> TutorialStep.NONE
+                            }
+                        )
+
+                        if (tutorialInformation.tutorialStep == TutorialStep.DONE)
+                            tutorialInformation = tutorialInformation.copy (
+                                isActive = false,
+                                tutorialStep = TutorialStep.NONE
+                            )
+                    }
             ) {
                 // Header nur, wenn nicht Welcome
                 if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY).contains(sectionIdentifier)) {
                     HeaderSection(onNewSectionIdentifier = {
-                        sectionIdentifier = it
-                    })
-                    Spacer(modifier = Modifier.height(1.dp))
+                            sectionIdentifier = it
+                        },
+                        tutorialInformation = tutorialInformation
+                    )
+                    Spacer (
+                        modifier = Modifier.height(1.dp)
+                    )
                 }
 
                 // Aktueller Screen
@@ -123,11 +169,15 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 ) {
-                    HomeScreen ()
+                    HomeScreen (
+                        tutorialInformation = tutorialInformation
+                    )
                 }
 
                 if (sectionIdentifier == Screen.LIKEDQUOTES)
-                    LikedQuotesScreen()
+                    LikedQuotesSection (
+                        tutorialInformation = tutorialInformation
+                    )
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.SPLASH,
@@ -149,7 +199,111 @@ class MainActivity : ComponentActivity() {
 
                 // AdSection nur auf Home
                 if (sectionIdentifier == Screen.HOME) {
-                    AdSection()
+                    AdSection (
+                        tutorialInformation = tutorialInformation
+                    )
+                }
+            }
+
+            if (sectionIdentifier == Screen.HOME) {
+
+                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.NONE) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Welcome to your new goal tracking space.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECENTLY_COMPLETED_GOALS) {
+
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Here, you can track your token progress. Tap to see your punch card, and tracking on goals you've completed.\n\nWhen you reach fifteen goals completed, you get to treat yourself!",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOALS) {
+
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding (
+                                top = 400.dp
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "This is where your see your current objectives, besides your targeted goal.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOAL) {
+
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.QUOTE) {
+
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Everyone needs words of motivation. Here you can view inspirational quotes, and like them to save for later.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -157,7 +311,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(tutorialInformation: TutorialInformation) {
 
     Column (
         modifier = Modifier
@@ -172,11 +326,15 @@ fun HomeScreen() {
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             GoalprogressSection (
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f),
+                tutorialInformation = tutorialInformation
             )
 
             QuoteSection (
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f),
+                tutorialInformation = tutorialInformation
             )
         }
 
@@ -185,18 +343,17 @@ fun HomeScreen() {
                 .padding(1.dp)
         )
 
-        GoalsSection()
+        GoalsSection (
+            tutorialInformation = tutorialInformation
+        )
 
         Spacer (
             modifier = Modifier
                 .padding(1.dp)
         )
 
-        RecemtlyCompletedGoalsSection()
+        RecentlyCompletedGoalsSection (
+            tutorialInformation = tutorialInformation
+        )
     }
-}
-
-@Composable
-fun LikedQuotesScreen() {
-    LikedQuotesSection()
 }

@@ -34,10 +34,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 
 @Composable
-fun GoalsSection(context: Context = LocalContext.current) {
+fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val goalSectionViewModel: GoalsSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -57,6 +58,8 @@ fun GoalsSection(context: Context = LocalContext.current) {
     var visible by remember { mutableStateOf(true) }
 
     Column (
+        modifier = Modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

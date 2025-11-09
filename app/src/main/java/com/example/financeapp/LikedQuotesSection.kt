@@ -26,7 +26,7 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun LikedQuotesSection(context: Context = LocalContext.current) {
+fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val likedQuotesSectionViewModel: LikedQuotesSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -60,7 +60,9 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
             likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
-                    AdSection()
+                    AdSection (
+                        tutorialInformation = tutorialInformation
+                    )
 
                     Spacer (
                         modifier = Modifier
@@ -149,13 +151,15 @@ fun LikedQuotesSection(context: Context = LocalContext.current) {
                             color = Emerald
                         )
                 ) {
-                    Column(
+                    Column (
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AdSection()
+                        AdSection (
+                            tutorialInformation = tutorialInformation
+                        )
                     }
                 }
             }
