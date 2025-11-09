@@ -9,4 +9,12 @@ class UserRepository(private val database: FinanceAppDatabase) {
     fun updateUser(user: String) {
         database.updateUser(user)
     }
+
+    fun isTutorialDone(): Boolean {
+        return database.isTutorialDone()
+    }
+
+    fun updateTutorialDoneStatus(status: Boolean) {
+        return database.updateTutorialStatus(if (status) 1 else 0)
+    }
 }

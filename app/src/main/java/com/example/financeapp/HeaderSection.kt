@@ -59,6 +59,8 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
         0 -> "Hey ${username.value}, what's up?"
         1 -> "Your Liked Quotes"
         2 -> "Goals Completed"
+        3 -> "Saved Receipts"
+        4 -> "About Greeen"
         else -> "Welcome!"
     }
 
@@ -143,6 +145,16 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                     onYourQuotesClicked = {
                         sectionIdentifier = 1
                         onNewSectionIdentifier(Screen.LIKEDQUOTES)
+                        expanded = false
+                    },
+                    onReceiptsClicked = {
+                        sectionIdentifier = 3
+                        onNewSectionIdentifier(Screen.RECEIPTS)
+                        expanded = false
+                    },
+                    onAboutUsClicked = {
+                        sectionIdentifier = 4
+                        onNewSectionIdentifier(Screen.ABOUT_US)
                         expanded = false
                     }
                 )

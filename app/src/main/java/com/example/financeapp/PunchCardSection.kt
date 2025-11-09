@@ -1,6 +1,5 @@
 package com.example.financeapp
 
-import android.R
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +97,7 @@ fun PunchCardSection(modifier: Modifier = Modifier) {
                     append("once this card is completed.")
                 },
                 fontSize = 16.sp,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Center
             )
         }
     }

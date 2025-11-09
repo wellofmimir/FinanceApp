@@ -47,7 +47,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         //in SQLite sind Foreign-Keys standardmäßig ausgestellt, also müssen wir diese anschalten
         database.execSQL("PRAGMA foreign_keys = ON;")
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL, tutorialdone INTEGER NOT NULL DEFAULT 0)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
@@ -138,6 +138,37 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         cursor.close()
         return user
+    }
+
+    fun isTutorialDone(): Boolean {
+
+        val cursor = database.rawQuery("SELECT tutorialdone FROM userinformation WHERE id = 1", null)
+
+        val tutorialDone: Int = if (cursor.moveToFirst()) {
+            cursor.getInt(cursor.getColumnIndexOrThrow("tutorialdone"))
+        } else {
+            0
+        }
+
+        return tutorialDone == 1
+    }
+
+    fun updateTutorialStatus(status: Int) {
+
+        val cursor = database.rawQuery("SELECT * FROM userinformation WHERE id = 1", null)
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("tutorialdone", status)
+        }
+
+        if (exists) {
+            database.update("userinformation", values, "id = ?", arrayOf("1"))
+        } else {
+            values.put("tutorialdone", status)
+            database.insert("userinformation", null, values)
+        }
     }
 
     fun getIDGoalStatus(description: String): GoalStatus? {

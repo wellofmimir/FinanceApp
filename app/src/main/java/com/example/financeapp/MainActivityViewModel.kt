@@ -10,7 +10,13 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
     private var internUser = MutableStateFlow<String>("")
     var user = internUser.asStateFlow()
 
+    var isTutorialDone = repository.isTutorialDone()
+
     fun loadUser() {
         internUser.value = repository.getUser()
+    }
+
+    fun updateTutorialDoneStatus(status: Boolean) {
+        repository.updateTutorialDoneStatus(status)
     }
 }

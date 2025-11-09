@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
@@ -21,7 +22,13 @@ import com.example.financeapp.ui.theme.Emerald
 
 
 @Composable
-fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverviewClicked: () -> Unit, onGoalHistoryClicked: () -> Unit, onYourQuotesClicked: () -> Unit) {
+fun DreiPunkteMenu(expanded: Boolean,
+                   onDismissRequested: () -> Unit,
+                   onOverviewClicked: () -> Unit,
+                   onGoalHistoryClicked: () -> Unit,
+                   onYourQuotesClicked: () -> Unit,
+                   onReceiptsClicked: () -> Unit,
+                   onAboutUsClicked: () -> Unit) {
 
     DropdownMenu (
         expanded = expanded,
@@ -60,7 +67,7 @@ fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverview
                 }
             )
 
-            Divider (
+            HorizontalDivider (
                 color = Color.White,
                 thickness = 1.dp,
                 modifier = Modifier
@@ -87,7 +94,7 @@ fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverview
                 }
             )
 
-            Divider (
+            HorizontalDivider (
                 color = Color.White,
                 thickness = 1.dp,
                 modifier = Modifier
@@ -111,6 +118,60 @@ fun DreiPunkteMenu(expanded: Boolean, onDismissRequested: () -> Unit, onOverview
                 },
                 onClick = {
                     onYourQuotesClicked()
+                }
+            )
+
+            HorizontalDivider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "Receipts",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onReceiptsClicked()
+                }
+            )
+
+            HorizontalDivider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "About us",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onAboutUsClicked()
                 }
             )
         }

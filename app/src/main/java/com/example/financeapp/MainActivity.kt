@@ -31,13 +31,9 @@ import kotlinx.coroutines.delay
 import androidx.compose.material3.Text
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.platform.LocalDensity
-import android.graphics.Rect
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.ui.Alignment
 
 enum class Screen (id: Int) {
@@ -45,7 +41,11 @@ enum class Screen (id: Int) {
     LIKEDQUOTES(1),
     WELCOME(2),
     GOALHISTORY(3),
-    SPLASH(4)
+    SPLASH(4),
+
+    RECEIPTS(5),
+
+    ABOUT_US(6)
 }
 
 enum class TutorialStep (id: Int) {
@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
-            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
+            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(!mainActivityViewModel.isTutorialDone, TutorialStep.NONE))}
 
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
@@ -126,15 +126,18 @@ class MainActivity : ComponentActivity() {
                             }
                         )
 
-                        if (tutorialInformation.tutorialStep == TutorialStep.DONE)
-                            tutorialInformation = tutorialInformation.copy (
+                        if (tutorialInformation.tutorialStep == TutorialStep.DONE) {
+                            tutorialInformation = tutorialInformation.copy(
                                 isActive = false,
                                 tutorialStep = TutorialStep.NONE
                             )
+
+                            mainActivityViewModel.updateTutorialDoneStatus(true)
+                        }
                     }
             ) {
                 // Header nur, wenn nicht Welcome
-                if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY).contains(sectionIdentifier)) {
+                if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US).contains(sectionIdentifier)) {
                     HeaderSection(onNewSectionIdentifier = {
                             sectionIdentifier = it
                         },
@@ -182,8 +185,13 @@ class MainActivity : ComponentActivity() {
                     )
 
                 if (sectionIdentifier == Screen.GOALHISTORY)
-                    GoalHistorySection (
-                    )
+                    GoalHistorySection()
+
+                if (sectionIdentifier == Screen.RECEIPTS)
+                    ReceiptsSection()
+
+                if (sectionIdentifier == Screen.ABOUT_US)
+                    AboutUsSection()
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.SPLASH,
@@ -424,4 +432,128 @@ fun GoalHistorySection() {
                 tutorialStep = TutorialStep.NONE
             )
         )
+}
+
+@Composable
+fun ReceiptsSection() {
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+
+        PunchCardSection (
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
+
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        ) {
+            TotalGoalsAchievedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+
+            TotalTokensEarnedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+        }
+    }
+
+    Spacer (
+        modifier = Modifier
+            .padding(1.dp)
+    )
+
+    AchievementsSection (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.65f)
+    )
+
+    Spacer (
+        modifier = Modifier
+            .padding(1.dp)
+    )
+
+    AdSectionLargeBanner (
+        tutorialInformation = TutorialInformation (
+            isActive = false,
+            tutorialStep = TutorialStep.NONE
+        )
+    )
+}
+
+@Composable
+fun AboutUsSection() {
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+
+        PunchCardSection (
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
+
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        ) {
+            TotalGoalsAchievedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+
+            TotalTokensEarnedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+        }
+    }
+
+    Spacer (
+        modifier = Modifier
+            .padding(1.dp)
+    )
+
+    AchievementsSection (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.65f)
+    )
+
+    Spacer (
+        modifier = Modifier
+            .padding(1.dp)
+    )
+
+    AdSectionLargeBanner (
+        tutorialInformation = TutorialInformation (
+            isActive = false,
+            tutorialStep = TutorialStep.NONE
+        )
+    )
 }
