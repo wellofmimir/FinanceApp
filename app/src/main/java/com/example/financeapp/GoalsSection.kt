@@ -36,9 +36,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.font.FontStyle
 
 @Composable
-fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val goalSectionViewModel: GoalsSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -58,31 +59,36 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
     var visible by remember { mutableStateOf(true) }
 
     Column (
-        modifier = Modifier
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f),
+        modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f)
+            .background (
+                color = Pistachio,
+                shape = RoundedCornerShape(12.dp)
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row (
             modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.15f)
-            .background(
-                color = Pistachio,
-                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-            ),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceAround
+                .fillMaxWidth()
+                .background (
+                    color = Pistachio,
+                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text (
                 text = "Stuff you're working on:",
-                fontSize = 22.sp,
+                color = Emerald,
+                fontSize = 24.sp,
+                fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = Pistachio
                     )
-                    .padding(start = 0.dp, top = 26.dp, end = 0.dp, bottom = 0.dp)
+                    .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)
             )
 
             Image (
@@ -90,7 +96,7 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
                 contentDescription = "Pluszeichen",
                 modifier = Modifier
                     .size(64.dp)
-                    .offset(y = 8.dp, x = 50.dp)
+                    .offset(y = 8.dp, x = 28.dp)
                     .clickable (
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
@@ -98,7 +104,7 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
                         expanded = true
                         visible = true
                     },
-                alignment = Alignment.TopEnd
+                alignment = Alignment.TopStart
             )
 
             this@Row.AnimatedVisibility (
@@ -127,7 +133,7 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
 
         if (newGoalEntered) {
 
-            goals.take(5).forEach { item ->
+            goals.take(4).forEach { item ->
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -145,6 +151,7 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
                         painter = painterResource(R.drawable.bulletpoint_foreground),
                         contentDescription = "Bulletpoint",
                         modifier = Modifier
+
                             .background(
                                 color = Pistachio
                             )
@@ -159,7 +166,8 @@ fun GoalsSection(tutorialInformation: TutorialInformation, context: Context = Lo
 
                     Text (
                         fontSize = 18.sp,
-                        text = item.goal
+                        text = item.goal,
+                        color = Emerald
                     )
                 }
             }

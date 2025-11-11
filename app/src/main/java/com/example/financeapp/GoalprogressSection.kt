@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.graphics.Color
+import com.example.financeapp.ui.theme.Emerald
 
 @Composable
 fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
@@ -103,6 +104,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                 ) {
                     Text (
                         text = "Current goal:\n",
+                        color = Emerald,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         textDecoration = TextDecoration.Underline,

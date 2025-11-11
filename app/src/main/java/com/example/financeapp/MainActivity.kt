@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 
 enum class Screen (id: Int) {
@@ -143,8 +144,10 @@ class MainActivity : ComponentActivity() {
                         },
                         tutorialInformation = tutorialInformation
                     )
+
                     Spacer (
-                        modifier = Modifier.height(1.dp)
+                        modifier = Modifier
+                            .padding(2.dp)
                     )
                 }
 
@@ -327,13 +330,17 @@ fun HomeScreen(tutorialInformation: TutorialInformation) {
     ) {
         Row (
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                .fillMaxWidth()
         ) {
             GoalprogressSection (
                 modifier = Modifier
                     .weight(1f),
                 tutorialInformation = tutorialInformation
+            )
+
+            Spacer (
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
             )
 
             QuoteSection (
@@ -345,30 +352,45 @@ fun HomeScreen(tutorialInformation: TutorialInformation) {
 
         Spacer (
             modifier = Modifier
-                .padding(1.dp)
+                .padding(2.dp)
         )
 
-        GoalsSection (
-            tutorialInformation = tutorialInformation
-        )
-
-        Spacer (
+        Column (
             modifier = Modifier
-                .padding(1.dp)
-        )
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background (
+                    color = Color.Transparent,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            GoalsSection (
+                modifier = Modifier
+                    .weight(1f),
+                tutorialInformation = tutorialInformation
+            )
 
-        RecentlyCompletedGoalsSection (
-            tutorialInformation = tutorialInformation
-        )
+            Spacer (
+                modifier = Modifier
+                    .padding(2.dp)
+            )
 
-        Spacer (
-            modifier = Modifier
-                .padding(1.dp)
-        )
+            RecentlyCompletedGoalsSection (
+                modifier = Modifier
+                    .weight(0.7f),
+                tutorialInformation = tutorialInformation
+            )
 
-        AdSectionMiddleBanner (
-            tutorialInformation = tutorialInformation
-        )
+            AdSectionMiddleBanner (
+                modifier = Modifier
+                    .weight(0.3f),
+                tutorialInformation = tutorialInformation
+            )
+        }
+
+
     }
 }
 

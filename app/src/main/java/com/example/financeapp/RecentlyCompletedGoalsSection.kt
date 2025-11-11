@@ -21,14 +21,23 @@ import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import com.example.financeapp.ui.theme.Emerald
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.withStyle
+
 
 @Composable
-fun RecentlyCompletedGoalsSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val recentlyCompletedGoalsSectionViewModel: RecentlyCompletedGoalsSectionViewModel = viewModel (
         factory = object : ViewModelProvider.Factory {
@@ -44,23 +53,32 @@ fun RecentlyCompletedGoalsSection(tutorialInformation: TutorialInformation, cont
     recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
 
     Column (
-        modifier = Modifier
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECENTLY_COMPLETED_GOALS) 0.1f else 1.0f)
+        modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f)
+            .background (
+                color = Pistachio,
+                shape = RoundedCornerShape(12.dp)
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
+                .background (
                     color = Pistachio,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text (
                 text = "Recently Completed Goals:",
-                fontSize = 22.sp,
+                color = Emerald,
+                fontSize = 24.sp,
+                fontStyle = FontStyle.Italic,
                 modifier = Modifier
-                    .weight(0.1f)
+                    .weight(0.8f)
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = Pistachio
@@ -69,53 +87,64 @@ fun RecentlyCompletedGoalsSection(tutorialInformation: TutorialInformation, cont
             )
 
             Column (
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text (
-                    text = "${goals.size}",
-                    fontSize = 64.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Emerald,
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = 64.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Emerald
+                            )
+                        ) {
+                            append("${goals.size}\n")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Emerald
+                            )
+                        ) {
+                            append("total")
+                        }
+                    },
                     modifier = Modifier
-                        .padding(end = 24.dp)
+                        .padding(end = 24.dp),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 24.sp,
+                    color = Emerald
                 )
 
-                Text (
-                    text = "total",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Emerald,
-                    modifier = Modifier
-                        .padding(end = 24.dp)
-                )
             }
         }
 
         goals.take(3).forEach { item ->
-
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .offset(y = (-30).dp) //aufgrund von Jetpack Compose Fehler muss zurückgeschoben werden
                     .background(
                         shape = RoundedCornerShape(
                             bottomStart = if (item == goals.last()) 12.dp else 0.dp,
                             bottomEnd = if (item == goals.last()) 12.dp else 0.dp
                         ),
-                        color = Pistachio
+                        color = Color.Transparent
                     )
                     .padding(horizontal = 36.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image (
                     painter = painterResource(R.drawable.bulletpointfilled_foreground),
-                    contentDescription = "BulletpointFilled",
+                    contentDescription = "Bulletpoint",
                     modifier = Modifier
                         .background(
-                            color = Color.Transparent
+                            color = Pistachio
                         )
                         .size(24.dp),
-                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Emerald)
+                    colorFilter = ColorFilter.tint(Emerald)
                 )
 
                 Spacer (
@@ -125,7 +154,8 @@ fun RecentlyCompletedGoalsSection(tutorialInformation: TutorialInformation, cont
 
                 Text (
                     fontSize = 18.sp,
-                    text = item.goal
+                    text = item.goal,
+                    color = Emerald
                 )
             }
         }

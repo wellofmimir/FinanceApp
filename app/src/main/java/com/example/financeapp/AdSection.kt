@@ -2,8 +2,10 @@ package com.example.financeapp
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdSize
@@ -28,13 +30,13 @@ fun AdSectionLargeBanner(tutorialInformation: TutorialInformation) {
 }
 
 @Composable
-fun AdSectionMiddleBanner(tutorialInformation: TutorialInformation) {
+fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
 
     AndroidView (
-        modifier = Modifier
+        modifier = modifier
             .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .fillMaxWidth()
-            .fillMaxHeight(),
+            .height(50.dp),
         factory = { context ->
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)

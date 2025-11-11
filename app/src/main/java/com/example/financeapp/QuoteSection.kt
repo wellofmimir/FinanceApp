@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.ui.draw.alpha
+import com.example.financeapp.ui.theme.Emerald
 
 @Composable
 fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
@@ -78,7 +79,8 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     text = quoteState.value,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Left,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Emerald
                 )
             }
         }
@@ -131,7 +133,8 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     text = quotedPersonState.value,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    fontStyle = FontStyle.Italic
+                    fontStyle = FontStyle.Italic,
+                    color = Emerald
                 )
             }
         }

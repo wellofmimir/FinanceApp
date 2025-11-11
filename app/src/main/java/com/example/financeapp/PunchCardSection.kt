@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.Pistachio
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun PunchCardSection(modifier: Modifier = Modifier) {
@@ -90,13 +91,14 @@ fun PunchCardSection(modifier: Modifier = Modifier) {
             Text (
                 text = buildAnnotatedString {
                     withStyle (
-                        style = SpanStyle(fontWeight = FontWeight.Bold)
+                        style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)
                     ) {
                         append("Treat yourself ")
                     }
                     append("once this card is completed.")
                 },
                 fontSize = 16.sp,
+                color = Emerald,
                 textAlign = TextAlign.Center
             )
         }

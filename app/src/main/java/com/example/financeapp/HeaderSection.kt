@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
+import com.example.financeapp.ui.theme.Emerald
 
 @Composable
 fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
@@ -85,6 +86,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
 
         Text (
             text = formattedDate,
+            color = Emerald,
             fontSize = 16.sp,
             fontFamily = FontFamily.SansSerif
         )
@@ -102,6 +104,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
             ) {
                 Text(
                     text = headerText,
+                    color = Emerald,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
