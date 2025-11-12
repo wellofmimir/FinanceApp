@@ -1,39 +1,55 @@
 package com.example.financeapp
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.Pistachio
+import android.content.Context
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AchievementsSection(modifier: Modifier = Modifier) {
+fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+
+    val achievementsSectionViewModel: AchievementsSectionViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = GoalRepository(database)
+
+                return AchievementsSectionViewModel(repository) as T
+            }
+        }
+    )
+
+    val goals by achievementsSectionViewModel.goals.collectAsState()
+    achievementsSectionViewModel.getCompletedGoals()
 
     Column (
         modifier = modifier
@@ -64,9 +80,51 @@ fun AchievementsSection(modifier: Modifier = Modifier) {
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = Pistachio
                     )
-                    .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)
+                    .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 24.dp)
             )
-
         }
+
+        val listState = rememberLazyListState()
+
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxSize()
+                .background (
+                    color = Pistachio,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .weight(1f),
+            state = listState
+        ) {
+            items(goals.take(goals.size)) {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+
+                    Text (
+                        text = it.goal,
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .padding(start = 40.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
+                            .weight(1f)
+                    )
+
+                    Text (
+                        text = "6 November 2025",
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier
+                            .padding(start = 24.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
+                            .weight(1f)
+                    )
+                }
+            }
+        }
+
     }
 }

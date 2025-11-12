@@ -26,6 +26,13 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
             Goal(3, "pay the Loch Ness Monster", 3.50f, 0.10f,1),
             Goal(4, "buy a Toyota Corolla", 19999.0f, 15000.80f,2),
             Goal(5, "etf invest", 400.0f, 40.0f,2),
+            Goal(6, "pay the Loch Ness Monster", 3.50f, 0.10f,1),
+            Goal(7, "buy a Toyota Corolla", 19999.0f, 15000.80f,2),
+            Goal(8, "etf invest", 400.0f, 40.0f,2),
+            Goal(9, "etf invest", 400.0f, 40.0f,2),
+            Goal(10, "pay the Loch Ness Monster", 3.50f, 0.10f,1),
+            Goal(11, "buy a Toyota Corolla", 19999.0f, 15000.80f,2),
+            Goal(12, "etf invest", 400.0f, 40.0f,2),
         )
 
         internGoals.value = exampleGoals

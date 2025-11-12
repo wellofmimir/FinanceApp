@@ -389,8 +389,6 @@ fun HomeScreen(tutorialInformation: TutorialInformation) {
                 tutorialInformation = tutorialInformation
             )
         }
-
-
     }
 }
 

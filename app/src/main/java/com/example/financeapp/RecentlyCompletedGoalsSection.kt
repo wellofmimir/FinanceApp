@@ -89,6 +89,8 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
             Column (
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(0.2f)
             ) {
                 Text(
                     text = buildAnnotatedString {
@@ -112,7 +114,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                         }
                     },
                     modifier = Modifier
-                        .padding(end = 24.dp),
+                        .padding(start = 6.dp, end = 6.dp),
                     textAlign = TextAlign.Center,
                     lineHeight = 24.sp,
                     color = Emerald
