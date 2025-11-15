@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.runtime.mutableStateOf
@@ -119,9 +118,9 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                 Image (
                     painter = painterResource(R.drawable.punktemenu_foreground),
                     contentDescription = "Punktemenu",
-                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color.Black),
+                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Emerald),
                     modifier = Modifier
-                        .height(32.dp)
+                        .height(40.dp)
                         .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }

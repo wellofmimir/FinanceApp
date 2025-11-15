@@ -14,6 +14,10 @@ class GoalRepository(private val database: FinanceAppDatabase) {
         }
     }
 
+    fun getNewestGoalId(): Int {
+        return database.getNewestGoalId()
+    }
+
     fun updateGoal(goal: Goal) {
         database.run {
             updateGoal(goal)
@@ -35,10 +39,17 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
 
     fun getCurrentGoal(): Goal? {
+
         val goal = database.currentGoal()
 
-        if (goal == null)
-            return Goal(1, "Test", 1000.0f, 120.0f, 1)
+        if (goal == null) {
+
+            val currentDate = java.time.LocalDate.now()
+            val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
+            val formattedDate = currentDate.format(formatter)
+
+            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate)
+        }
 
         return goal
     }

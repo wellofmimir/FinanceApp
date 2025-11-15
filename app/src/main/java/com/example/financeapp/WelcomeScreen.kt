@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,7 +20,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.ui.theme.Pistachio
@@ -39,17 +39,21 @@ import androidx.compose.ui.unit.IntSize
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModel
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 
 @Composable
-fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (String) -> Unit) {
+fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (username: String, goal: String, amount: Float) -> Unit) {
 
     var username by remember { mutableStateOf("") }
+    var goal by remember {mutableStateOf("")}
+    var amountText by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf(0.0f) }
 
     DropdownMenu (
         expanded = expanded,
@@ -186,8 +190,9 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                     .padding(start = 5.dp, end = 5.dp)
             ) {
                 TextField (
-                    value = "",
+                    value = goal,
                     onValueChange = {
+                        goal = it
                     },
                     placeholder = {
                         Text (
@@ -253,8 +258,9 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
             ) {
 
                 TextField (
-                    value = "",
+                    value = amountText,
                     onValueChange = {
+                        amountText = it
                     },
                     placeholder = {
                         Text (
@@ -402,7 +408,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring1_4"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -410,10 +416,11 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    onFinished(username)
+                                    amount = amountText.toFloat()
+                                    onFinished(username, goal, amount)
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
-                            contentDescription = "Ring1_5",
+                            contentDescription = "Ring1_5"
                         )
                     }
                 }
@@ -423,7 +430,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 }
 
 @Composable
-fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: () -> Unit) {
+fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (tokenCount: Int) -> Unit) {
 
     val username by remember { mutableStateOf("") }
 
@@ -432,8 +439,8 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished
         onDismissRequest = onDismissRequested,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.5f)
-            .background(
+            .fillMaxHeight(0.7f)
+            .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -511,7 +518,7 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished
                         .padding(start = 5.dp, end = 5.dp)
                 ) {
                     Text (
-                        text = "Every goal you create is worth tokens. You decide how much your goals are worth, up to five tokens.",
+                        text = "Every goal you create is worth tokens. You decide how much your goals are worth - up to five tokens.",
                         color = Emerald,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal,
@@ -756,36 +763,48 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished
                     )
                 }
 
+                Spacer (
+                    modifier = Modifier
+                        .padding(50.dp)
+                )
+
                 Column (
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.End,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth(1.0f)
                         .background (
                             color = Pistachio,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .padding(start = 5.dp, end = 5.dp)
+                        .height(85.dp)
                 ) {
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End,
+                    Text (
+                        text = "Start your journey.",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Emerald
+                    )
+
+                    Spacer (
                         modifier = Modifier
-                            .height(45.dp)
-                    ) {
-                        Image (
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .clickable(
-                                    indication = null,
-                                    interactionSource = remember { MutableInteractionSource() }
-                                ) {
-                                    onFinished()
-                                },
-                            painter = painterResource(R.drawable.pfeilnachrechts_foreground),
-                            contentDescription = "Ring1_5",
-                        )
-                    }
+                            .padding(5.dp)
+                    )
+
+                    Image (
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                onFinished(tokenIdentifier)
+                            },
+                        painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+                        contentDescription = "Ring1_5",
+                        colorFilter = ColorFilter.tint(Emerald)
+                    )
                 }
             }
         }
@@ -800,14 +819,18 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
             override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.getInstance(context)
-                val repository = UserRepository(database)
+                val userRepository = UserRepository(database)
+                val goalRepository = GoalRepository(database)
 
-                return WelcomeScreenViewModel(repository) as T
+                return WelcomeScreenViewModel(userRepository, goalRepository) as T
             }
         }
     )
 
     var username by remember { mutableStateOf("") }
+    var goal by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf(0.0f) }
+    var tokenCount by remember { mutableStateOf(1) }
 
     val density = LocalDensity.current
 
@@ -1112,27 +1135,16 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                             firstTokenMenuExpanded = true
                         }
                     },
-                    onFinished = {
-                        username = it
+                    onFinished = { newUsername, firstGoal, savingAmount  ->
+
+                        username = newUsername
+                        goal = firstGoal
+                        amount = savingAmount
                         firstGoalMenuExpanded = false
                         firstTokenMenuExpanded = true
-                    }
-                )
 
-                FirstTokenMenu (
-                    expanded = firstTokenMenuExpanded,
-                    onDismissRequested = {
-                        firstTokenMenuExpanded = false
-                    },
-                    onFinished = {
-                        firstTokenMenuExpanded = false
-
-                        if (username.isEmpty() || username == "DUMMY") {
-                            //TODO: Fehlermeldung anzeigen
-                        } else {
-                            welcomeScreenViewModel.updateUser(username)
-                            onFinished()
-                        }
+                        if (goal.isEmpty() || amount == 0.0f)
+                            TODO("Fehlermeldung einbauen")
                     }
                 )
             }
@@ -1152,6 +1164,25 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                     color = Pistachio,
                     fontSize = if (splashMode) 48.sp else 35.sp,
                     fontWeight = FontWeight.Bold
+                )
+
+                FirstTokenMenu (
+                    expanded = firstTokenMenuExpanded,
+                    onDismissRequested = {
+                        firstTokenMenuExpanded = false
+                    },
+                    onFinished = { tokenCount ->
+
+                        firstTokenMenuExpanded = false
+
+                        if (username.isEmpty() || username == "DUMMY") {
+                            //TODO: Fehlermeldung anzeigen
+                        } else {
+                            welcomeScreenViewModel.updateUser(username)
+                            welcomeScreenViewModel.insertGoal(Goal(-1, goal, amount, 0.0f, 1, ""))
+                            onFinished()
+                        }
+                    }
                 )
             }
 
@@ -1217,7 +1248,8 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
 
                             Image (
                                 painter = painterResource(R.drawable.pfeilnachrechts_foreground),
-                                contentDescription = "PfeilNachRechts"
+                                contentDescription = "PfeilNachRechts",
+                                colorFilter = ColorFilter.tint(Emerald)
                             )
                         }
                     }

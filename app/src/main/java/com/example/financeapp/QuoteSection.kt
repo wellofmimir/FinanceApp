@@ -52,6 +52,10 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         }
     )
 
+    val currentDate = java.time.LocalDate.now()
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
+    val formattedDate = currentDate.format(formatter)
+
     val quoteState = quoteViewModel.quote.collectAsState()
     val quotedPersonState = quoteViewModel.quotedPerson.collectAsState()
 

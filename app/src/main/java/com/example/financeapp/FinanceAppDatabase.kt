@@ -10,7 +10,8 @@ data class Goal (
     val goal: String,
     var amount: Float,
     var saved: Float,
-    val idStatus: Int
+    val idStatus: Int,
+    val dateWhenFinished: String
 )
 
 data class GoalStatus (
@@ -23,7 +24,8 @@ data class Quote (
 
     val id: Int,
     val quote: String,
-    val name: String
+    val name: String,
+    val date: String
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
@@ -48,10 +50,10 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("PRAGMA foreign_keys = ON;")
 
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL, tutorialdone INTEGER NOT NULL DEFAULT 0)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -90,15 +92,16 @@ class FinanceAppDatabase private constructor(context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val quote = cursor.getString(cursor.getColumnIndexOrThrow("quote"))
             val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+            val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
 
-            quotes.add(Quote(id, quote, name))
+            quotes.add(Quote(id, quote, name, date))
         }
 
         cursor.close()
         return quotes
     }
 
-    fun insertQuote(quote: String, name: String) {
+    fun insertQuote(quote: String, name: String, formattedDate: String) {
 
         val cursor = database.rawQuery("SELECT * FROM quotes WHERE quote = ?", arrayOf(quote))
         val exists = cursor.moveToFirst()
@@ -107,6 +110,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         val values = ContentValues()
         values.put("quote", quote)
         values.put("name", name)
+        values.put("date", formattedDate)
 
         if (exists) {
             return
@@ -226,11 +230,12 @@ class FinanceAppDatabase private constructor(context: Context) {
         cursor.close()
 
         val values = ContentValues().apply {
-            put("id",       goal.id)
-            put("goal",     goal.goal)
-            put("amount",   goal.amount)
-            put("saved",    goal.saved)
-            put("idStatus", goal.idStatus)
+            put("id",         goal.id)
+            put("goal",       goal.goal)
+            put("amount",     goal.amount)
+            put("saved",      goal.saved)
+            put("idStatus",   goal.idStatus)
+            put("finishdate", goal.dateWhenFinished)
         }
 
         if (exists) {
@@ -251,8 +256,9 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val amount = it.getFloat(it.getColumnIndexOrThrow("amount"))
                 val savedAmount = it.getFloat(it.getColumnIndexOrThrow("saved"))
                 val idStatus = it.getInt(it.getColumnIndexOrThrow("idStatus"))
+                val dateWhenFinished = it.getString(it.getColumnIndexOrThrow("finishdate"))
 
-                return Goal(id, goal, amount, savedAmount, idStatus)
+                return Goal(id, goal, amount, savedAmount, idStatus, dateWhenFinished)
             }
         }
 
@@ -271,8 +277,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
             val savedAmount = cursor.getFloat(cursor.getColumnIndexOrThrow("saved"))
             val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
+            val dateWhenFinished = cursor.getString(cursor.getColumnIndexOrThrow("finishdate"))
 
-            goals.add(Goal (id, goal, amount, savedAmount, idStatus))
+            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished))
         }
 
         cursor.close()
@@ -290,6 +297,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("amount", amount)
         values.put("saved", savedAmount)
         values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
+        TODO("finishdate einbauen")
 
         if (exists) {
              return
@@ -309,12 +317,27 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("amount", goal.amount)
         values.put("saved", goal.saved)
         values.put("idStatus", goal.idStatus)
+        values.put("finishdate", goal.dateWhenFinished)
 
         if (exists) {
             return
         } else {
             database.insert("goals", null, values)
         }
+    }
+
+    fun getNewestGoalId(): Int {
+        val cursor = database.rawQuery("SELECT id FROM goals ORDER BY id DESC LIMIT 1", null)
+        var newestId = -1
+
+        if (cursor.moveToFirst()) {
+            if (!cursor.isNull(0)) {
+                newestId = cursor.getInt(0)
+            }
+        }
+
+        cursor.close()
+        return newestId
     }
     
     fun deleteDatabase() {

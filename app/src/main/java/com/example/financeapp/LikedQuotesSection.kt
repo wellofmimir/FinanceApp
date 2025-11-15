@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
@@ -49,7 +48,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                 Emerald
             )
     ) {
-        Column(
+        Column (
             modifier = Modifier
                 .background(
                     color = Emerald
@@ -70,8 +69,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                     )
                 }
 
-
-                Column(
+                Column (
                     modifier = Modifier
                         .height(180.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,14 +86,15 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             )
                             .padding(top = 12.dp, start = 12.dp)
                     ) {
-                        Text(
-                            text = "October 6, 2025",
+                        Text (
+                            text = quote.date,
                             fontSize = 20.sp,
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                            color = Emerald
                         )
                     }
 
-                    Row(
+                    Row (
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.8f)
@@ -104,15 +103,16 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             )
                             .padding(start = 12.dp)
                     ) {
-                        Text(
+                        Text (
                             text = quote.quote,
                             fontSize = 20.sp,
                             textAlign = TextAlign.Left,
-                            fontWeight = FontWeight.ExtraBold
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Emerald
                         )
                     }
 
-                    Row(
+                    Row (
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.3f)
@@ -131,7 +131,8 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             text = quote.name,
                             fontSize = 20.sp,
                             textAlign = TextAlign.Right,
-                            fontStyle = FontStyle.Italic
+                            fontStyle = FontStyle.Italic,
+                            color = Emerald
                         )
                     }
                 }

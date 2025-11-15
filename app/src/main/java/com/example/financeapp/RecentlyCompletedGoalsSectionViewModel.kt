@@ -14,9 +14,9 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
 
         val exampleGoals = listOf (
 
-            Goal(1, "my awesome goal", 1100.0f, 0f,2),
-            Goal(1, "example goal #2", 1100.0f, 0f,2),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2)
+            Goal(1, "my awesome goal", 1100.0f, 0f,2, "May 04, 2024"),
+            Goal(1, "example goal #2", 1100.0f, 0f,2, "May 04, 2024"),
+            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "May 04, 2024")
         )
 
         internGoals.value = exampleGoals

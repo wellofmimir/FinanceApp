@@ -114,7 +114,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalC
                     )
 
                     Text (
-                        text = "6 November 2025",
+                        text = it.dateWhenFinished,
                         color = Emerald,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Italic,

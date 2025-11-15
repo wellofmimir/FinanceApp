@@ -91,7 +91,12 @@ class QuoteRepository private constructor(private val database: FinanceAppDataba
     }
 
     fun insertQuote(quote: String, name: String) {
-        database.insertQuote(quote, name)
+
+        val currentDate = java.time.LocalDate.now()
+        val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
+        val formattedDate = currentDate.format(formatter)
+
+        database.insertQuote(quote, name, formattedDate)
     }
 
     fun deleteQuote(quote: String) {
