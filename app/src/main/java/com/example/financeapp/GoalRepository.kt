@@ -48,7 +48,7 @@ class GoalRepository(private val database: FinanceAppDatabase) {
             val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
             val formattedDate = currentDate.format(formatter)
 
-            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate)
+            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate, 3)
         }
 
         return goal

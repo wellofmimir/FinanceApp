@@ -11,7 +11,8 @@ data class Goal (
     var amount: Float,
     var saved: Float,
     val idStatus: Int,
-    val dateWhenFinished: String
+    val dateWhenFinished: String,
+    val tokenCount: Int
 )
 
 data class GoalStatus (
@@ -45,13 +46,12 @@ class FinanceAppDatabase private constructor(context: Context) {
     private val databasePath = context.getDatabasePath("userdatabase.sqlite")
 
     init {
-
         //in SQLite sind Foreign-Keys standardmäßig ausgestellt, also müssen wir diese anschalten
         database.execSQL("PRAGMA foreign_keys = ON;")
 
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL, tutorialdone INTEGER NOT NULL DEFAULT 0)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
 
@@ -236,6 +236,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             put("saved",      goal.saved)
             put("idStatus",   goal.idStatus)
             put("finishdate", goal.dateWhenFinished)
+            put("tokencount", goal.tokenCount)
         }
 
         if (exists) {
@@ -257,8 +258,9 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val savedAmount = it.getFloat(it.getColumnIndexOrThrow("saved"))
                 val idStatus = it.getInt(it.getColumnIndexOrThrow("idStatus"))
                 val dateWhenFinished = it.getString(it.getColumnIndexOrThrow("finishdate"))
+                val tokenCount = it.getInt(it.getColumnIndexOrThrow("tokencount"))
 
-                return Goal(id, goal, amount, savedAmount, idStatus, dateWhenFinished)
+                return Goal(id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount)
             }
         }
 
@@ -278,8 +280,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val savedAmount = cursor.getFloat(cursor.getColumnIndexOrThrow("saved"))
             val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
             val dateWhenFinished = cursor.getString(cursor.getColumnIndexOrThrow("finishdate"))
+            val tokenCount = cursor.getInt(cursor.getColumnIndexOrThrow("tokencount"))
 
-            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished))
+            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount))
         }
 
         cursor.close()
@@ -318,6 +321,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("saved", goal.saved)
         values.put("idStatus", goal.idStatus)
         values.put("finishdate", goal.dateWhenFinished)
+        values.put("tokencount", goal.tokenCount)
 
         if (exists) {
             return

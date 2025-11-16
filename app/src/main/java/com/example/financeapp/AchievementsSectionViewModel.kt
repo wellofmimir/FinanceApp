@@ -14,18 +14,9 @@ class AchievementsSectionViewModel(private val repository: GoalRepository): View
     private fun insertExampleGoals() {
 
         val exampleGoals = listOf (
-            Goal(1, "my awesome goal", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "example goal #2", 1100.0f, 0f,2, "November 01, 2025"),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "Oktober 25, 2025"),
-            Goal(1, "my awesome goal", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "example goal #2", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "my awesome goal", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "example goal #2", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "my awesome goal", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "example goal #2", 1100.0f, 0f,2, "November 14, 2025"),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "November 14, 2025")
+            Goal(1, "my awesome goal", 1100.0f, 0f,2, "November 14, 2025", 4),
+            Goal(1, "example goal #2", 1100.0f, 0f,2, "November 01, 2025", 3),
+            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f,2, "Oktober 25, 2025", 1),
         )
 
         internGoals.value = exampleGoals

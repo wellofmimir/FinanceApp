@@ -21,18 +21,9 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     fun insertExampleGoals() {
 
         val exampleGoals = listOf (
-            Goal(1, "my awesome goal", 1100.0f, 100.50f,1, "May 04, 2024"),
-            Goal(2, "example goal #2", 12.0f, 4.0f,2, "May 04, 2024"),
-            Goal(3, "pay the Loch Ness Monster", 3.50f, 0.10f,1, "May 04, 2024"),
-            Goal(4, "buy a Toyota Corolla", 19999.0f, 15000.80f,2, "May 04, 2024"),
-            Goal(5, "etf invest", 400.0f, 40.0f,2, "May 04, 2024"),
-            Goal(6, "pay the Loch Ness Monster", 3.50f, 0.10f,1, "May 04, 2024"),
-            Goal(7, "buy a Toyota Corolla", 19999.0f, 15000.80f,2, "May 04, 2024"),
-            Goal(8, "etf invest", 400.0f, 40.0f,2, "May 04, 2024"),
-            Goal(9, "etf invest", 400.0f, 40.0f,2, "May 04, 2024"),
-            Goal(10, "pay the Loch Ness Monster", 3.50f, 0.10f,1, "May 04, 2024"),
-            Goal(11, "buy a Toyota Corolla", 19999.0f, 15000.80f,2, "May 04, 2024"),
-            Goal(12, "etf invest", 400.0f, 40.0f,2, "May 04, 2024"),
+            Goal(1, "my awesome goal", 1100.0f, 100.50f,1, "May 09, 2024", 3),
+            Goal(2, "example goal #2", 12.0f, 4.0f,2, "May 12, 2024", 5),
+            Goal(3, "pay the Loch Ness Monster", 3.50f, 0.10f,1, "April 17, 2024",1),
         )
 
         internGoals.value = exampleGoals

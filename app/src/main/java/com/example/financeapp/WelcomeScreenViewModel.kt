@@ -15,11 +15,11 @@ class WelcomeScreenViewModel(private val userRepository: UserRepository, private
         val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
         val formattedDate = currentDate.format(formatter)
 
-        var newGoal = Goal(goal.id, goal.goal, goal.amount, goal.saved, goal.idStatus, formattedDate)
+        var newGoal = Goal(goal.id, goal.goal, goal.amount, goal.saved, goal.idStatus, formattedDate, goal.tokenCount)
         goalRepository.insertGoal(newGoal)
 
         val newestGoalId = goalRepository.getNewestGoalId()
-        newGoal = Goal(newestGoalId, goal.goal, goal.amount, goal.saved, goal.idStatus, formattedDate)
+        newGoal = Goal(newestGoalId, goal.goal, goal.amount, goal.saved, goal.idStatus, formattedDate, goal.tokenCount)
         goalRepository.setCurrentGoal(newGoal)
     }
 

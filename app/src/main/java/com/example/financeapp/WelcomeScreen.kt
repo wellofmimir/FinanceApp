@@ -57,7 +57,14 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 
     DropdownMenu (
         expanded = expanded,
-        onDismissRequest = onDismissRequested,
+        onDismissRequest = {
+            username = ""
+            goal = ""
+            amountText = ""
+            amount = 0.0f
+
+            onDismissRequested()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .background (
@@ -223,7 +230,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
                         }
-                        .padding(start = 10.dp, end = 10.dp)
+                        .padding (start = 10.dp, end = 10.dp)
                 )
             }
 
@@ -416,8 +423,19 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    amount = amountText.toFloat()
-                                    onFinished(username, goal, amount)
+                                    val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
+
+                                    if (moneyRegex.matches(amountText)) {
+                                        amount = amountText.toFloatOrNull() ?: 0f
+                                        onFinished(username, goal, amount)
+                                    } else {
+                                        username = ""
+                                        amount = 0.0f
+                                        goal = ""
+
+                                        onDismissRequested()
+                                        //TODO("FEHLERMELDUNG")
+                                    }
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
                             contentDescription = "Ring1_5"
@@ -830,7 +848,6 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
     var username by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf(0.0f) }
-    var tokenCount by remember { mutableStateOf(1) }
 
     val density = LocalDensity.current
 
@@ -1130,10 +1147,7 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                 FirstGoalMenu (
                     expanded = firstGoalMenuExpanded,
                     onDismissRequested = {
-                        if (firstGoalMenuExpanded) {
-                            firstGoalMenuExpanded = false
-                            firstTokenMenuExpanded = true
-                        }
+                        firstGoalMenuExpanded = false
                     },
                     onFinished = { newUsername, firstGoal, savingAmount  ->
 
@@ -1179,7 +1193,7 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                             //TODO: Fehlermeldung anzeigen
                         } else {
                             welcomeScreenViewModel.updateUser(username)
-                            welcomeScreenViewModel.insertGoal(Goal(-1, goal, amount, 0.0f, 1, ""))
+                            welcomeScreenViewModel.insertGoal(Goal(-1, goal, amount, 0.0f, 1, "", tokenCount))
                             onFinished()
                         }
                     }

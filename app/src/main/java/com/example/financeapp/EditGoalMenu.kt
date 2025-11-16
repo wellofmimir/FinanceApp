@@ -2,7 +2,9 @@ package com.example.financeapp
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,8 +39,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue@Composable
+import androidx.compose.ui.text.input.TextFieldValue
+import com.example.financeapp.ui.theme.Pistachio
+
+@Composable
 
 fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, onNewAmount: (String) -> Unit, onSaved: (String) -> Unit, currentGoalText: String) {
 
@@ -46,18 +54,17 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
 
     var amountText by remember { mutableStateOf("") }
     var originalAmountText by remember { mutableStateOf(amountText) } //einfach nur der Erinnerungswert, falls das Editieren verworfen wird
-
-    var amountTextAsTextFieldValue by remember { //wird benötigt, um den Curson ans Ende des TextFields zu setzen bei anclicken
+    var amountTextAsTextFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalAmountText))
     }
 
     var savedAmountText by remember { mutableStateOf("" ) }
     var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
-
-    var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Curson ans Ende des TextFields zu setzen bei anclicken
+    var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalSavedAmountText))
     }
 
+    var tokenCount by remember { mutableStateOf(5) }
     var hasChanged by remember { mutableStateOf(false) }
 
     LaunchedEffect(expanded) {
@@ -68,6 +75,8 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
 
             savedAmountText = goal.saved.toString()
             originalSavedAmountText = savedAmountText
+
+            tokenCount = goal.tokenCount
         }
     }
 
@@ -408,6 +417,112 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 ) {
                     Text (
                         text = "Save"
+                    )
+                }
+            }
+
+            Spacer (
+                modifier = Modifier
+                    .height (12.dp)
+            )
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(bottom = 5.dp)
+                    .background (
+                        color = Emerald,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+            ) {
+                Canvas (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                ) {
+                    drawCircle (
+                        color = when (tokenCount) {
+                            1 -> Emerald
+                            2 -> Emerald
+                            3 -> Emerald
+                            4 -> Pistachio
+                            5 -> Pistachio
+                            else -> Pistachio
+                        },
+                        style = Fill
+                    )
+                }
+
+                Canvas (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                ) {
+                    drawCircle (
+                        color = when (tokenCount) {
+                            1 -> Emerald
+                            2 -> Pistachio
+                            3 -> Pistachio
+                            4 -> Pistachio
+                            5 -> Pistachio
+                            else -> Pistachio
+                        },
+                        style = Fill
+                    )
+                }
+
+                Canvas (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                ) {
+                    drawCircle (
+                        color = when (tokenCount) {
+                            1 -> Pistachio
+                            2 -> Emerald
+                            3 -> Pistachio
+                            4 -> Pistachio
+                            5 -> Pistachio
+                            else -> Pistachio
+                        },
+                        style = Fill
+                    )
+                }
+
+                Canvas (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                ) {
+                    drawCircle (
+                        color = when (tokenCount) {
+                            1 -> Emerald
+                            2 -> Pistachio
+                            3 -> Pistachio
+                            4 -> Pistachio
+                            5 -> Pistachio
+                            else -> Pistachio
+                        },
+                        style = Fill
+                    )
+                }
+
+                Canvas (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                ) {
+                    drawCircle (
+                        color = when (tokenCount) {
+                            1 -> Emerald
+                            2 -> Emerald
+                            3 -> Emerald
+                            4 -> Emerald
+                            5 -> Pistachio
+                            else -> Emerald
+                        },
+                        style = Fill
                     )
                 }
             }
