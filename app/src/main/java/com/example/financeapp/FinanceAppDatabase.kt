@@ -54,6 +54,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -154,6 +155,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             0
         }
 
+        cursor.close()
         return tutorialDone == 1
     }
 
@@ -267,6 +269,37 @@ class FinanceAppDatabase private constructor(context: Context) {
         return null
     }
 
+    fun setTokenSoFarForPunchcard(tokenSoFar: Int) {
+
+        val cursor = database.rawQuery("SELECT tokensofar FROM punchcard WHERE id = ?", arrayOf("1"))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("tokensofar", tokenSoFar)
+        }
+
+        if (exists) {
+            database.update("punchcard", values, "id = ?", arrayOf("1"))
+        } else {
+            values.put("id", 1)
+            database.insert("punchcard", null, values)
+        }
+    }
+    fun getTokenSoFarForPunchcard(): Int {
+
+        val cursor = database.rawQuery("SELECT * FROM punchcard WHERE id = 1", null)
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                val tokenSoFar = it.getInt(it.getColumnIndexOrThrow("tokensofar"))
+                return tokenSoFar
+            }
+        }
+
+        return -1
+    }
+
     fun getGoals(): List<Goal> {
 
         val cursor = database.rawQuery("SELECT * FROM goals", null)
@@ -331,6 +364,7 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun getNewestGoalId(): Int {
+
         val cursor = database.rawQuery("SELECT id FROM goals ORDER BY id DESC LIMIT 1", null)
         var newestId = -1
 

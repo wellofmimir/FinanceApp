@@ -57,4 +57,12 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     fun setCurrentGoal(goal: Goal) {
         return database.setCurrentGoal(goal)
     }
+
+    fun getTokenSoFarForPunchcard(): Int {
+        return database.getTokenSoFarForPunchcard()
+    }
+
+    fun resetTokenSoFarForPunchcard() {
+        return database.setTokenSoFarForPunchcard(0)
+    }
 }
