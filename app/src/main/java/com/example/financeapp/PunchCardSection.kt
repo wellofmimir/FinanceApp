@@ -158,7 +158,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
                     )
                     .height(40.dp)
                     .fillMaxWidth(0.9f)
-                    .align (Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally)
                     .clickable (
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }

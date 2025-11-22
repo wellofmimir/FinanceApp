@@ -36,6 +36,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalConfiguration
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -400,7 +401,7 @@ fun GoalHistorySection() {
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f),
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
             PunchCardSection (
@@ -411,7 +412,7 @@ fun GoalHistorySection() {
 
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -432,18 +433,18 @@ fun GoalHistorySection() {
 
         Spacer (
             modifier = Modifier
-                .padding(1.dp)
+                .padding(2.dp)
         )
 
         AchievementsSection (
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.65f)
+                .fillMaxHeight(0.75f)
         )
 
         Spacer (
             modifier = Modifier
-                .padding(1.dp)
+                .padding(2.dp)
         )
 
         AdSectionLargeBanner (
@@ -457,63 +458,46 @@ fun GoalHistorySection() {
 @Composable
 fun ReceiptsSection() {
 
-    Row (
+    Column (
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.5f),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        SinceWhenSection ()
 
-        PunchCardSection (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        )
-
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
+        Row (
+            modifier = Modifier,
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            TotalGoalsAchievedSection (
+            AverageSpentSection (
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .aspectRatio(1f)
             )
 
-            TotalTokensEarnedSection (
+            ExpensesOverviewSection (
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .aspectRatio(1f)
             )
         }
+
+        ReceiptLogSection (
+            modifier = Modifier
+                .fillMaxHeight(0.8f)
+        )
+
+        AdSectionLargeBanner (
+            tutorialInformation = TutorialInformation (
+                isActive = false,
+                tutorialStep = TutorialStep.NONE
+            )
+        )
     }
 
-    Spacer (
-        modifier = Modifier
-            .padding(1.dp)
-    )
 
-    AchievementsSection (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.65f)
-    )
-
-    Spacer (
-        modifier = Modifier
-            .padding(1.dp)
-    )
-
-    AdSectionLargeBanner (
-        tutorialInformation = TutorialInformation (
-            isActive = false,
-            tutorialStep = TutorialStep.NONE
-        )
-    )
 }
 
 @Composable

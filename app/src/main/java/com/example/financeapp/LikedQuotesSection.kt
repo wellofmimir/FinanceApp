@@ -158,6 +158,11 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Spacer (
+                            modifier = Modifier
+                                .height(2.dp)
+                        )
+
                         AdSectionLargeBanner (
                             tutorialInformation = tutorialInformation
                         )
