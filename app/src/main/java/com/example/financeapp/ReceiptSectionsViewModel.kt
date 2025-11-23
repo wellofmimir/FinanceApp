@@ -21,6 +21,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
             onSuccess = { id ->
                 internInsertState.value = true
                 getReceipts()
+                internInsertState.value = false
             },
             onFailure = {
                 internInsertState.value = false

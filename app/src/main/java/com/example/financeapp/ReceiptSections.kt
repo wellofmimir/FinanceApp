@@ -66,6 +66,8 @@ import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.window.DialogProperties
+import kotlin.math.exp
 
 
 @Composable
@@ -83,23 +85,37 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
         }
     )
 
+    var amountText by remember { mutableStateOf("") }
+    var nameOfReceipt by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+    var photoCanBeTaken by remember { mutableStateOf(false) }
+
     var takePhotoButtonText by remember { mutableStateOf("Take a photo") }
     var insertSuccessful = receiptSectionsViewModel.insertState.collectAsState()
+
+    val resetAndDismiss = {
+
+        amountText = ""
+        nameOfReceipt = ""
+        errorMessage = ""
+        photoCanBeTaken = false
+        onDismissRequest()
+    }
+
+    LaunchedEffect(errorMessage) {
+
+        if (!errorMessage.isEmpty()) {
+            delay(3000)
+            errorMessage = ""
+        }
+    }
 
     LaunchedEffect(insertSuccessful.value) {
 
         if (expanded) {
 
-            when (insertSuccessful.value) {
-                false -> takePhotoButtonText = "X"
-                true -> takePhotoButtonText = "✓"
-            }
-
             delay(1000)
-            onDismissRequest()
-            takePhotoButtonText = ""
-            delay(500)
-            takePhotoButtonText = "Take a photo"
+            resetAndDismiss()
         }
     }
 
@@ -118,11 +134,13 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                 receiptSectionsViewModel.insertReceipt (
                     Receipt (
                         -1,
-                        "Home depot",
-                        250.50f,
+                        nameOfReceipt,
+                        amountText.toFloat(),
                         it.absolutePath
                     )
                 )
+
+                resetAndDismiss()
             }
         }
     }
@@ -144,11 +162,6 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
         }
     }
 
-    var amountText by remember { mutableStateOf("") }
-    var amount by remember { mutableFloatStateOf(0.0f) }
-    var nameOfReceipt by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") }
-
     DropdownMenu (
         expanded,
         onDismissRequest = {
@@ -156,7 +169,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
         },
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.4f)
+            .fillMaxHeight(0.45f)
             .background (
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
@@ -173,7 +186,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                     .height(16.dp)
             )
 
-            Text(
+            Text (
                 text = "Add a receipt",
                 color = Color.White,
                 fontSize = 24.sp
@@ -216,7 +229,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                         nameOfReceipt = newText
                     },
                     singleLine = true,
-                    colors = TextFieldDefaults.colors (
+                    colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
                         disabledContainerColor = Color.Transparent,
@@ -238,7 +251,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text (
+                Text(
                     text = "Amount",
                     textAlign = TextAlign.Justify,
                     color = Color.White,
@@ -255,7 +268,6 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
 
                         if (moneyRegex.matches(newText)) {
                             amountText = newText
-                            amount = newText.toFloatOrNull() ?: 0f
                         }
 
                         if (newText.isEmpty())
@@ -272,13 +284,13 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White
                     ),
-                    keyboardOptions = KeyboardOptions (
+                    keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
                     )
                 )
             }
 
-            Spacer (
+            Spacer(
                 modifier = Modifier
                     .height(48.dp)
             )
@@ -287,15 +299,35 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(
+                Button (
                     onClick = {
+                        if (!photoCanBeTaken) {
+
+                            if (nameOfReceipt.isEmpty()) {
+                                errorMessage = "Photo can not be taken yet - give your receipt a name."
+                                return@Button
+                            }
+
+                            if (nameOfReceipt.length > 30) {
+                                errorMessage = "Choose a name a bit shorter."
+                                return@Button
+                            }
+
+                            if (amountText.isEmpty()) {
+                                errorMessage = "Photo can not be taken yet - insert the amount on the receipt."
+                                return@Button
+                            }
+
+                            photoCanBeTaken = true
+                        }
+
                         permissionLauncher.launch(Manifest.permission.CAMERA)
                     },
                     colors = ButtonDefaults.buttonColors (
                         containerColor = Pistachio,
                         contentColor = Emerald
                     ),
-                    border = BorderStroke(
+                    border = BorderStroke (
                         width = 1.dp,
                         color = Color.White
                     ),
@@ -307,6 +339,23 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                         textAlign = TextAlign.Center,
                         color = Emerald,
                         fontSize = 18.sp
+                    )
+                }
+            }
+
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (!errorMessage.isEmpty()) {
+                    Text (
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
                     )
                 }
             }
@@ -448,7 +497,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalCon
 
     Column (
         modifier = modifier
-            .background(
+            .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -477,19 +526,30 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalCon
             Dialog (
                 onDismissRequest = {
                     showDialog = false
-                }
+                },
+                properties = DialogProperties (
+                    usePlatformDefaultWidth = false
+                )
             ) {
                 Box (
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .padding(16.dp)
                 ) {
                     Image (
                         bitmap = bitmap!!.asImageBitmap(),
                         contentDescription = null,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp))
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                if (showDialog) {
+                                    showDialog = false
+                                }
+                            }
                     )
                 }
             }
@@ -513,8 +573,6 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalCon
                 Row (
                     modifier = Modifier
                         .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
                         ) {
                             val file = File(receipt.pathToImage)
 
@@ -522,29 +580,38 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalCon
                                 bitmap = BitmapFactory.decodeFile(file.absolutePath)
                                 showDialog = true
                             }
+                            
+                            //TODO: Behandlung einbauen für den Fall, das file nicht existiert
                         },
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     Text (
                         text = receipt.description,
                         color = Emerald,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .padding(start = 36.dp)
                     )
 
                     Text (
                         text = receipt.date,
                         color = Emerald,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier
+                            .weight(1f)
                     )
 
                     Text (
                         text = receipt.amount.toString(),
                         color = Emerald,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .weight(1f)
                     )
                 }
             }

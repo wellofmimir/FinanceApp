@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
@@ -233,8 +234,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         feedbackTrigger++
                     },
                     colors = ButtonDefaults.buttonColors (
-                        containerColor = Color.Transparent,
-                        contentColor = Color.White
+                        containerColor = Pistachio,
+                        contentColor = Emerald
                     ),
                     border = BorderStroke (
                         width = 1.dp,
