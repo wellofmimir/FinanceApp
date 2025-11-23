@@ -42,7 +42,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
     val quoteViewModel: QuoteViewModel = viewModel (
         factory = remember {
-            object : ViewModelProvider.Factory {
+            object: ViewModelProvider.Factory {
                 override fun <T: ViewModel> create(modelClass: Class<T>): T {
                     val database = FinanceAppDatabase.getInstance(context)
                     val repository = QuoteRepository.getInstance(database)

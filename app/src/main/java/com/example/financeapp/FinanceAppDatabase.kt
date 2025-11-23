@@ -29,6 +29,15 @@ data class Quote (
     val date: String
 )
 
+data class Receipt (
+
+    val id: Int,
+    val description: String,
+    val amount: Float,
+    val pathToImage: String,
+    val date: String = ""
+)
+
 class FinanceAppDatabase private constructor(context: Context) {
 
     companion object {
@@ -55,16 +64,61 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
             put("idGoal", 1)
         }
+
         database.insert("currentGoal", null, values)
 
         //einfügen von Werten in die goalStatus-Tabelle
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
+    }
+
+    fun insertReceipt(receipt: Receipt, date: String): Result<Long>  {
+
+        val values = ContentValues().apply {
+
+            put("description", receipt.description)
+            put("amount",      receipt.amount)
+            put("pathtoimage", receipt.pathToImage)
+            put("date",        date)
+        }
+
+        val id = database.insert("receipts", null, values)
+
+        return if (id != -1L)
+            Result.success(id)
+        else
+            Result.failure(Exception("Insert into receipts-table failed."))
+    }
+
+    fun getReceipts(): Result<List<Receipt>>  {
+
+        val cursor = database.rawQuery("SELECT * FROM receipts ORDER BY id DESC", null)
+        val receipts = mutableListOf<Receipt>()
+
+        try {
+            while (cursor.moveToNext()) {
+
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val description = cursor.getString(cursor.getColumnIndexOrThrow("description"))
+                val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
+                val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+
+                receipts.add(Receipt(id, description, amount, pathToImage, date))
+            }
+        } catch (e: Exception) {
+            return Result.failure(Exception("Error in getReceipts()"))
+        } finally {
+            cursor.close()
+        }
+
+        return Result.success(receipts)
     }
 
     fun updateUser(name: String) {
@@ -73,7 +127,9 @@ class FinanceAppDatabase private constructor(context: Context) {
         val exists = cursor.moveToFirst()
         cursor.close()
 
-        val values = ContentValues().apply {put("name", name)}
+        val values = ContentValues().apply {
+            put("name", name)
+        }
 
         if (exists) {
             database.update("userinformation", values, "id = ?", arrayOf("1"))

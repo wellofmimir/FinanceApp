@@ -52,9 +52,56 @@ import androidx.compose.ui.text.input.KeyboardType
 import java.io.File
 import androidx.core.content.FileProvider
 import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.window.Dialog
+import kotlinx.coroutines.delay
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.draw.clip
+
 
 @Composable
 fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Context = LocalContext.current) {
+
+    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = ReceiptRepository.getInstance(database)
+
+                return ReceiptSectionsViewModel(repository) as T
+            }
+        }
+    )
+
+    var takePhotoButtonText by remember { mutableStateOf("Take a photo") }
+    var insertSuccessful = receiptSectionsViewModel.insertState.collectAsState()
+
+    LaunchedEffect(insertSuccessful.value) {
+
+        if (expanded) {
+
+            when (insertSuccessful.value) {
+                false -> takePhotoButtonText = "X"
+                true -> takePhotoButtonText = "✓"
+            }
+
+            delay(1000)
+            onDismissRequest()
+            takePhotoButtonText = ""
+            delay(500)
+            takePhotoButtonText = "Take a photo"
+        }
+    }
 
     val photos = remember { mutableStateListOf<File>() }
 
@@ -63,11 +110,20 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
     ) { success ->
         if (success) {
             val lastPhoto = photos.lastOrNull()
-            lastPhoto?.let {
-                Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
-            }
 
-            //TODO: Eintrag in Datenbank anlegen
+            lastPhoto?.let {
+
+                Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
+
+                receiptSectionsViewModel.insertReceipt (
+                    Receipt (
+                        -1,
+                        "Home depot",
+                        250.50f,
+                        it.absolutePath
+                    )
+                )
+            }
         }
     }
 
@@ -247,7 +303,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                         .fillMaxWidth(0.5f)
                 ) {
                     Text (
-                        text = "Take a photo",
+                        text = takePhotoButtonText,
                         textAlign = TextAlign.Center,
                         color = Emerald,
                         fontSize = 18.sp
@@ -370,7 +426,25 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier) {
+fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+
+    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = ReceiptRepository.getInstance(database)
+
+                return ReceiptSectionsViewModel(repository) as T
+            }
+        }
+    )
+
+    val receipts by receiptSectionsViewModel.receipts.collectAsState()
+    receiptSectionsViewModel.getReceipts()
+
+    var showDialog by remember { mutableStateOf(false) }
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     Column (
         modifier = modifier
@@ -399,29 +473,79 @@ fun ReceiptLogSection(modifier: Modifier = Modifier) {
                 .height(4.dp)
         )
 
-        Column (
-            modifier = Modifier,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val entries = listOf("Home Depot", "Oct 6.", "$45")
-
-            for (i in 1..5) {
-
-                Row (
-                    modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(50.dp)
+        if (showDialog && bitmap != null) {
+            Dialog (
+                onDismissRequest = {
+                    showDialog = false
+                }
+            ) {
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
+                    Image (
+                        bitmap = bitmap!!.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+            }
+        }
 
-                    entries.forEach {
-                        Text (
-                            text = it,
-                            color = Emerald,
-                            fontSize = 22.sp,
-                            fontWeight = if (it == entries.last()) FontWeight.Bold else FontWeight.Normal
-                        )
-                    }
+        val listState = rememberLazyListState()
+
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxSize()
+                .background (
+                    color = Pistachio,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = listState
+        ) {
+            items(receipts.take(receipts.size)) { receipt ->
+                Row (
+                    modifier = Modifier
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            val file = File(receipt.pathToImage)
+
+                            if (file.exists()) {
+                                bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                showDialog = true
+                            }
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                ) {
+                    Text (
+                        text = receipt.description,
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+
+                    Text (
+                        text = receipt.date,
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+
+                    Text (
+                        text = receipt.amount.toString(),
+                        color = Emerald,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }

@@ -27,11 +27,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
@@ -101,7 +97,6 @@ fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalC
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
-
                     Text (
                         text = it.goal,
                         color = Emerald,
