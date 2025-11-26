@@ -37,6 +37,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
@@ -46,7 +47,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import java.io.File
@@ -58,6 +58,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,7 +69,6 @@ import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.DialogProperties
-import kotlin.math.exp
 
 
 @Composable
@@ -399,7 +400,26 @@ fun SinceWhenSection(modifier: Modifier = Modifier, context: Context  = LocalCon
 @Composable
 fun AverageSpentSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
 
+    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = ReceiptRepository.getInstance(database)
+
+                return ReceiptSectionsViewModel(repository) as T
+            }
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        receiptSectionsViewModel.getReceipts()
+        receiptSectionsViewModel.calculateAverage()
+    }
+
     var expanded by remember { mutableStateOf(false) }
+    receiptSectionsViewModel.calculateAverage()
+    val averageAmount by receiptSectionsViewModel.receiptsAverage.collectAsState()
 
     Column (
         modifier = modifier
@@ -414,7 +434,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, context: Context = LocalC
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp, top = 18.dp),
-            text = "$32,75",
+            text = averageAmount.toString(),
             color = Emerald,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
