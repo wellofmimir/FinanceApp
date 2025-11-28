@@ -36,7 +36,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalConfiguration
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -458,13 +457,33 @@ fun GoalHistorySection() {
 @Composable
 fun ReceiptsSection() {
 
+    var context = LocalContext.current
+
+    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = ReceiptRepository.getInstance(database)
+
+                return ReceiptSectionsViewModel(repository) as T
+            }
+        }
+    )
+
+    var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
+
     Column (
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SinceWhenSection ()
+        SinceWhenSection (onCurrentMonth = {
+                timespan = it
+            },
+            receiptSectionsViewModel = receiptSectionsViewModel
+        )
 
         Row (
             modifier = Modifier,
@@ -474,19 +493,29 @@ fun ReceiptsSection() {
             AverageSpentSection (
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(1f)
+                    .aspectRatio(1f),
+                receiptAdded = {
+
+                },
+                onDismissRequest = {
+
+                },
+                receiptSectionsViewModel = receiptSectionsViewModel
             )
 
             ExpensesOverviewSection (
                 modifier = Modifier
                     .weight(1f)
-                    .aspectRatio(1f)
+                    .aspectRatio(1f),
+                timespan,
+                receiptSectionsViewModel
             )
         }
 
         ReceiptLogSection (
             modifier = Modifier
-                .fillMaxHeight(0.8f)
+                .fillMaxHeight(0.8f),
+            receiptSectionsViewModel
         )
 
         AdSectionLargeBanner (
@@ -496,8 +525,6 @@ fun ReceiptsSection() {
             )
         )
     }
-
-
 }
 
 @Composable

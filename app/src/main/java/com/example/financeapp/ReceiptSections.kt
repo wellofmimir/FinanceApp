@@ -2,7 +2,6 @@ package com.example.financeapp
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,7 +24,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,37 +52,35 @@ import androidx.core.content.FileProvider
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.text.Layout
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.flow.compose
 
+enum class Timespan (id: Int) {
 
+    NONE (-1),
+    THIS_MONTH (0),
+    LAST_TWO_MONTHS (1),
+    LAST_SIX_MONTHS (2),
+    WHOLE_YEAR (3)
+}
 @Composable
-fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Context = LocalContext.current) {
-
-    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.getInstance(context)
-                val repository = ReceiptRepository.getInstance(database)
-
-                return ReceiptSectionsViewModel(repository) as T
-            }
-        }
-    )
+fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
 
     var amountText by remember { mutableStateOf("") }
     var nameOfReceipt by remember { mutableStateOf("") }
@@ -137,7 +133,9 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
                         -1,
                         nameOfReceipt,
                         amountText.toFloat(),
-                        it.absolutePath
+                        it.absolutePath,
+                        "",
+                        -1
                     )
                 )
 
@@ -365,32 +363,60 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, context: Con
 }
 
 @Composable
-fun SinceWhenSection(modifier: Modifier = Modifier, context: Context  = LocalContext.current) {
+fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+
+    val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
+    var clickedEntry by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        receiptSectionsViewModel.getCurrentMonth()
+    }
 
     Row (
         modifier = modifier,
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        val entries = listOf("Oct", "2 mo.", "6 mo.", "1 yr")
+        val entries = listOf(currentMonth, "2 mo.", "6 mo.", "1 yr")
 
-        entries.forEach {
+        entries.forEach { entry ->
             Box (
                 modifier = Modifier
                     .weight(1f)
                     .height(60.dp)
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ){
+                        clickedEntry = entries.indexOf(entry)
+
+                        onCurrentMonth (
+                            when (clickedEntry) {
+                                0 -> Timespan.THIS_MONTH
+                                1 -> Timespan.LAST_TWO_MONTHS
+                                2 -> Timespan.LAST_SIX_MONTHS
+                                3 -> Timespan.WHOLE_YEAR
+                                else -> Timespan.NONE
+                            }
+                        )
+                    }
                     .background(
-                        color = Pistachio,
+                        color = if (entries.indexOf(entry) == clickedEntry) Emerald else Pistachio,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .border (
+                        width = 2.dp,
+                        color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Color.Transparent,
                         shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text (
-                    text = it,
+                    text = entry,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
                     fontStyle = FontStyle.Normal,
-                    color = Emerald
+                    color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Emerald
                 )
             }
         }
@@ -398,21 +424,11 @@ fun SinceWhenSection(modifier: Modifier = Modifier, context: Context  = LocalCon
 }
 
 @Composable
-fun AverageSpentSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun AverageSpentSection(modifier: Modifier = Modifier, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
 
-    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+    val receipts by receiptSectionsViewModel.receipts.collectAsState()
 
-                val database = FinanceAppDatabase.getInstance(context)
-                val repository = ReceiptRepository.getInstance(database)
-
-                return ReceiptSectionsViewModel(repository) as T
-            }
-        }
-    )
-
-    LaunchedEffect(Unit) {
+    LaunchedEffect(receipts) {
         receiptSectionsViewModel.getReceipts()
         receiptSectionsViewModel.calculateAverage()
     }
@@ -475,39 +491,100 @@ fun AverageSpentSection(modifier: Modifier = Modifier, context: Context = LocalC
             expanded,
             onDismissRequest = {
                 expanded = false
-            }
+                receiptSectionsViewModel.getReceipts()
+            },
+            receiptSectionsViewModel
         )
     }
 }
 
 @Composable
-fun ExpensesOverviewSection(modifier: Modifier = Modifier) {
+fun ExpensesOverviewSection(modifier: Modifier = Modifier, timeSpan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+
+    val receipts by receiptSectionsViewModel.receipts.collectAsState()
+    val sumOfExpenses by receiptSectionsViewModel.receiptsSum.collectAsState()
+
+    LaunchedEffect(receipts) {
+        receiptSectionsViewModel.getReceiptsForThisMonth()
+        receiptSectionsViewModel.calculateSum()
+    }
+
+    val numberOfMonths = when (timeSpan){
+        Timespan.THIS_MONTH -> 1
+        Timespan.LAST_TWO_MONTHS -> 2
+        Timespan.LAST_SIX_MONTHS -> 6
+        Timespan.WHOLE_YEAR -> 12
+        Timespan.NONE -> 1
+    }
 
     Column (
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .background (
+                color = Pistachio,
+                shape = RoundedCornerShape(12.dp)
+            ),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
     ) {
         Text (
-            text = "This month "
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 24.dp, top = 18.dp),
+            text = "This month:",
+            color = Emerald,
+            textAlign = TextAlign.Start,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Italic
         )
+
+        Text (
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 24.dp, top = 9.dp),
+            text = sumOfExpenses.toString(),
+            color = Emerald,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer (
+            modifier = Modifier
+                .height(20.dp)
+        )
+
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 20.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Text (
+                text = receipts.size.toString(),
+                color = Emerald,
+                fontSize = 64.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 15.dp, bottom = 10.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Text (
+                text = "Purchases recorded",
+                color = Emerald,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal
+            )
+        }
     }
 }
 
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
-
-    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.getInstance(context)
-                val repository = ReceiptRepository.getInstance(database)
-
-                return ReceiptSectionsViewModel(repository) as T
-            }
-        }
-    )
+fun ReceiptLogSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel) {
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     receiptSectionsViewModel.getReceipts()

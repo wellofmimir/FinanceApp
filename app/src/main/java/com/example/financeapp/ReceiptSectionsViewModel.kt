@@ -15,7 +15,16 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
     val receipts = internReceipts.asStateFlow()
 
     private val internReceiptsAverage = MutableStateFlow<Float>(0.0f)
-    var receiptsAverage = internReceiptsAverage.asStateFlow()
+    val receiptsAverage = internReceiptsAverage.asStateFlow()
+
+    private val internReceiptsSum = MutableStateFlow<Float>(0.0f)
+    val receiptsSum = internReceiptsSum.asStateFlow()
+
+    private val internCurrentMonth = MutableStateFlow<String>("")
+    val currentMonth = internCurrentMonth.asStateFlow()
+
+    private val internAccumulatedExpenses = MutableStateFlow<Float>(0.0f)
+    val accumulatedExpenses = internAccumulatedExpenses.asStateFlow()
 
     fun insertReceipt(receipt: Receipt) {
 
@@ -61,5 +70,40 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
         }.average().toFloat()
 
         internReceiptsAverage.value = average
+    }
+
+    fun calculateSum() {
+
+        val receipts = internReceipts.value
+
+        if (receipts.isEmpty()) {
+            internReceiptsSum.value = 0f
+            return
+        }
+
+        val average = receipts.map { receipt ->
+            receipt.amount
+        }.sum().toFloat()
+
+        internReceiptsSum.value = average
+    }
+
+    fun getCurrentMonth() {
+
+        internCurrentMonth.value = repository.getCurrentMonth()
+    }
+
+    fun getReceiptsForThisMonth() {
+
+        val result = repository.getReceiptsForLastMonths(1)
+
+        result.fold (
+            onSuccess = {
+                internReceipts.value = it
+            },
+            onFailure = {
+                internReceipts.value = emptyList()
+            }
+        )
     }
 }
