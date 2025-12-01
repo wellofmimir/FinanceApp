@@ -1,6 +1,7 @@
 package com.example.financeapp
 
-import androidx.compose.ui.res.integerResource
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ReceiptRepository private constructor(private val database: FinanceAppDatabase) {
     companion object {
@@ -17,25 +18,18 @@ class ReceiptRepository private constructor(private val database: FinanceAppData
     fun insertReceipt(receipt: Receipt): Result<Long> {
 
         val currentDate = java.time.LocalDate.now()
-        var formatter = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.ENGLISH)
+        var formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd", java.util.Locale.ENGLISH)
         val formattedDate = currentDate.format(formatter)
-
-        formatter = java.time.format.DateTimeFormatter.ofPattern("MMM", java.util.Locale.ENGLISH)
-        val abbreviatedCurrentMonth = currentDate.format(formatter)
-
-        database.getMonth(abbreviatedCurrentMonth)
-            .onSuccess {
-                receipt.idMonth = it.toLong()
-            }
-            .onFailure {
-
-            }
 
         return database.insertReceipt(receipt, formattedDate)
     }
 
     fun getReceipts(): Result<List<Receipt>> {
         return database.getReceipts()
+    }
+
+    fun getReceiptsForACertainTimespan(startDate: String, endDate: String): Result<List<Receipt>> {
+        return database.getReceipts(startDate, endDate)
     }
 
     fun getCurrentMonth(): String {
@@ -47,26 +41,48 @@ class ReceiptRepository private constructor(private val database: FinanceAppData
         return formattedDate
     }
 
-    fun getReceiptsForLastMonths(numberOfLastMonths: Int): Result<List<Receipt>> {
+    fun getFirstDayOfCurrentMonth(): String {
 
-        val currentMonth = getCurrentMonth()
-        val receipts = mutableListOf<Receipt>()
+        val today = LocalDate.now()
+        val firstDayOfMonth = today.withDayOfMonth(1)
 
-        return database.getMonth(currentMonth)
-            .mapCatching {
-                for (monthOffset in 0 until numberOfLastMonths) {
-                    val month = it - monthOffset.toLong()
+        val formatter = DateTimeFormatter.ISO_DATE
+        return firstDayOfMonth.format(formatter)
+    }
 
-                    database.getReceiptsForAMonth(month)
-                        .onSuccess { list ->
-                            receipts.addAll(list)
-                        }
-                        .onFailure {
-                            // Fehler ignorieren oder loggen
-                        }
-                }
+    fun getLastDayOfCurrentMonth(): String {
 
-                receipts.toList()
-            }
+        val today = LocalDate.now()
+        val lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth())
+
+        val formatter = DateTimeFormatter.ISO_DATE
+        return lastDayOfMonth.format(formatter)
+    }
+
+    fun getFirstDayOfTwoMonthsAgo(): String {
+
+        val today = LocalDate.now().minusMonths(2)
+        val firstDayOfTwoMonthsAgo = today.withDayOfMonth(1)
+
+        val formatter = DateTimeFormatter.ISO_DATE
+        return firstDayOfTwoMonthsAgo.format(formatter)
+    }
+
+    fun getFirstDayOfSixMonthsAgo(): String {
+
+        val today = LocalDate.now().minusMonths(6)
+        val firstDayOfSixMonthsAgo = today.withDayOfMonth(1)
+
+        val formatter = DateTimeFormatter.ISO_DATE
+        return firstDayOfSixMonthsAgo.format(formatter)
+    }
+
+    fun getFirstDayOfAYearAgo(): String {
+
+        val today = LocalDate.now()
+        val firstDayOfAYearAgo = today.minusYears(1)
+
+        val formatter = DateTimeFormatter.ISO_DATE
+        return firstDayOfAYearAgo.format(formatter)
     }
 }

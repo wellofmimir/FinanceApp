@@ -58,18 +58,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.window.DialogProperties
-import kotlinx.coroutines.flow.compose
 
 enum class Timespan (id: Int) {
 
@@ -77,7 +72,8 @@ enum class Timespan (id: Int) {
     THIS_MONTH (0),
     LAST_TWO_MONTHS (1),
     LAST_SIX_MONTHS (2),
-    WHOLE_YEAR (3)
+    WHOLE_YEAR (3),
+    ALL (4)
 }
 @Composable
 fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
@@ -110,7 +106,6 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
     LaunchedEffect(insertSuccessful.value) {
 
         if (expanded) {
-
             delay(1000)
             resetAndDismiss()
         }
@@ -134,8 +129,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
                         nameOfReceipt,
                         amountText.toFloat(),
                         it.absolutePath,
-                        "",
-                        -1
+                        ""
                     )
                 )
 
@@ -169,7 +163,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.45f)
-            .background (
+            .background(
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -384,13 +378,13 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                 modifier = Modifier
                     .weight(1f)
                     .height(60.dp)
-                    .clickable (
+                    .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
-                    ){
+                    ) {
                         clickedEntry = entries.indexOf(entry)
 
-                        onCurrentMonth (
+                        onCurrentMonth(
                             when (clickedEntry) {
                                 0 -> Timespan.THIS_MONTH
                                 1 -> Timespan.LAST_TWO_MONTHS
@@ -404,7 +398,7 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                         color = if (entries.indexOf(entry) == clickedEntry) Emerald else Pistachio,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .border (
+                    .border(
                         width = 2.dp,
                         color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Color.Transparent,
                         shape = RoundedCornerShape(12.dp)
@@ -424,12 +418,20 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
 }
 
 @Composable
-fun AverageSpentSection(modifier: Modifier = Modifier, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+
+    when (timespan) {
+        Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_TWO_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfTwoMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_SIX_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfSixMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.WHOLE_YEAR -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfAYearAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.NONE -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.ALL -> receiptSectionsViewModel.getReceipts()
+    }
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
 
     LaunchedEffect(receipts) {
-        receiptSectionsViewModel.getReceipts()
         receiptSectionsViewModel.calculateAverage()
     }
 
@@ -499,22 +501,31 @@ fun AverageSpentSection(modifier: Modifier = Modifier, receiptAdded: () -> Unit,
 }
 
 @Composable
-fun ExpensesOverviewSection(modifier: Modifier = Modifier, timeSpan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+
+    when (timespan) {
+        Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_TWO_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfTwoMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_SIX_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfSixMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.WHOLE_YEAR -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfAYearAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.NONE -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.ALL -> receiptSectionsViewModel.getReceipts()
+    }
+
+    val timeRangeText = when (timespan) {
+        Timespan.THIS_MONTH -> "This month"
+        Timespan.LAST_TWO_MONTHS -> "Last two months"
+        Timespan.LAST_SIX_MONTHS -> "Last six months"
+        Timespan.WHOLE_YEAR -> "Last year"
+        Timespan.NONE -> ""
+        Timespan.ALL -> "All"
+    }
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     val sumOfExpenses by receiptSectionsViewModel.receiptsSum.collectAsState()
 
     LaunchedEffect(receipts) {
-        receiptSectionsViewModel.getReceiptsForThisMonth()
         receiptSectionsViewModel.calculateSum()
-    }
-
-    val numberOfMonths = when (timeSpan){
-        Timespan.THIS_MONTH -> 1
-        Timespan.LAST_TWO_MONTHS -> 2
-        Timespan.LAST_SIX_MONTHS -> 6
-        Timespan.WHOLE_YEAR -> 12
-        Timespan.NONE -> 1
     }
 
     Column (
@@ -530,7 +541,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timeSpan: Timespan, r
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 24.dp, top = 18.dp),
-            text = "This month:",
+            text = "$timeRangeText:",
             color = Emerald,
             textAlign = TextAlign.Start,
             fontSize = 22.sp,
@@ -584,17 +595,24 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timeSpan: Timespan, r
 }
 
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+
+    when (timespan) {
+        Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_TWO_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfTwoMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.LAST_SIX_MONTHS -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfSixMonthsAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.WHOLE_YEAR -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfAYearAgo(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.NONE -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+        Timespan.ALL -> receiptSectionsViewModel.getReceipts()
+    }
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
-    receiptSectionsViewModel.getReceipts()
-
     var showDialog by remember { mutableStateOf(false) }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     Column (
         modifier = modifier
-            .background (
+            .background(
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -639,7 +657,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, receiptSectionsViewModel: R
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp))
-                            .clickable (
+                            .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
@@ -657,7 +675,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, receiptSectionsViewModel: R
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
-                .background (
+                .background(
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )

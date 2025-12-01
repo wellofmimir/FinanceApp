@@ -39,7 +39,6 @@ data class Receipt (
     val amount: Float,
     val pathToImage: String,
     val date: String = "",
-    var idMonth: Long = -1
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
@@ -70,8 +69,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL, idMonth INTEGER NOT NULL, FOREIGN KEY (idMonth) REFERENCES months(id))".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS months (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, month TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -83,20 +81,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         //einfügen von Werten in die goalStatus-Tabelle
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
-
-        //Alle Monate hinterlegen
-        database.execSQL("INSERT INTO months (month) SELECT 'Jan' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Jan')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Feb' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Feb')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Mar' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Mar')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Apr' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Apr')")
-        database.execSQL("INSERT INTO months (month) SELECT 'May' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'May')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Jun' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Jun')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Jul' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Jul')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Aug' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Aug')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Sep' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Sep')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Oct' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Oct')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Nov' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Nov')")
-        database.execSQL("INSERT INTO months (month) SELECT 'Dec' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Dec')")
     }
 
     private val quotePreferences by lazy {
@@ -131,20 +115,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         return quote to quotedPerson
     }
 
-    fun getMonth(abbreviation: String): Result<Long> {
-
-        val cursor = database.rawQuery("SELECT * FROM months WHERE month = ?", arrayOf(abbreviation))
-
-        val month = if (cursor.moveToFirst()) {
-            Result.success(cursor.getLong(cursor.getColumnIndexOrThrow("id")))
-        } else {
-            Result.failure(Exception(""))
-        }
-
-        cursor.close()
-        return month
-    }
-
     fun insertReceipt(receipt: Receipt, date: String): Result<Long>  {
 
         val values = ContentValues().apply {
@@ -153,7 +123,6 @@ class FinanceAppDatabase private constructor(context: Context) {
             put("amount",      receipt.amount)
             put("pathtoimage", receipt.pathToImage)
             put("date",        date)
-            put("idMonth",     receipt.idMonth)
         }
 
         val id = database.insert("receipts", null, values)
@@ -164,9 +133,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             Result.failure(Exception("Insert into receipts-table failed."))
     }
 
-    fun getReceiptsForAMonth(idMonth: Long): Result<List<Receipt>>  {
+    fun getReceipts(startMonth: String, endMonth: String): Result<List<Receipt>>  {
 
-        val cursor = database.rawQuery("SELECT * FROM receipts where idMonth = ?", arrayOf(idMonth.toString()))
+        val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, null)
         val receipts = mutableListOf<Receipt>()
 
         try {
@@ -177,9 +146,8 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
                 val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
-                val idMonth = cursor.getLong(cursor.getColumnIndexOrThrow("idMonth"))
 
-                receipts.add(Receipt(id, description, amount, pathToImage, date, idMonth))
+                receipts.add(Receipt(id, description, amount, pathToImage, date))
             }
         } catch (e: Exception) {
             return Result.failure(Exception("Error in getReceipts()"))
@@ -203,9 +171,8 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
                 val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
-                val idMonth = cursor.getLong(cursor.getColumnIndexOrThrow("idMonth"))
 
-                receipts.add(Receipt(id, description, amount, pathToImage, date, idMonth))
+                receipts.add(Receipt(id, description, amount, pathToImage, date))
             }
         } catch (e: Exception) {
             return Result.failure(Exception("Error in getReceipts()"))

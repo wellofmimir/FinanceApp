@@ -516,6 +516,7 @@ fun ReceiptsSection() {
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f),
+                timespan = timespan,
                 receiptAdded = {
 
                 },
@@ -537,7 +538,8 @@ fun ReceiptsSection() {
         ReceiptLogSection (
             modifier = Modifier
                 .fillMaxHeight(0.8f),
-            receiptSectionsViewModel
+            timespan = timespan,
+            receiptSectionsViewModel = receiptSectionsViewModel,
         )
 
         AdSectionLargeBanner (
@@ -614,6 +616,7 @@ fun AboutUsSection() {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RequestNotificationPermission() {
+
     if (Build.VERSION.SDK_INT < 33) return
 
     val permissionState =
@@ -631,8 +634,8 @@ fun scheduleDailyQuoteWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 21)
-        set(Calendar.MINUTE, 40)
+        set(Calendar.HOUR_OF_DAY, 22)
+        set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 

@@ -1,10 +1,9 @@
 package com.example.financeapp
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.first
 
 class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewModel() {
 
@@ -26,6 +25,8 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
     private val internAccumulatedExpenses = MutableStateFlow<Float>(0.0f)
     val accumulatedExpenses = internAccumulatedExpenses.asStateFlow()
 
+    private var currentTimespan = MutableStateFlow("" to "")
+
     fun insertReceipt(receipt: Receipt) {
 
         val result = repository.insertReceipt(receipt)
@@ -33,7 +34,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
         result.fold (
             onSuccess = { id ->
                 internInsertState.value = true
-                getReceipts()
+                getReceiptsForACertainTimespan(currentTimespan.value.first, currentTimespan.value.second)
                 internInsertState.value = false
             },
             onFailure = {
@@ -45,6 +46,21 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
     fun getReceipts() {
 
         val result = repository.getReceipts()
+
+        result.fold (
+            onSuccess = {
+                internReceipts.value = it
+            },
+            onFailure = {
+                internReceipts.value = emptyList()
+            }
+        )
+    }
+
+    fun getReceiptsForACertainTimespan(startDate: String, endDate: String) {
+
+        val result = repository.getReceiptsForACertainTimespan(startDate, endDate)
+        currentTimespan.value = startDate to endDate
 
         result.fold (
             onSuccess = {
@@ -89,21 +105,26 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
     }
 
     fun getCurrentMonth() {
-
         internCurrentMonth.value = repository.getCurrentMonth()
     }
 
-    fun getReceiptsForThisMonth() {
-
-        val result = repository.getReceiptsForLastMonths(1)
-
-        result.fold (
-            onSuccess = {
-                internReceipts.value = it
-            },
-            onFailure = {
-                internReceipts.value = emptyList()
-            }
-        )
+    fun getFirstDayOfCurrentMonth(): String {
+        return repository.getFirstDayOfCurrentMonth()
     }
+
+    fun getLastDayOfCurrentMonth(): String {
+        return repository.getLastDayOfCurrentMonth()
+    }
+
+    fun getFirstDayOfSixMonthsAgo(): String {
+        return repository.getFirstDayOfSixMonthsAgo()
+    }
+
+    fun getFirstDayOfTwoMonthsAgo(): String {
+        return repository.getFirstDayOfTwoMonthsAgo()
+    }
+    fun getFirstDayOfAYearAgo(): String {
+        return repository.getFirstDayOfAYearAgo()
+    }
+
 }
