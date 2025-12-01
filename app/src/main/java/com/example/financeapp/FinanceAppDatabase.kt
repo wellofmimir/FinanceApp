@@ -1,8 +1,11 @@
 package com.example.financeapp
 
+import android.R
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
+import kotlin.getValue
+import androidx.core.content.edit
 
 data class Goal (
 
@@ -52,6 +55,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
+
     private val database: SQLiteDatabase = context.openOrCreateDatabase("userdatabase.sqlite", Context.MODE_PRIVATE, null)
     private val databasePath = context.getDatabasePath("userdatabase.sqlite")
 
@@ -64,6 +68,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL, idMonth INTEGER NOT NULL, FOREIGN KEY (idMonth) REFERENCES months(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS months (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, month TEXT NOT NULL)".trimIndent())
@@ -92,6 +97,38 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("INSERT INTO months (month) SELECT 'Oct' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Oct')")
         database.execSQL("INSERT INTO months (month) SELECT 'Nov' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Nov')")
         database.execSQL("INSERT INTO months (month) SELECT 'Dec' WHERE NOT EXISTS (SELECT 1 from months WHERE month = 'Dec')")
+    }
+
+    private val quotePreferences by lazy {
+        context.getSharedPreferences("quotePreferences", Context.MODE_PRIVATE)
+    }
+
+    fun resetDailyQuoteFetched() {
+        quotePreferences.edit {
+            putBoolean("dailyQuoteFetched", false)
+            putString("quote", "")
+            putString("quotedPerson", "")
+        }
+    }
+
+    fun saveDailyQuoteFetched(quote: Pair<String, String>) {
+        quotePreferences.edit {
+            putBoolean("dailyQuoteFetched", true)
+            putString("quote", quote.first)
+            putString("quotedPerson", quote.second)
+        }
+    }
+
+    fun dailyQuoteFetched(): Boolean {
+        return quotePreferences.getBoolean("dailyQuoteFetched", false)
+    }
+
+    fun dailyQuote(): Pair<String, String> {
+
+        val quote = quotePreferences.getString("quote", "Time is money.") ?: "Time is money."
+        val quotedPerson = quotePreferences.getString("quotedPerson", "Benjamin Franklin") ?: "Benjamin Franklin"
+
+        return quote to quotedPerson
     }
 
     fun getMonth(abbreviation: String): Result<Long> {
@@ -194,6 +231,38 @@ class FinanceAppDatabase private constructor(context: Context) {
         } else {
             values.put("id", 1)
             database.insert("userinformation", null, values)
+        }
+    }
+
+    fun getCurrentQuote(): String {
+
+        val cursor = database.rawQuery("SELECT id FROM currentQuote WHERE id = 1", null)
+
+        val currentQuote = if (cursor.moveToFirst()) {
+            cursor.getString(cursor.getColumnIndexOrThrow("quote"))
+        } else {
+            ""
+        }
+
+        cursor.close()
+        return currentQuote
+    }
+
+    fun updateCurrentQuote(quote: String) {
+
+        val cursor = database.rawQuery("SELECT id FROM currentQuote WHERE id = 1", null)
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("quote", quote)
+        }
+
+        if (exists) {
+            database.update("currentQuote", values, "id = ?", arrayOf("1"))
+        } else {
+            values.put("id", 1)
+            database.insert("currentQuote", null, values)
         }
     }
 

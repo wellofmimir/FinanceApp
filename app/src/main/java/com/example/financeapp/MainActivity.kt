@@ -1,5 +1,7 @@
 package com.example.financeapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +38,17 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import android.os.Build
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import android.content.Context
+import android.icu.util.Calendar
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
+
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -73,8 +86,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
+
             MobileAds.initialize(this)
             var context = LocalContext.current
+
+            scheduleDailyQuoteWorker(context)
+
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
+            manager.createNotificationChannel(NotificationChannel("receipts", "Receipt", NotificationManager.IMPORTANCE_HIGH))
 
             val mainActivityViewModel: MainActivityViewModel = viewModel (
                 factory = object: ViewModelProvider.Factory {
@@ -319,7 +339,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(tutorialInformation: TutorialInformation) {
+fun HomeScreen(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    RequestNotificationPermission()
 
     Column (
         modifier = Modifier
@@ -586,5 +608,47 @@ fun AboutUsSection() {
             isActive = false,
             tutorialStep = TutorialStep.NONE
         )
+    )
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestNotificationPermission() {
+    if (Build.VERSION.SDK_INT < 33) return
+
+    val permissionState =
+        rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+
+    LaunchedEffect(Unit) {
+        if (!permissionState.status.isGranted) {
+            permissionState.launchPermissionRequest()
+        }
+    }
+}
+
+fun scheduleDailyQuoteWorker(context: Context) {
+
+    val now = Calendar.getInstance()
+    val next22 = Calendar.getInstance().apply {
+
+        set(Calendar.HOUR_OF_DAY, 21)
+        set(Calendar.MINUTE, 40)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+
+        if (before(now))
+            add(Calendar.DAY_OF_MONTH, 1)
+    }
+
+    val initialDelay = next22.timeInMillis - now.timeInMillis
+
+    val workRequest = PeriodicWorkRequestBuilder<QuotePollingWorker>(1, TimeUnit.DAYS)
+        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .build()
+
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork (
+        "dailyQuoteWorker",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        workRequest
     )
 }

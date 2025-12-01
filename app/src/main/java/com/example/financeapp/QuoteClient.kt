@@ -7,7 +7,7 @@ import okhttp3.Request
 import java.lang.Exception
 
 interface QuoteClientCallback {
-    fun onResult(response: String?)
+    fun result(response: String)
 }
 class QuoteClient private constructor(){
     companion object {
@@ -22,7 +22,8 @@ class QuoteClient private constructor(){
     }
 
     private val client = OkHttpClient()
-    fun getQuote(callback: QuoteClientCallback) {
+
+    fun fetchQuote(callback: QuoteClientCallback) {
 
         val request = Request.Builder()
             .get()
@@ -31,19 +32,18 @@ class QuoteClient private constructor(){
 
         Thread {
             try {
-                //val response = client.newCall(request).execute()
-                val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}" //response.body?.string()
-                //val responseBody = response.body?.string()
-                //response.close()
+                val response = client.newCall(request).execute()
+                //val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}"
+                val responseBody = response.body?.string()
+                response.close()
 
                 Handler (Looper.getMainLooper()).post {
-                    callback.onResult(responseBody)
+                    callback.result(responseBody!!)
                 }
+            } catch (e: kotlin.Exception) {
 
-            } catch (e: Exception) {
-
-                Handler(Looper.getMainLooper()).post {
-                    callback.onResult(null)
+                Handler (Looper.getMainLooper()).post {
+                    callback.result("")
                 }
             }
         }.start()

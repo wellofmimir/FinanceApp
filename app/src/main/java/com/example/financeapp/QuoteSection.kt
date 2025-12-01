@@ -52,12 +52,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         }
     )
 
-    val currentDate = java.time.LocalDate.now()
-    val formatter = java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy", java.util.Locale.ENGLISH)
-    val formattedDate = currentDate.format(formatter)
-
-    val quoteState = quoteViewModel.quote.collectAsState()
-    val quotedPersonState = quoteViewModel.quotedPerson.collectAsState()
+    val quoteToQuotedPerson = quoteViewModel.quoteToQuotedPerson.collectAsState()
 
     Column (
         modifier = modifier
@@ -80,7 +75,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 contentAlignment = Alignment.Center
             ) {
                 Text (
-                    text = quoteState.value,
+                    text = quoteToQuotedPerson.value.first,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Left,
                     fontWeight = FontWeight.ExtraBold,
@@ -108,7 +103,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 var herzZumLikenClicked by remember { mutableStateOf(false) }
 
                 quoteViewModel.getLikedQuotes().forEach { quote ->
-                    if (quote.quote == quoteState.value)
+                    if (quote.quote == quoteToQuotedPerson.value.first)
                         herzZumLikenClicked = true
                 }
 
@@ -123,7 +118,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             interactionSource = remember { MutableInteractionSource() }
                         ){
                             herzZumLikenClicked = !herzZumLikenClicked
-                            quoteViewModel.quoteGotLiked(quoteState.value, quotedPersonState.value)
+                            quoteViewModel.quoteGotLiked(quoteToQuotedPerson.value.first, quoteToQuotedPerson.value.second)
                         }
                 )
             }
@@ -134,7 +129,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text (
-                    text = quotedPersonState.value,
+                    text = quoteToQuotedPerson.value.second,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
                     fontStyle = FontStyle.Italic,
@@ -144,5 +139,5 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         }
     }
 
-    quoteViewModel.loadQuote()
+    quoteViewModel.fetchQuote()
 }
