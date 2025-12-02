@@ -125,13 +125,13 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
             Box (
                 modifier = Modifier
-                    .padding(4.dp, end = 16.dp),
-                contentAlignment = Alignment.CenterStart
+                    .padding(end = 12.dp, bottom = 2.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text (
                     text = quoteToQuotedPerson.value.second,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
                     fontStyle = FontStyle.Italic,
                     color = Emerald
                 )

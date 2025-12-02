@@ -52,19 +52,20 @@ import androidx.core.content.FileProvider
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.text.Layout
-import androidx.compose.foundation.border
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.Alignment
 
 enum class Timespan (id: Int) {
 
@@ -162,7 +163,8 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
         },
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.45f)
+            .height(425.dp)
+            .heightIn(min = 425.dp)
             .background(
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
@@ -360,58 +362,66 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
 fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
 
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
-    var clickedEntry by remember { mutableStateOf(0) }
+    var clickedEntry by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         receiptSectionsViewModel.getCurrentMonth()
     }
 
-    Row (
+    val entries = listOf(currentMonth, "2 mo.", "6 mo.", "1 yr", "All")
+
+    Column (
         modifier = modifier,
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        val entries = listOf(currentMonth, "2 mo.", "6 mo.", "1 yr")
+        Row (
+            modifier = Modifier,
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
 
-        entries.forEach { entry ->
-            Box (
-                modifier = Modifier
-                    .weight(1f)
-                    .height(60.dp)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        clickedEntry = entries.indexOf(entry)
+            entries.forEach { entry ->
+                Box (
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            clickedEntry = entries.indexOf(entry)
 
-                        onCurrentMonth(
-                            when (clickedEntry) {
-                                0 -> Timespan.THIS_MONTH
-                                1 -> Timespan.LAST_TWO_MONTHS
-                                2 -> Timespan.LAST_SIX_MONTHS
-                                3 -> Timespan.WHOLE_YEAR
-                                else -> Timespan.NONE
-                            }
+                            onCurrentMonth(
+                                when (clickedEntry) {
+                                    0 -> Timespan.THIS_MONTH
+                                    1 -> Timespan.LAST_TWO_MONTHS
+                                    2 -> Timespan.LAST_SIX_MONTHS
+                                    3 -> Timespan.WHOLE_YEAR
+                                    4 -> Timespan.ALL
+                                    else -> Timespan.NONE
+                                }
+                            )
+                        }
+                        .background (
+                            color = if (entries.indexOf(entry) == clickedEntry) Emerald else Pistachio,
+                            shape = RoundedCornerShape(12.dp)
                         )
-                    }
-                    .background(
-                        color = if (entries.indexOf(entry) == clickedEntry) Emerald else Pistachio,
-                        shape = RoundedCornerShape(12.dp)
+                        .border (
+                            width = 2.dp,
+                            color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Color.Transparent,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text (
+                        text = entry,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontStyle = FontStyle.Normal,
+                        color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Emerald
                     )
-                    .border(
-                        width = 2.dp,
-                        color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Color.Transparent,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = entry,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontStyle = FontStyle.Normal,
-                    color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Emerald
-                )
+                }
             }
         }
     }
@@ -448,6 +458,15 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        AddReceiptMenu (
+            expanded,
+            onDismissRequest = {
+                expanded = false
+                receiptSectionsViewModel.getReceipts()
+            },
+            receiptSectionsViewModel
+        )
+
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
@@ -488,15 +507,6 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                 },
             alignment = Alignment.BottomEnd
         )
-
-        AddReceiptMenu (
-            expanded,
-            onDismissRequest = {
-                expanded = false
-                receiptSectionsViewModel.getReceipts()
-            },
-            receiptSectionsViewModel
-        )
     }
 }
 
@@ -523,10 +533,6 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     val sumOfExpenses by receiptSectionsViewModel.receiptsSum.collectAsState()
-
-    LaunchedEffect(receipts) {
-        receiptSectionsViewModel.calculateSum()
-    }
 
     Column (
         modifier = modifier
@@ -561,7 +567,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
         Spacer (
             modifier = Modifier
-                .height(20.dp)
+                .height(5.dp)
         )
 
         Box (

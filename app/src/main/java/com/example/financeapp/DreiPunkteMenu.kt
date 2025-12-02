@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -83,6 +82,33 @@ fun DreiPunkteMenu(expanded: Boolean,
                         contentAlignment = Alignment.Center
                     ) {
                         Text (
+                            text = "Receipts",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onReceiptsClicked()
+                }
+            )
+
+            HorizontalDivider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
                             text = "Goal History",
                             color = Color.White,
                             fontSize = 18.sp
@@ -118,33 +144,6 @@ fun DreiPunkteMenu(expanded: Boolean,
                 },
                 onClick = {
                     onYourQuotesClicked()
-                }
-            )
-
-            HorizontalDivider (
-                color = Color.White,
-                thickness = 1.dp,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            DropdownMenuItem (
-                text = {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text (
-                            text = "Receipts",
-                            color = Color.White,
-                            fontSize = 18.sp
-                        )
-                    }
-                },
-                onClick = {
-                    onReceiptsClicked()
                 }
             )
 

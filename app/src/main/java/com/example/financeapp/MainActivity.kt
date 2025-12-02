@@ -352,17 +352,14 @@ fun HomeScreen(tutorialInformation: TutorialInformation, context: Context = Loca
     ) {
         Row (
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             GoalprogressSection (
                 modifier = Modifier
                     .weight(1f),
                 tutorialInformation = tutorialInformation
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .padding(horizontal = 2.dp)
             )
 
             QuoteSection (

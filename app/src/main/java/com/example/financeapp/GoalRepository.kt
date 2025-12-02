@@ -19,8 +19,19 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
 
     fun updateGoal(goal: Goal) {
+        database.updateGoal(goal)
+    }
+
+    fun setGoalCompleted(goal: Goal) {
         database.run {
+            val status = getIDGoalStatus("Completed")
+
+            if (goal.idStatus == status!!.id)
+                return
+
+            goal.idStatus = status!!.id
             updateGoal(goal)
+            addNewTokenAmountToPunchcard(goal.tokenCount)
         }
     }
 
@@ -62,7 +73,10 @@ class GoalRepository(private val database: FinanceAppDatabase) {
         return database.getTokenSoFarForPunchcard()
     }
 
+    fun addNewTokenAmountToPunchcard(tokenAmount: Int) {
+        database.setTokenSoFarForPunchcard(tokenAmount)
+    }
     fun resetTokenSoFarForPunchcard() {
-        return database.setTokenSoFarForPunchcard(0)
+        database.setTokenSoFarForPunchcard(0)
     }
 }

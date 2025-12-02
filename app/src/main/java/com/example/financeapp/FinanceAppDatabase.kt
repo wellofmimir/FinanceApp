@@ -13,7 +13,7 @@ data class Goal (
     val goal: String,
     var amount: Float,
     var saved: Float,
-    val idStatus: Int,
+    var idStatus: Int,
     val dateWhenFinished: String,
     val tokenCount: Int
 )
@@ -135,7 +135,7 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     fun getReceipts(startMonth: String, endMonth: String): Result<List<Receipt>>  {
 
-        val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, null)
+        val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, "date DESC")
         val receipts = mutableListOf<Receipt>()
 
         try {
@@ -160,7 +160,7 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     fun getReceipts(): Result<List<Receipt>>  {
 
-        val cursor = database.rawQuery("SELECT * FROM receipts ORDER BY id DESC", null)
+        val cursor = database.rawQuery("SELECT * FROM receipts ORDER BY date DESC", null)
         val receipts = mutableListOf<Receipt>()
 
         try {
@@ -423,10 +423,13 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         val cursor = database.rawQuery("SELECT tokensofar FROM punchcard WHERE id = ?", arrayOf("1"))
         val exists = cursor.moveToFirst()
+        val current = if (exists) cursor.getInt(0) else 0
         cursor.close()
 
+        val updatedValue = current + tokenSoFar
+
         val values = ContentValues().apply {
-            put("tokensofar", tokenSoFar)
+            put("tokensofar", updatedValue)
         }
 
         if (exists) {

@@ -50,6 +50,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
         result.fold (
             onSuccess = {
                 internReceipts.value = it
+                calculateSum()
             },
             onFailure = {
                 internReceipts.value = emptyList()
@@ -65,6 +66,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
         result.fold (
             onSuccess = {
                 internReceipts.value = it
+                calculateSum()
             },
             onFailure = {
                 internReceipts.value = emptyList()

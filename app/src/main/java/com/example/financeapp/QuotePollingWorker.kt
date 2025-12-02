@@ -15,7 +15,13 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
 
         database.resetDailyQuoteFetched()
         quoteRepository.fetchQuoteFromServer()
-        notifier.sendQuoteNotification()
+
+        val newQuote = quoteRepository.quoteToQuotedPerson.value
+        val currentQuote = database.dailyQuote()
+
+        if (newQuote.first != currentQuote.first)
+            notifier.sendQuoteNotification()
+
         return Result.success()
     }
 
