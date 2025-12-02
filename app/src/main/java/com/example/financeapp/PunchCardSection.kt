@@ -59,7 +59,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
     punchCardSectionViewModel.getTokenSoFarForPunchcard()
     val tokenSoFar = punchCardSectionViewModel.tokenSoFar.collectAsState()
 
-    if (tokenSoFar.value == 8) {
+    if (tokenSoFar.value == 3) {
 
         Column (
             modifier = modifier
@@ -134,7 +134,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
             )
 
             Text (
-                text = "Now give yourself a treat. Or a big one. The world is your oyster.",
+                text = "Now give yourself a little treat. Or a big one. The world is your oyster.",
                 fontSize = 16.sp,
                 color = Pistachio,
                 textAlign = TextAlign.Center
