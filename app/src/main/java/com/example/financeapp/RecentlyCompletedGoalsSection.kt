@@ -59,75 +59,27 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
             ),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Row (
+        Text (
+            text = "Recently Completed:",
+            color = Emerald,
+            fontSize = 18.sp,
+            fontStyle = FontStyle.Italic,
             modifier = Modifier
-                .fillMaxWidth()
-                .background (
-                    color = Pistachio,
-                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text (
-                text = "Recently Completed Goals:",
-                color = Emerald,
-                fontSize = 24.sp,
-                fontStyle = FontStyle.Italic,
-                modifier = Modifier
-                    .weight(0.8f)
-                    .background (
-                        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                        color = Pistachio
-                    )
-                    .padding(horizontal = 24.dp),
-            )
+                .padding(start = 14.dp, top = 18.dp)
+        )
 
-            Column (
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(0.2f)
-            ) {
-                Text(
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 64.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Emerald
-                            )
-                        ) {
-                            append("${goals.size}\n")
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Emerald
-                            )
-                        ) {
-                            append("total")
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(start = 6.dp, end = 6.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 24.sp,
-                    color = Emerald
-                )
-
-            }
-        }
+        Spacer (
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+        )
 
         goals.take(3).forEach { item ->
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-30).dp) //aufgrund von Jetpack Compose Fehler muss zurückgeschoben werden
                     .background(
                         shape = RoundedCornerShape(
                             bottomStart = if (item == goals.last()) 12.dp else 0.dp,
@@ -135,7 +87,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                         ),
                         color = Color.Transparent
                     )
-                    .padding(horizontal = 36.dp, vertical = 8.dp),
+                    .padding(start = 24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image (

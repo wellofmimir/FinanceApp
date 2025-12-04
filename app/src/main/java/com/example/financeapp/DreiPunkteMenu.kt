@@ -27,7 +27,8 @@ fun DreiPunkteMenu(expanded: Boolean,
                    onGoalHistoryClicked: () -> Unit,
                    onYourQuotesClicked: () -> Unit,
                    onReceiptsClicked: () -> Unit,
-                   onAboutUsClicked: () -> Unit) {
+                   onAboutUsClicked: () -> Unit,
+                   onSettingsClicked:() -> Unit) {
 
     DropdownMenu (
         expanded = expanded,
@@ -163,14 +164,14 @@ fun DreiPunkteMenu(expanded: Boolean,
                         contentAlignment = Alignment.Center
                     ) {
                         Text (
-                            text = "About us",
+                            text = "Settings",
                             color = Color.White,
                             fontSize = 18.sp
                         )
                     }
                 },
                 onClick = {
-                    onAboutUsClicked()
+                    onSettingsClicked()
                 }
             )
         }

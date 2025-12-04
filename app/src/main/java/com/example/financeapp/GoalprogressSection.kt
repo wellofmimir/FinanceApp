@@ -85,7 +85,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                     color = Pistachio
                 )
-                .padding(top = 8.dp, bottom = 1.dp, start = 8.dp, end = 8.dp)
+                .padding(top = 8.dp, end = 8.dp)
         ) {
             Box (
                 modifier = Modifier
@@ -97,8 +97,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
             ) {
                 Column (
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 0.dp),
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text (
@@ -106,16 +105,17 @@ fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                         color = Emerald,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top = 12.dp)
                     )
 
                     Text (
                         text = currentGoalText,
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Emerald,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 2.dp, start = 2.dp, end = 2.dp)
@@ -165,7 +165,9 @@ fun GoalprogressSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                 fontSize = 64.sp,
                 textAlign = TextAlign.Right,
                 fontWeight = FontWeight.Bold,
+                color = Emerald,
                 modifier = modifier
+                    .padding(end = 8.dp)
                     .clickable(
                         indication = null,
                         interactionSource = remember {MutableInteractionSource()}

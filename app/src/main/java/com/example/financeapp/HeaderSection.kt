@@ -33,23 +33,15 @@ import androidx.compose.ui.draw.alpha
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation: TutorialInformation, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
     //Aber der Context darf nicht in dem HeaderSectionViewModel selbst angelegt werden (geht nicht in Compose).
 
-    val headersectionViewModel: HeaderSectionViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val database = FinanceAppDatabase.getInstance(context)
-                return HeaderSectionViewModel(database) as T
-            }
-        }
-    )
 
-    headersectionViewModel.getUser()
-    val username = headersectionViewModel.user.collectAsState()
+    headerSectionViewModel.getUser()
+    val username = headerSectionViewModel.user.collectAsState()
 
     var headerText by remember { mutableStateOf("Test") }
     var sectionIdentifier by remember { mutableStateOf(0) }
@@ -61,6 +53,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
         2 -> "Goals Completed"
         3 -> "Saved Receipts"
         4 -> "About Greeen"
+        7 -> "Settings"
         else -> "Welcome!"
     }
 
@@ -157,6 +150,11 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                     onAboutUsClicked = {
                         sectionIdentifier = 4
                         onNewSectionIdentifier(Screen.ABOUT_US)
+                        expanded = false
+                    },
+                    onSettingsClicked = {
+                        sectionIdentifier = 7
+                        onNewSectionIdentifier(Screen.USER_SETTINGS)
                         expanded = false
                     }
                 )

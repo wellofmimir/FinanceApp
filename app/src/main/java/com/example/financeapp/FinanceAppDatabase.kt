@@ -87,6 +87,18 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("quotePreferences", Context.MODE_PRIVATE)
     }
 
+    fun setFeedbackSent() {
+        quotePreferences.edit {
+            putBoolean("feedbackSent", true)
+        }
+    }
+
+    fun resetFeedbackSent() {
+        quotePreferences.edit {
+            putBoolean("feedbackSent", false)
+        }
+    }
+
     fun resetDailyQuoteFetched() {
         quotePreferences.edit {
             putBoolean("dailyQuoteFetched", false)

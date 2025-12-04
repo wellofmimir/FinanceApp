@@ -75,8 +75,8 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     color = Pistachio,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Center
         ) {
             Text (
                 text = "Stuff you're working on:",
@@ -89,23 +89,28 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                         color = Pistachio
                     )
                     .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)
+                    .weight(2f)
             )
 
-            Image (
-                painter = painterResource(R.drawable.pluszeichen_foreground),
-                contentDescription = "Pluszeichen",
+            Box (
                 modifier = Modifier
-                    .size(64.dp)
-                    .offset(y = 8.dp, x = 28.dp)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ){
-                        expanded = true
-                        visible = true
-                    },
-                alignment = Alignment.TopStart
-            )
+                    .padding(top = 8.dp, end = 8.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Image (
+                    painter = painterResource(R.drawable.pluszeichen_foreground),
+                    contentDescription = "Pluszeichen",
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ){
+                            expanded = true
+                            visible = true
+                        }
+                )
+            }
 
             this@Row.AnimatedVisibility (
                 visible = visible,

@@ -35,15 +35,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.Alignment
 import android.os.Build
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import android.content.Context
 import android.icu.util.Calendar
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -56,10 +56,11 @@ enum class Screen (id: Int) {
     WELCOME(2),
     GOALHISTORY(3),
     SPLASH(4),
-
     RECEIPTS(5),
 
-    ABOUT_US(6)
+    ABOUT_US(6),
+
+    USER_SETTINGS(id = 7)
 }
 
 enum class TutorialStep (id: Int) {
@@ -86,7 +87,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-
             MobileAds.initialize(this)
             var context = LocalContext.current
 
@@ -104,6 +104,27 @@ class MainActivity : ComponentActivity() {
                         val repository = UserRepository(database)
 
                         return MainActivityViewModel(repository) as T
+                    }
+                }
+            )
+
+            val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+                factory = object: ViewModelProvider.Factory {
+                    override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                        val database = FinanceAppDatabase.getInstance(context)
+                        val repository = ReceiptRepository.getInstance(database)
+
+                        return ReceiptSectionsViewModel(repository) as T
+                    }
+                }
+            )
+
+            val headerSectionViewModel: HeaderSectionViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val database = FinanceAppDatabase.getInstance(context)
+                        return HeaderSectionViewModel(database) as T
                     }
                 }
             )
@@ -158,11 +179,12 @@ class MainActivity : ComponentActivity() {
                     }
             ) {
                 // Header nur, wenn nicht Welcome
-                if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US).contains(sectionIdentifier)) {
+                if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS).contains(sectionIdentifier)) {
                     HeaderSection(onNewSectionIdentifier = {
                             sectionIdentifier = it
                         },
-                        tutorialInformation = tutorialInformation
+                        tutorialInformation = tutorialInformation,
+                        headerSectionViewModel = headerSectionViewModel
                     )
 
                     Spacer (
@@ -170,8 +192,6 @@ class MainActivity : ComponentActivity() {
                             .padding(2.dp)
                     )
                 }
-
-                // Aktueller Screen
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.WELCOME,
@@ -198,7 +218,8 @@ class MainActivity : ComponentActivity() {
                     )
                 ) {
                     HomeScreen (
-                        tutorialInformation = tutorialInformation
+                        tutorialInformation = tutorialInformation,
+                        receiptSectionsViewModel = receiptSectionsViewModel
                     )
                 }
 
@@ -211,10 +232,18 @@ class MainActivity : ComponentActivity() {
                     GoalHistorySection()
 
                 if (sectionIdentifier == Screen.RECEIPTS)
-                    ReceiptsSection()
+                    ReceiptsSection (
+                        receiptSectionsViewModel = receiptSectionsViewModel
+                    )
 
                 if (sectionIdentifier == Screen.ABOUT_US)
                     AboutUsSection()
+
+                if (sectionIdentifier == Screen.USER_SETTINGS)
+                    SettingsScreen (
+                        headerSectionViewModel = headerSectionViewModel,
+                        tutorialInformation = tutorialInformation
+                    )
 
                 AnimatedVisibility (
                     visible = sectionIdentifier == Screen.SPLASH,
@@ -339,7 +368,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
 
     RequestNotificationPermission()
 
@@ -396,11 +425,27 @@ fun HomeScreen(tutorialInformation: TutorialInformation, context: Context = Loca
                     .padding(2.dp)
             )
 
-            RecentlyCompletedGoalsSection (
+            Row (
                 modifier = Modifier
-                    .weight(0.7f),
-                tutorialInformation = tutorialInformation
-            )
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                RecentlyCompletedGoalsSection (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f),
+                    tutorialInformation = tutorialInformation
+                )
+
+                SavedReceiptsSection (
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                        .fillMaxHeight(),
+                    receiptSectionsViewModel = receiptSectionsViewModel
+                )
+            }
 
             AdSectionMiddleBanner (
                 modifier = Modifier
@@ -474,21 +519,7 @@ fun GoalHistorySection() {
 }
 
 @Composable
-fun ReceiptsSection() {
-
-    var context = LocalContext.current
-
-    val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.getInstance(context)
-                val repository = ReceiptRepository.getInstance(database)
-
-                return ReceiptSectionsViewModel(repository) as T
-            }
-        }
-    )
+fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
 
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
 
@@ -610,6 +641,16 @@ fun AboutUsSection() {
     )
 }
 
+@Composable
+fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    SettingsSection (
+        headerSectionViewModel = headerSectionViewModel
+    )
+
+    AdSectionLargeBanner(tutorialInformation)
+}
+
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RequestNotificationPermission() {
@@ -652,3 +693,4 @@ fun scheduleDailyQuoteWorker(context: Context) {
         workRequest
     )
 }
+

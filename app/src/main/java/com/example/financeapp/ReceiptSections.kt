@@ -470,7 +470,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 18.dp),
+                .padding(start = 12.dp, top = 18.dp),
             text = averageAmount.toString(),
             color = Emerald,
             fontSize = 32.sp,
@@ -480,7 +480,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 2.dp),
+                .padding(start = 12.dp, top = 2.dp),
             text = "Average spent per transaction",
             color = Emerald,
             fontSize = 16.sp,
@@ -493,8 +493,8 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
         )
 
         Image (
-            painter = painterResource(com.example.financeapp.R.drawable.pluszeichen_foreground),
-            contentDescription = "Pluszeichen",
+            painter = painterResource(com.example.financeapp.R.drawable.kamerasymbol_foreground),
+            contentDescription = "Kamerasymbol",
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(end = 12.dp, bottom = 12.dp)
@@ -546,7 +546,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 18.dp),
+                .padding(start = 12.dp, top = 18.dp),
             text = "$timeRangeText:",
             color = Emerald,
             textAlign = TextAlign.Start,
@@ -558,7 +558,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 9.dp),
+                .padding(start = 12.dp, top = 9.dp),
             text = sumOfExpenses.toString(),
             color = Emerald,
             fontSize = 32.sp,

@@ -139,7 +139,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
 
                 Spacer(
                     modifier = Modifier
-                        .padding(1.dp)
+                        .padding(2.dp)
                 )
             }
 
