@@ -1,0 +1,50 @@
+package com.example.financeapp.advertisement
+
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.viewinterop.AndroidView
+import com.example.financeapp.TutorialInformation
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+
+@Composable
+fun AdSectionLargeBanner(tutorialInformation: TutorialInformation) {
+
+    AndroidView (
+        modifier = Modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        factory = { context ->
+            AdView(context).apply {
+                setAdSize(AdSize.LARGE_BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
+}
+
+@Composable
+fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
+
+    AndroidView (
+        modifier = modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
+            .fillMaxWidth()
+            .height(50.dp),
+        factory = { context ->
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
+}

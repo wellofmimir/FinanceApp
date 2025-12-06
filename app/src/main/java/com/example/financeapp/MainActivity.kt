@@ -47,6 +47,35 @@ import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.financeapp.advertisement.AdSectionLargeBanner
+import com.example.financeapp.advertisement.AdSectionMiddleBanner
+import com.example.financeapp.database.FinanceAppDatabase
+import com.example.financeapp.goalhistoryscreen.AchievementsSection
+import com.example.financeapp.goalhistoryscreen.PunchCardSection
+import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
+import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
+import com.example.financeapp.header.HeaderSection
+import com.example.financeapp.header.HeaderSectionViewModel
+import com.example.financeapp.homescreen.GoalprogressSection
+import com.example.financeapp.homescreen.GoalsSection
+import com.example.financeapp.homescreen.GoalsSectionViewModel
+import com.example.financeapp.homescreen.QuoteSection
+import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
+import com.example.financeapp.homescreen.SavedReceiptsSection
+import com.example.financeapp.homescreen.WellDoneSection
+import com.example.financeapp.likedquotes.LikedQuotesSection
+import com.example.financeapp.network.QuotePollingWorker
+import com.example.financeapp.receiptsscreen.AverageSpentSection
+import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
+import com.example.financeapp.receiptsscreen.ReceiptLogSection
+import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
+import com.example.financeapp.receiptsscreen.SinceWhenSection
+import com.example.financeapp.receiptsscreen.Timespan
+import com.example.financeapp.repositories.GoalRepository
+import com.example.financeapp.repositories.ReceiptRepository
+import com.example.financeapp.repositories.UserRepository
+import com.example.financeapp.settingsscreen.SettingsSection
+import com.example.financeapp.welcomescreen.WelcomeScreen
 import java.util.concurrent.TimeUnit
 
 
@@ -129,12 +158,26 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
+            val goalSectionViewModel: GoalsSectionViewModel = viewModel (
+                factory = object: ViewModelProvider.Factory {
+                    override fun<T : ViewModel> create(modelClass: Class<T>): T {
+
+                        val database = FinanceAppDatabase.getInstance(context)
+                        val repository = GoalRepository(database)
+
+                        return GoalsSectionViewModel(repository) as T
+                    }
+                }
+            )
+
             var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(!mainActivityViewModel.isTutorialDone, TutorialStep.NONE))}
 
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
 
             var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
+
+            var goalAchieved by remember { mutableStateOf(false) }
 
             LaunchedEffect(user) {
 
@@ -180,17 +223,23 @@ class MainActivity : ComponentActivity() {
             ) {
                 // Header nur, wenn nicht Welcome
                 if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS).contains(sectionIdentifier)) {
-                    HeaderSection(onNewSectionIdentifier = {
-                            sectionIdentifier = it
-                        },
-                        tutorialInformation = tutorialInformation,
-                        headerSectionViewModel = headerSectionViewModel
-                    )
 
-                    Spacer (
-                        modifier = Modifier
-                            .padding(2.dp)
-                    )
+                    if (goalAchieved) {
+
+                    } else {
+                        HeaderSection(
+                            onNewSectionIdentifier = {
+                                sectionIdentifier = it
+                            },
+                            tutorialInformation = tutorialInformation,
+                            headerSectionViewModel = headerSectionViewModel
+                        )
+
+                        Spacer (
+                            modifier = Modifier
+                                .padding(2.dp)
+                        )
+                    }
                 }
 
                 AnimatedVisibility (
@@ -201,7 +250,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 ) {
-                    WelcomeScreen (
+                    WelcomeScreen(
                         onFinished = {
                             mainActivityViewModel.loadUser()
                         },
@@ -219,12 +268,19 @@ class MainActivity : ComponentActivity() {
                 ) {
                     HomeScreen (
                         tutorialInformation = tutorialInformation,
-                        receiptSectionsViewModel = receiptSectionsViewModel
+                        receiptSectionsViewModel = receiptSectionsViewModel,
+                        goalsSectionViewModel = goalSectionViewModel,
+                        onGoalAchieved = {
+                            goalAchieved = true
+                        },
+                        onWellDoneSectionDismissed = {
+                            goalAchieved = false
+                        }
                     )
                 }
 
                 if (sectionIdentifier == Screen.LIKEDQUOTES)
-                    LikedQuotesSection (
+                    LikedQuotesSection(
                         tutorialInformation = tutorialInformation
                     )
 
@@ -253,7 +309,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 ) {
-                    WelcomeScreen (
+                    WelcomeScreen(
                         onFinished = {
                             mainActivityViewModel.loadUser()
                         },
@@ -368,9 +424,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
+fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, context: Context = LocalContext.current) {
 
     RequestNotificationPermission()
+
+    var goalAchieved by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
@@ -379,79 +437,98 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
             ),
         verticalArrangement = Arrangement.Top
     ) {
-        Row (
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            GoalprogressSection (
+
+        if (goalAchieved) {
+
+            onGoalAchieved()
+            WellDoneSection(
                 modifier = Modifier
-                    .weight(1f),
-                tutorialInformation = tutorialInformation
+                    .fillMaxHeight(),
+                onFinished = {
+                    onWellDoneSectionDismissed()
+                    goalAchieved = false
+                }
             )
 
-            QuoteSection (
-                modifier = Modifier
-                    .weight(1f),
-                tutorialInformation = tutorialInformation
-            )
-        }
-
-        Spacer (
-            modifier = Modifier
-                .padding(2.dp)
-        )
-
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background (
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            GoalsSection (
-                modifier = Modifier
-                    .weight(1f),
-                tutorialInformation = tutorialInformation
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .padding(2.dp)
-            )
-
+        } else {
             Row (
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                RecentlyCompletedGoalsSection (
+                GoalprogressSection(
                     modifier = Modifier
-                        .weight(1f)
-                        .aspectRatio(1f),
+                        .weight(1f),
+                    onGoalReached = {
+                        goalAchieved = true
+                    },
                     tutorialInformation = tutorialInformation
                 )
 
-                SavedReceiptsSection (
+                QuoteSection(
                     modifier = Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
-                        .fillMaxHeight(),
-                    receiptSectionsViewModel = receiptSectionsViewModel
+                        .weight(1f),
+                    tutorialInformation = tutorialInformation
                 )
             }
 
-            AdSectionMiddleBanner (
+            Spacer (
                 modifier = Modifier
-                    .weight(0.3f),
-                tutorialInformation = tutorialInformation
+                    .padding(2.dp)
             )
+
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background (
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                GoalsSection(
+                    modifier = Modifier
+                        .weight(1f),
+                    tutorialInformation = tutorialInformation,
+                    goalsSectionViewModel = goalsSectionViewModel
+                )
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(2.dp)
+                )
+
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    RecentlyCompletedGoalsSection(
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f),
+                        tutorialInformation = tutorialInformation
+                    )
+
+                    SavedReceiptsSection(
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .fillMaxHeight(),
+                        receiptSectionsViewModel = receiptSectionsViewModel
+                    )
+                }
+
+                AdSectionMiddleBanner(
+                    modifier = Modifier
+                        .weight(0.3f),
+                    tutorialInformation = tutorialInformation
+                )
+            }
         }
     }
 }
@@ -467,7 +544,7 @@ fun GoalHistorySection() {
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            PunchCardSection (
+            PunchCardSection(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -480,13 +557,13 @@ fun GoalHistorySection() {
                     .weight(1f)
                     .fillMaxHeight()
             ) {
-                TotalGoalsAchievedSection (
+                TotalGoalsAchievedSection(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
                 )
 
-                TotalTokensEarnedSection (
+                TotalTokensEarnedSection(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
@@ -499,23 +576,23 @@ fun GoalHistorySection() {
                 .padding(2.dp)
         )
 
-        AchievementsSection (
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.75f)
-        )
+    AchievementsSection(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.75f)
+    )
 
         Spacer (
             modifier = Modifier
                 .padding(2.dp)
         )
 
-        AdSectionLargeBanner (
-            tutorialInformation = TutorialInformation (
-                isActive = false,
-                tutorialStep = TutorialStep.NONE
-            )
+    AdSectionLargeBanner(
+        tutorialInformation = TutorialInformation(
+            isActive = false,
+            tutorialStep = TutorialStep.NONE
         )
+    )
 }
 
 @Composable
@@ -529,7 +606,8 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SinceWhenSection (onCurrentMonth = {
+        SinceWhenSection(
+            onCurrentMonth = {
                 timespan = it
             },
             receiptSectionsViewModel = receiptSectionsViewModel
@@ -540,7 +618,7 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            AverageSpentSection (
+            AverageSpentSection(
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f),
@@ -554,7 +632,7 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
                 receiptSectionsViewModel = receiptSectionsViewModel
             )
 
-            ExpensesOverviewSection (
+            ExpensesOverviewSection(
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f),
@@ -563,15 +641,15 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
             )
         }
 
-        ReceiptLogSection (
+        ReceiptLogSection(
             modifier = Modifier
                 .fillMaxHeight(0.8f),
             timespan = timespan,
             receiptSectionsViewModel = receiptSectionsViewModel,
         )
 
-        AdSectionLargeBanner (
-            tutorialInformation = TutorialInformation (
+        AdSectionLargeBanner(
+            tutorialInformation = TutorialInformation(
                 isActive = false,
                 tutorialStep = TutorialStep.NONE
             )
@@ -590,7 +668,7 @@ fun AboutUsSection() {
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
 
-        PunchCardSection (
+        PunchCardSection(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -603,13 +681,13 @@ fun AboutUsSection() {
                 .weight(1f)
                 .fillMaxHeight()
         ) {
-            TotalGoalsAchievedSection (
+            TotalGoalsAchievedSection(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             )
 
-            TotalTokensEarnedSection (
+            TotalTokensEarnedSection(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -622,7 +700,7 @@ fun AboutUsSection() {
             .padding(1.dp)
     )
 
-    AchievementsSection (
+    AchievementsSection(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.65f)
@@ -633,8 +711,8 @@ fun AboutUsSection() {
             .padding(1.dp)
     )
 
-    AdSectionLargeBanner (
-        tutorialInformation = TutorialInformation (
+    AdSectionLargeBanner(
+        tutorialInformation = TutorialInformation(
             isActive = false,
             tutorialStep = TutorialStep.NONE
         )
@@ -644,7 +722,7 @@ fun AboutUsSection() {
 @Composable
 fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
-    SettingsSection (
+    SettingsSection(
         headerSectionViewModel = headerSectionViewModel
     )
 
