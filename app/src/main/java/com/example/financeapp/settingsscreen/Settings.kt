@@ -29,43 +29,52 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.header.HeaderSectionViewModel
 import com.example.financeapp.R
-import kotlinx.coroutines.delay
+import com.example.financeapp.database.FinanceAppDatabase
+import com.example.financeapp.repositories.FeedbackRepository
+import androidx.compose.ui.platform.LocalFocusManager
 
 @Composable
 fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
 
+    val settingsViewModel: SettingsViewModel = viewModel (
+        factory = object: ViewModelProvider.Factory {
+            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+                val database = FinanceAppDatabase.getInstance(context)
+                val repository = FeedbackRepository.getInstance(database)
+                return SettingsViewModel(repository) as T
+            }
+        }
+    )
+
+    val user by headerSectionViewModel.user.collectAsState()
+    var newUsername by remember { mutableStateOf(user) }
+
     var feedbackText by remember { mutableStateOf("") }
-    var feedbackSent by remember { mutableStateOf(false) }
-    var feedbackAlreadySent by remember { mutableStateOf(false) }
+    val isFeedbackAlreadySent by settingsViewModel.isFeedbackAlreadySent.collectAsState()
+    settingsViewModel.feedbackAlreadySent()
+
     var textAfterFeedbackButtonClicked by remember { mutableStateOf("Thank you for your feedback!") }
-    var buttonText by remember { mutableStateOf("Send") }
-
-    LaunchedEffect(feedbackSent) {
-
-        if (!feedbackSent)
-            return@LaunchedEffect
-
-        buttonText = "Thank you!"
-        delay(3000)
-        buttonText = "Send"
-        feedbackSent = false
-        feedbackAlreadySent = true
-    }
+    var isEditingTheName by remember { mutableStateOf(false) }
 
     Column (
         modifier = modifier
             .fillMaxWidth()
-            .background (
+            .background(
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -75,7 +84,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background (
+                .background(
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -96,31 +105,71 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 )
             }
 
-            Box (
-                modifier = Modifier
-                    .weight(0.5f)
-                    .padding(start = 4.dp)
-            ) {
-                Text (
-                    text = "Name",
-                    color = Emerald,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 32.sp
-                )
-            }
+            val focusManager = LocalFocusManager.current
 
             Box (
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp),
+                    .weight(0.5f)
+                    .padding(start = 4.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Image (
-                    painter = painterResource(R.drawable.checkhook_foreground),
-                    contentDescription = "CheckHook",
+
+                if (isEditingTheName) {
+
+                    TextField (
+                        value = newUsername,
+                        onValueChange = {
+                            newUsername = it
+                        },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background (
+                                color = Pistachio
+                            )
+                    )
+                } else {
+                    Text (
+                        text = user,
+                        color = Emerald,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 32.sp,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                isEditingTheName = true
+                            }
+                    )
+                }
+            }
+
+            if (isEditingTheName) {
+                Box (
                     modifier = Modifier
-                        .size(56.dp)
-                )
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Image (
+                        painter = painterResource(R.drawable.checkhook_foreground),
+                        contentDescription = "CheckHook",
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                if (isEditingTheName) {
+                                    isEditingTheName = false
+                                    headerSectionViewModel.updateUser(newUsername)
+                                    headerSectionViewModel.getUser()
+                                }
+                            }
+                    )
+                }
             }
         }
 
@@ -132,7 +181,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background (
+                .background(
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -173,13 +222,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 .height(4.dp)
         )
 
-        if (!feedbackSent) {
+        if (!isFeedbackAlreadySent) {
 
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f)
-                    .background (
+                    .background(
                         color = Pistachio,
                         shape = RoundedCornerShape(12.dp)
                     )
@@ -200,7 +249,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
                 var labelText by remember { mutableStateOf("We love to hear from you! Please let us know how we can improve here ...") }
 
-                OutlinedTextField(
+                OutlinedTextField (
                     value = feedbackText,
                     onValueChange = {
                         feedbackText = it
@@ -240,20 +289,15 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
-                            if (feedbackAlreadySent) {
-                                textAfterFeedbackButtonClicked = "We are still processing the last feedback."
-                                return@clickable
-                            }
+                            settingsViewModel.sendFeedback(user, feedbackText)
 
-                            feedbackSent = true
                             labelText = ""
-                            //TODO(Senden an Server)
                             feedbackText = ""
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = buttonText,
+                        text = "Send",
                         fontSize = 18.sp,
                         color = Pistachio,
                         fontStyle = FontStyle.Italic,
@@ -267,7 +311,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f)
-                    .background (
+                    .background(
                         color = Pistachio,
                         shape = RoundedCornerShape(12.dp)
                     ),

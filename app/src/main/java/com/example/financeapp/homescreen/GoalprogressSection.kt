@@ -190,7 +190,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                 )
             }
 
-            EditGoalMenu(
+            EditGoalMenu (
                 expanded,
                 goal = currentGoal,
                 onDismissRequest = { expanded = false },
@@ -211,8 +211,11 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                     goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
                     goalprogressSectionViewModel.calculateCurrentGoalPercentage()
 
-                    if (currentGoalPercentage >= 100) {
+                    val goalPercentage = goalprogressSectionViewModel.getCurrentGoalPercentage()
+
+                    if (goalPercentage >= 100) {
                         goalprogressSectionViewModel.setGoalCompleted(updatedCurrentGoal)
+                        goalprogressSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
                         onGoalReached()
                     }
                 },

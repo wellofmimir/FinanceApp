@@ -1,27 +1,56 @@
 package com.example.financeapp.goalhistoryscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
-fun TotalTokensEarnedSection(modifier: Modifier = Modifier) {
+fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel) {
+
+    val totalTokensEarned by totalGoalsAchievedSectionViewModel.totalTokensEarned.collectAsState()
+    totalGoalsAchievedSectionViewModel.getTotalTokensEarned()
 
     Box (
         modifier = modifier
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Text (
-            text = "BUMSEREI"
-        )
-    }
+        Column (
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text (
+                text = totalTokensEarned.toString(),
+                textAlign = TextAlign.Center,
+                fontSize = 128.sp,
+                fontWeight = FontWeight.Bold,
+                color = Emerald
+            )
 
+            Text (
+                text = "total tokens earned",
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Emerald
+            )
+        }
+    }
 }

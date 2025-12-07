@@ -35,7 +35,7 @@ class GoalRepository(private val database: FinanceAppDatabase) {
             if (goal.idStatus == status!!.id)
                 return
 
-            goal.idStatus = status!!.id
+            goal.idStatus = status.id
             updateGoal(goal)
             addNewTokenAmountToPunchcard(goal.tokenCount)
         }
@@ -51,7 +51,9 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     fun getCompletedGoals(): List<Goal> {
        val completedStatus = database.getIDGoalStatus("Completed") ?: return emptyList()
 
-        return database.getGoals().filter{it.idStatus == completedStatus.id}
+        return database.getGoals().filter {
+            it.idStatus == completedStatus.id
+        }
     }
 
     fun getCurrentGoal(): Goal? {
@@ -88,5 +90,12 @@ class GoalRepository(private val database: FinanceAppDatabase) {
     }
     fun resetTokenSoFarForPunchcard() {
         database.setTokenSoFarForPunchcard(0)
+    }
+
+    fun addToTotalTokensEarned(amount: Int) {
+        database.addTotalTokensEarned(amount)
+    }
+    fun getTotalTokensEarned(): Int {
+        return database.getTotalTokensEarned()
     }
 }

@@ -53,6 +53,7 @@ import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.goalhistoryscreen.AchievementsSection
 import com.example.financeapp.goalhistoryscreen.PunchCardSection
 import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
+import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewModel
 import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
 import com.example.financeapp.header.HeaderSection
 import com.example.financeapp.header.HeaderSectionViewModel
@@ -64,7 +65,7 @@ import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
 import com.example.financeapp.homescreen.SavedReceiptsSection
 import com.example.financeapp.homescreen.WellDoneSection
 import com.example.financeapp.likedquotes.LikedQuotesSection
-import com.example.financeapp.network.QuotePollingWorker
+import com.example.financeapp.notifications.QuotePollingWorker
 import com.example.financeapp.receiptsscreen.AverageSpentSection
 import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
 import com.example.financeapp.receiptsscreen.ReceiptLogSection
@@ -166,6 +167,17 @@ class MainActivity : ComponentActivity() {
                         val repository = GoalRepository(database)
 
                         return GoalsSectionViewModel(repository) as T
+                    }
+                }
+            )
+
+            var totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
+                factory = object: ViewModelProvider.Factory {
+                    override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                        val database = FinanceAppDatabase.Companion.getInstance(context)
+                        val repository = GoalRepository(database)
+                        return TotalGoalsAchievedSectionViewModel(repository) as T
                     }
                 }
             )
@@ -285,7 +297,9 @@ class MainActivity : ComponentActivity() {
                     )
 
                 if (sectionIdentifier == Screen.GOALHISTORY)
-                    GoalHistorySection()
+                    GoalHistorySection (
+                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+                    )
 
                 if (sectionIdentifier == Screen.RECEIPTS)
                     ReceiptsSection (
@@ -534,7 +548,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
 }
 
 @Composable
-fun GoalHistorySection() {
+fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel) {
 
         Row (
             modifier = Modifier
@@ -557,16 +571,18 @@ fun GoalHistorySection() {
                     .weight(1f)
                     .fillMaxHeight()
             ) {
-                TotalGoalsAchievedSection(
+                TotalGoalsAchievedSection (
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
                 )
 
-                TotalTokensEarnedSection(
+                TotalTokensEarnedSection (
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
                 )
             }
         }
@@ -659,64 +675,6 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
 
 @Composable
 fun AboutUsSection() {
-
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.5f),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-
-        PunchCardSection(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        )
-
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        ) {
-            TotalGoalsAchievedSection(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            )
-
-            TotalTokensEarnedSection(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            )
-        }
-    }
-
-    Spacer (
-        modifier = Modifier
-            .padding(1.dp)
-    )
-
-    AchievementsSection(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.65f)
-    )
-
-    Spacer (
-        modifier = Modifier
-            .padding(1.dp)
-    )
-
-    AdSectionLargeBanner(
-        tutorialInformation = TutorialInformation(
-            isActive = false,
-            tutorialStep = TutorialStep.NONE
-        )
-    )
 }
 
 @Composable

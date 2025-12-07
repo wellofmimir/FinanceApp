@@ -13,4 +13,9 @@ class HeaderSectionViewModel(private val database: FinanceAppDatabase) : ViewMod
     fun getUser() {
         internUser.value = database.getUser()
     }
+
+    fun updateUser(name: String) {
+        database.updateUser(name)
+        database.getUser()
+    }
 }

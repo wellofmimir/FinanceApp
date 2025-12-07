@@ -19,9 +19,7 @@ class QuoteClient private constructor(){
             return instance!!
         }
     }
-
     private val client = OkHttpClient()
-
     fun fetchQuote(callback: QuoteClientCallback) {
 
         val request = Request.Builder()

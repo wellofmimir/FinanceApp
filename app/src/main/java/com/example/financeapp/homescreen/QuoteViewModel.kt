@@ -30,7 +30,6 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
     }
 
     fun fetchQuote() {
-
         repository.fetchQuoteFromServer()
     }
 }

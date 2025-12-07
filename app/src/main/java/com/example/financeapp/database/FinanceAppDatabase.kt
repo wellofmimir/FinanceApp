@@ -69,6 +69,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -82,18 +83,28 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
     }
 
+    //PREFERENCES - START
+
     private val quotePreferences by lazy {
         context.getSharedPreferences("quotePreferences", Context.MODE_PRIVATE)
     }
 
+    private val feedbackPreferences by lazy {
+        context.getSharedPreferences("feedbackPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun feedbackAlreadySent(): Boolean {
+        return feedbackPreferences.getBoolean("feedbackSent", false)
+    }
+
     fun setFeedbackSent() {
-        quotePreferences.edit {
+        feedbackPreferences.edit {
             putBoolean("feedbackSent", true)
         }
     }
 
     fun resetFeedbackSent() {
-        quotePreferences.edit {
+        feedbackPreferences.edit {
             putBoolean("feedbackSent", false)
         }
     }
@@ -124,6 +135,42 @@ class FinanceAppDatabase private constructor(context: Context) {
         val quotedPerson = quotePreferences.getString("quotedPerson", "Benjamin Franklin") ?: "Benjamin Franklin"
 
         return quote to quotedPerson
+    }
+
+    //PREFERENCES - END
+
+    fun addTotalTokensEarned(amount: Int) {
+
+        val cursor = database.rawQuery("SELECT tokens FROM totalTokens WHERE id = ?", arrayOf("1"))
+        val exists = cursor.moveToFirst()
+        val current = if (exists) cursor.getInt(0) else 0
+        cursor.close()
+
+        val updatedValue = current + amount
+
+        val values = ContentValues().apply {
+            put("tokens", updatedValue)
+        }
+
+        if (exists) {
+            database.update("totalTokens", values, "id = ?", arrayOf("1"))
+        } else {
+            values.put("id", 1)
+            database.insert("totalTokens", null, values)
+        }
+    }
+    fun getTotalTokensEarned(): Int {
+
+        val cursor = database.rawQuery("SELECT * FROM totalTokens WHERE id = ?", arrayOf("1"))
+
+        val totalTokensEarned = if (cursor.moveToFirst()) {
+             cursor.getInt(cursor.getColumnIndexOrThrow("tokens"))
+        } else {
+            0
+        }
+
+        cursor.close()
+        return totalTokensEarned
     }
 
     fun insertReceipt(receipt: Receipt, date: String): Result<Long>  {

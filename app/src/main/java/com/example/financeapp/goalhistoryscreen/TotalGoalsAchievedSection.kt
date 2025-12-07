@@ -26,21 +26,10 @@ import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
-
-    var totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
-
-                return TotalGoalsAchievedSectionViewModel(repository) as T
-            }
-        }
-    )
+fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, context: Context = LocalContext.current) {
 
     val goals by totalGoalsAchievedSectionViewModel.goals.collectAsState()
+    totalGoalsAchievedSectionViewModel.getCompletedGoals()
 
     Box (
         modifier = modifier

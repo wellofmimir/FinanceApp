@@ -30,7 +30,7 @@ class QuoteRepository private constructor(val database: FinanceAppDatabase) {
 
     private var internQuoteToQuotedPerson = MutableStateFlow<Pair<String, String>>("" to "")
     var quoteToQuotedPerson = internQuoteToQuotedPerson.asStateFlow()
-    private val client = QuoteClient.Companion.getInstance()
+    private val client = QuoteClient.getInstance()
 
     private fun isValidJson(json: String): Any {
 
@@ -90,7 +90,7 @@ class QuoteRepository private constructor(val database: FinanceAppDatabase) {
                     return;
                 }
 
-                val jsonObject = JSONObject(response);
+                val jsonObject = JSONObject(response)
                 internQuoteToQuotedPerson.value = Pair<String, String>(jsonObject.getString("quote"), jsonObject.getString("person"))
                 database.saveDailyQuoteFetched(internQuoteToQuotedPerson.value)
             }

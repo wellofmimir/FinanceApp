@@ -12,6 +12,10 @@ class GoalprogressSectionViewModel(private val repository: GoalRepository) : Vie
     private val internPercentageOfCurrentGoal = MutableStateFlow<Int>(0)
     val percentageOfCurrentGoal = internPercentageOfCurrentGoal.asStateFlow()
 
+    fun getCurrentGoalPercentage(): Int {
+        return internPercentageOfCurrentGoal.value
+    }
+
     fun calculateCurrentGoalPercentage() {
 
         val goal = internCurrentGoal.value
@@ -54,5 +58,9 @@ class GoalprogressSectionViewModel(private val repository: GoalRepository) : Vie
 
     fun setGoalCompleted(goal: Goal) {
         repository.setGoalCompleted(goal)
+    }
+
+    fun addToTotalTokensEarned(amount: Int) {
+        repository.addToTotalTokensEarned(amount)
     }
 }
