@@ -7,7 +7,6 @@ import kotlin.getValue
 import androidx.core.content.edit
 
 data class Goal (
-
     val id: Int,
     val goal: String,
     var amount: Float,
@@ -18,13 +17,11 @@ data class Goal (
 )
 
 data class GoalStatus (
-
     val id: Int,
     val description: String
 )
 
 data class Quote (
-
     val id: Int,
     val quote: String,
     val name: String,
@@ -32,13 +29,18 @@ data class Quote (
 )
 
 data class Receipt (
-
     val id: Int,
     val description: String,
     val amount: Float,
     val pathToImage: String,
     val date: String = "",
     val remindMeDate: String = ""
+)
+
+data class RemindMeEntry (
+    val id: Int,
+    val idReceipt: Int,
+    val date: String
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
@@ -173,6 +175,25 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
+    fun getReceiptRemindMe(): List<RemindMeEntry> {
+
+        val cursor = database.rawQuery("SELECT * FROM receiptRemindDates", null)
+        val receiptReminders = mutableListOf<RemindMeEntry>()
+
+        while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val idReceipt = cursor.getInt(cursor.getColumnIndexOrThrow("idReceipt"))
+            val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+
+            val entry = RemindMeEntry(id, idReceipt, date)
+            receiptReminders.add(entry)
+        }
+
+        cursor.close()
+        return receiptReminders
+    }
+
     fun addTotalTokensEarned(amount: Int) {
 
         val cursor = database.rawQuery("SELECT tokens FROM totalTokens WHERE id = ?", arrayOf("1"))
@@ -248,6 +269,28 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
 
         return Result.success(receipts)
+    }
+
+    fun getReceipt(id: Int): Receipt {
+
+        val cursor = database.rawQuery("SELECT * FROM receipts WHERE id = ?", arrayOf(id.toString()))
+        val exists = cursor.moveToFirst()
+
+        val receipt = if (exists) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val description = cursor.getString(cursor.getColumnIndexOrThrow("description"))
+            val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
+            val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
+            val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+
+            Receipt(id, description, amount, pathToImage, date)
+        } else {
+            Receipt(-1, "", 0.0f, "", "")
+        }
+
+        cursor.close()
+        return receipt
     }
 
     fun getReceipts(): Result<List<Receipt>>  {

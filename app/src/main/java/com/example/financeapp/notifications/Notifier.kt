@@ -44,7 +44,7 @@ class Notifier(private val context: Context) {
         NotificationManagerCompat.from(context).notify(1, notification.build())
     }
 
-    fun sendReceiptReminderNotification() {
+    fun sendReceiptReminderNotification(receiptName: String) {
 
         if (Build.VERSION.SDK_INT >= 33 &&
             ActivityCompat.checkSelfPermission (
@@ -53,13 +53,14 @@ class Notifier(private val context: Context) {
             ) != PackageManager.PERMISSION_GRANTED
         ) return
 
-        val notification = NotificationCompat.Builder(context, "receiptsRemindMe")
+        val notification = NotificationCompat.Builder(context, "reminders")
             .setSmallIcon(R.drawable.starfilledpistachio_foreground)
             .setContentTitle("Check your receipt!")
-            .setContentText("Hey, you wanted us to remind you of your receipt.")
+            .setContentText("Hey, you wanted us to remind you of your receipt: ${receiptName}")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        NotificationManagerCompat.from(context).notify(1, notification.build())
+        val notificationId = System.currentTimeMillis().toInt()
+        NotificationManagerCompat.from(context).notify(notificationId, notification.build())
     }
 
     fun sendReceiptNotification() {

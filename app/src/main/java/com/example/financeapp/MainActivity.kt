@@ -68,6 +68,7 @@ import com.example.financeapp.homescreen.SavedReceiptsSection
 import com.example.financeapp.homescreen.WellDoneSection
 import com.example.financeapp.likedquotes.LikedQuotesSection
 import com.example.financeapp.notifications.QuotePollingWorker
+import com.example.financeapp.notifications.ReceiptReminderPollingWorker
 import com.example.financeapp.receiptsscreen.AverageSpentSection
 import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
 import com.example.financeapp.receiptsscreen.ReceiptLogSection
@@ -125,10 +126,12 @@ class MainActivity : ComponentActivity() {
 
             var context = LocalContext.current
             scheduleDailyQuoteWorker(context)
+            scheduleDailyReminderMeWorker(context)
 
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
             manager.createNotificationChannel(NotificationChannel("receipts", "Receipt", NotificationManager.IMPORTANCE_HIGH))
+            manager.createNotificationChannel(NotificationChannel("reminders", "Reminders", NotificationManager.IMPORTANCE_HIGH))
 
             val mainActivityViewModel: MainActivityViewModel = viewModel (
                 factory = object: ViewModelProvider.Factory {
@@ -717,6 +720,33 @@ fun RequestNotificationPermission() {
             permissionState.launchPermissionRequest()
         }
     }
+}
+
+fun scheduleDailyReminderMeWorker(context: Context) {
+
+    val now = Calendar.getInstance()
+    val nextReminder = Calendar.getInstance().apply {
+
+        set(Calendar.HOUR_OF_DAY, 9)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+
+        if (before(now))
+            add(Calendar.DAY_OF_MONTH, 1)
+    }
+
+    val initialDelay = nextReminder.timeInMillis - now.timeInMillis
+
+    val workRequest = PeriodicWorkRequestBuilder<ReceiptReminderPollingWorker>(1, TimeUnit.DAYS)
+        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .build()
+
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork (
+        "dailyReminderWorker",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        workRequest
+    )
 }
 
 fun scheduleDailyQuoteWorker(context: Context) {

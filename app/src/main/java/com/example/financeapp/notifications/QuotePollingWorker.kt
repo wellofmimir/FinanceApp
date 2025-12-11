@@ -1,13 +1,14 @@
 package com.example.financeapp.notifications
 
-import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.QuoteRepository
 
+import android.content.Context
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+
 class QuotePollingWorker(context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
-    private val database = FinanceAppDatabase.Companion.getInstance(applicationContext)
+    private val database = FinanceAppDatabase.getInstance(applicationContext)
     private val quoteRepository = QuoteRepository.Companion.getInstance(database)
     private val notifier = Notifier(applicationContext)
 
