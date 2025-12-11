@@ -33,7 +33,7 @@ class Notifier(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val builder = NotificationCompat.Builder(context, "quotes")
+        val notification = NotificationCompat.Builder(context, "quotes")
             .setSmallIcon(R.drawable.starfilledpistachio_foreground)
             .setContentTitle("New quote available")
             .setContentText("A new quote is waiting for you ...")
@@ -41,7 +41,25 @@ class Notifier(private val context: Context) {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        NotificationManagerCompat.from(context).notify(1, builder.build())
+        NotificationManagerCompat.from(context).notify(1, notification.build())
+    }
+
+    fun sendReceiptReminderNotification() {
+
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ActivityCompat.checkSelfPermission (
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+
+        val notification = NotificationCompat.Builder(context, "receiptsRemindMe")
+            .setSmallIcon(R.drawable.starfilledpistachio_foreground)
+            .setContentTitle("Check your receipt!")
+            .setContentText("Hey, you wanted us to remind you of your receipt.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        NotificationManagerCompat.from(context).notify(1, notification.build())
     }
 
     fun sendReceiptNotification() {
@@ -58,8 +76,7 @@ class Notifier(private val context: Context) {
             .setContentTitle("Track your receipt")
             .setContentText("Hey, do you want to track your latest receipt?")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
 
-        NotificationManagerCompat.from(context).notify(1, notification)
+        NotificationManagerCompat.from(context).notify(1, notification.build())
     }
 }

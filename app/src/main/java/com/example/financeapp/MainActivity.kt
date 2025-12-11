@@ -1,5 +1,6 @@
 package com.example.financeapp
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Bundle
@@ -49,6 +50,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.financeapp.advertisement.AdSectionLargeBanner
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
+import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.goalhistoryscreen.AchievementsSection
 import com.example.financeapp.goalhistoryscreen.PunchCardSection
@@ -78,7 +80,7 @@ import com.example.financeapp.repositories.UserRepository
 import com.example.financeapp.settingsscreen.SettingsSection
 import com.example.financeapp.welcomescreen.WelcomeScreen
 import java.util.concurrent.TimeUnit
-
+import com.example.financeapp.repositories.AdRepository
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -118,8 +120,10 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             MobileAds.initialize(this)
-            var context = LocalContext.current
+            InterstitialAdManager.instance.initialize(this)
+            InterstitialAdManager.instance.loadInterstitial(this)
 
+            var context = LocalContext.current
             scheduleDailyQuoteWorker(context)
 
             val manager = getSystemService(NotificationManager::class.java)
@@ -143,9 +147,10 @@ class MainActivity : ComponentActivity() {
                     override fun <T: ViewModel> create(modelClass: Class<T>): T {
 
                         val database = FinanceAppDatabase.getInstance(context)
-                        val repository = ReceiptRepository.getInstance(database)
+                        val receiptRepository = ReceiptRepository.getInstance(database)
+                        val adRepository = AdRepository.getInstance(database)
 
-                        return ReceiptSectionsViewModel(repository) as T
+                        return ReceiptSectionsViewModel(receiptRepository, adRepository) as T
                     }
                 }
             )
@@ -171,7 +176,7 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
-            var totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
+            val totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
                 factory = object: ViewModelProvider.Factory {
                     override fun <T: ViewModel> create(modelClass: Class<T>): T {
 
@@ -188,7 +193,6 @@ class MainActivity : ComponentActivity() {
             val user by mainActivityViewModel.user.collectAsState()
 
             var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
-
             var goalAchieved by remember { mutableStateOf(false) }
 
             LaunchedEffect(user) {
@@ -305,9 +309,6 @@ class MainActivity : ComponentActivity() {
                     ReceiptsSection (
                         receiptSectionsViewModel = receiptSectionsViewModel
                     )
-
-                if (sectionIdentifier == Screen.ABOUT_US)
-                    AboutUsSection()
 
                 if (sectionIdentifier == Screen.USER_SETTINGS)
                     SettingsScreen (
@@ -550,61 +551,61 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
 @Composable
 fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel) {
 
-        Row (
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+
+        PunchCardSection(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-
-            PunchCardSection(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
-
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            ) {
-                TotalGoalsAchievedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
-                )
-
-                TotalTokensEarnedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
-                )
-            }
-        }
-
-        Spacer (
-            modifier = Modifier
-                .padding(2.dp)
+                .weight(1f)
+                .fillMaxHeight()
         )
 
-    AchievementsSection(
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        ) {
+            TotalGoalsAchievedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+            )
+
+            TotalTokensEarnedSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+            )
+        }
+    }
+
+    Spacer (
+        modifier = Modifier
+            .padding(2.dp)
+    )
+
+    AchievementsSection (
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.75f)
     )
 
-        Spacer (
-            modifier = Modifier
-                .padding(2.dp)
-        )
+    Spacer (
+        modifier = Modifier
+            .padding(2.dp)
+    )
 
-    AdSectionLargeBanner(
-        tutorialInformation = TutorialInformation(
+    AdSectionLargeBanner (
+        tutorialInformation = TutorialInformation (
             isActive = false,
             tutorialStep = TutorialStep.NONE
         )
@@ -612,9 +613,29 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
 }
 
 @Composable
-fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
 
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
+    val activity = context as? Activity
+    var receiptAdded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(receiptAdded) {
+        activity?.let {
+            if (receiptAdded) {
+                 if (receiptSectionsViewModel.interstitialAdsSeen() < 1) {
+                    InterstitialAdManager.instance.showInterstitial(
+                        activity = it,
+                        onAdClosed = {
+                            receiptAdded = false
+                            receiptSectionsViewModel.addToInterstitialAdsSeen()
+                        },
+                        onAdFailed = {
+                        }
+                    )
+                }
+            }
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -622,7 +643,7 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SinceWhenSection(
+        SinceWhenSection (
             onCurrentMonth = {
                 timespan = it
             },
@@ -634,13 +655,13 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            AverageSpentSection(
+            AverageSpentSection (
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f),
                 timespan = timespan,
                 receiptAdded = {
-
+                    receiptAdded = true
                 },
                 onDismissRequest = {
 
@@ -648,7 +669,7 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
                 receiptSectionsViewModel = receiptSectionsViewModel
             )
 
-            ExpensesOverviewSection(
+            ExpensesOverviewSection (
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f),
@@ -657,14 +678,14 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
             )
         }
 
-        ReceiptLogSection(
+        ReceiptLogSection (
             modifier = Modifier
                 .fillMaxHeight(0.8f),
             timespan = timespan,
             receiptSectionsViewModel = receiptSectionsViewModel,
         )
 
-        AdSectionLargeBanner(
+        AdSectionLargeBanner (
             tutorialInformation = TutorialInformation(
                 isActive = false,
                 tutorialStep = TutorialStep.NONE
@@ -672,11 +693,6 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel) {
         )
     }
 }
-
-@Composable
-fun AboutUsSection() {
-}
-
 @Composable
 fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
@@ -691,10 +707,10 @@ fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInfor
 @Composable
 fun RequestNotificationPermission() {
 
-    if (Build.VERSION.SDK_INT < 33) return
+    if (Build.VERSION.SDK_INT < 33)
+        return
 
-    val permissionState =
-        rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+    val permissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect(Unit) {
         if (!permissionState.status.isGranted) {
@@ -708,7 +724,7 @@ fun scheduleDailyQuoteWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 22)
+        set(Calendar.HOUR_OF_DAY, 17)
         set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)

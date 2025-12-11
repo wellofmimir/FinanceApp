@@ -106,7 +106,7 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
-                AddNewGoalMenu(
+                AddNewGoalMenu (
                     expanded,
                     onDismissRequest = {
                         expanded = false

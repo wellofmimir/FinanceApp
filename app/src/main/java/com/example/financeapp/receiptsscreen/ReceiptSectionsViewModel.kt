@@ -2,11 +2,12 @@ package com.example.financeapp.receiptsscreen
 
 import androidx.lifecycle.ViewModel
 import com.example.financeapp.database.Receipt
+import com.example.financeapp.repositories.AdRepository
 import com.example.financeapp.repositories.ReceiptRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewModel() {
+class ReceiptSectionsViewModel(private val repository: ReceiptRepository, private val adRepository: AdRepository): ViewModel() {
 
     private val internInsertState = MutableStateFlow<Boolean>(false)
     val insertState = internInsertState.asStateFlow()
@@ -28,7 +29,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
 
     private var currentTimespan = MutableStateFlow("" to "")
 
-    fun insertReceipt(receipt: Receipt) {
+    fun insertReceipt(receipt: Receipt, remindMeDate: String = "") {
 
         val result = repository.insertReceipt(receipt)
 
@@ -36,12 +37,17 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
             onSuccess = { id ->
                 internInsertState.value = true
                 getReceiptsForACertainTimespan(currentTimespan.value.first, currentTimespan.value.second)
+                updateReceiptRemindMe(id.toInt(), remindMeDate)
                 internInsertState.value = false
             },
             onFailure = {
                 internInsertState.value = false
             }
         )
+    }
+
+    fun updateReceiptRemindMe(idReceipt: Int, date: String) {
+        repository.updateReceiptRemindMe(idReceipt, date)
     }
 
     fun getReceipts() {
@@ -130,4 +136,11 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository): ViewM
         return repository.getFirstDayOfAYearAgo()
     }
 
+    fun addToInterstitialAdsSeen() {
+        adRepository.addToInterstitialAdsSeen()
+    }
+
+    fun interstitialAdsSeen(): Int {
+        return adRepository.interstitialAdsSeen()
+    }
 }

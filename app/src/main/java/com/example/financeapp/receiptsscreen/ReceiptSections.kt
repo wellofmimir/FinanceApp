@@ -1,5 +1,8 @@
 package com.example.financeapp.receiptsscreen
 
+import com.example.financeapp.R
+import com.example.financeapp.database.Receipt
+
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
@@ -44,13 +47,17 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.Checkbox
 import androidx.compose.ui.text.input.KeyboardType
 import java.io.File
 import androidx.core.content.FileProvider
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.widget.DatePicker
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,9 +71,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.ui.Alignment
-import com.example.financeapp.R
-import com.example.financeapp.database.Receipt
+import java.time.format.DateTimeFormatter
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Locale
+
 
 enum class Timespan (id: Int) {
 
@@ -77,8 +91,10 @@ enum class Timespan (id: Int) {
     WHOLE_YEAR (3),
     ALL (4)
 }
+
 @Composable
-fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSaved:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
 
     var amountText by remember { mutableStateOf("") }
     var nameOfReceipt by remember { mutableStateOf("") }
@@ -88,6 +104,21 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
     var takePhotoButtonText by remember { mutableStateOf("Take a photo") }
     var insertSuccessful = receiptSectionsViewModel.insertState.collectAsState()
 
+    var remindMeCheckboxChecked by remember { mutableStateOf(false) }
+    var showDatepickerDialog by remember { mutableStateOf(false) }
+    var selectedDate by remember {mutableStateOf<String>("")}
+
+    val datepickerState = rememberDatePickerState (
+
+        initialSelectedDateMillis = System.currentTimeMillis(),
+
+        selectableDates = object: SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= System.currentTimeMillis()
+            }
+        }
+    )
+
     val resetAndDismiss = {
 
         amountText = ""
@@ -95,6 +126,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
         errorMessage = ""
         photoCanBeTaken = false
         onDismissRequest()
+        onReceiptSaved()
     }
 
     LaunchedEffect(errorMessage) {
@@ -126,13 +158,14 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
                 Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
 
                 receiptSectionsViewModel.insertReceipt (
-                    Receipt(
+                    Receipt (
                         -1,
                         nameOfReceipt,
                         amountText.toFloat(),
                         it.absolutePath,
                         ""
-                    )
+                    ),
+                    selectedDate
                 )
 
                 resetAndDismiss()
@@ -217,6 +250,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
                     fontSize = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
+                        .padding(start = 2.dp)
                 )
 
                 TextField (
@@ -247,13 +281,14 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                Text (
                     text = "Amount",
                     textAlign = TextAlign.Justify,
                     color = Color.White,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
+                        .padding(start = 2.dp)
                 )
 
                 TextField (
@@ -280,10 +315,94 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, receiptSecti
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White
                     ),
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions = KeyboardOptions (
                         keyboardType = KeyboardType.Number
                     )
                 )
+            }
+
+            Spacer(
+                modifier = Modifier
+                    .height(24.dp)
+            )
+
+            Row (
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text (
+                    text = "Remind me",
+                    textAlign = TextAlign.Justify,
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .weight(1f)
+                )
+
+                Checkbox (
+                    checked = remindMeCheckboxChecked,
+                    onCheckedChange = {
+
+                        if (!remindMeCheckboxChecked)
+                            showDatepickerDialog = true
+
+                        remindMeCheckboxChecked = it
+                    },
+                    modifier = Modifier
+                        .weight(2f)
+                )
+
+                if (showDatepickerDialog) {
+
+                    DatePickerDialog (
+                        modifier = Modifier
+                            .height(400.dp),
+                        onDismissRequest = {
+                            showDatepickerDialog = false
+                        },
+                        confirmButton = {
+                            TextButton (
+                                onClick = {
+                                    val dateMillis = datepickerState.selectedDateMillis
+
+                                    if (dateMillis != null) {
+                                        val localDate = Instant.ofEpochMilli(dateMillis)
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate()
+
+                                        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+                                        selectedDate = formatter.format(localDate)
+                                    }
+
+                                    showDatepickerDialog = false
+                                }
+                            ) {
+                                Text (
+                                    text = "Ok"
+                                )
+                            }
+                        },
+                        dismissButton = {
+                            TextButton (
+                                onClick = {
+                                    showDatepickerDialog = false
+                                }
+                            ) {
+                                Text (
+                                    text = "Cancel"
+                                )
+                            }
+                        }
+                    ) {
+                        DatePicker (
+                            state = datepickerState
+                        )
+                    }
+                }
+
             }
 
             Spacer(
@@ -464,6 +583,9 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
             onDismissRequest = {
                 expanded = false
                 receiptSectionsViewModel.getReceipts()
+            },
+            onReceiptSaved = {
+                receiptAdded()
             },
             receiptSectionsViewModel
         )

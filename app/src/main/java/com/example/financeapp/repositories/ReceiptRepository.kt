@@ -27,6 +27,10 @@ class ReceiptRepository private constructor(private val database: FinanceAppData
         return database.insertReceipt(receipt, formattedDate)
     }
 
+    fun updateReceiptRemindMe(idReceipt: Int, date: String) {
+        database.updateReceiptRemindMe(idReceipt, date)
+    }
+
     fun getReceipts(): Result<List<Receipt>> {
         return database.getReceipts()
     }

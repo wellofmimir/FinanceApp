@@ -27,8 +27,6 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
         if (newQuote.first != currentQuote.first)
             notifier.sendQuoteNotification()
 
-
-
         return Result.success()
     }
 

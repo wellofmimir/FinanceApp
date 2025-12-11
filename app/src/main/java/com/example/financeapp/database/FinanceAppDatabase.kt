@@ -38,6 +38,7 @@ data class Receipt (
     val amount: Float,
     val pathToImage: String,
     val date: String = "",
+    val remindMeDate: String = ""
 )
 
 class FinanceAppDatabase private constructor(context: Context) {
@@ -69,6 +70,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
@@ -91,6 +93,10 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     private val feedbackPreferences by lazy {
         context.getSharedPreferences("feedbackPreferences", Context.MODE_PRIVATE)
+    }
+
+    private val adPreferences by lazy {
+        context.getSharedPreferences("adPreferences", Context.MODE_PRIVATE)
     }
 
     fun feedbackAlreadySent(): Boolean {
@@ -130,14 +136,42 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun dailyQuote(): Pair<String, String> {
-
         val quote = quotePreferences.getString("quote", "Time is money.") ?: "Time is money."
         val quotedPerson = quotePreferences.getString("quotedPerson", "Benjamin Franklin") ?: "Benjamin Franklin"
-
         return quote to quotedPerson
     }
 
+    fun addToInterstitialAdsSeen() {
+        val currentAmountOfInterstitialAdsSeen = adPreferences.getInt("interstitialAdsSeen", 0)
+
+        adPreferences.edit {
+            putInt("interstitialAdsSeen", currentAmountOfInterstitialAdsSeen + 1)
+        }
+    }
+
+    fun interstitialAdsSeen(): Int {
+        return adPreferences.getInt("interstitialAdsSeen", 0)
+    }
+
     //PREFERENCES - END
+
+    fun updateReceiptRemindMe(idReceipt: Int, date: String) {
+
+        val cursor = database.rawQuery("SELECT id FROM receiptRemindDates WHERE idReceipt = ?", arrayOf(idReceipt.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("idReceipt", idReceipt)
+            put("date", date)
+        }
+
+        if (exists) {
+            database.update("receiptRemindDates", values, "idReceipt = ?", arrayOf(idReceipt.toString()))
+        } else {
+            database.insert("receiptRemindDates", null, values)
+        }
+    }
 
     fun addTotalTokensEarned(amount: Int) {
 
@@ -533,7 +567,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         return goals
     }
 
-    fun insertGoal(nameOfGoal: String, amount: Float, savedAmount: Float, goalStatus: String) {
+    fun insertGoal(nameOfGoal: String, amount: Float, savedAmount: Float, goalStatus: String, tokenCount: Int = 1) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(nameOfGoal))
         val exists = cursor.moveToFirst()
@@ -545,6 +579,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("saved", savedAmount)
         values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
         values.put("finishdate", "")
+        values.put("tokencount", tokenCount)
 
         if (exists) {
              return
