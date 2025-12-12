@@ -80,7 +80,8 @@ import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
-
+import android.media.ExifInterface
+import android.graphics.Matrix
 
 enum class Timespan (id: Int) {
 
@@ -90,6 +91,30 @@ enum class Timespan (id: Int) {
     LAST_SIX_MONTHS (2),
     WHOLE_YEAR (3),
     ALL (4)
+}
+
+fun Bitmap.fixOrientation(path: String): Bitmap {
+
+    val exif = ExifInterface(path)
+
+    val rotation = when (exif.getAttributeInt (
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_NORMAL
+    )) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+        ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+        ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+        else -> 0f
+    }
+
+    if (rotation == 0f)
+        return this
+
+    val matrix = Matrix().apply {
+        postRotate(rotation)
+    }
+
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
 @Composable
@@ -767,6 +792,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
         )
 
         if (showDialog && bitmap != null) {
+
             Dialog (
                 onDismissRequest = {
                     showDialog = false
@@ -821,7 +847,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                             val file = File(receipt.pathToImage)
 
                             if (file.exists()) {
-                                bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                bitmap = BitmapFactory.decodeFile(file.absolutePath).fixOrientation(file.absolutePath)
                                 showDialog = true
                             }
                             

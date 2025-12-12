@@ -122,9 +122,6 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
         LaunchedEffect(Unit) {
             goalsSectionViewModel.reloadGoals()
-
-            if (goalsSectionViewModel.goals.value.isEmpty())
-                goalsSectionViewModel.insertExampleGoals()
         }
 
         if (newGoalEntered) {

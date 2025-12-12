@@ -475,7 +475,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                GoalprogressSection(
+                GoalprogressSection (
                     modifier = Modifier
                         .weight(1f),
                     onGoalReached = {
@@ -484,7 +484,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                     tutorialInformation = tutorialInformation
                 )
 
-                QuoteSection(
+                QuoteSection (
                     modifier = Modifier
                         .weight(1f),
                     tutorialInformation = tutorialInformation

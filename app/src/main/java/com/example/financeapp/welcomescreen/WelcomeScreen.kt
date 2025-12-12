@@ -46,6 +46,8 @@ import androidx.lifecycle.ViewModel
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
+import android.content.res.Resources
+
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.database.Goal
 import com.example.financeapp.repositories.GoalRepository
@@ -60,6 +62,9 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
     var amountText by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf(0.0f) }
 
+    val displayMetrics = Resources.getSystem().displayMetrics
+    val heightPx = displayMetrics.heightPixels
+
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = {
@@ -72,6 +77,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
         },
         modifier = Modifier
             .fillMaxWidth()
+            .height((heightPx / 2).dp)
             .background (
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
@@ -455,14 +461,13 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 @Composable
 fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (tokenCount: Int) -> Unit) {
 
-    val username by remember { mutableStateOf("") }
-
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = onDismissRequested,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.7f)
+            .fillMaxHeight()
+            .heightIn(450.dp)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
@@ -473,6 +478,7 @@ fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxWidth()
                 .background (
                     color = Pistachio,
@@ -876,6 +882,35 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                 .statusBarsPadding(),
             horizontalAlignment = Alignment.Start
         ) {
+            FirstTokenMenu (
+                expanded = firstTokenMenuExpanded,
+                onDismissRequested = {
+                    firstTokenMenuExpanded = false
+                },
+                onFinished = { tokenCount ->
+
+                    firstTokenMenuExpanded = false
+
+                    if (username.isEmpty() || username == "DUMMY") {
+                        //TODO: Fehlermeldung anzeigen
+                    } else {
+                        welcomeScreenViewModel.updateUser(username)
+                        welcomeScreenViewModel.insertGoal(
+                            Goal(
+                                -1,
+                                goal,
+                                amount,
+                                0.0f,
+                                1,
+                                "",
+                                tokenCount
+                            )
+                        )
+                        onFinished()
+                    }
+                }
+            )
+
             Row (
             ) {
                 Image (
@@ -1183,35 +1218,6 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                     color = Pistachio,
                     fontSize = if (splashMode) 48.sp else 35.sp,
                     fontWeight = FontWeight.Bold
-                )
-
-                FirstTokenMenu (
-                    expanded = firstTokenMenuExpanded,
-                    onDismissRequested = {
-                        firstTokenMenuExpanded = false
-                    },
-                    onFinished = { tokenCount ->
-
-                        firstTokenMenuExpanded = false
-
-                        if (username.isEmpty() || username == "DUMMY") {
-                            //TODO: Fehlermeldung anzeigen
-                        } else {
-                            welcomeScreenViewModel.updateUser(username)
-                            welcomeScreenViewModel.insertGoal(
-                                Goal(
-                                    -1,
-                                    goal,
-                                    amount,
-                                    0.0f,
-                                    1,
-                                    "",
-                                    tokenCount
-                                )
-                            )
-                            onFinished()
-                        }
-                    }
                 )
             }
 

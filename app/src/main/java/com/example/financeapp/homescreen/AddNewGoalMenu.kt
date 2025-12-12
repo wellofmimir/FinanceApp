@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +48,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
+import com.example.financeapp.R
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.Pistachio
@@ -87,7 +92,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     color = Emerald
                 )
                 .fillMaxWidth()
-                .fillMaxHeight(0.6f),
+                .fillMaxHeight(0.65f),
             containerColor = Color.Transparent
 
         ) {
@@ -208,7 +213,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
                 Spacer (
                     modifier = Modifier
-                        .height(30.dp)
+                        .height(24.dp)
                 )
 
                 var tokenIdentifier by remember { mutableStateOf(3) }
@@ -288,7 +293,67 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
                 Spacer (
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(5.dp)
+                )
+
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth(0.25f)
+                        .fillMaxHeight(0.3f)
+                        .background (
+                            color = Emerald,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                    ) {
+                        Image (
+                            painter = painterResource(R.drawable.minuszeichen_standard_pistachio_foreground),
+                            contentDescription = "Minuszeichen_Token",
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    if (tokenIdentifier > 0 && tokenIdentifier <= 4)
+                                        --tokenIdentifier
+                                }
+                        )
+
+                        Spacer (
+                            modifier = Modifier
+                                .padding(20.dp)
+                        )
+
+                        Image (
+                            painter = painterResource(R.drawable.pluszeichen_standard_pistachio_foreground),
+                            contentDescription = "Pluszeichen_Token",
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    if (tokenIdentifier >= 0 && tokenIdentifier < 4)
+                                        ++tokenIdentifier
+                                }
+                        )
+                    }
+                }
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(8.dp)
                 )
 
                 var confirmed by remember { mutableStateOf(false) }

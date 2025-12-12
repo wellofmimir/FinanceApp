@@ -50,7 +50,12 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
     )
 
     val goals by recentlyCompletedGoalsSectionViewModel.goals.collectAsState()
-    recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
+
+    if (tutorialInformation.isActive) {
+        recentlyCompletedGoalsSectionViewModel.getExampleGoals()
+    } else {
+        recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
+    }
 
     Column (
         modifier = modifier

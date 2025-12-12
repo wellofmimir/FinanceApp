@@ -12,16 +12,18 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
 
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
-    private fun insertExampleGoals() {
 
-        val exampleGoals = listOf (
+    fun getExampleGoals() {
+        viewModelScope.launch {
+            val exampleGoals = listOf (
 
-            Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5),
-            Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4)
-        )
+                Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5),
+                Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2),
+                Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4)
+            )
 
-        internGoals.value = exampleGoals
+            internGoals.value = exampleGoals
+        }
     }
     fun getCompletedGoals() {
 
@@ -29,9 +31,6 @@ class RecentlyCompletedGoalsSectionViewModel(private val repository: GoalReposit
 
             val result = repository.getCompletedGoals()
             internGoals.value = result
-
-            if (internGoals.value.isEmpty())
-                insertExampleGoals()
         }
     }
 }

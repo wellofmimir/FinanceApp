@@ -81,6 +81,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
         }
     }
 
+    var expandedEditMenu by remember {mutableStateOf(false)}
+
 
     Column (
         modifier = modifier
@@ -107,6 +109,40 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         color = Pistachio
                     ),
             ) {
+
+
+                EditGoalMenu (
+                    expandedEditMenu,
+                    goal = currentGoal,
+                    onDismissRequest = { expandedEditMenu = false },
+                    onNewAmount = { amount ->
+
+                        val newAmount = amount.toFloat()
+                        val updatedCurrentGoal = currentGoal
+                        updatedCurrentGoal!!.amount = newAmount
+
+                        goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
+                    },
+                    onSaved = { savedAmount ->
+
+                        val newSavedAmount = savedAmount.toFloat()
+                        val updatedCurrentGoal = currentGoal
+                        updatedCurrentGoal!!.saved = newSavedAmount
+
+                        goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
+                        goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+
+                        val goalPercentage = goalprogressSectionViewModel.getCurrentGoalPercentage()
+
+                        if (goalPercentage >= 100) {
+                            goalprogressSectionViewModel.setGoalCompleted(updatedCurrentGoal)
+                            goalprogressSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
+                            onGoalReached()
+                        }
+                    },
+                    currentGoalText
+                )
+
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -169,9 +205,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            var expanded by remember { mutableStateOf(false) }
-
             if (currentGoal != null) {
                 Text (
                     text = currentGoalPercentage.toString() + "%",
@@ -185,42 +218,10 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
                         ) {
-                            expanded = true
+                            expandedEditMenu = true
                         }
                 )
             }
-
-            EditGoalMenu (
-                expanded,
-                goal = currentGoal,
-                onDismissRequest = { expanded = false },
-                onNewAmount = { amount ->
-
-                    val newAmount = amount.toFloat()
-                    val updatedCurrentGoal = currentGoal
-                    updatedCurrentGoal!!.amount = newAmount
-
-                    goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
-                },
-                onSaved = { savedAmount ->
-
-                    val newSavedAmount = savedAmount.toFloat()
-                    val updatedCurrentGoal = currentGoal
-                    updatedCurrentGoal!!.saved = newSavedAmount
-
-                    goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
-                    goalprogressSectionViewModel.calculateCurrentGoalPercentage()
-
-                    val goalPercentage = goalprogressSectionViewModel.getCurrentGoalPercentage()
-
-                    if (goalPercentage >= 100) {
-                        goalprogressSectionViewModel.setGoalCompleted(updatedCurrentGoal)
-                        goalprogressSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
-                        onGoalReached()
-                    }
-                },
-                currentGoalText
-            )
         }
     }
 }
