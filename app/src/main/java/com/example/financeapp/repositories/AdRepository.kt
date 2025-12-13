@@ -14,11 +14,11 @@ class AdRepository(private val database: FinanceAppDatabase) {
         }
     }
 
-    fun addToInterstitialAdsSeen() {
-        database.addToInterstitialAdsSeen()
+    fun setInterstitialAdAfterReceiptSeen() {
+        database.setInterstitialAdAfterReceiptSeen()
     }
 
-    fun interstitialAdsSeen(): Int {
-        return database.interstitialAdsSeen()
+    fun interstitialAdAfterReceiptSeen(): Boolean {
+        return database.interstitialAdAfterReceiptSeen()
     }
 }

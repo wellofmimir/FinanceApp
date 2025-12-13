@@ -104,8 +104,9 @@ enum class TutorialStep (id: Int) {
     CURRENT_GOALS_BUTTON (3),
     CURRENT_GOAL (4),
     QUOTE (5),
-
-    DONE (6)
+    DONE (6),
+    SAVED_RECEIPTS (7),
+    RECEIPTSSECTION(8)
 }
 
 data class TutorialInformation (
@@ -225,7 +226,8 @@ class MainActivity : ComponentActivity() {
                                 TutorialStep.RECENTLY_COMPLETED_GOALS -> TutorialStep.CURRENT_GOALS
                                 TutorialStep.CURRENT_GOALS -> TutorialStep.CURRENT_GOAL
                                 TutorialStep.CURRENT_GOAL -> TutorialStep.QUOTE
-                                TutorialStep.QUOTE -> TutorialStep.DONE
+                                TutorialStep.QUOTE -> TutorialStep.RECEIPTSSECTION
+                                TutorialStep.RECEIPTSSECTION -> TutorialStep.DONE
                                 else -> TutorialStep.NONE
                             }
                         )
@@ -246,7 +248,7 @@ class MainActivity : ComponentActivity() {
                     if (goalAchieved) {
 
                     } else {
-                        HeaderSection(
+                        HeaderSection (
                             onNewSectionIdentifier = {
                                 sectionIdentifier = it
                             },
@@ -327,7 +329,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 ) {
-                    WelcomeScreen(
+                    WelcomeScreen (
                         onFinished = {
                             mainActivityViewModel.loadUser()
                         },
@@ -337,7 +339,6 @@ class MainActivity : ComponentActivity() {
             }
 
             if (sectionIdentifier == Screen.HOME) {
-
                 if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.NONE) {
                     Box (
                         modifier = Modifier
@@ -357,7 +358,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECENTLY_COMPLETED_GOALS) {
-
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -368,7 +368,7 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text (
-                                text = "Here, you can track your token progress. Tap to see your punch card, and tracking on goals you've completed.\n\nWhen you reach fifteen goals completed, you get to treat yourself!",
+                                text = "Here, you can track your token progress. Tap the plus sign to add a new goal.\n\nWhen you reach 18 token, you get to treat yourself!",
                                 fontSize = 24.sp,
                                 color = Color.White,
                                 textAlign = TextAlign.Center
@@ -376,21 +376,18 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOALS) {
-
                     Box (
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding (
-                                top = 400.dp
-                            ),
+                            .offset(y = -200.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Column (
-                            verticalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text (
-                                text = "This is where your see your current objectives, besides your targeted goal.",
+                                text = "This is where your see your recent goals as well as your current ones.",
                                 fontSize = 24.sp,
                                 color = Color.White,
                                 textAlign = TextAlign.Center
@@ -398,7 +395,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOAL) {
-
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -409,7 +405,7 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text (
-                                text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.",
+                                text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.\n\nTap the percentage to update your current goal.",
                                 fontSize = 24.sp,
                                 color = Color.White,
                                 textAlign = TextAlign.Center
@@ -417,7 +413,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.QUOTE) {
-
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -435,12 +430,29 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTSSECTION) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Have fun exploring the app!\n\nCheck out the Receipts-Section where you can track all you receipts.\n\nCheck the Remind-me button and we'll send you a notification as a reminder.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
-
 @Composable
 fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, context: Context = LocalContext.current) {
 
@@ -459,7 +471,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
         if (goalAchieved) {
 
             onGoalAchieved()
-            WellDoneSection(
+            WellDoneSection (
                 modifier = Modifier
                     .fillMaxHeight(),
                 onFinished = {
@@ -507,7 +519,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GoalsSection(
+                GoalsSection (
                     modifier = Modifier
                         .weight(1f),
                     tutorialInformation = tutorialInformation,
@@ -525,23 +537,24 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    RecentlyCompletedGoalsSection(
+                    RecentlyCompletedGoalsSection (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f),
                         tutorialInformation = tutorialInformation
                     )
 
-                    SavedReceiptsSection(
+                    SavedReceiptsSection (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
                             .fillMaxHeight(),
-                        receiptSectionsViewModel = receiptSectionsViewModel
+                        receiptSectionsViewModel = receiptSectionsViewModel,
+                        tutorialInformation = tutorialInformation
                     )
                 }
 
-                AdSectionMiddleBanner(
+                AdSectionMiddleBanner (
                     modifier = Modifier
                         .weight(0.3f),
                     tutorialInformation = tutorialInformation
@@ -561,7 +574,6 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-
         PunchCardSection(
             modifier = Modifier
                 .weight(1f)
@@ -625,12 +637,12 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
     LaunchedEffect(receiptAdded) {
         activity?.let {
             if (receiptAdded) {
-                 if (receiptSectionsViewModel.interstitialAdsSeen() < 1) {
+                 if (!receiptSectionsViewModel.interstitialAdAfterReceiptSeen()) {
                     InterstitialAdManager.instance.showInterstitial(
                         activity = it,
                         onAdClosed = {
                             receiptAdded = false
-                            receiptSectionsViewModel.addToInterstitialAdsSeen()
+                            receiptSectionsViewModel.setInterstitialAdAfterReceiptSeen()
                         },
                         onAdFailed = {
                         }

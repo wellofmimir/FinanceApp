@@ -19,4 +19,8 @@ class UserRepository(private val database: FinanceAppDatabase) {
     fun updateTutorialDoneStatus(status: Boolean) {
         return database.updateTutorialStatus(if (status) 1 else 0)
     }
+
+    fun setCurrency(currency: String) {
+        database.setCurrency(currency)
+    }
 }

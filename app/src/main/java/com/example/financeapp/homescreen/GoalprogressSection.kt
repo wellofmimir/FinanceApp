@@ -83,7 +83,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
 
     var expandedEditMenu by remember {mutableStateOf(false)}
 
-
     Column (
         modifier = modifier
             .aspectRatio(1f)
@@ -183,11 +182,14 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
+                        if (tutorialInformation.isActive)
+                            return@clickable
+
                         expanded = true
                     }
             )
 
-            SwapCurrentGoalMenu(
+            SwapCurrentGoalMenu (
                 expanded = expanded,
                 onCurrentGoalChanged = { newText -> currentGoalText = newText },
                 onDissmissRequest = { expanded = false }
@@ -197,7 +199,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1.5f)
+                .weight(1.0f)
                 .background(
                     color = Pistachio,
                     shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
@@ -213,11 +215,14 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                     fontWeight = FontWeight.Bold,
                     color = Emerald,
                     modifier = modifier
-                        .padding(end = 8.dp)
+                        .padding(end = 8.dp, bottom = 8.dp)
                         .clickable(
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
                         ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             expandedEditMenu = true
                         }
                 )

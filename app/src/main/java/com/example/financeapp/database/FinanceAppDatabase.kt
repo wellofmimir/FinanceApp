@@ -101,6 +101,20 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("adPreferences", Context.MODE_PRIVATE)
     }
 
+    private val currencyPreferences by lazy {
+        context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun getCurrency(): String {
+        return currencyPreferences.getString("currency", "$") ?: "$"
+    }
+
+    fun setCurrency(currency: String) {
+        currencyPreferences.edit {
+            putString("currency", currency)
+        }
+    }
+
     fun feedbackAlreadySent(): Boolean {
         return feedbackPreferences.getBoolean("feedbackSent", false)
     }
@@ -143,16 +157,20 @@ class FinanceAppDatabase private constructor(context: Context) {
         return quote to quotedPerson
     }
 
-    fun addToInterstitialAdsSeen() {
-        val currentAmountOfInterstitialAdsSeen = adPreferences.getInt("interstitialAdsSeen", 0)
-
+    fun setInterstitialAdAfterReceiptSeen() {
         adPreferences.edit {
-            putInt("interstitialAdsSeen", currentAmountOfInterstitialAdsSeen + 1)
+            putBoolean("interstitialAdAfterReceiptSeen", true)
         }
     }
 
-    fun interstitialAdsSeen(): Int {
-        return adPreferences.getInt("interstitialAdsSeen", 0)
+    fun resetInterstitialAdAfterReceiptSeen() {
+        adPreferences.edit {
+            putBoolean("interstitialAdAfterReceiptSeen", false)
+        }
+    }
+
+    fun interstitialAdAfterReceiptSeen(): Boolean {
+        return adPreferences.getBoolean("interstitialAdAfterReceiptSeen", false)
     }
 
     //PREFERENCES - END

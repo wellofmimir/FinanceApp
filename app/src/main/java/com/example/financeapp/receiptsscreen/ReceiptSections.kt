@@ -2,6 +2,7 @@ package com.example.financeapp.receiptsscreen
 
 import com.example.financeapp.R
 import com.example.financeapp.database.Receipt
+import com.example.financeapp.TutorialInformation
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -57,7 +58,6 @@ import androidx.core.content.FileProvider
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.DatePicker
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -82,6 +82,9 @@ import java.time.ZoneId
 import java.util.Locale
 import android.media.ExifInterface
 import android.graphics.Matrix
+import androidx.compose.ui.draw.alpha
+import java.math.RoundingMode
+import kotlin.toBigDecimal
 
 enum class Timespan (id: Int) {
 
@@ -134,9 +137,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
     var selectedDate by remember {mutableStateOf<String>("")}
 
     val datepickerState = rememberDatePickerState (
-
         initialSelectedDateMillis = System.currentTimeMillis(),
-
         selectableDates = object: SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                 return utcTimeMillis >= System.currentTimeMillis()
@@ -152,6 +153,9 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
         photoCanBeTaken = false
         onDismissRequest()
         onReceiptSaved()
+        remindMeCheckboxChecked = false
+        showDatepickerDialog = false
+        selectedDate = ""
     }
 
     LaunchedEffect(errorMessage) {
@@ -594,6 +598,9 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
     receiptSectionsViewModel.calculateAverage()
     val averageAmount by receiptSectionsViewModel.receiptsAverage.collectAsState()
 
+    val currency by receiptSectionsViewModel.currency.collectAsState()
+    receiptSectionsViewModel.getCurrency()
+
     Column (
         modifier = modifier
             .background (
@@ -619,7 +626,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 18.dp),
-            text = averageAmount.toString(),
+            text = currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
             color = Emerald,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
@@ -681,6 +688,8 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     val sumOfExpenses by receiptSectionsViewModel.receiptsSum.collectAsState()
+    val currency by receiptSectionsViewModel.currency.collectAsState()
+    receiptSectionsViewModel.getCurrency()
 
     Column (
         modifier = modifier
@@ -707,7 +716,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 9.dp),
-            text = sumOfExpenses.toString(),
+            text = currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
             color = Emerald,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
@@ -763,6 +772,9 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    val currency by receiptSectionsViewModel.currency.collectAsState()
+    receiptSectionsViewModel.getCurrency()
 
     Column (
         modifier = modifier
@@ -876,7 +888,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                     )
 
                     Text (
-                        text = receipt.amount.toString(),
+                        text = currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
                         color = Emerald,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,

@@ -92,4 +92,12 @@ class ReceiptRepository private constructor(private val database: FinanceAppData
         val formatter = DateTimeFormatter.ISO_DATE
         return firstDayOfAYearAgo.format(formatter)
     }
+
+    fun setCurrency(currency: String) {
+        return database.setCurrency(currency)
+    }
+
+    fun getCurrency(): String {
+        return database.getCurrency()
+    }
 }

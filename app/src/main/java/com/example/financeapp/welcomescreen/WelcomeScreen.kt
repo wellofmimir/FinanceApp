@@ -47,6 +47,12 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import android.content.res.Resources
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.database.Goal
@@ -55,12 +61,14 @@ import com.example.financeapp.R
 import com.example.financeapp.repositories.UserRepository
 
 @Composable
-fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (username: String, goal: String, amount: Float) -> Unit) {
+fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit) {
 
     var username by remember { mutableStateOf("") }
     var goal by remember {mutableStateOf("")}
     var amountText by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf(0.0f) }
+    var chosenCurrency by remember {mutableStateOf("$")}
+    var differentCurrency by remember {mutableStateOf("")}
 
     val displayMetrics = Resources.getSystem().displayMetrics
     val heightPx = displayMetrics.heightPixels
@@ -78,7 +86,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
         modifier = Modifier
             .fillMaxWidth()
             .height((heightPx / 2).dp)
-            .background (
+            .background(
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -88,7 +96,8 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background (
+                .padding(top = 40.dp)
+                .background(
                     color = Emerald,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -145,7 +154,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 
             Spacer (
                 modifier = Modifier
-                    .background (
+                    .background(
                         color = Emerald
                     )
                     .padding(4.dp)
@@ -156,7 +165,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background (
+                    .background(
                         color = Pistachio,
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                     )
@@ -184,7 +193,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background (
+                    .background(
                         color = Pistachio
                     )
                     .padding(start = 5.dp, end = 5.dp)
@@ -202,7 +211,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background (
+                    .background(
                         color = Pistachio
                     )
                     .padding(start = 5.dp, end = 5.dp)
@@ -236,12 +245,12 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                         unfocusedTextColor = Color.Black
                     ),
                     modifier = Modifier
-                        .clickable (
+                        .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
                         }
-                        .padding (start = 10.dp, end = 10.dp)
+                        .padding(start = 10.dp, end = 10.dp)
                 )
             }
 
@@ -250,7 +259,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background (
+                    .background(
                         color = Pistachio
                     )
                     .padding(start = 5.dp, end = 5.dp)
@@ -268,13 +277,11 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background (
-                        color = Pistachio,
-                        shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+                    .background(
+                        color = Pistachio
                     )
                     .padding(start = 5.dp, end = 5.dp)
             ) {
-
                 TextField (
                     value = amountText,
                     onValueChange = {
@@ -304,7 +311,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                         unfocusedTextColor = Color.Black
                     ),
                     modifier = Modifier
-                        .clickable (
+                        .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
@@ -312,24 +319,169 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                         .padding(start = 10.dp, end = 10.dp)
                 )
             }
+
+            Row (
+                modifier = Modifier
+                    .height(45.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = Pistachio
+                    )
+                    .padding(start = 5.dp, end = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                val currencies = listOf("zł", "€", "$", "¥", "£")
+
+                currencies.forEach {
+                    Box (
+                        modifier = Modifier
+                            .padding(horizontal = 15.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                chosenCurrency = it
+                                differentCurrency = ""
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text (
+                            text = it,
+                            fontSize = 30.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold,
+                            color = if (it == chosenCurrency) Color.White else Emerald
+                        )
+                    }
+                }
+            }
+
+            Row (
+                modifier = Modifier
+                    .height(45.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = Pistachio,
+                        shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+                    )
+                    .padding(start = 5.dp, end = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                var expandAlertDialog by remember { mutableStateOf(false) }
+                var insertedCurrency by remember { mutableStateOf("")}
+
+                if (differentCurrency.isEmpty()) {
+
+                    Text(
+                        text = "choose another currency",
+                        fontSize = 14.sp,
+                        color = Emerald,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                expandAlertDialog = true
+                            }
+                    )
+
+                    if (expandAlertDialog) {
+                        AlertDialog(
+                            onDismissRequest = { },
+                            title = {
+                                Text(
+                                    text = "Tell us your currency",
+                                    color = Emerald,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            },
+                            text = {
+                                OutlinedTextField(
+                                    value = insertedCurrency,
+                                    onValueChange = { newValue ->
+                                        val filtered = newValue.filterNot {
+                                            it.isDigit()
+                                        }
+
+                                        if (newValue.length <= 3) {
+                                            insertedCurrency = filtered.uppercase()
+                                        }
+                                    },
+                                    label = {
+                                        Text(
+                                            color = Emerald,
+                                            text = "Currency symbol or shortcut"
+                                        )
+                                    },
+                                    singleLine = true,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        if (!insertedCurrency.isEmpty()) {
+                                            differentCurrency = insertedCurrency
+                                            chosenCurrency = differentCurrency
+                                            expandAlertDialog = false
+                                        }
+                                    }
+                                ) {
+                                    Text("Okay")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = {
+                                        expandAlertDialog = false
+                                    }
+                                ) {
+                                    Text("Cancel")
+                                }
+                            },
+                            modifier = Modifier
+                                .widthIn(max = 320.dp)
+                        )
+                    }
+                } else {
+                    Box (
+                        modifier = Modifier
+                            .padding(horizontal = 15.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text (
+                            text = chosenCurrency,
+                            fontSize = 30.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
         }
 
         if (expanded) {
             Box (
                 modifier = Modifier
-                    .background(
+                    .background (
                         color = Emerald,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
-                Column(
+                Column (
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Row(
+                    Row (
                     ) {
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f),
@@ -337,7 +489,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring0_0"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -346,7 +498,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring0_1"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f),
@@ -354,7 +506,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring0_2"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f),
@@ -362,7 +514,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring0_3"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f),
@@ -370,7 +522,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring0_4"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -380,9 +532,9 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                         )
                     }
 
-                    Row(
+                    Row (
                     ) {
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -391,7 +543,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring1_0"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -400,7 +552,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring1_1"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -409,7 +561,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring1_2"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f),
@@ -417,7 +569,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             contentDescription = "Ring1_3"
                         )
 
-                        Image(
+                        Image (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
@@ -430,7 +582,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
-                                .clickable (
+                                .clickable(
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
@@ -438,7 +590,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 
                                     if (moneyRegex.matches(amountText)) {
                                         amount = amountText.toFloatOrNull() ?: 0f
-                                        onFinished(username, goal, amount)
+                                        onFinished(username, goal, amount, chosenCurrency)
                                     } else {
                                         username = ""
                                         amount = 0.0f
@@ -868,6 +1020,8 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
     var firstGoalMenuExpanded by remember { mutableStateOf(false) }
     var firstTokenMenuExpanded by remember { mutableStateOf(false) }
 
+    var chosenCurrency by remember { mutableStateOf("$")}
+
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -895,8 +1049,8 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                         //TODO: Fehlermeldung anzeigen
                     } else {
                         welcomeScreenViewModel.updateUser(username)
-                        welcomeScreenViewModel.insertGoal(
-                            Goal(
+                        welcomeScreenViewModel.insertGoal (
+                            Goal (
                                 -1,
                                 goal,
                                 amount,
@@ -906,6 +1060,7 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                                 tokenCount
                             )
                         )
+                        welcomeScreenViewModel.setCurrency(currency = chosenCurrency)
                         onFinished()
                     }
                 }
@@ -1189,13 +1344,14 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                     onDismissRequested = {
                         firstGoalMenuExpanded = false
                     },
-                    onFinished = { newUsername, firstGoal, savingAmount  ->
+                    onFinished = { newUsername, firstGoal, savingAmount, currency  ->
 
                         username = newUsername
                         goal = firstGoal
                         amount = savingAmount
                         firstGoalMenuExpanded = false
                         firstTokenMenuExpanded = true
+                        chosenCurrency = currency
 
                         if (goal.isEmpty() || amount == 0.0f)
                             TODO("Fehlermeldung einbauen")

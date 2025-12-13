@@ -43,4 +43,8 @@ class WelcomeScreenViewModel(private val userRepository: UserRepository, private
     fun updateUser(user: String) {
         userRepository.updateUser(user)
     }
+
+    fun setCurrency(currency: String) {
+        userRepository.setCurrency(currency)
+    }
 }

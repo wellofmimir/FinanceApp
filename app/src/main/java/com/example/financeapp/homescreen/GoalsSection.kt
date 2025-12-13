@@ -95,6 +95,9 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ){
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             expanded = true
                             visible = true
                         }

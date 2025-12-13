@@ -123,6 +123,9 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ){
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             herzZumLikenClicked = !herzZumLikenClicked
                             quoteViewModel.quoteGotLiked(quoteToQuotedPerson.value.first, quoteToQuotedPerson.value.second)
                         }

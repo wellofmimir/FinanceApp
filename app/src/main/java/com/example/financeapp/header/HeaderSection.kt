@@ -44,7 +44,6 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
     //Aber der Context darf nicht in dem HeaderSectionViewModel selbst angelegt werden (geht nicht in Compose).
 
-
     headerSectionViewModel.getUser()
     val username = headerSectionViewModel.user.collectAsState()
 
@@ -99,7 +98,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                 modifier = Modifier
                     .weight(0.9f)
             ) {
-                Text(
+                Text (
                     text = headerText,
                     color = Emerald,
                     fontSize = 32.sp,
@@ -123,6 +122,9 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             expanded = true
                         }
                 )

@@ -19,6 +19,7 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
 
         database.resetDailyQuoteFetched()
         database.resetFeedbackSent()
+        database.resetInterstitialAdAfterReceiptSeen()
 
         quoteRepository.fetchQuoteFromServer()
 

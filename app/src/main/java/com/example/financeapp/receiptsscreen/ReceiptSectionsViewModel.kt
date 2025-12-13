@@ -29,6 +29,9 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
     private var currentTimespan = MutableStateFlow("" to "")
 
+    private var internCurrency = MutableStateFlow("")
+    var currency = internCurrency.asStateFlow()
+
     fun insertReceipt(receipt: Receipt, remindMeDate: String = "") {
 
         val result = repository.insertReceipt(receipt)
@@ -136,11 +139,15 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
         return repository.getFirstDayOfAYearAgo()
     }
 
-    fun addToInterstitialAdsSeen() {
-        adRepository.addToInterstitialAdsSeen()
+    fun setInterstitialAdAfterReceiptSeen() {
+        adRepository.setInterstitialAdAfterReceiptSeen()
     }
 
-    fun interstitialAdsSeen(): Int {
-        return adRepository.interstitialAdsSeen()
+    fun interstitialAdAfterReceiptSeen(): Boolean {
+        return adRepository.interstitialAdAfterReceiptSeen()
+    }
+
+    fun getCurrency() {
+        internCurrency.value = repository.getCurrency()
     }
 }

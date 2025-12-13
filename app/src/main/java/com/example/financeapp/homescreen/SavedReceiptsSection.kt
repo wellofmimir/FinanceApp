@@ -22,18 +22,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
+
 import com.example.financeapp.R
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 
 @Composable
-fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
+fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
     val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.SAVED_RECEIPTS) 0.1f else 1.0f)
             .fillMaxWidth()
             .background(
                 color = Pistachio,
