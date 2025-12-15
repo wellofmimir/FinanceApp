@@ -93,10 +93,6 @@ class ReceiptRepository private constructor(private val database: FinanceAppData
         return firstDayOfAYearAgo.format(formatter)
     }
 
-    fun setCurrency(currency: String) {
-        return database.setCurrency(currency)
-    }
-
     fun getCurrency(): String {
         return database.getCurrency()
     }

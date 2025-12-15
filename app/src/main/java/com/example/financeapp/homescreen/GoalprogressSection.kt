@@ -73,7 +73,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
     Column (
         modifier = modifier
             .aspectRatio(1f)
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOAL) 0.1f else 1.0f),
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOAL) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

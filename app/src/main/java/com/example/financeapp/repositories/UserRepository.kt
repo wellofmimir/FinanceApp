@@ -12,12 +12,28 @@ class UserRepository(private val database: FinanceAppDatabase) {
         database.updateUser(user)
     }
 
-    fun isTutorialDone(): Boolean {
-        return database.isTutorialDone()
+    fun getHomeScreenTutorialDone(): Boolean {
+        return database.getHomeScreenTutorialDone()
     }
 
-    fun updateTutorialDoneStatus(status: Boolean) {
-        return database.updateTutorialStatus(if (status) 1 else 0)
+    fun setHomeScreenTutorialDone() {
+        database.setHomeScreenTutorialDone()
+    }
+
+    fun resetHomeScreenTutorialDone() {
+        database.resetHomeScreenTutorialDone()
+    }
+
+    fun getReceiptsTutorialDone(): Boolean {
+        return database.getReceiptsTutorialDone()
+    }
+
+    fun setReceiptsTutorialDone() {
+        database.setReceiptsTutorialDone()
+    }
+
+    fun resetReceiptsTutorialDone() {
+        database.resetReceiptsTutorialDone()
     }
 
     fun setCurrency(currency: String) {

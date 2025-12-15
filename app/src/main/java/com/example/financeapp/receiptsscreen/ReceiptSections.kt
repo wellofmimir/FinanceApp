@@ -82,6 +82,8 @@ import java.util.Locale
 import android.media.ExifInterface
 import android.graphics.Matrix
 import androidx.compose.ui.draw.alpha
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 import java.math.RoundingMode
 import kotlin.toBigDecimal
 
@@ -507,7 +509,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 }
 
 @Composable
-fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
     var clickedEntry by remember { mutableIntStateOf(0) }
@@ -519,7 +521,8 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
     val entries = listOf(currentMonth, "2 mo.", "6 mo.", "1 yr", "All")
 
     Column (
-        modifier = modifier,
+        modifier = modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -534,10 +537,13 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                     modifier = Modifier
                         .weight(1f)
                         .height(60.dp)
-                        .clickable(
+                        .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             clickedEntry = entries.indexOf(entry)
 
                             onCurrentMonth(
@@ -576,7 +582,7 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
 }
 
 @Composable
-fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -602,6 +608,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_TAKE_PICTURE) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
@@ -665,7 +672,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
 }
 
 @Composable
-fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -692,6 +699,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_SUM_SECTION) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
@@ -757,7 +765,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 }
 
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel) {
+fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -777,6 +785,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_LOG_SECTION) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
@@ -855,6 +864,9 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                     modifier = Modifier
                         .clickable (
                         ) {
+                            if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_LOG_SECTION)
+                                return@clickable
+
                             val file = File(receipt.pathToImage)
 
                             if (file.exists()) {

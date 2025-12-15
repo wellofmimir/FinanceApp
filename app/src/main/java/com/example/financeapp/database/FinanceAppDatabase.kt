@@ -64,7 +64,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         //in SQLite sind Foreign-Keys standardmäßig ausgestellt, also müssen wir diese anschalten
         database.execSQL("PRAGMA foreign_keys = ON;")
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL, tutorialdone INTEGER NOT NULL DEFAULT 0)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
@@ -89,6 +89,10 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     //PREFERENCES - START
 
+    private val tutorialPreferences by lazy {
+        context.getSharedPreferences("tutorialPreferences", Context.MODE_PRIVATE)
+    }
+
     private val quotePreferences by lazy {
         context.getSharedPreferences("quotePreferences", Context.MODE_PRIVATE)
     }
@@ -103,6 +107,37 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun setHomeScreenTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("homeScreenTutorialDone", true)
+        }
+    }
+
+    fun getHomeScreenTutorialDone(): Boolean {
+        return tutorialPreferences.getBoolean("homeScreenTutorialDone", false)
+    }
+
+    fun resetHomeScreenTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("homeScreenTutorialDone", false)
+        }
+    }
+
+    fun getReceiptsTutorialDone(): Boolean {
+        return tutorialPreferences.getBoolean("receiptsTutorialDone", false)
+    }
+    fun setReceiptsTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("receiptsTutorialDone", true)
+        }
+    }
+
+    fun resetReceiptsTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("receiptsTutorialDone", false)
+        }
     }
 
     fun getCurrency(): String {
@@ -447,39 +482,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         cursor.close()
         return user
     }
-
-    fun isTutorialDone(): Boolean {
-
-        val cursor = database.rawQuery("SELECT tutorialdone FROM userinformation WHERE id = 1", null)
-
-        val tutorialDone: Int = if (cursor.moveToFirst()) {
-            cursor.getInt(cursor.getColumnIndexOrThrow("tutorialdone"))
-        } else {
-            0
-        }
-
-        cursor.close()
-        return tutorialDone == 1
-    }
-
-    fun updateTutorialStatus(status: Int) {
-
-        val cursor = database.rawQuery("SELECT * FROM userinformation WHERE id = 1", null)
-        val exists = cursor.moveToFirst()
-        cursor.close()
-
-        val values = ContentValues().apply {
-            put("tutorialdone", status)
-        }
-
-        if (exists) {
-            database.update("userinformation", values, "id = ?", arrayOf("1"))
-        } else {
-            values.put("tutorialdone", status)
-            database.insert("userinformation", null, values)
-        }
-    }
-
     fun getIDGoalStatus(description: String): GoalStatus? {
 
         val cursor = database.rawQuery("SELECT id, description FROM goalStatus WHERE description = ?", arrayOf(description))

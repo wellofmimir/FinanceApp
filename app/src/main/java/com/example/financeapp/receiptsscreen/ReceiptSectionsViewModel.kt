@@ -14,21 +14,13 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
     private val internReceipts = MutableStateFlow<List<Receipt>>(emptyList())
     val receipts = internReceipts.asStateFlow()
-
     private val internReceiptsAverage = MutableStateFlow<Float>(0.0f)
     val receiptsAverage = internReceiptsAverage.asStateFlow()
-
     private val internReceiptsSum = MutableStateFlow<Float>(0.0f)
     val receiptsSum = internReceiptsSum.asStateFlow()
-
     private val internCurrentMonth = MutableStateFlow<String>("")
     val currentMonth = internCurrentMonth.asStateFlow()
-
-    private val internAccumulatedExpenses = MutableStateFlow<Float>(0.0f)
-    val accumulatedExpenses = internAccumulatedExpenses.asStateFlow()
-
     private var currentTimespan = MutableStateFlow("" to "")
-
     private var internCurrency = MutableStateFlow("")
     var currency = internCurrency.asStateFlow()
 
@@ -146,7 +138,6 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     fun interstitialAdAfterReceiptSeen(): Boolean {
         return adRepository.interstitialAdAfterReceiptSeen()
     }
-
     fun getCurrency() {
         internCurrency.value = repository.getCurrency()
     }

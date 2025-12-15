@@ -45,7 +45,6 @@ import android.content.Context
 import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -99,15 +98,23 @@ enum class Screen (id: Int) {
 
 enum class TutorialStep (id: Int) {
 
-    NONE (0),
-    RECENTLY_COMPLETED_GOALS (1),
-    CURRENT_GOALS (2),
+    NONE (-1),
+    HOMESCREEN_START (0),
+    HOMESCREEN_RECENTLY_COMPLETED_GOALS (1),
+    HOMESCREEN_CURRENT_GOALS (2),
     CURRENT_GOALS_BUTTON (3),
-    CURRENT_GOAL (4),
-    QUOTE (5),
-    DONE (6),
-    SAVED_RECEIPTS (7),
-    RECEIPTSSECTION(8)
+    HOMESCREEN_CURRENT_GOAL (4),
+    HOMESCREEN_QUOTE (5),
+    HOMESCREEN_SAVED_RECEIPTS (6),
+    HOMESCREEN_END (7),
+
+    RECEIPTS_START(8),
+    RECEIPTS_AVERAGE_SECTION(9),
+    RECEIPTS_SUM_SECTION(10),
+    RECEIPTS_LOG_SECTION(11),
+    RECEIPTS_TAKE_PICTURE(12),
+    RECEIPTS_END(13),
+    GOALS_START (14)
 }
 
 data class TutorialInformation (
@@ -192,7 +199,7 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
-            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(!mainActivityViewModel.isTutorialDone, TutorialStep.NONE))}
+            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
             mainActivityViewModel.loadUser()
             val user by mainActivityViewModel.user.collectAsState()
@@ -220,26 +227,58 @@ class MainActivity : ComponentActivity() {
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        tutorialInformation = tutorialInformation.copy (
-                            isActive = tutorialInformation.isActive,
-                            tutorialStep =  when (tutorialInformation.tutorialStep) {
-                                TutorialStep.NONE -> TutorialStep.RECENTLY_COMPLETED_GOALS
-                                TutorialStep.RECENTLY_COMPLETED_GOALS -> TutorialStep.CURRENT_GOALS
-                                TutorialStep.CURRENT_GOALS -> TutorialStep.CURRENT_GOAL
-                                TutorialStep.CURRENT_GOAL -> TutorialStep.QUOTE
-                                TutorialStep.QUOTE -> TutorialStep.RECEIPTSSECTION
-                                TutorialStep.RECEIPTSSECTION -> TutorialStep.DONE
-                                else -> TutorialStep.NONE
-                            }
-                        )
+                        if (sectionIdentifier == Screen.HOME) {
 
-                        if (tutorialInformation.tutorialStep == TutorialStep.DONE) {
-                            tutorialInformation = tutorialInformation.copy(
-                                isActive = false,
-                                tutorialStep = TutorialStep.NONE
+                            tutorialInformation = tutorialInformation.copy (
+                                isActive = true,
+                                tutorialStep = when (tutorialInformation.tutorialStep) {
+                                    TutorialStep.HOMESCREEN_START -> TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS
+                                    TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOALS
+                                    TutorialStep.HOMESCREEN_CURRENT_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOAL
+                                    TutorialStep.HOMESCREEN_CURRENT_GOAL -> TutorialStep.HOMESCREEN_QUOTE
+                                    TutorialStep.HOMESCREEN_QUOTE -> TutorialStep.HOMESCREEN_END
+                                    else -> TutorialStep.HOMESCREEN_END
+                                }
                             )
 
-                            mainActivityViewModel.updateTutorialDoneStatus(true)
+                            if (tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
+                                tutorialInformation = tutorialInformation.copy(
+                                    isActive = false,
+                                    tutorialStep = TutorialStep.RECEIPTS_START
+                                )
+
+                                mainActivityViewModel.setHomeScreenTutorialDone()
+                            }
+                        } else if (sectionIdentifier == Screen.RECEIPTS) {
+
+                            if (!mainActivityViewModel.getReceiptsTutorialDone()) {
+
+                                //Das ist hier, um den User zu zwingen, während des Tutorials in der ReceiptsSection -> AverageSpentSection
+                                //auch wirklich ein Bild von einem Receipt aufzunehmen :D -> Das stärkt die Retention
+
+                                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE)
+                                    return@clickable
+
+                                tutorialInformation = tutorialInformation.copy (
+                                    isActive = true,
+                                    tutorialStep = when (tutorialInformation.tutorialStep) {
+                                        TutorialStep.RECEIPTS_START -> TutorialStep.RECEIPTS_TAKE_PICTURE
+                                        TutorialStep.RECEIPTS_TAKE_PICTURE -> TutorialStep.RECEIPTS_LOG_SECTION
+                                        TutorialStep.RECEIPTS_LOG_SECTION -> TutorialStep.RECEIPTS_SUM_SECTION
+                                        TutorialStep.RECEIPTS_SUM_SECTION -> TutorialStep.RECEIPTS_END
+                                        else -> TutorialStep.RECEIPTS_START
+                                    }
+                                )
+
+                                if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_END) {
+                                    tutorialInformation = tutorialInformation.copy (
+                                        isActive = false,
+                                        tutorialStep = TutorialStep.GOALS_START
+                                    )
+
+                                    mainActivityViewModel.setReceiptsTutorialDone()
+                                }
+                            }
                         }
                     }
             ) {
@@ -272,7 +311,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 ) {
-                    WelcomeScreen(
+                    WelcomeScreen (
                         onFinished = {
                             mainActivityViewModel.loadUser()
                         },
@@ -302,7 +341,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 if (sectionIdentifier == Screen.LIKEDQUOTES)
-                    LikedQuotesSection(
+                    LikedQuotesSection (
                         tutorialInformation = tutorialInformation
                     )
 
@@ -313,7 +352,14 @@ class MainActivity : ComponentActivity() {
 
                 if (sectionIdentifier == Screen.RECEIPTS)
                     ReceiptsSection (
-                        receiptSectionsViewModel = receiptSectionsViewModel
+                        onReceiptAdded = {
+                            tutorialInformation = tutorialInformation.copy (
+                                isActive = tutorialInformation.isActive,
+                                tutorialStep = if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) TutorialStep.RECEIPTS_LOG_SECTION else TutorialStep.NONE
+                            )
+                        },
+                        receiptSectionsViewModel = receiptSectionsViewModel,
+                        tutorialInformation = tutorialInformation
                     )
 
                 if (sectionIdentifier == Screen.USER_SETTINGS)
@@ -339,8 +385,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            if (sectionIdentifier == Screen.HOME) {
-                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.NONE) {
+            if (sectionIdentifier == Screen.HOME)
+            {
+                if (!mainActivityViewModel.getHomeScreenTutorialDone() && !tutorialInformation.isActive) {
+                    tutorialInformation = tutorialInformation.copy (
+                        isActive = true,
+                        tutorialStep = TutorialStep.HOMESCREEN_START
+                    )
+                }
+
+                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_START) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -358,7 +412,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECENTLY_COMPLETED_GOALS) {
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -376,7 +430,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOALS) {
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOALS) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize()
@@ -395,7 +449,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.CURRENT_GOAL) {
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOAL) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -413,7 +467,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.QUOTE) {
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_QUOTE) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -431,7 +485,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTSSECTION) {
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
@@ -443,6 +497,108 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Text (
                                 text = "Have fun exploring the app!\n\nCheck out the Receipts-Section where you can track all you receipts.\n\nCheck the Remind-me button and we'll send you a notification as a reminder.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            } else if (sectionIdentifier == Screen.RECEIPTS) {
+
+                if (!mainActivityViewModel.getReceiptsTutorialDone() && !tutorialInformation.isActive) {
+                    tutorialInformation = tutorialInformation.copy (
+                        isActive = true,
+                        tutorialStep = TutorialStep.RECEIPTS_START
+                    )
+                }
+
+                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_START) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(75.dp)
+                            )
+
+                            Text (
+                                text = "Welcome to your receipt tracking space!",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(100.dp)
+                            )
+
+                            Text (
+                                text = "Take a picture of your receipt to always have an eye on your finances.\n\nGive it a try!\n\nCheck the Remind-me button and you'll be notified by us.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_SUM_SECTION) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(75.dp)
+                            )
+
+                            Text (
+                                text = "This sections helps you to keep an eye on your expenses.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_LOG_SECTION) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.TopStart
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(275.dp)
+                            )
+
+                            Text (
+                                text = "Just scroll down when you need to revisit one of your receipts.",
                                 fontSize = 24.sp,
                                 color = Color.White,
                                 textAlign = TextAlign.Center
@@ -623,13 +779,13 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
     AdSectionLargeBanner (
         tutorialInformation = TutorialInformation (
             isActive = false,
-            tutorialStep = TutorialStep.NONE
+            tutorialStep = TutorialStep.HOMESCREEN_END
         )
     )
 }
 
 @Composable
-fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
+fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
@@ -663,7 +819,8 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
             onCurrentMonth = {
                 timespan = it
             },
-            receiptSectionsViewModel = receiptSectionsViewModel
+            receiptSectionsViewModel = receiptSectionsViewModel,
+            tutorialInformation = tutorialInformation
         )
 
         Row (
@@ -678,11 +835,13 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
                 timespan = timespan,
                 receiptAdded = {
                     receiptAdded = true
+                    onReceiptAdded()
                 },
                 onDismissRequest = {
 
                 },
-                receiptSectionsViewModel = receiptSectionsViewModel
+                receiptSectionsViewModel = receiptSectionsViewModel,
+                tutorialInformation = tutorialInformation
             )
 
             ExpensesOverviewSection (
@@ -690,7 +849,8 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
                     .weight(1f)
                     .aspectRatio(1f),
                 timespan,
-                receiptSectionsViewModel
+                receiptSectionsViewModel,
+                tutorialInformation = tutorialInformation
             )
         }
 
@@ -699,12 +859,13 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
                 .fillMaxHeight(0.8f),
             timespan = timespan,
             receiptSectionsViewModel = receiptSectionsViewModel,
+            tutorialInformation = tutorialInformation
         )
 
         AdSectionLargeBanner (
             tutorialInformation = TutorialInformation(
                 isActive = false,
-                tutorialStep = TutorialStep.NONE
+                tutorialStep = TutorialStep.HOMESCREEN_END
             )
         )
     }

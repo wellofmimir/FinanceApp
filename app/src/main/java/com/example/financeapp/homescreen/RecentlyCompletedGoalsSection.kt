@@ -43,7 +43,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
 
     Column (
         modifier = modifier
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f)
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)

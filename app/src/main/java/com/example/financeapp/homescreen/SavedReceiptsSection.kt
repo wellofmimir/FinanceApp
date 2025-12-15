@@ -38,7 +38,7 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
 
     Column (
         modifier = modifier
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.SAVED_RECEIPTS) 0.1f else 1.0f)
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_SAVED_RECEIPTS) 0.1f else 1.0f)
             .fillMaxWidth()
             .background(
                 color = Pistachio,

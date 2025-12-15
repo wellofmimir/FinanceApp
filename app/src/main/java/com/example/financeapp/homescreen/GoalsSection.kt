@@ -53,7 +53,7 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
     Column (
         modifier = modifier
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.CURRENT_GOALS) 0.1f else 1.0f)
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOALS) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)

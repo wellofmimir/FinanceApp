@@ -63,7 +63,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
     Column (
         modifier = modifier
             .aspectRatio(1f)
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.QUOTE) 0.1f else 1.0f),
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_QUOTE) 0.1f else 1.0f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -123,9 +123,6 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ){
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
                             if (quoteViewModel.hasError())
                                 return@clickable
 

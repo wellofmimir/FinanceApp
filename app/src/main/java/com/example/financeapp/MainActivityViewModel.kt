@@ -11,13 +11,31 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
     private var internUser = MutableStateFlow<String>("")
     var user = internUser.asStateFlow()
 
-    var isTutorialDone = repository.isTutorialDone()
+    fun setHomeScreenTutorialDone() {
+        repository.setHomeScreenTutorialDone()
+    }
+
+    fun getHomeScreenTutorialDone(): Boolean {
+        return repository.getHomeScreenTutorialDone()
+    }
+
+    fun resetHomeScreenTutorialDone() {
+        repository.resetHomeScreenTutorialDone()
+    }
 
     fun loadUser() {
         internUser.value = repository.getUser()
     }
 
-    fun updateTutorialDoneStatus(status: Boolean) {
-        repository.updateTutorialDoneStatus(status)
+    fun getReceiptsTutorialDone(): Boolean {
+        return repository.getReceiptsTutorialDone()
+    }
+
+    fun setReceiptsTutorialDone() {
+        repository.setReceiptsTutorialDone()
+    }
+
+    fun resetReceiptsTutorialDone() {
+        repository.resetReceiptsTutorialDone()
     }
 }
