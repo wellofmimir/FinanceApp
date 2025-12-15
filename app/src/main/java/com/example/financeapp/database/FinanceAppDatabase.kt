@@ -572,6 +572,25 @@ class FinanceAppDatabase private constructor(context: Context) {
         return null
     }
 
+    fun resetPunchcard() {
+
+        val cursor = database.rawQuery("SELECT tokensofar FROM punchcard WHERE id = ?", arrayOf("1"))
+        val exists = cursor.moveToFirst()
+        val current = if (exists) cursor.getInt(0) else 0
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("tokensofar", 0)
+        }
+
+        if (exists) {
+            database.update("punchcard", values, "id = ?", arrayOf("1"))
+        } else {
+            values.put("id", 1)
+            database.insert("punchcard", null, values)
+        }
+    }
+
     fun setTokenSoFarForPunchcard(tokenSoFar: Int) {
 
         val cursor = database.rawQuery("SELECT tokensofar FROM punchcard WHERE id = ?", arrayOf("1"))
@@ -643,7 +662,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("tokencount", tokenCount)
 
         if (exists) {
-             return
+            database.update("goals", values, "goal = ?", arrayOf(nameOfGoal))
         } else {
             database.insert("goals", null, values)
         }
@@ -664,7 +683,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("tokencount", goal.tokenCount)
 
         if (exists) {
-            return
+            database.update("goals", values, "goal = ?", arrayOf(goal.goal))
         } else {
             database.insert("goals", null, values)
         }

@@ -8,9 +8,9 @@ import java.util.Locale
 
 class GoalRepository(private val database: FinanceAppDatabase) {
 
-    fun insertGoal(goal: String, amount: Float, saved: Float, statusDescription: String) {
+    fun insertGoal(goal: String, amount: Float, saved: Float, statusDescription: String, amountOfTokens: Int) {
         database.run {
-            insertGoal(goal, amount, saved,statusDescription)
+            insertGoal(goal, amount, saved,statusDescription, amountOfTokens)
         }
     }
 
@@ -56,8 +56,11 @@ class GoalRepository(private val database: FinanceAppDatabase) {
         }
     }
 
-    fun getCurrentGoal(): Goal? {
+    fun setCurrentGoal() {
 
+    }
+
+    fun getCurrentGoal(): Goal? {
         val goal = database.currentGoal()
 
         if (goal == null) {
@@ -85,6 +88,9 @@ class GoalRepository(private val database: FinanceAppDatabase) {
         return database.getTokenSoFarForPunchcard()
     }
 
+    fun resetPunchcard() {
+        database.resetPunchcard()
+    }
     fun addNewTokenAmountToPunchcard(tokenAmount: Int) {
         database.setTokenSoFarForPunchcard(tokenAmount)
     }

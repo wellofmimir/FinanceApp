@@ -126,6 +126,9 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             if (tutorialInformation.isActive)
                                 return@clickable
 
+                            if (quoteViewModel.hasError())
+                                return@clickable
+
                             herzZumLikenClicked = !herzZumLikenClicked
                             quoteViewModel.quoteGotLiked(quoteToQuotedPerson.value.first, quoteToQuotedPerson.value.second)
                         }

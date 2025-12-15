@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.unit.dp
@@ -30,28 +27,14 @@ import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, context: Context = LocalContext.current) {
-
-    val swapCurrentGoalMenuViewModel: SwapCurrentGoalMenuViewModel = viewModel (
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
-
-                return SwapCurrentGoalMenuViewModel(repository) as T
-            }
-        }
-    )
+fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
 
     DropdownMenu (
         expanded = expanded,
@@ -99,12 +82,11 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                     .height(48.dp)
             )
 
-            val goals by swapCurrentGoalMenuViewModel.goals.collectAsState()
-            swapCurrentGoalMenuViewModel.getInProgressGoals()
+            val goals by goalsSectionViewModel.goals.collectAsState()
+            val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
+            goalsSectionViewModel.reloadGoals()
 
-            val currentGoal by swapCurrentGoalMenuViewModel.currentGoal.collectAsState()
-            swapCurrentGoalMenuViewModel.getCurrentGoal()
-            var newCurrentGoal by remember { mutableStateOf(goals.indexOf(currentGoal)) }
+            var newCurrentGoal by remember { mutableIntStateOf(goals.indexOf(currentGoal)) }
 
             goals.take(5).forEach { item ->
 
@@ -138,7 +120,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                                 interactionSource = remember {MutableInteractionSource()}
                             ) {
                                 newCurrentGoal = goals.indexOf(item)
-                                swapCurrentGoalMenuViewModel.setCurrentGoal(item)
+                                goalsSectionViewModel.setCurrentGoal(item)
                                 onCurrentGoalChanged(goals.get(newCurrentGoal).goal)
                             }
                     )

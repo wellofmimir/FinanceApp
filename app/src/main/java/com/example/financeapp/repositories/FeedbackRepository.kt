@@ -1,5 +1,6 @@
 package com.example.financeapp.repositories
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.FeedbackClient
 import com.example.financeapp.network.FeedbackClientCallback
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONObject
 
 class FeedbackRepository(private val database: FinanceAppDatabase) {
+
     companion object {
         private var instance: FeedbackRepository? = null
 
@@ -21,6 +23,7 @@ class FeedbackRepository(private val database: FinanceAppDatabase) {
 
     private val internFeedbackAlreadySent = MutableStateFlow(false)
     val isFeedbackAlreadySent = internFeedbackAlreadySent.asStateFlow()
+
     private val client = FeedbackClient.getInstance()
     fun sendFeedback(name: String, text: String) {
 
@@ -42,7 +45,6 @@ class FeedbackRepository(private val database: FinanceAppDatabase) {
             }
         })
     }
-
 
     fun feedbackAlreadySent(): Boolean {
         internFeedbackAlreadySent.value = database.feedbackAlreadySent()

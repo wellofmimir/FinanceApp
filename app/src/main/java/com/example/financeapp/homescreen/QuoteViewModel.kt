@@ -25,6 +25,10 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
         }
     }
 
+    fun hasError(): Boolean {
+        return repository.hasError()
+    }
+
     fun getLikedQuotes(): List<Quote> {
         return repository.getLikedQuotes()
     }

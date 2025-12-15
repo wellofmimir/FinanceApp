@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,32 +26,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 
-
 @Composable
-fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
 
-    val recentlyCompletedGoalsSectionViewModel: RecentlyCompletedGoalsSectionViewModel = viewModel (
-        factory = object : ViewModelProvider.Factory {
-            override fun<T : ViewModel> create(modelClass: Class<T>): T {
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
-                return RecentlyCompletedGoalsSectionViewModel(repository) as T
-            }
-        }
-    )
-
-    val goals by recentlyCompletedGoalsSectionViewModel.goals.collectAsState()
+    val goals by goalsSectionViewModel.completedGoals.collectAsState()
 
     if (tutorialInformation.isActive) {
-        recentlyCompletedGoalsSectionViewModel.getExampleGoals()
+        goalsSectionViewModel.getExampleGoals()
     } else {
-        recentlyCompletedGoalsSectionViewModel.getCompletedGoals()
+        goalsSectionViewModel.getCompletedGoals()
     }
 
     Column (

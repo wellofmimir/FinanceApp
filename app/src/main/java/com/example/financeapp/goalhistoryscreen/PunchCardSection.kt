@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -38,6 +40,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import com.example.financeapp.database.FinanceAppDatabase
@@ -59,10 +63,16 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
         }
     )
 
-    punchCardSectionViewModel.getTokenSoFarForPunchcard()
-    val tokenSoFar = punchCardSectionViewModel.tokenSoFar.collectAsState()
+    LaunchedEffect(Unit) {
+        punchCardSectionViewModel.getTokenSoFarForPunchcard()
+    }
 
-    if (tokenSoFar.value == 18) { //18 token sind in der punchardsection zu sehen
+    val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsState()
+    val isPunchcardFull = tokenSoFar >= 15
+
+    if (isPunchcardFull) { //15 token sind in der punchardsection zu sehen
+
+        val spareToken = tokenSoFar - 15
 
         Column (
             modifier = modifier
@@ -166,7 +176,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        punchCardSectionViewModel.resetTokenSoFarForPunchcard()
+                        punchCardSectionViewModel.resetTokenSoFarForPunchcard(spareToken = spareToken)
                         punchCardSectionViewModel.getTokenSoFarForPunchcard()
                     },
                 contentAlignment = Alignment.Center
@@ -185,7 +195,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
 
         Column (
             modifier = modifier
-                .background(
+                .background (
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -201,7 +211,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
                 ) {
                     for (j in 1 .. 3) {
 
-                        val filled = index < tokenSoFar.value
+                        val filled = index < tokenSoFar
 
                         Canvas (
                             modifier = Modifier

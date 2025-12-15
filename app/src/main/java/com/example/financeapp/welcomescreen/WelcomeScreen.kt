@@ -49,10 +49,13 @@ import androidx.compose.ui.Alignment
 import android.content.res.Resources
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.text.input.KeyboardType
 
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.database.Goal
@@ -310,6 +313,9 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black
                     ),
+                    keyboardOptions = KeyboardOptions (
+                        keyboardType = KeyboardType.Number
+                    ),
                     modifier = Modifier
                         .clickable(
                             indication = null,
@@ -391,17 +397,23 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                     )
 
                     if (expandAlertDialog) {
-                        AlertDialog(
+                        AlertDialog (
+                            containerColor = Emerald,
+                            modifier = Modifier
+                                .background (
+                                    color = Emerald,
+                                    shape = RoundedCornerShape(12.dp)
+                                ),
                             onDismissRequest = { },
                             title = {
-                                Text(
+                                Text (
                                     text = "Tell us your currency",
-                                    color = Emerald,
+                                    color = Pistachio,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             },
                             text = {
-                                OutlinedTextField(
+                                OutlinedTextField (
                                     value = insertedCurrency,
                                     onValueChange = { newValue ->
                                         val filtered = newValue.filterNot {
@@ -414,16 +426,25 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                     },
                                     label = {
                                         Text(
-                                            color = Emerald,
-                                            text = "Currency symbol or shortcut"
+                                            color = Pistachio,
+                                            text = "Currency symbol or shortcut",
                                         )
                                     },
                                     singleLine = true,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background (
+                                            color = Emerald,
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    colors = OutlinedTextFieldDefaults.colors (
+                                        focusedTextColor = Pistachio,
+                                        unfocusedTextColor = Pistachio
+                                    )
                                 )
                             },
                             confirmButton = {
-                                TextButton(
+                                TextButton (
                                     onClick = {
                                         if (!insertedCurrency.isEmpty()) {
                                             differentCurrency = insertedCurrency
@@ -432,7 +453,10 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                         }
                                     }
                                 ) {
-                                    Text("Okay")
+                                    Text (
+                                        text = "Okay",
+                                        color = Pistachio
+                                    )
                                 }
                             },
                             dismissButton = {
@@ -441,11 +465,12 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                         expandAlertDialog = false
                                     }
                                 ) {
-                                    Text("Cancel")
+                                    Text (
+                                        text = "Cancel",
+                                        color = Pistachio
+                                    )
                                 }
-                            },
-                            modifier = Modifier
-                                .widthIn(max = 320.dp)
+                            }
                         )
                     }
                 } else {
@@ -1465,11 +1490,9 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text (
-            text = "LOGO",
-            color = Color.White,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+        Image (
+            painter = painterResource(R.mipmap.logo_foreground),
+            contentDescription = "Logo"
         )
     }
 }

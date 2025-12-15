@@ -2,7 +2,6 @@ package com.example.financeapp.receiptsscreen
 
 import com.example.financeapp.R
 import com.example.financeapp.database.Receipt
-import com.example.financeapp.TutorialInformation
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -350,7 +349,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                 )
             }
 
-            Spacer(
+            Spacer (
                 modifier = Modifier
                     .height(24.dp)
             )
@@ -434,7 +433,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 
             }
 
-            Spacer(
+            Spacer (
                 modifier = Modifier
                     .height(48.dp)
             )
@@ -626,7 +625,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 18.dp),
-            text = currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
+            text = if (currency.length == 1) currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
             color = Emerald,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
@@ -716,7 +715,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 9.dp),
-            text = currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
+            text = if (currency.length == 1) currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
             color = Emerald,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
@@ -778,7 +777,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
 
     Column (
         modifier = modifier
-            .background(
+            .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -888,7 +887,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                     )
 
                     Text (
-                        text = currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString(),
+                        text = if (currency.length == 1) currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
                         color = Emerald,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,

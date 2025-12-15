@@ -20,6 +20,7 @@ class QuoteClient private constructor(){
         }
     }
     private val client = OkHttpClient()
+    var hasError: Boolean = false
     fun fetchQuote(callback: QuoteClientCallback) {
 
         val request = Request.Builder()
@@ -30,7 +31,6 @@ class QuoteClient private constructor(){
         Thread {
             try {
                 val response = client.newCall(request).execute()
-                //val responseBody = "{\"quote\":\"Testbumserei\",\"name\":\"ADOLF\"}"
                 val responseBody = response.body?.string()
                 response.close()
 
@@ -38,6 +38,7 @@ class QuoteClient private constructor(){
                     callback.result(responseBody!!)
                 }
             } catch (e: kotlin.Exception) {
+                hasError = true
 
                 Handler (Looper.getMainLooper()).post {
                     callback.result("")

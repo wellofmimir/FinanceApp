@@ -28,12 +28,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.homescreen.GoalsSectionViewModel
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
@@ -118,7 +122,8 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                         expanded = false
                         newGoalEntered = true
                         goalsSectionViewModel.reloadGoals()
-                    }
+                    },
+                    goalsSectionViewModel = goalsSectionViewModel
                 )
             }
         }
@@ -129,41 +134,51 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
         if (newGoalEntered) {
 
-            goals.take(4).forEach { item ->
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            shape = RoundedCornerShape(
-                                bottomStart = if (item == goals.last()) 12.dp else 0.dp,
-                                bottomEnd = if (item == goals.last()) 12.dp else 0.dp
-                            ),
-                            color = Pistachio
+            val listState = rememberLazyListState()
+
+            LazyColumn (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 36.dp)
+                    .background (
+                        color = Pistachio,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                state = listState
+            ) {
+                items(goals.take(goals.size)) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Image (
+                            painter = painterResource(R.drawable.bulletpoint_foreground),
+                            contentDescription = "Bulletpoint",
+                            modifier = Modifier
+                                .background (
+                                    color = Pistachio
+                                )
+                                .size(24.dp),
+                            colorFilter = ColorFilter.tint(Emerald)
                         )
-                        .padding(horizontal = 36.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image (
-                        painter = painterResource(R.drawable.bulletpoint_foreground),
-                        contentDescription = "Bulletpoint",
-                        modifier = Modifier
-                            .background (
-                                color = Pistachio
-                            )
-                            .size(24.dp),
-                        colorFilter = ColorFilter.tint(Emerald)
-                    )
 
-                    Spacer (
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                    )
+                        Spacer (
+                            modifier = Modifier
+                                .width(24.dp)
+                        )
 
-                    Text (
-                        fontSize = 18.sp,
-                        text = item.goal,
-                        color = Emerald
-                    )
+                        Text (
+                            text = it.goal,
+                            color = Emerald,
+                            fontSize = 18.sp,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
                 }
             }
         }

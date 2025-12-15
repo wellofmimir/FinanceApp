@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
@@ -40,6 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.example.financeapp.database.Goal
 import com.example.financeapp.ui.theme.Pistachio
@@ -63,7 +66,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
         mutableStateOf(TextFieldValue(originalSavedAmountText))
     }
 
-    var tokenCount by remember { mutableStateOf(5) }
+    var tokenCount by remember { mutableIntStateOf(5) }
     var hasChanged by remember { mutableStateOf(false) }
 
     LaunchedEffect(expanded) {
@@ -113,17 +116,13 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 interactionSource = remember { MutableInteractionSource() }
             ) {
                 if (isEditingSavedAmount) {
-
                     savedAmountText = originalSavedAmountText
-
                     isEditingSavedAmount = false
                     isEditingInitialAmount = false
                 }
 
                 if (isEditingInitialAmount) {
-
                     amountText = originalAmountText
-
                     isEditingSavedAmount = false
                     isEditingInitialAmount = false
                 }
@@ -200,10 +199,8 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 )
 
                 val focusRequester = remember { FocusRequester() }
-                var hasFocus by remember { mutableStateOf(false) }
 
                 if (isEditingInitialAmount) {
-
                     LaunchedEffect(Unit) {
                         focusRequester.requestFocus()
 
@@ -216,7 +213,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                     TextField (
                         value = amountTextAsTextFieldValue,
                         onValueChange = { newText ->
-
                             amountTextAsTextFieldValue = newText
                             amountText = amountTextAsTextFieldValue.text
                             hasChanged = true
@@ -232,6 +228,9 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White
                         ),
+                        keyboardOptions = KeyboardOptions (
+                            keyboardType = KeyboardType.Number
+                        ),
                         modifier = Modifier
                             .focusRequester(focusRequester)
                             .onFocusChanged { focusState ->
@@ -244,7 +243,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                                 }
 
                                 if (!focusState.hasFocus){
-
                                     amountTextAsTextFieldValue = TextFieldValue(originalAmountText)
                                     amountText = originalAmountText
                                 }
@@ -310,7 +308,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                     TextField (
                         value = savedAmountTextAsFieldValue,
                         onValueChange = { newText ->
-
                             savedAmountTextAsFieldValue = newText
                             savedAmountText = savedAmountTextAsFieldValue.text
                             hasChanged = true
@@ -326,6 +323,9 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White
                         ),
+                        keyboardOptions = KeyboardOptions (
+                            keyboardType = KeyboardType.Number
+                        ),
                         modifier = Modifier
                             .focusRequester(focusRequester)
                             .onFocusChanged { focusState ->
@@ -338,7 +338,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                                 }
 
                                 if (!focusState.hasFocus){
-
                                     savedAmountTextAsFieldValue = TextFieldValue(originalSavedAmountText)
                                     savedAmountText = originalSavedAmountText
                                 }

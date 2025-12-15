@@ -9,11 +9,9 @@ class HeaderSectionViewModel(private val database: FinanceAppDatabase) : ViewMod
 
     private val internUser = MutableStateFlow("DUMMY")
     val user = internUser.asStateFlow()
-
     fun getUser() {
         internUser.value = database.getUser()
     }
-
     fun updateUser(name: String) {
         database.updateUser(name)
         database.getUser()

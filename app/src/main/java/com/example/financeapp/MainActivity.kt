@@ -45,6 +45,7 @@ import android.content.Context
 import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -456,8 +457,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, context: Context = LocalContext.current) {
 
-    RequestNotificationPermission()
-
     var goalAchieved by remember { mutableStateOf(false) }
 
     Column (
@@ -493,6 +492,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                     onGoalReached = {
                         goalAchieved = true
                     },
+                    goalsSectionViewModel = goalsSectionViewModel,
                     tutorialInformation = tutorialInformation
                 )
 
@@ -541,7 +541,8 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f),
-                        tutorialInformation = tutorialInformation
+                        tutorialInformation = tutorialInformation,
+                        goalsSectionViewModel = goalsSectionViewModel
                     )
 
                     SavedReceiptsSection (
@@ -574,7 +575,7 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        PunchCardSection(
+        PunchCardSection (
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -711,11 +712,16 @@ fun ReceiptsSection(receiptSectionsViewModel: ReceiptSectionsViewModel, context:
 @Composable
 fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
-    SettingsSection(
+    SettingsSection (
         headerSectionViewModel = headerSectionViewModel
     )
 
-    AdSectionLargeBanner(tutorialInformation)
+    Spacer (
+        modifier = Modifier
+            .height(4.dp)
+    )
+
+    AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

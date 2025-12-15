@@ -39,34 +39,21 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
-    val goalprogressSectionViewModel: GoalprogressSectionViewModel = viewModel (
-        factory = object : ViewModelProvider.Factory {
-            override fun<T : ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
-
-                return GoalprogressSectionViewModel(repository) as T
-            }
-        }
-    )
-
-    val currentGoalPercentage by goalprogressSectionViewModel.percentageOfCurrentGoal.collectAsState()
-    val currentGoal by goalprogressSectionViewModel.currentGoal.collectAsState()
-    goalprogressSectionViewModel.getCurrentGoal()
+    val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
+    val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
+    goalsSectionViewModel.getCurrentGoal()
 
     var currentGoalText by remember { mutableStateOf("") }
 
     LaunchedEffect(currentGoal) {
-
         if (currentGoal == null)
             currentGoalText = ""
 
         currentGoal?.let {
             currentGoalText = it.goal
-            goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+            goalsSectionViewModel.calculateCurrentGoalPercentage()
         }
     }
 
@@ -77,7 +64,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
 
         currentGoal?.let {
             currentGoalText = it.goal
-            goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+            goalsSectionViewModel.calculateCurrentGoalPercentage()
         }
     }
 
@@ -109,7 +96,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                     ),
             ) {
 
-
                 EditGoalMenu (
                     expandedEditMenu,
                     goal = currentGoal,
@@ -120,7 +106,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         val updatedCurrentGoal = currentGoal
                         updatedCurrentGoal!!.amount = newAmount
 
-                        goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
+                        goalsSectionViewModel.updateGoal(updatedCurrentGoal)
                     },
                     onSaved = { savedAmount ->
 
@@ -128,14 +114,14 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         val updatedCurrentGoal = currentGoal
                         updatedCurrentGoal!!.saved = newSavedAmount
 
-                        goalprogressSectionViewModel.updateGoal(updatedCurrentGoal)
-                        goalprogressSectionViewModel.calculateCurrentGoalPercentage()
+                        goalsSectionViewModel.updateGoal(updatedCurrentGoal)
+                        goalsSectionViewModel.calculateCurrentGoalPercentage()
 
-                        val goalPercentage = goalprogressSectionViewModel.getCurrentGoalPercentage()
+                        val goalPercentage = goalsSectionViewModel.getCurrentGoalPercentage()
 
                         if (goalPercentage >= 100) {
-                            goalprogressSectionViewModel.setGoalCompleted(updatedCurrentGoal)
-                            goalprogressSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
+                            goalsSectionViewModel.setGoalCompleted(updatedCurrentGoal)
+                            goalsSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
                             onGoalReached()
                         }
                     },
@@ -192,7 +178,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
             SwapCurrentGoalMenu (
                 expanded = expanded,
                 onCurrentGoalChanged = { newText -> currentGoalText = newText },
-                onDissmissRequest = { expanded = false }
+                onDissmissRequest = { expanded = false },
+                goalsSectionViewModel = goalsSectionViewModel
             )
         }
 

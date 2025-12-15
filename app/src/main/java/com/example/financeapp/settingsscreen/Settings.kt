@@ -2,7 +2,6 @@ package com.example.financeapp.settingsscreen
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +15,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,16 +28,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -46,24 +53,33 @@ import com.example.financeapp.header.HeaderSectionViewModel
 import com.example.financeapp.R
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.FeedbackRepository
+import com.example.financeapp.repositories.CurrencyRepository
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.material3.TextButton
 
 @Composable
-fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
+fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current, focusManager: FocusManager = LocalFocusManager.current) {
 
     val settingsViewModel: SettingsViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
             override fun <T: ViewModel> create(modelClass: Class<T>): T {
                 val database = FinanceAppDatabase.getInstance(context)
-                val repository = FeedbackRepository.getInstance(database)
-                return SettingsViewModel(repository) as T
+                val feedbackRepository = FeedbackRepository.getInstance(database)
+                val currencyRepository = CurrencyRepository.getInstance(database)
+                return SettingsViewModel(feedbackRepository, currencyRepository) as T
             }
         }
     )
 
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val user by headerSectionViewModel.user.collectAsState()
     var newUsername by remember { mutableStateOf(user) }
 
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var feedbackTextFieldIsFocused by remember { mutableStateOf(false) }
+    var labelText by remember { mutableStateOf("We love to hear from you! Please let us know how we can improve here ...") }
     var feedbackText by remember { mutableStateOf("") }
     val isFeedbackAlreadySent by settingsViewModel.isFeedbackAlreadySent.collectAsState()
     settingsViewModel.feedbackAlreadySent()
@@ -71,10 +87,22 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
     var textAfterFeedbackButtonClicked by remember { mutableStateOf("Thank you for your feedback!") }
     var isEditingTheName by remember { mutableStateOf(false) }
 
+    val currency by settingsViewModel.currency.collectAsState()
+    settingsViewModel.getCurrency()
+    var newCurrency by remember { mutableStateOf(currency) }
+
+    var isEditingTheCurrency by remember { mutableStateOf(false) }
+
+    LaunchedEffect(feedbackTextFieldIsFocused) {
+        if (feedbackTextFieldIsFocused) {
+            focusRequester.requestFocus()
+        }
+    }
+
     Column (
         modifier = modifier
             .fillMaxWidth()
-            .background(
+            .background (
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -88,7 +116,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .height(100.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
                 .padding(start = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -105,15 +133,12 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 )
             }
 
-            val focusManager = LocalFocusManager.current
-
             Box (
                 modifier = Modifier
                     .weight(0.5f)
                     .padding(start = 4.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-
                 if (isEditingTheName) {
 
                     TextField (
@@ -124,36 +149,37 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background (
+                            .background(
                                 color = Pistachio
                             )
                     )
                 } else {
-                    Text (
+                    Text(
                         text = user,
                         color = Emerald,
                         fontWeight = FontWeight.Normal,
                         fontSize = 32.sp,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .clickable (
+                            .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 isEditingTheName = true
+                                isEditingTheCurrency = false
                             }
                     )
                 }
             }
 
             if (isEditingTheName) {
-                Box (
+                Box(
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    Image (
+                    Image(
                         painter = painterResource(R.drawable.checkhook_foreground),
                         contentDescription = "CheckHook",
                         modifier = Modifier
@@ -175,7 +201,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
         Spacer (
             modifier = Modifier
-                .height(4.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 4.dp)
         )
 
         Row (
@@ -185,17 +211,17 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .height(100.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
                 .padding(start = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
             Box (
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(0.7f)
             ) {
                 Text (
-                    text = "Version Info:",
+                    text = "Currency:",
                     color = Emerald,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
@@ -204,11 +230,119 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
             Box (
                 modifier = Modifier
+                    .padding(end = 8.dp)
+                    .weight(0.5f)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+
+                    },
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                if (isEditingTheCurrency) {
+                    TextField(
+                        value = newCurrency,
+                        onValueChange = {
+                            if (it.length <= 3) {
+                                newCurrency = it
+                                newCurrency = newCurrency.uppercase()
+                            }
+                        },
+                        singleLine = true,
+                        modifier = Modifier
+                            .width(150.dp)
+                            .padding(10.dp)
+                            .background(
+                                color = Pistachio
+                            )
+                    )
+                } else {
+                    Text(
+                        text = currency,
+                        color = Emerald,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 32.sp,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                isEditingTheCurrency = true
+                                isEditingTheName = false
+                            }
+                    )
+                }
+            }
+
+            if (isEditingTheCurrency) {
+                Box(
+                    modifier = Modifier
+                        .weight(0.8f)
+                        .padding(end = 8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.checkhook_foreground),
+                        contentDescription = "CheckHook",
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                if (isEditingTheCurrency) {
+                                    isEditingTheCurrency = false
+
+                                    if (newCurrency.isEmpty())
+                                        return@clickable
+
+                                    settingsViewModel.setCurrency(newCurrency)
+                                    settingsViewModel.getCurrency()
+                                }
+                            }
+                    )
+                }
+            }
+        }
+
+        Spacer (
+            modifier = Modifier
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 4.dp)
+        )
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Pistachio,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
+                .padding(start = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(0.5f)
+            ) {
+                Text(
+                    text = "Version Info:",
+                    color = Emerald,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 32.sp
+                )
+            }
+
+            Box(
+                modifier = Modifier
                     .weight(0.5f)
                     .padding(end = 8.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text (
+                Text(
                     text = "1.0.0.0",
                     color = Emerald,
                     fontWeight = FontWeight.Normal,
@@ -219,15 +353,54 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
         Spacer (
             modifier = Modifier
-                .height(4.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 4.dp)
         )
 
         if (!isFeedbackAlreadySent) {
 
+            if (showErrorDialog) {
+                AlertDialog (
+                    modifier = Modifier
+                        .background (
+                            color = Emerald,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .height(225.dp),
+                    onDismissRequest = {
+                        showErrorDialog = false
+                    },
+                    title = {
+                        Text (
+                            text = "A bit more, please ...",
+                            color = Pistachio
+                        )
+                    },
+                    text = {
+                        Text (
+                            text = "Please give us a little bit more elaborate feedback ... :)",
+                            color = Pistachio
+                        )
+                    },
+                    confirmButton = {
+                        TextButton (
+                            onClick = {
+                                showErrorDialog = false
+                            }
+                        ) {
+                            Text (
+                                text = "Okay",
+                                color = Pistachio
+                            )
+                        }
+                    },
+                    containerColor = Emerald
+                )
+            }
+
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+                    .fillMaxHeight(if (feedbackTextFieldIsFocused) 0.5f else 0.8f)
                     .background(
                         color = Pistachio,
                         shape = RoundedCornerShape(12.dp)
@@ -235,19 +408,17 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     .height(100.dp)
                     .padding(start = 12.dp, top = 12.dp)
             ) {
-                Box(
+                Box (
                     modifier = Modifier
                         .weight(0.1f)
                 ) {
-                    Text(
+                    Text (
                         text = "Feedback",
                         color = Emerald,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 32.sp
                     )
                 }
-
-                var labelText by remember { mutableStateOf("We love to hear from you! Please let us know how we can improve here ...") }
 
                 OutlinedTextField (
                     value = feedbackText,
@@ -267,43 +438,93 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         .background(
                             color = Pistachio
                         )
+                        .onFocusChanged { focusState ->
+                            if (focusState.isFocused) {
+                                isEditingTheName = false
+                                isEditingTheCurrency = false
+                                feedbackTextFieldIsFocused = true
+                            }
+                        }
                 )
 
-                Box (
+                Row (
                     modifier = Modifier
-                        .weight(0.1f)
-                        .padding(end = 12.dp)
-                        .background(
-                            color = Emerald,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .border(
-                            color = Pistachio,
-                            width = 2.dp,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .height(40.dp)
-                        .width(120.dp)
-                        .align(Alignment.End)
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            settingsViewModel.sendFeedback(user, feedbackText)
-
-                            labelText = ""
-                            feedbackText = ""
-                        },
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = "Send",
-                        fontSize = 18.sp,
-                        color = Pistachio,
-                        fontStyle = FontStyle.Italic,
+                    Box (
                         modifier = Modifier
-                            .padding(start = 12.dp, end = 12.dp)
-                    )
+                            .padding(end = 2.dp)
+                            .background(
+                                color = Emerald,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .border(
+                                color = Pistachio,
+                                width = 2.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .height(40.dp)
+                            .width(120.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "Dismiss",
+                            fontSize = 18.sp,
+                            color = Pistachio,
+                            fontStyle = FontStyle.Italic,
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clickable (
+                                ) {
+                                    feedbackTextFieldIsFocused = false
+                                    feedbackText = ""
+                                    focusManager.clearFocus()
+                                }
+                        )
+                    }
+
+                    Box (
+                        modifier = Modifier
+                            .padding(end = 12.dp)
+                            .background (
+                                color = Emerald,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .border (
+                                color = Pistachio,
+                                width = 2.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .height(40.dp)
+                            .width(120.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        var sendButtonText by remember { mutableStateOf("Send") }
+
+                        Text (
+                            text = sendButtonText,
+                            fontSize = 18.sp,
+                            color = Pistachio,
+                            fontStyle = FontStyle.Italic,
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clickable (
+                                ) {
+                                    if (feedbackText.isEmpty() || feedbackText.length < 10) {
+                                        showErrorDialog = true
+                                        return@clickable
+                                    }
+
+                                    sendButtonText = "Wait"
+                                    settingsViewModel.sendFeedback(user, feedbackText)
+                                    feedbackTextFieldIsFocused = false
+                                    sendButtonText = "Send"
+                                    keyboardController?.hide()
+                                }
+                        )
+                    }
                 }
             }
         } else {

@@ -39,6 +39,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import com.example.financeapp.R
 import com.example.financeapp.database.FinanceAppDatabase
@@ -55,17 +57,9 @@ import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
-fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, context: Context = LocalContext.current) {
+fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
 
-    val addNewGoalMenuViewModel: AddNewGoalMenuViewModel = viewModel (
-        factory = object : ViewModelProvider.Factory {
-            override fun<T : ViewModel> create(modelClass: Class<T>): T {
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
-                return AddNewGoalMenuViewModel(repository) as T
-            }
-        }
-    )
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var errorInInput by remember { mutableStateOf(false) }
     var nameOfGoalText by remember { mutableStateOf("") }
@@ -216,18 +210,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .height(24.dp)
                 )
 
-                var tokenIdentifier by remember { mutableStateOf(3) }
-                var tokenText by remember { mutableStateOf("") }
-
-                tokenText = when (tokenIdentifier) {
-
-                    0 -> "One token: Baby steps get you there."
-                    1 -> "Two tokens: Just a little goal."
-                    2 -> "Three tokens: Something to strive for."
-                    3 -> "Four tokens: A true achievement."
-                    4 -> "Five tokens: Extraordinary!"
-                    else -> ""
-                }
+                var tokenIdentifier by remember { mutableIntStateOf(2) }
 
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
@@ -378,8 +361,21 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
                             if (!nameOfGoalText.isEmpty() && amount > 0.0f && !errorInInput) {
 
+                                keyboardController?.hide()
+
+                                val amountOfTokens: Int = when (tokenIdentifier) {
+                                    0 -> 1
+                                    1 -> 2
+                                    2 -> 3
+                                    3 -> 4
+                                    4 -> 5
+                                    else -> 1
+                                }
+
                                 confirmed = true
-                                addNewGoalMenuViewModel.newGoalAdded(nameOfGoalText, amount, "InProgress")
+                                goalsSectionViewModel.insertGoal(nameOfGoalText, amount, "InProgress", amountOfTokens = amountOfTokens)
+                                goalsSectionViewModel.getCurrentGoal() //update für die GoalProgressSection
+                                goalsSectionViewModel.reloadGoals()
 
                                 amount = 0.0f
                                 nameOfGoalText = ""
@@ -408,6 +404,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     }
 
                     LaunchedEffect (feedbackTrigger) {
+                        keyboardController?.hide()
+
                         delay (3000)
                         errorInInput = false
                         errorMessage = null

@@ -1,35 +1,100 @@
 package com.example.financeapp.homescreen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.financeapp.database.Goal
 import com.example.financeapp.repositories.GoalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel() {
-
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
 
-    fun insertGoal(goal: Goal) {
-        repository.insertGoal(goal)
-        reloadGoals()
-    }
+    private val internCompletedGoals = MutableStateFlow<List<Goal>>(emptyList())
+    val completedGoals = internCompletedGoals.asStateFlow()
 
-    fun insertExampleGoals() {
+    private val internPercentageOfCurrentGoal = MutableStateFlow<Int>(0)
+    val percentageOfCurrentGoal = internPercentageOfCurrentGoal.asStateFlow()
 
+    private val internCurrentGoal = MutableStateFlow<Goal?>(null)
+    val currentGoal = internCurrentGoal.asStateFlow()
+
+    fun getExampleGoals() {
         val exampleGoals = listOf (
-            Goal(1, "my awesome goal", 1100.0f, 100.50f, 1, "May 09, 2024", 3),
-            Goal(2, "example goal #2", 12.0f, 4.0f, 2, "May 12, 2024", 5),
-            Goal(3, "pay the Loch Ness Monster", 3.50f, 0.10f, 1, "April 17, 2024", 1),
+            Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5),
+            Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2),
+            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4)
         )
 
-        internGoals.value = exampleGoals
+        internCompletedGoals.value = exampleGoals
+    }
+    fun getCompletedGoals() {
+        internCompletedGoals.value = repository.getCompletedGoals()
+    }
+    fun getCurrentGoalPercentage(): Int {
+        return internPercentageOfCurrentGoal.value
+    }
+    fun calculateCurrentGoalPercentage() {
+        val goal = internCurrentGoal.value
+
+        if (goal != null && goal.amount != 0.0f) {
+
+            val zaehler = goal.saved
+            val nenner = goal.amount
+            val result = ((zaehler / nenner) * 100).toInt()
+
+            internPercentageOfCurrentGoal.value = when {
+                result >= 100 -> 100
+                result <= 0 -> 0
+                else -> result
+            }
+
+            when (internPercentageOfCurrentGoal.value) {
+                100 -> {
+                    setGoalCompleted(goal)
+                }
+            }
+        }
+    }
+    fun getCurrentGoal() {
+        val result = repository.getCurrentGoal()
+
+        if (result == null) {
+            reloadGoals()
+
+            if (internGoals.value.isNotEmpty()) {
+                internCurrentGoal.value = internGoals.value.first()
+            } else {
+                internCurrentGoal.value = null
+            }
+
+            return
+        }
+
+        internCurrentGoal.value = result
+    }
+    fun updateGoal(goal: Goal) {
+        repository.updateGoal(goal)
+    }
+    fun setGoalCompleted(goal: Goal) {
+        repository.setGoalCompleted(goal)
+    }
+
+    fun addToTotalTokensEarned(amount: Int) {
+        repository.addToTotalTokensEarned(amount)
+    }
+
+    fun insertGoal(goal: String, amount: Float, statusDescription: String, amountOfTokens: Int) {
+        repository.insertGoal(goal, amount, 0f, statusDescription, amountOfTokens)
+    }
+
+    fun setCurrentGoal(goal: Goal) {
+        repository.setCurrentGoal(goal)
     }
 
     fun reloadGoals() {
-
-        val result = repository.getInProgressGoals()
-        internGoals.value = result
+        internGoals.value = repository.getInProgressGoals()
     }
 }

@@ -46,6 +46,10 @@ class QuoteRepository private constructor(val database: FinanceAppDatabase) {
         }
     }
 
+    fun hasError(): Boolean {
+        return client.hasError
+    }
+
     fun getLikedQuotes(): List<Quote> {
         return database.getAllQuotes()
     }
