@@ -38,4 +38,16 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
     fun resetReceiptsTutorialDone() {
         repository.resetReceiptsTutorialDone()
     }
+
+    fun getGoalHistoryTutorialDone(): Boolean {
+        return repository.getGoalHistoryTutorialDone()
+    }
+
+    fun setGoalHistoryTutorialDone() {
+        repository.setGoalHistoryTutorialDone()
+    }
+
+    fun resetGoalHistoryTutorialDone() {
+        repository.resetGoalHistoryTutorialDone()
+    }
 }

@@ -44,12 +44,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.R
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 
 @Composable
-fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val punchCardSectionViewModel: PunchCardSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -71,7 +74,6 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
     val isPunchcardFull = tokenSoFar >= 15
 
     if (isPunchcardFull) { //15 token sind in der punchardsection zu sehen
-
         val spareToken = tokenSoFar - 15
 
         Column (
@@ -195,6 +197,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, context: Context = LocalCont
 
         Column (
             modifier = modifier
+                .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_PUNCHCARD) 0.1f else 1.0f)
                 .background (
                     color = Pistachio,
                     shape = RoundedCornerShape(12.dp)

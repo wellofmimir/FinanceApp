@@ -18,21 +18,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, context: Context = LocalContext.current) {
+fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val goals by totalGoalsAchievedSectionViewModel.goals.collectAsState()
     totalGoalsAchievedSectionViewModel.getCompletedGoals()
 
     Box (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_TOTAL_GOALS) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)

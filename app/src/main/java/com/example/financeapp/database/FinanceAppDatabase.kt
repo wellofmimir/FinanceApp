@@ -109,6 +109,22 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
+    fun getGoalHistoryTutorialDone(): Boolean {
+        return tutorialPreferences.getBoolean("goalHistoryTutorialDone", false)
+    }
+
+    fun setGoalHistoryTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("goalHistoryTutorialDone", true)
+        }
+    }
+
+    fun resetGoalHistoryTutorialDone() {
+        tutorialPreferences.edit {
+            putBoolean("goalHistoryTutorialDone", false)
+        }
+    }
+
     fun setHomeScreenTutorialDone() {
         tutorialPreferences.edit {
             putBoolean("homeScreenTutorialDone", true)

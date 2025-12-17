@@ -28,12 +28,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.GoalRepository
 
 @Composable
-fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val achievementsSectionViewModel: AchievementsSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -52,6 +55,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, context: Context = LocalC
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_ACHIEVEMENTS) 0.1f else 1.0f)
             .background (
                 color = Pistachio,
                 shape = RoundedCornerShape(12.dp)

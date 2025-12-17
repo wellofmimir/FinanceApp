@@ -114,7 +114,12 @@ enum class TutorialStep (id: Int) {
     RECEIPTS_LOG_SECTION(11),
     RECEIPTS_TAKE_PICTURE(12),
     RECEIPTS_END(13),
-    GOALS_START (14)
+    GOALS_START (14),
+    GOALS_PUNCHCARD (15),
+    GOALS_TOTAL_GOALS (16),
+    GOALS_TOTAL_TOKENS (17),
+    GOALS_ACHIEVEMENTS (18),
+    GOALS_END (19)
 }
 
 data class TutorialInformation (
@@ -242,7 +247,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                             if (tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
-                                tutorialInformation = tutorialInformation.copy(
+                                tutorialInformation = tutorialInformation.copy (
                                     isActive = false,
                                     tutorialStep = TutorialStep.RECEIPTS_START
                                 )
@@ -251,33 +256,59 @@ class MainActivity : ComponentActivity() {
                             }
                         } else if (sectionIdentifier == Screen.RECEIPTS) {
 
-                            if (!mainActivityViewModel.getReceiptsTutorialDone()) {
+                            if (mainActivityViewModel.getReceiptsTutorialDone())
+                                return@clickable
 
-                                //Das ist hier, um den User zu zwingen, während des Tutorials in der ReceiptsSection -> AverageSpentSection
-                                //auch wirklich ein Bild von einem Receipt aufzunehmen :D -> Das stärkt die Retention
+                            //Das ist hier, um den User zu zwingen, während des Tutorials in der ReceiptsSection -> AverageSpentSection
+                            //auch wirklich ein Bild von einem Receipt aufzunehmen :D -> Das stärkt die Retention
 
-                                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE)
-                                    return@clickable
+                            if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE)
+                                return@clickable
 
+                            tutorialInformation = tutorialInformation.copy (
+                                isActive = true,
+                                tutorialStep = when (tutorialInformation.tutorialStep) {
+                                    TutorialStep.RECEIPTS_START -> TutorialStep.RECEIPTS_TAKE_PICTURE
+                                    TutorialStep.RECEIPTS_TAKE_PICTURE -> TutorialStep.RECEIPTS_LOG_SECTION
+                                    TutorialStep.RECEIPTS_LOG_SECTION -> TutorialStep.RECEIPTS_SUM_SECTION
+                                    TutorialStep.RECEIPTS_SUM_SECTION -> TutorialStep.RECEIPTS_END
+                                    else -> TutorialStep.RECEIPTS_START
+                                }
+                            )
+
+                            if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_END) {
                                 tutorialInformation = tutorialInformation.copy (
-                                    isActive = true,
-                                    tutorialStep = when (tutorialInformation.tutorialStep) {
-                                        TutorialStep.RECEIPTS_START -> TutorialStep.RECEIPTS_TAKE_PICTURE
-                                        TutorialStep.RECEIPTS_TAKE_PICTURE -> TutorialStep.RECEIPTS_LOG_SECTION
-                                        TutorialStep.RECEIPTS_LOG_SECTION -> TutorialStep.RECEIPTS_SUM_SECTION
-                                        TutorialStep.RECEIPTS_SUM_SECTION -> TutorialStep.RECEIPTS_END
-                                        else -> TutorialStep.RECEIPTS_START
-                                    }
+                                    isActive = false,
+                                    tutorialStep = TutorialStep.GOALS_START
                                 )
 
-                                if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_END) {
-                                    tutorialInformation = tutorialInformation.copy (
-                                        isActive = false,
-                                        tutorialStep = TutorialStep.GOALS_START
-                                    )
+                                mainActivityViewModel.setReceiptsTutorialDone()
+                            }
 
-                                    mainActivityViewModel.setReceiptsTutorialDone()
+                        } else if (sectionIdentifier == Screen.GOALHISTORY) {
+
+                            if (mainActivityViewModel.getGoalHistoryTutorialDone())
+                                return@clickable
+
+                            tutorialInformation = tutorialInformation.copy (
+                                isActive = true,
+                                tutorialStep = when (tutorialInformation.tutorialStep) {
+                                    TutorialStep.GOALS_START -> TutorialStep.GOALS_PUNCHCARD
+                                    TutorialStep.GOALS_PUNCHCARD -> TutorialStep.GOALS_TOTAL_GOALS
+                                    TutorialStep.GOALS_TOTAL_GOALS -> TutorialStep.GOALS_TOTAL_TOKENS
+                                    TutorialStep.GOALS_TOTAL_TOKENS -> TutorialStep.GOALS_ACHIEVEMENTS
+                                    TutorialStep.GOALS_ACHIEVEMENTS -> TutorialStep.GOALS_END
+                                    else -> TutorialStep.GOALS_START
                                 }
+                            )
+
+                            if (tutorialInformation.tutorialStep == TutorialStep.GOALS_END) {
+                                tutorialInformation = tutorialInformation.copy (
+                                    isActive = false,
+                                    tutorialStep = TutorialStep.GOALS_START
+                                )
+
+                                mainActivityViewModel.setGoalHistoryTutorialDone()
                             }
                         }
                     }
@@ -347,7 +378,9 @@ class MainActivity : ComponentActivity() {
 
                 if (sectionIdentifier == Screen.GOALHISTORY)
                     GoalHistorySection (
-                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                        mainActivityViewModel = mainActivityViewModel,
+                        tutorialInformation = tutorialInformation
                     )
 
                 if (sectionIdentifier == Screen.RECEIPTS)
@@ -359,6 +392,7 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         receiptSectionsViewModel = receiptSectionsViewModel,
+                        mainActivityViewModel = mainActivityViewModel,
                         tutorialInformation = tutorialInformation
                     )
 
@@ -586,7 +620,7 @@ class MainActivity : ComponentActivity() {
                     Box (
                         modifier = Modifier
                             .fillMaxSize(),
-                        contentAlignment = Alignment.TopStart
+                        contentAlignment = Alignment.TopCenter
                     ) {
                         Column (
                             verticalArrangement = Arrangement.Center,
@@ -599,6 +633,116 @@ class MainActivity : ComponentActivity() {
 
                             Text (
                                 text = "Just scroll down when you need to revisit one of your receipts.",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            } else if (sectionIdentifier == Screen.GOALHISTORY) {
+
+                if (!mainActivityViewModel.getGoalHistoryTutorialDone() && !tutorialInformation.isActive) {
+                    tutorialInformation = tutorialInformation.copy (
+                        isActive = true,
+                        tutorialStep = TutorialStep.GOALS_START
+                    )
+                }
+
+                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_START) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Welcome to your goal overview space!",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_PUNCHCARD) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                         ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(75.dp)
+                            )
+
+                            Text (
+                                text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_GOALS) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "The more goals the better ;)",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_TOKENS) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer (
+                                modifier = Modifier
+                                    .height(275.dp)
+                            )
+
+                            Text (
+                                text = "The more token the better, too!",
+                                fontSize = 24.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_ACHIEVEMENTS) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text (
+                                text = "Remind yourself from time to time about your achievements and successes!",
                                 fontSize = 24.sp,
                                 color = Color.White,
                                 textAlign = TextAlign.Center
@@ -722,7 +866,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
 }
 
 @Composable
-fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel) {
+fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation) {
 
     Row (
         modifier = Modifier
@@ -734,7 +878,8 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
         PunchCardSection (
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            tutorialInformation = tutorialInformation
         )
 
         Column (
@@ -748,14 +893,16 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                tutorialInformation = tutorialInformation
             )
 
             TotalTokensEarnedSection (
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel
+                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                tutorialInformation = tutorialInformation
             )
         }
     }
@@ -768,7 +915,8 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
     AchievementsSection (
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.75f)
+            .fillMaxHeight(0.75f),
+        tutorialInformation = tutorialInformation
     )
 
     Spacer (
@@ -785,7 +933,7 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
 }
 
 @Composable
-fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
@@ -793,19 +941,24 @@ fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: Receipt
 
     LaunchedEffect(receiptAdded) {
         activity?.let {
-            if (receiptAdded) {
-                 if (!receiptSectionsViewModel.interstitialAdAfterReceiptSeen()) {
-                    InterstitialAdManager.instance.showInterstitial(
-                        activity = it,
-                        onAdClosed = {
-                            receiptAdded = false
-                            receiptSectionsViewModel.setInterstitialAdAfterReceiptSeen()
-                        },
-                        onAdFailed = {
-                        }
-                    )
+            if (!receiptAdded)
+                return@LaunchedEffect
+
+            if (!mainActivityViewModel.getReceiptsTutorialDone())
+                return@LaunchedEffect
+
+            if (receiptSectionsViewModel.interstitialAdAfterReceiptSeen())
+                return@LaunchedEffect
+
+            InterstitialAdManager.instance.showInterstitial(
+                activity = it,
+                onAdClosed = {
+                    receiptAdded = false
+                    receiptSectionsViewModel.setInterstitialAdAfterReceiptSeen()
+                },
+                onAdFailed = {
                 }
-            }
+            )
         }
     }
 
