@@ -43,8 +43,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import android.content.Context
 import android.icu.util.Calendar
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -59,6 +61,7 @@ import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewMod
 import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
 import com.example.financeapp.header.HeaderSection
 import com.example.financeapp.header.HeaderSectionViewModel
+import com.example.financeapp.homescreen.DailyTipSection
 import com.example.financeapp.homescreen.GoalprogressSection
 import com.example.financeapp.homescreen.GoalsSection
 import com.example.financeapp.homescreen.GoalsSectionViewModel
@@ -82,6 +85,7 @@ import com.example.financeapp.settingsscreen.SettingsSection
 import com.example.financeapp.welcomescreen.WelcomeScreen
 import java.util.concurrent.TimeUnit
 import com.example.financeapp.repositories.AdRepository
+import com.example.financeapp.ui.theme.Pistachio
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -754,6 +758,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, context: Context = LocalContext.current) {
 
@@ -831,6 +836,16 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                         .padding(2.dp)
                 )
 
+                DailyTipSection (
+                    modifier = Modifier
+                        .weight(0.5f)
+                )
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(2.dp)
+                )
+
                 Row (
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -883,28 +898,58 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
         )
 
         Column (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TotalGoalsAchievedSection (
+            Row (
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                TotalGoalsAchievedSection (
+                    modifier = Modifier
+                        .weight(1f),
+                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                    tutorialInformation = tutorialInformation
+                )
+
+                TotalTokensEarnedSection (
+                    modifier = Modifier
+                        .weight(1f),
+                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                    tutorialInformation = tutorialInformation
+                )
+            }
+
+            Spacer (
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                tutorialInformation = tutorialInformation
+                    .padding(2.dp)
             )
 
-            TotalTokensEarnedSection (
+            Box (
                 modifier = Modifier
+                    .fillMaxSize()
                     .weight(1f)
-                    .fillMaxWidth(),
-                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                tutorialInformation = tutorialInformation
-            )
+                    .background (
+                        color = Emerald,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .border (
+                        color = Pistachio,
+                        width = 4.dp,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text (
+                    text = "photo memory random\ntreat pic cycle",
+                    color = Pistachio,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
+
     }
 
     Spacer (
@@ -925,10 +970,7 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
     )
 
     AdSectionLargeBanner (
-        tutorialInformation = TutorialInformation (
-            isActive = false,
-            tutorialStep = TutorialStep.HOMESCREEN_END
-        )
+        tutorialInformation = tutorialInformation
     )
 }
 
@@ -1016,10 +1058,7 @@ fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: Receipt
         )
 
         AdSectionLargeBanner (
-            tutorialInformation = TutorialInformation(
-                isActive = false,
-                tutorialStep = TutorialStep.HOMESCREEN_END
-            )
+            tutorialInformation = tutorialInformation
         )
     }
 }
@@ -1036,22 +1075,6 @@ fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInfor
     )
 
     AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun RequestNotificationPermission() {
-
-    if (Build.VERSION.SDK_INT < 33)
-        return
-
-    val permissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
-
-    LaunchedEffect(Unit) {
-        if (!permissionState.status.isGranted) {
-            permissionState.launchPermissionRequest()
-        }
-    }
 }
 
 fun scheduleDailyReminderMeWorker(context: Context) {

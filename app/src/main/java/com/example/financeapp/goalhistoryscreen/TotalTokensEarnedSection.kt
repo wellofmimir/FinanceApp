@@ -49,9 +49,9 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
             )
 
             Text (
-                text = "total tokens earned",
+                text = "lifetime tokens",
                 textAlign = TextAlign.Center,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Emerald
             )

@@ -58,11 +58,10 @@ fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedS
             Text (
                 text = "total goals achieved",
                 textAlign = TextAlign.Center,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Emerald
             )
         }
-
     }
 }

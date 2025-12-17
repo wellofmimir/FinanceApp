@@ -14,10 +14,11 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 @Composable
-fun AdSectionFullBanner(modifier: Modifier = Modifier) {
+fun AdSectionFullBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
 
     AndroidView (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .fillMaxWidth()
             .height(50.dp),
         factory = { context ->

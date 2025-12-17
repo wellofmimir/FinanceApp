@@ -81,6 +81,7 @@ import java.time.ZoneId
 import java.util.Locale
 import android.media.ExifInterface
 import android.graphics.Matrix
+import android.os.Build
 import androidx.compose.ui.draw.alpha
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
@@ -133,7 +134,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
     var takePhotoButtonText by remember { mutableStateOf("Take a photo") }
     var insertSuccessful = receiptSectionsViewModel.insertState.collectAsState()
 
-    var remindMeCheckboxChecked by remember { mutableStateOf(false) }
+    var remindMeCheckboxChecked by remember { mutableStateOf(true) }
     var showDatepickerDialog by remember { mutableStateOf(false) }
     var selectedDate by remember {mutableStateOf<String>("")}
 
@@ -218,6 +219,18 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
         } else {
             Toast.makeText(context, "Permission for camera needed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult (
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            Toast.makeText(context, "Notification permission granted!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "We can't remind you without permission :(", Toast.LENGTH_SHORT).show()
+        }
+
+        permissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
     DropdownMenu (
@@ -466,7 +479,9 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                             photoCanBeTaken = true
                         }
 
-                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                        if (Build.VERSION.SDK_INT >= 33)
+                            notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+
                     },
                     colors = ButtonDefaults.buttonColors (
                         containerColor = Pistachio,

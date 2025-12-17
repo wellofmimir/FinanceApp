@@ -1,11 +1,13 @@
 package com.example.financeapp
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.financeapp.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+
 
 class MainActivityViewModel(private val repository: UserRepository): ViewModel() {
     private var internUser = MutableStateFlow<String>("")
