@@ -1082,7 +1082,7 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                                 0.0f,
                                 1,
                                 "",
-                                tokenCount
+                                tokenCount + 1
                             )
                         )
                         welcomeScreenViewModel.setCurrency(currency = chosenCurrency)
