@@ -37,16 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
-import android.os.Build
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import android.content.Context
 import android.icu.util.Calendar
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -68,6 +63,7 @@ import com.example.financeapp.homescreen.GoalsSectionViewModel
 import com.example.financeapp.homescreen.QuoteSection
 import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
 import com.example.financeapp.homescreen.SavedReceiptsSection
+import com.example.financeapp.homescreen.TokenBanner
 import com.example.financeapp.homescreen.WellDoneSection
 import com.example.financeapp.likedquotes.LikedQuotesSection
 import com.example.financeapp.notifications.QuotePollingWorker
@@ -869,6 +865,17 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                         tutorialInformation = tutorialInformation
                     )
                 }
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(2.dp)
+                )
+
+                TokenBanner (
+                    modifier = Modifier
+                        .weight(0.5f),
+                    goalsSectionViewModel = goalsSectionViewModel,
+                    tutorialInformation = tutorialInformation)
 
                 AdSectionMiddleBanner (
                     modifier = Modifier
