@@ -19,10 +19,13 @@ import androidx.compose.ui.unit.sp
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, tutorialInformation: TutorialInformation) {
+
+    val colors = LocalAppColors.current
 
     val totalTokensEarned by totalGoalsAchievedSectionViewModel.totalTokensEarned.collectAsState()
     totalGoalsAchievedSectionViewModel.getTotalTokensEarned()
@@ -31,7 +34,7 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_TOTAL_TOKENS) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         contentAlignment = Alignment.Center
@@ -45,7 +48,7 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
                 textAlign = TextAlign.Center,
                 fontSize = 128.sp,
                 fontWeight = FontWeight.Bold,
-                color = Emerald
+                color = colors.textPrimary
             )
 
             Text (
@@ -53,7 +56,7 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Emerald
+                color = colors.textPrimary
             )
         }
     }

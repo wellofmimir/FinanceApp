@@ -27,7 +27,6 @@ fun DreiPunkteMenu(expanded: Boolean,
                    onGoalHistoryClicked: () -> Unit,
                    onYourQuotesClicked: () -> Unit,
                    onReceiptsClicked: () -> Unit,
-                   onAboutUsClicked: () -> Unit,
                    onSettingsClicked:() -> Unit) {
 
     DropdownMenu (

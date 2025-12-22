@@ -1,4 +1,8 @@
 package com.example.financeapp.header
+import com.example.financeapp.R
+import com.example.financeapp.Screen
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.ui.theme.Emerald
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -28,17 +32,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
-import com.example.financeapp.header.HeaderSectionViewModel
-import com.example.financeapp.R
-import com.example.financeapp.Screen
-import com.example.financeapp.TutorialInformation
-import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation: TutorialInformation, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
+fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: Int, tutorialInformation: TutorialInformation, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -46,18 +48,18 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
 
     headerSectionViewModel.getUser()
     val username = headerSectionViewModel.user.collectAsState()
-
     var headerText by remember { mutableStateOf("Test") }
-    var sectionIdentifier by remember { mutableStateOf(0) }
 
     headerText = when (sectionIdentifier) {
 
         0 -> "Hey ${username.value}, what's up?"
         1 -> "Your Liked Quotes"
         2 -> "Goals Completed"
-        3 -> "Saved Receipts"
+        3 -> "Goals Completed"
+        5 -> "Saved Receipts"
         4 -> "About Greeen"
         7 -> "Settings"
+        8 -> "Shop"
         else -> "Welcome!"
     }
 
@@ -66,7 +68,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
             .fillMaxWidth()
             .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -82,7 +84,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
 
         Text (
             text = formattedDate,
-            color = Emerald,
+            color = colors.textPrimary,
             fontSize = 16.sp,
             fontFamily = FontFamily.SansSerif
         )
@@ -100,7 +102,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
             ) {
                 Text (
                     text = headerText,
-                    color = Emerald,
+                    color = colors.textPrimary,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -115,7 +117,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                 Image (
                     painter = painterResource(R.drawable.punktemenu_foreground),
                     contentDescription = "Punktemenu",
-                    colorFilter = ColorFilter.tint(Emerald),
+                    colorFilter = ColorFilter.tint(colors.background),
                     modifier = Modifier
                         .height(40.dp)
                         .clickable (
@@ -129,38 +131,28 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, tutorialInformation:
                         }
                 )
 
-                DreiPunkteMenu(
+                DreiPunkteMenu (
                     expanded = expanded,
                     onDismissRequested = {
                         expanded = false
                     },
                     onOverviewClicked = {
-                        sectionIdentifier = 0
                         onNewSectionIdentifier(Screen.HOME)
                         expanded = false
                     },
                     onGoalHistoryClicked = {
-                        sectionIdentifier = 2
                         onNewSectionIdentifier(Screen.GOALHISTORY)
                         expanded = false
                     },
                     onYourQuotesClicked = {
-                        sectionIdentifier = 1
                         onNewSectionIdentifier(Screen.LIKEDQUOTES)
                         expanded = false
                     },
                     onReceiptsClicked = {
-                        sectionIdentifier = 3
                         onNewSectionIdentifier(Screen.RECEIPTS)
                         expanded = false
                     },
-                    onAboutUsClicked = {
-                        sectionIdentifier = 4
-                        onNewSectionIdentifier(Screen.ABOUT_US)
-                        expanded = false
-                    },
                     onSettingsClicked = {
-                        sectionIdentifier = 7
                         onNewSectionIdentifier(Screen.USER_SETTINGS)
                         expanded = false
                     }

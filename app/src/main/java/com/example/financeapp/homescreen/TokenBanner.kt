@@ -23,9 +23,12 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
     goalsSectionViewModel.getCurrentGoal()
@@ -34,7 +37,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
         modifier = modifier
             .fillMaxWidth()
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding (
@@ -61,7 +64,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
                     val radius = size.minDimension / 2 - strokePx / 2
 
                     drawCircle (
-                        color = Emerald,
+                        color = colors.background,
                         radius = radius,
                         style = if (i <= tokenIdentifier) Fill else Stroke(strokePx)
                     )

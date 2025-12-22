@@ -1,4 +1,42 @@
 package com.example.financeapp
+import com.example.financeapp.advertisement.AdSectionLargeBanner
+import com.example.financeapp.advertisement.AdSectionMiddleBanner
+import com.example.financeapp.advertisement.InterstitialAdManager
+import com.example.financeapp.database.FinanceAppDatabase
+import com.example.financeapp.goalhistoryscreen.AchievementsSection
+import com.example.financeapp.goalhistoryscreen.PunchCardSection
+import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
+import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewModel
+import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
+import com.example.financeapp.homescreen.ShopSection
+import com.example.financeapp.header.HeaderSection
+import com.example.financeapp.header.HeaderSectionViewModel
+import com.example.financeapp.homescreen.DailyTipSection
+import com.example.financeapp.homescreen.GoalprogressSection
+import com.example.financeapp.homescreen.GoalsSection
+import com.example.financeapp.homescreen.GoalsSectionViewModel
+import com.example.financeapp.homescreen.QuoteSection
+import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
+import com.example.financeapp.homescreen.SavedReceiptsSection
+import com.example.financeapp.homescreen.TokenBanner
+import com.example.financeapp.homescreen.WellDoneSection
+import com.example.financeapp.likedquotes.LikedQuotesSection
+import com.example.financeapp.notifications.QuotePollingWorker
+import com.example.financeapp.notifications.ReceiptReminderPollingWorker
+import com.example.financeapp.receiptsscreen.AverageSpentSection
+import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
+import com.example.financeapp.receiptsscreen.ReceiptLogSection
+import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
+import com.example.financeapp.receiptsscreen.SinceWhenSection
+import com.example.financeapp.receiptsscreen.Timespan
+import com.example.financeapp.repositories.GoalRepository
+import com.example.financeapp.repositories.ReceiptRepository
+import com.example.financeapp.repositories.UserRepository
+import com.example.financeapp.settingsscreen.SettingsSection
+import com.example.financeapp.welcomescreen.WelcomeScreen
+import com.example.financeapp.repositories.AdRepository
+import com.example.financeapp.ui.theme.Pistachio
+import com.example.financeapp.ui.theme.Emerald
 
 import android.app.Activity
 import android.app.NotificationChannel
@@ -17,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
-import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,43 +82,15 @@ import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.financeapp.advertisement.AdSectionLargeBanner
-import com.example.financeapp.advertisement.AdSectionMiddleBanner
-import com.example.financeapp.advertisement.InterstitialAdManager
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.goalhistoryscreen.AchievementsSection
-import com.example.financeapp.goalhistoryscreen.PunchCardSection
-import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
-import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewModel
-import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
-import com.example.financeapp.header.HeaderSection
-import com.example.financeapp.header.HeaderSectionViewModel
-import com.example.financeapp.homescreen.DailyTipSection
-import com.example.financeapp.homescreen.GoalprogressSection
-import com.example.financeapp.homescreen.GoalsSection
-import com.example.financeapp.homescreen.GoalsSectionViewModel
-import com.example.financeapp.homescreen.QuoteSection
-import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
-import com.example.financeapp.homescreen.SavedReceiptsSection
-import com.example.financeapp.homescreen.TokenBanner
-import com.example.financeapp.homescreen.WellDoneSection
-import com.example.financeapp.likedquotes.LikedQuotesSection
-import com.example.financeapp.notifications.QuotePollingWorker
-import com.example.financeapp.notifications.ReceiptReminderPollingWorker
-import com.example.financeapp.receiptsscreen.AverageSpentSection
-import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
-import com.example.financeapp.receiptsscreen.ReceiptLogSection
-import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
-import com.example.financeapp.receiptsscreen.SinceWhenSection
-import com.example.financeapp.receiptsscreen.Timespan
-import com.example.financeapp.repositories.GoalRepository
-import com.example.financeapp.repositories.ReceiptRepository
-import com.example.financeapp.repositories.UserRepository
-import com.example.financeapp.settingsscreen.SettingsSection
-import com.example.financeapp.welcomescreen.WelcomeScreen
+import com.example.financeapp.shopscreen.ThemeShopIntroSection
+import com.example.financeapp.shopscreen.ThemeShopSection
+import com.example.financeapp.ui.theme.CharcoalAppColors
+import com.example.financeapp.ui.theme.FinanceAppTheme
+import com.example.financeapp.ui.theme.GreenAppColors
+import com.example.financeapp.ui.theme.LocalAppColors
+
 import java.util.concurrent.TimeUnit
-import com.example.financeapp.repositories.AdRepository
-import com.example.financeapp.ui.theme.Pistachio
+
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -93,7 +102,9 @@ enum class Screen (id: Int) {
 
     ABOUT_US(6),
 
-    USER_SETTINGS(id = 7)
+    USER_SETTINGS(id = 7),
+
+    SHOP (id = 8)
 }
 
 enum class TutorialStep (id: Int) {
@@ -134,619 +145,635 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            MobileAds.initialize(this)
-            InterstitialAdManager.instance.initialize(this)
-            InterstitialAdManager.instance.loadInterstitial(this)
-
-            var context = LocalContext.current
-            scheduleDailyQuoteWorker(context)
-            scheduleDailyReminderMeWorker(context)
-
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel("receipts", "Receipt", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel("reminders", "Reminders", NotificationManager.IMPORTANCE_HIGH))
-
-            val mainActivityViewModel: MainActivityViewModel = viewModel (
-                factory = object: ViewModelProvider.Factory {
-                    override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                        val database = FinanceAppDatabase.getInstance(context)
-                        val repository = UserRepository(database)
-
-                        return MainActivityViewModel(repository) as T
-                    }
-                }
-            )
-
-            val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
-                factory = object: ViewModelProvider.Factory {
-                    override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                        val database = FinanceAppDatabase.getInstance(context)
-                        val receiptRepository = ReceiptRepository.getInstance(database)
-                        val adRepository = AdRepository.getInstance(database)
-
-                        return ReceiptSectionsViewModel(receiptRepository, adRepository) as T
-                    }
-                }
-            )
-
-            val headerSectionViewModel: HeaderSectionViewModel = viewModel(
-                factory = object : ViewModelProvider.Factory {
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val database = FinanceAppDatabase.getInstance(context)
-                        return HeaderSectionViewModel(database) as T
-                    }
-                }
-            )
-
-            val goalSectionViewModel: GoalsSectionViewModel = viewModel (
-                factory = object: ViewModelProvider.Factory {
-                    override fun<T : ViewModel> create(modelClass: Class<T>): T {
-
-                        val database = FinanceAppDatabase.getInstance(context)
-                        val repository = GoalRepository(database)
-
-                        return GoalsSectionViewModel(repository) as T
-                    }
-                }
-            )
-
-            val totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
-                factory = object: ViewModelProvider.Factory {
-                    override fun <T: ViewModel> create(modelClass: Class<T>): T {
-
-                        val database = FinanceAppDatabase.Companion.getInstance(context)
-                        val repository = GoalRepository(database)
-                        return TotalGoalsAchievedSectionViewModel(repository) as T
-                    }
-                }
-            )
-
-            var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
-
-            mainActivityViewModel.loadUser()
-            val user by mainActivityViewModel.user.collectAsState()
-
-            var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
-            var goalAchieved by remember { mutableStateOf(false) }
-
-            LaunchedEffect(user) {
-
-                if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
-                    delay(2000)
-
-                sectionIdentifier = when (user) {
-                    "DUMMY" -> Screen.WELCOME
-                    "" -> Screen.WELCOME
-                    else -> Screen.HOME
-                }
-            }
-
-            Column (
-                modifier = Modifier
-                    .background(Emerald)
-                    .fillMaxSize()
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        if (sectionIdentifier == Screen.HOME) {
-
-                            tutorialInformation = tutorialInformation.copy (
-                                isActive = true,
-                                tutorialStep = when (tutorialInformation.tutorialStep) {
-                                    TutorialStep.HOMESCREEN_START -> TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS
-                                    TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOALS
-                                    TutorialStep.HOMESCREEN_CURRENT_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOAL
-                                    TutorialStep.HOMESCREEN_CURRENT_GOAL -> TutorialStep.HOMESCREEN_QUOTE
-                                    TutorialStep.HOMESCREEN_QUOTE -> TutorialStep.HOMESCREEN_END
-                                    else -> TutorialStep.HOMESCREEN_END
-                                }
-                            )
-
-                            if (tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
-                                tutorialInformation = tutorialInformation.copy (
-                                    isActive = false,
-                                    tutorialStep = TutorialStep.RECEIPTS_START
-                                )
-
-                                mainActivityViewModel.setHomeScreenTutorialDone()
-                            }
-                        } else if (sectionIdentifier == Screen.RECEIPTS) {
-
-                            if (mainActivityViewModel.getReceiptsTutorialDone())
-                                return@clickable
-
-                            //Das ist hier, um den User zu zwingen, während des Tutorials in der ReceiptsSection -> AverageSpentSection
-                            //auch wirklich ein Bild von einem Receipt aufzunehmen :D -> Das stärkt die Retention
-
-                            if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE)
-                                return@clickable
-
-                            tutorialInformation = tutorialInformation.copy (
-                                isActive = true,
-                                tutorialStep = when (tutorialInformation.tutorialStep) {
-                                    TutorialStep.RECEIPTS_START -> TutorialStep.RECEIPTS_TAKE_PICTURE
-                                    TutorialStep.RECEIPTS_TAKE_PICTURE -> TutorialStep.RECEIPTS_LOG_SECTION
-                                    TutorialStep.RECEIPTS_LOG_SECTION -> TutorialStep.RECEIPTS_SUM_SECTION
-                                    TutorialStep.RECEIPTS_SUM_SECTION -> TutorialStep.RECEIPTS_END
-                                    else -> TutorialStep.RECEIPTS_START
-                                }
-                            )
-
-                            if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_END) {
-                                tutorialInformation = tutorialInformation.copy (
-                                    isActive = false,
-                                    tutorialStep = TutorialStep.GOALS_START
-                                )
-
-                                mainActivityViewModel.setReceiptsTutorialDone()
-                            }
-
-                        } else if (sectionIdentifier == Screen.GOALHISTORY) {
-
-                            if (mainActivityViewModel.getGoalHistoryTutorialDone())
-                                return@clickable
-
-                            tutorialInformation = tutorialInformation.copy (
-                                isActive = true,
-                                tutorialStep = when (tutorialInformation.tutorialStep) {
-                                    TutorialStep.GOALS_START -> TutorialStep.GOALS_PUNCHCARD
-                                    TutorialStep.GOALS_PUNCHCARD -> TutorialStep.GOALS_TOTAL_GOALS
-                                    TutorialStep.GOALS_TOTAL_GOALS -> TutorialStep.GOALS_TOTAL_TOKENS
-                                    TutorialStep.GOALS_TOTAL_TOKENS -> TutorialStep.GOALS_ACHIEVEMENTS
-                                    TutorialStep.GOALS_ACHIEVEMENTS -> TutorialStep.GOALS_END
-                                    else -> TutorialStep.GOALS_START
-                                }
-                            )
-
-                            if (tutorialInformation.tutorialStep == TutorialStep.GOALS_END) {
-                                tutorialInformation = tutorialInformation.copy (
-                                    isActive = false,
-                                    tutorialStep = TutorialStep.GOALS_START
-                                )
-
-                                mainActivityViewModel.setGoalHistoryTutorialDone()
-                            }
-                        }
-                    }
+            FinanceAppTheme (
+                appColors = GreenAppColors
             ) {
-                // Header nur, wenn nicht Welcome
-                if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS).contains(sectionIdentifier)) {
+                val colors = LocalAppColors.current
 
-                    if (goalAchieved) {
+                MobileAds.initialize(this)
+                InterstitialAdManager.instance.initialize(this)
+                InterstitialAdManager.instance.loadInterstitial(this)
 
-                    } else {
-                        HeaderSection (
-                            onNewSectionIdentifier = {
-                                sectionIdentifier = it
+                var context = LocalContext.current
+                scheduleDailyQuoteWorker(context)
+                scheduleDailyReminderMeWorker(context)
+
+                val manager = getSystemService(NotificationManager::class.java)
+                manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
+                manager.createNotificationChannel(NotificationChannel("receipts", "Receipt", NotificationManager.IMPORTANCE_HIGH))
+                manager.createNotificationChannel(NotificationChannel("reminders", "Reminders", NotificationManager.IMPORTANCE_HIGH))
+
+                val mainActivityViewModel: MainActivityViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val repository = UserRepository(database)
+
+                            return MainActivityViewModel(repository) as T
+                        }
+                    }
+                )
+
+                val receiptSectionsViewModel: ReceiptSectionsViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val receiptRepository = ReceiptRepository.getInstance(database)
+                            val adRepository = AdRepository.getInstance(database)
+
+                            return ReceiptSectionsViewModel(receiptRepository, adRepository) as T
+                        }
+                    }
+                )
+
+                val headerSectionViewModel: HeaderSectionViewModel = viewModel(
+                    factory = object : ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            val database = FinanceAppDatabase.getInstance(context)
+                            return HeaderSectionViewModel(database) as T
+                        }
+                    }
+                )
+
+                val goalSectionViewModel: GoalsSectionViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T : ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val repository = GoalRepository(database)
+
+                            return GoalsSectionViewModel(repository) as T
+                        }
+                    }
+                )
+
+                val totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val repository = GoalRepository(database)
+                            return TotalGoalsAchievedSectionViewModel(repository) as T
+                        }
+                    }
+                )
+
+                var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
+
+                mainActivityViewModel.loadUser()
+                val user by mainActivityViewModel.user.collectAsState()
+
+                var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
+                var goalAchieved by remember { mutableStateOf(false) }
+
+                LaunchedEffect(user) {
+
+                    if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
+                        delay(2000)
+
+                    sectionIdentifier = when (user) {
+                        "DUMMY" -> Screen.WELCOME
+                        "" -> Screen.WELCOME
+                        else -> Screen.HOME
+                    }
+                }
+
+                Column (
+                    modifier = Modifier
+                        .background(colors.background)
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            if (sectionIdentifier == Screen.HOME) {
+
+                                tutorialInformation = tutorialInformation.copy(
+                                    isActive = true,
+                                    tutorialStep = when (tutorialInformation.tutorialStep) {
+                                        TutorialStep.HOMESCREEN_START -> TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS
+                                        TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOALS
+                                        TutorialStep.HOMESCREEN_CURRENT_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOAL
+                                        TutorialStep.HOMESCREEN_CURRENT_GOAL -> TutorialStep.HOMESCREEN_QUOTE
+                                        TutorialStep.HOMESCREEN_QUOTE -> TutorialStep.HOMESCREEN_END
+                                        else -> TutorialStep.HOMESCREEN_END
+                                    }
+                                )
+
+                                if (tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
+                                    tutorialInformation = tutorialInformation.copy(
+                                        isActive = false,
+                                        tutorialStep = TutorialStep.RECEIPTS_START
+                                    )
+
+                                    mainActivityViewModel.setHomeScreenTutorialDone()
+                                }
+                            } else if (sectionIdentifier == Screen.RECEIPTS) {
+
+                                if (mainActivityViewModel.getReceiptsTutorialDone())
+                                    return@clickable
+
+                                //Das ist hier, um den User zu zwingen, während des Tutorials in der ReceiptsSection -> AverageSpentSection
+                                //auch wirklich ein Bild von einem Receipt aufzunehmen :D -> Das stärkt die Retention
+
+                                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE)
+                                    return@clickable
+
+                                tutorialInformation = tutorialInformation.copy(
+                                    isActive = true,
+                                    tutorialStep = when (tutorialInformation.tutorialStep) {
+                                        TutorialStep.RECEIPTS_START -> TutorialStep.RECEIPTS_TAKE_PICTURE
+                                        TutorialStep.RECEIPTS_TAKE_PICTURE -> TutorialStep.RECEIPTS_LOG_SECTION
+                                        TutorialStep.RECEIPTS_LOG_SECTION -> TutorialStep.RECEIPTS_SUM_SECTION
+                                        TutorialStep.RECEIPTS_SUM_SECTION -> TutorialStep.RECEIPTS_END
+                                        else -> TutorialStep.RECEIPTS_START
+                                    }
+                                )
+
+                                if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_END) {
+                                    tutorialInformation = tutorialInformation.copy(
+                                        isActive = false,
+                                        tutorialStep = TutorialStep.GOALS_START
+                                    )
+
+                                    mainActivityViewModel.setReceiptsTutorialDone()
+                                }
+
+                            } else if (sectionIdentifier == Screen.GOALHISTORY) {
+
+                                if (mainActivityViewModel.getGoalHistoryTutorialDone())
+                                    return@clickable
+
+                                tutorialInformation = tutorialInformation.copy(
+                                    isActive = true,
+                                    tutorialStep = when (tutorialInformation.tutorialStep) {
+                                        TutorialStep.GOALS_START -> TutorialStep.GOALS_PUNCHCARD
+                                        TutorialStep.GOALS_PUNCHCARD -> TutorialStep.GOALS_TOTAL_GOALS
+                                        TutorialStep.GOALS_TOTAL_GOALS -> TutorialStep.GOALS_TOTAL_TOKENS
+                                        TutorialStep.GOALS_TOTAL_TOKENS -> TutorialStep.GOALS_ACHIEVEMENTS
+                                        TutorialStep.GOALS_ACHIEVEMENTS -> TutorialStep.GOALS_END
+                                        else -> TutorialStep.GOALS_START
+                                    }
+                                )
+
+                                if (tutorialInformation.tutorialStep == TutorialStep.GOALS_END) {
+                                    tutorialInformation = tutorialInformation.copy(
+                                        isActive = false,
+                                        tutorialStep = TutorialStep.GOALS_START
+                                    )
+
+                                    mainActivityViewModel.setGoalHistoryTutorialDone()
+                                }
+                            }
+                        }
+                ) {
+                    // Header nur, wenn nicht Welcome
+                    if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP).contains(sectionIdentifier)) {
+
+                        if (goalAchieved) {
+
+                        } else {
+                            HeaderSection (
+                                onNewSectionIdentifier = {
+                                    sectionIdentifier = it
+                                },
+                                sectionIdentifier = sectionIdentifier.ordinal,
+                                tutorialInformation = tutorialInformation,
+                                headerSectionViewModel = headerSectionViewModel
+                            )
+
+                            Spacer (
+                                modifier = Modifier
+                                    .padding(2.dp)
+                            )
+                        }
+                    }
+
+                    AnimatedVisibility (
+                        visible = sectionIdentifier == Screen.WELCOME,
+                        enter = fadeIn (
+                            animationSpec = tween (
+                                durationMillis = 1000
+                            )
+                        )
+                    ) {
+                        WelcomeScreen (
+                            onFinished = {
+                                mainActivityViewModel.loadUser()
                             },
+                            false
+                        )
+                    }
+
+                    AnimatedVisibility (
+                        visible = sectionIdentifier == Screen.HOME,
+                        enter = fadeIn (
+                            animationSpec = tween (
+                                durationMillis = 1000
+                            )
+                        )
+                    ) {
+                        HomeScreen (
                             tutorialInformation = tutorialInformation,
-                            headerSectionViewModel = headerSectionViewModel
+                            receiptSectionsViewModel = receiptSectionsViewModel,
+                            goalsSectionViewModel = goalSectionViewModel,
+                            onGoalAchieved = {
+                                goalAchieved = true
+                            },
+                            onWellDoneSectionDismissed = {
+                                goalAchieved = false
+                            },
+                            shopSectionClicked = {
+                                sectionIdentifier = Screen.SHOP
+                            }
+                        )
+                    }
+
+                    if (sectionIdentifier == Screen.LIKEDQUOTES)
+                        LikedQuotesSection (
+                            tutorialInformation = tutorialInformation
                         )
 
-                        Spacer (
+                    if (sectionIdentifier == Screen.GOALHISTORY)
+                        GoalHistorySection (
+                            totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                            mainActivityViewModel = mainActivityViewModel,
+                            tutorialInformation = tutorialInformation
+                        )
+
+                    if (sectionIdentifier == Screen.RECEIPTS)
+                        ReceiptsSection (
+                            onReceiptAdded = {
+                                tutorialInformation = tutorialInformation.copy (
+                                    isActive = tutorialInformation.isActive,
+                                    tutorialStep = if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) TutorialStep.RECEIPTS_LOG_SECTION else TutorialStep.NONE
+                                )
+                            },
+                            receiptSectionsViewModel = receiptSectionsViewModel,
+                            mainActivityViewModel = mainActivityViewModel,
+                            tutorialInformation = tutorialInformation
+                        )
+
+                    if (sectionIdentifier == Screen.USER_SETTINGS)
+                        SettingsScreen (
+                            headerSectionViewModel = headerSectionViewModel,
+                            tutorialInformation = tutorialInformation
+                        )
+
+                    if (sectionIdentifier == Screen.SHOP)
+                        ShopScreen (
+                            headerSectionViewModel = headerSectionViewModel,
+                            tutorialInformation = tutorialInformation
+                        )
+
+                    AnimatedVisibility (
+                        visible = sectionIdentifier == Screen.SPLASH,
+                        enter = fadeIn (
+                            animationSpec = tween (
+                                durationMillis = 1000
+                            )
+                        )
+                    ) {
+                        WelcomeScreen (
+                            onFinished = {
+                                mainActivityViewModel.loadUser()
+                            },
+                            true
+                        )
+                    }
+                }
+
+                if (sectionIdentifier == Screen.HOME)
+                {
+                    if (!mainActivityViewModel.getHomeScreenTutorialDone() && !tutorialInformation.isActive) {
+                        tutorialInformation = tutorialInformation.copy (
+                            isActive = true,
+                            tutorialStep = TutorialStep.HOMESCREEN_START
+                        )
+                    }
+
+                    if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_START) {
+                        Box (
                             modifier = Modifier
-                                .padding(2.dp)
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Welcome to your new goal tracking space.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Here, you can track your token progress. Tap the plus sign to add a new goal.\n\nWhen you reach 18 token, you get to treat yourself!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOALS) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .offset(y = -200.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "This is where your see your recent goals as well as your current ones.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOAL) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.\n\nTap the percentage to update your current goal.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_QUOTE) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Everyone needs words of motivation. Here you can view inspirational quotes, and like them to save for later.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Have fun exploring the app!\n\nCheck out the Receipts-Section where you can track all you receipts.\n\nCheck the Remind-me button and we'll send you a notification as a reminder.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+                } else if (sectionIdentifier == Screen.RECEIPTS) {
+
+                    if (!mainActivityViewModel.getReceiptsTutorialDone() && !tutorialInformation.isActive) {
+                        tutorialInformation = tutorialInformation.copy (
+                            isActive = true,
+                            tutorialStep = TutorialStep.RECEIPTS_START
                         )
                     }
-                }
 
-                AnimatedVisibility (
-                    visible = sectionIdentifier == Screen.WELCOME,
-                    enter = fadeIn (
-                        animationSpec = tween (
-                            durationMillis = 1000
+                    if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_START) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(75.dp)
+                                )
+
+                                Text (
+                                    text = "Welcome to your receipt tracking space!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(100.dp)
+                                )
+
+                                Text (
+                                    text = "Take a picture of your receipt to always have an eye on your finances.\n\nGive it a try!\n\nCheck the Remind-me button and you'll be notified by us.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_SUM_SECTION) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(75.dp)
+                                )
+
+                                Text (
+                                    text = "This sections helps you to keep an eye on your expenses.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_LOG_SECTION) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(275.dp)
+                                )
+
+                                Text (
+                                    text = "Just scroll down when you need to revisit one of your receipts.",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+                } else if (sectionIdentifier == Screen.GOALHISTORY) {
+
+                    if (!mainActivityViewModel.getGoalHistoryTutorialDone() && !tutorialInformation.isActive) {
+                        tutorialInformation = tutorialInformation.copy (
+                            isActive = true,
+                            tutorialStep = TutorialStep.GOALS_START
                         )
-                    )
-                ) {
-                    WelcomeScreen (
-                        onFinished = {
-                            mainActivityViewModel.loadUser()
-                        },
-                        false
-                    )
-                }
-
-                AnimatedVisibility (
-                    visible = sectionIdentifier == Screen.HOME,
-                    enter = fadeIn (
-                        animationSpec = tween (
-                            durationMillis = 1000
-                        )
-                    )
-                ) {
-                    HomeScreen (
-                        tutorialInformation = tutorialInformation,
-                        receiptSectionsViewModel = receiptSectionsViewModel,
-                        goalsSectionViewModel = goalSectionViewModel,
-                        onGoalAchieved = {
-                            goalAchieved = true
-                        },
-                        onWellDoneSectionDismissed = {
-                            goalAchieved = false
-                        }
-                    )
-                }
-
-                if (sectionIdentifier == Screen.LIKEDQUOTES)
-                    LikedQuotesSection (
-                        tutorialInformation = tutorialInformation
-                    )
-
-                if (sectionIdentifier == Screen.GOALHISTORY)
-                    GoalHistorySection (
-                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                        mainActivityViewModel = mainActivityViewModel,
-                        tutorialInformation = tutorialInformation
-                    )
-
-                if (sectionIdentifier == Screen.RECEIPTS)
-                    ReceiptsSection (
-                        onReceiptAdded = {
-                            tutorialInformation = tutorialInformation.copy (
-                                isActive = tutorialInformation.isActive,
-                                tutorialStep = if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) TutorialStep.RECEIPTS_LOG_SECTION else TutorialStep.NONE
-                            )
-                        },
-                        receiptSectionsViewModel = receiptSectionsViewModel,
-                        mainActivityViewModel = mainActivityViewModel,
-                        tutorialInformation = tutorialInformation
-                    )
-
-                if (sectionIdentifier == Screen.USER_SETTINGS)
-                    SettingsScreen (
-                        headerSectionViewModel = headerSectionViewModel,
-                        tutorialInformation = tutorialInformation
-                    )
-
-                AnimatedVisibility (
-                    visible = sectionIdentifier == Screen.SPLASH,
-                    enter = fadeIn (
-                        animationSpec = tween (
-                            durationMillis = 1000
-                        )
-                    )
-                ) {
-                    WelcomeScreen (
-                        onFinished = {
-                            mainActivityViewModel.loadUser()
-                        },
-                        true
-                    )
-                }
-            }
-
-            if (sectionIdentifier == Screen.HOME)
-            {
-                if (!mainActivityViewModel.getHomeScreenTutorialDone() && !tutorialInformation.isActive) {
-                    tutorialInformation = tutorialInformation.copy (
-                        isActive = true,
-                        tutorialStep = TutorialStep.HOMESCREEN_START
-                    )
-                }
-
-                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_START) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "Welcome to your new goal tracking space.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
                     }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "Here, you can track your token progress. Tap the plus sign to add a new goal.\n\nWhen you reach 18 token, you get to treat yourself!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOALS) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .offset(y = -200.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Top,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "This is where your see your recent goals as well as your current ones.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_CURRENT_GOAL) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.\n\nTap the percentage to update your current goal.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_QUOTE) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "Everyone needs words of motivation. Here you can view inspirational quotes, and like them to save for later.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "Have fun exploring the app!\n\nCheck out the Receipts-Section where you can track all you receipts.\n\nCheck the Remind-me button and we'll send you a notification as a reminder.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            } else if (sectionIdentifier == Screen.RECEIPTS) {
 
-                if (!mainActivityViewModel.getReceiptsTutorialDone() && !tutorialInformation.isActive) {
-                    tutorialInformation = tutorialInformation.copy (
-                        isActive = true,
-                        tutorialStep = TutorialStep.RECEIPTS_START
-                    )
-                }
-
-                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_START) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_START) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(75.dp)
-                            )
-
-                            Text (
-                                text = "Welcome to your receipt tracking space!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Welcome to your goal overview space!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_PUNCHCARD) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(100.dp)
-                            )
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(75.dp)
+                                )
 
-                            Text (
-                                text = "Take a picture of your receipt to always have an eye on your finances.\n\nGive it a try!\n\nCheck the Remind-me button and you'll be notified by us.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
+                                Text (
+                                    text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_SUM_SECTION) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_GOALS) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(75.dp)
-                            )
-
-                            Text (
-                                text = "This sections helps you to keep an eye on your expenses.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "The more goals the better ;)",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_LOG_SECTION) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_TOKENS) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.TopCenter
                         ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(275.dp)
-                            )
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer (
+                                    modifier = Modifier
+                                        .height(275.dp)
+                                )
 
-                            Text (
-                                text = "Just scroll down when you need to revisit one of your receipts.",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
+                                Text (
+                                    text = "The more token the better, too!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
-                    }
-                }
-            } else if (sectionIdentifier == Screen.GOALHISTORY) {
-
-                if (!mainActivityViewModel.getGoalHistoryTutorialDone() && !tutorialInformation.isActive) {
-                    tutorialInformation = tutorialInformation.copy (
-                        isActive = true,
-                        tutorialStep = TutorialStep.GOALS_START
-                    )
-                }
-
-                if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_START) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_ACHIEVEMENTS) {
+                        Box (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text (
-                                text = "Welcome to your goal overview space!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_PUNCHCARD) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                         ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(75.dp)
-                            )
-
-                            Text (
-                                text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_GOALS) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "The more goals the better ;)",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_TOKENS) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Spacer (
-                                modifier = Modifier
-                                    .height(275.dp)
-                            )
-
-                            Text (
-                                text = "The more token the better, too!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_ACHIEVEMENTS) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column (
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text (
-                                text = "Remind yourself from time to time about your achievements and successes!",
-                                fontSize = 24.sp,
-                                color = Color.White,
-                                textAlign = TextAlign.Center
-                            )
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text (
+                                    text = "Remind yourself from time to time about your achievements and successes!",
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }
@@ -756,14 +783,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, context: Context = LocalContext.current) {
+fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, shopSectionClicked: () -> Unit, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     var goalAchieved by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
-            .background(
-                color = Emerald
+            .background (
+                color = colors.background
             ),
         verticalArrangement = Arrangement.Top
     ) {
@@ -832,10 +861,45 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                         .padding(2.dp)
                 )
 
-                DailyTipSection (
+                Box (
                     modifier = Modifier
-                        .weight(0.5f)
-                )
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .background (
+                            color = colors.background,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        DailyTipSection (
+                            modifier = Modifier
+                                .weight(3f)
+                                .fillMaxHeight(),
+                            dailyTipSectionClicked = {
+
+                            }
+                        )
+
+                        Spacer (
+                            modifier = Modifier
+                                .width(4.dp)
+                        )
+
+                        ShopSection (
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            shopSectionClicked = {
+                                shopSectionClicked()
+                            }
+                        )
+                    }
+                }
 
                 Spacer (
                     modifier = Modifier
@@ -890,6 +954,8 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
 @Composable
 fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation) {
 
+    val colors = LocalAppColors.current
+
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -939,11 +1005,11 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
                     .fillMaxSize()
                     .weight(1f)
                     .background (
-                        color = Emerald,
+                        color = colors.background,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .border (
-                        color = Pistachio,
+                        color = colors.surface,
                         width = 4.dp,
                         shape = RoundedCornerShape(12.dp)
                     ),
@@ -951,7 +1017,7 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
             ) {
                 Text (
                     text = "photo memory random\ntreat pic cycle",
-                    color = Pistachio,
+                    color = colors.textPrimary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -1066,6 +1132,40 @@ fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: Receipt
 
         AdSectionLargeBanner (
             tutorialInformation = tutorialInformation
+        )
+    }
+}
+
+@Composable
+fun ShopScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
+
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background (
+                color = colors.background,
+                shape = RoundedCornerShape(12.dp)
+            ),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ThemeShopIntroSection (
+            modifier = Modifier
+                .weight(1f)
+        )
+
+        Spacer (
+            modifier = Modifier
+                .padding (
+                    2.dp
+                )
+        )
+
+        ThemeShopSection (
+            modifier = Modifier
+                .weight(5f)
         )
     }
 }

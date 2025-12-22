@@ -27,9 +27,12 @@ import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.QuoteRepository
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val likedQuotesSectionViewModel: LikedQuotesSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -49,13 +52,13 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
         modifier = Modifier
             .fillMaxSize()
             .background (
-                Emerald
+                colors.background
             )
     ) {
         Column (
             modifier = Modifier
-                .background(
-                    color = Emerald
+                .background (
+                    color = colors.background
                 )
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
@@ -63,7 +66,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
             likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
-                    AdSectionLargeBanner(
+                    AdSectionLargeBanner (
                         tutorialInformation = tutorialInformation
                     )
 
@@ -84,9 +87,9 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.4f)
-                            .background(
+                            .background (
                                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                                color = Pistachio
+                                color = colors.surface
                             )
                             .padding(top = 12.dp, start = 12.dp)
                     ) {
@@ -94,7 +97,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             text = quote.date,
                             fontSize = 20.sp,
                             textAlign = TextAlign.Left,
-                            color = Emerald
+                            color = colors.textPrimary
                         )
                     }
 
@@ -102,8 +105,8 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.8f)
-                            .background(
-                                color = Pistachio
+                            .background (
+                                color = colors.surface
                             )
                             .padding(start = 12.dp)
                     ) {
@@ -112,7 +115,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             fontSize = 20.sp,
                             textAlign = TextAlign.Left,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Emerald
+                            color = colors.textPrimary
                         )
                     }
 
@@ -120,23 +123,23 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.3f)
-                            .background(
+                            .background (
                                 shape = RoundedCornerShape(
                                     bottomStart = 12.dp,
                                     bottomEnd = 12.dp
                                 ),
-                                color = Pistachio
+                                color = colors.surface
                             )
                             .padding(end = 12.dp, bottom = 12.dp),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
+                        Text (
                             text = quote.name,
                             fontSize = 20.sp,
                             textAlign = TextAlign.Right,
                             fontStyle = FontStyle.Italic,
-                            color = Emerald
+                            color = colors.textPrimary
                         )
                     }
                 }
@@ -152,8 +155,8 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                 Box (
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            color = Emerald
+                        .background (
+                            color = colors.background
                         )
                 ) {
                     Column (
@@ -167,7 +170,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                                 .height(2.dp)
                         )
 
-                        AdSectionLargeBanner(
+                        AdSectionLargeBanner (
                             tutorialInformation = tutorialInformation
                         )
                     }

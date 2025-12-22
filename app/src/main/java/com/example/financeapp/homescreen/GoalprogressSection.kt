@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
@@ -26,9 +27,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.database.FinanceAppDatabase
@@ -37,9 +41,12 @@ import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
@@ -81,18 +88,18 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(2f)
-                .background(
+                .background (
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                    color = Pistachio
+                    color = colors.surface
                 )
                 .padding(top = 8.dp, end = 8.dp)
         ) {
             Box (
                 modifier = Modifier
                     .weight(1f)
-                    .background(
+                    .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Pistachio
+                        color = colors.surface
                     ),
             ) {
 
@@ -135,7 +142,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                 ) {
                     Text (
                         text = "Current goal:\n",
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -148,7 +155,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.SemiBold,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 2.dp, start = 2.dp, end = 2.dp)
@@ -158,22 +165,37 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
 
             var expanded by remember {mutableStateOf(false)}
 
-            Image (
-                painter = painterResource(R.drawable.doppelpfeilerunter_foreground),
-                contentDescription = "Doppelpfeile",
+            Box (
                 modifier = Modifier
-                    .height(64.dp)
-                    .aspectRatio(1f)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        if (tutorialInformation.isActive)
-                            return@clickable
+                    .size(64.dp)
+                    .border (
+                        width = 1.dp,
+                        shape = CircleShape,
+                        color = colors.background
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image (
+                    painter = painterResource(R.drawable.doppelpfeileruntersymbol_foreground),
+                    contentDescription = "Doppelpfeile",
+                    modifier = Modifier
+                        .height(32.dp)
+                        .aspectRatio(1f)
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
 
-                        expanded = true
-                    }
-            )
+                            expanded = true
+                        },
+                    contentScale = ContentScale.Fit,
+                    colorFilter = ColorFilter.tint(colors.background)
+                )
+            }
+
+
 
             SwapCurrentGoalMenu (
                 expanded = expanded,
@@ -187,8 +209,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.0f)
-                .background(
-                    color = Pistachio,
+                .background (
+                    color = colors.surface,
                     shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
                 ),
             horizontalArrangement = Arrangement.End,
@@ -200,7 +222,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                     fontSize = 64.sp,
                     textAlign = TextAlign.Right,
                     fontWeight = FontWeight.Bold,
-                    color = Emerald,
+                    color = colors.textPrimary,
                     modifier = modifier
                         .padding(end = 8.dp, bottom = 8.dp)
                         .clickable(

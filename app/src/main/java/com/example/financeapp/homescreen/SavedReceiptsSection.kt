@@ -14,24 +14,32 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.font.FontWeight
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 
 import com.example.financeapp.R
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
     val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
@@ -40,8 +48,8 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_SAVED_RECEIPTS) 0.1f else 1.0f)
             .fillMaxWidth()
-            .background(
-                color = Pistachio,
+            .background (
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -55,19 +63,35 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
                 text = "This Month:",
                 fontSize = 18.sp,
                 fontStyle = FontStyle.Italic,
-                color = Emerald,
+                color = colors.textPrimary,
                 modifier = Modifier
                     .padding(start = 14.dp, top = 18.dp)
                     .weight(2f)
             )
 
-            Image (
-                painter = painterResource(R.drawable.receipt_foreground),
-                contentDescription = "ReceiptLogo",
+            Box (
                 modifier = Modifier
                     .padding(top = 8.dp, end = 8.dp)
                     .size(64.dp)
-            )
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = colors.background,
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image (
+                    painter = painterResource(R.drawable.receiptsymbol_foreground),
+                    contentDescription = "ReceiptLogo",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(top = 4.dp, start = 4.dp),
+                    colorFilter = ColorFilter.tint(colors.background),
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.BottomEnd
+                )
+            }
         }
 
         Column (
@@ -79,14 +103,14 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
             Text (
                 text = receiptsThisMonth.value.size.toString(),
                 fontSize = 84.sp,
-                color = Emerald,
+                color = colors.textPrimary,
                 fontWeight = FontWeight.Bold
             )
 
             Text (
                 text = "Saved Receipts",
                 fontSize = 20.sp,
-                color = Emerald
+                color = colors.textPrimary
             )
         }
     }

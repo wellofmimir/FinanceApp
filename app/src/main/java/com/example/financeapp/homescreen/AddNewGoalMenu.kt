@@ -8,9 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -47,17 +44,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+
 import com.example.financeapp.R
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.GoalRepository
+import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -83,7 +83,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     elevation = 8.dp,
                     shape = RoundedCornerShape(12.dp))
                 .background (
-                    color = Emerald
+                    color = colors.surface
                 )
                 .fillMaxWidth()
                 .fillMaxHeight(0.65f),
@@ -94,7 +94,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Emerald
+                        color = colors.surface
                     )
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -224,7 +224,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = Pistachio,
+                            color = colors.background,
                             style = Fill
                         )
                     }
@@ -235,7 +235,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = Pistachio,
+                            color = colors.background,
                             style = if (tokenIdentifier >= 1) Fill else Stroke(4f)
                         )
                     }
@@ -246,7 +246,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = Pistachio,
+                            color = colors.background,
                             style = if (tokenIdentifier >= 2) Fill else Stroke(4f)
                         )
                     }
@@ -257,7 +257,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = Pistachio,
+                            color = colors.background,
                             style = if (tokenIdentifier >= 3) Fill else Stroke(4f)
                         )
                     }
@@ -268,7 +268,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = Pistachio,
+                            color = colors.background,
                             style = if (tokenIdentifier >= 4) Fill else Stroke(4f)
                         )
                     }
@@ -286,7 +286,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .fillMaxWidth(0.25f)
                         .fillMaxHeight(0.3f)
                         .background (
-                            color = Emerald,
+                            color = colors.surface,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .padding(start = 5.dp, end = 5.dp)
@@ -309,7 +309,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                                 ) {
                                     if (tokenIdentifier > 0 && tokenIdentifier <= 4)
                                         --tokenIdentifier
-                                }
+                                },
+                            colorFilter = ColorFilter.tint(colors.background)
                         )
 
                         Spacer (
@@ -329,7 +330,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                                 ) {
                                     if (tokenIdentifier >= 0 && tokenIdentifier < 4)
                                         ++tokenIdentifier
-                                }
+                                },
+                            colorFilter = ColorFilter.tint(colors.background)
                         )
                     }
                 }
@@ -384,8 +386,8 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             feedbackTrigger++
                         },
                         colors = ButtonDefaults.buttonColors (
-                            containerColor = Pistachio,
-                            contentColor = Emerald
+                            containerColor = colors.surface,
+                            contentColor = colors.background
                         ),
                         border = BorderStroke (
                             width = 1.dp,

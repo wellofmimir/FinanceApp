@@ -74,7 +74,6 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.ui.Alignment
 import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.ZoneId
@@ -82,9 +81,14 @@ import java.util.Locale
 import android.media.ExifInterface
 import android.graphics.Matrix
 import android.os.Build
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
 
@@ -125,6 +129,8 @@ fun Bitmap.fixOrientation(path: String): Bitmap {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSaved:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     var amountText by remember { mutableStateOf("") }
     var nameOfReceipt by remember { mutableStateOf("") }
@@ -242,8 +248,8 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
             .fillMaxWidth()
             .height(425.dp)
             .heightIn(min = 425.dp)
-            .background(
-                color = Emerald,
+            .background (
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
@@ -484,8 +490,8 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 
                     },
                     colors = ButtonDefaults.buttonColors (
-                        containerColor = Pistachio,
-                        contentColor = Emerald
+                        containerColor = colors.surface,
+                        contentColor = colors.background
                     ),
                     border = BorderStroke (
                         width = 1.dp,
@@ -497,7 +503,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                     Text (
                         text = takePhotoButtonText,
                         textAlign = TextAlign.Center,
-                        color = Emerald,
+                        color = colors.background,
                         fontSize = 18.sp
                     )
                 }
@@ -525,6 +531,8 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 
 @Composable
 fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
+
+    val colors = LocalAppColors.current
 
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
     var clickedEntry by remember { mutableIntStateOf(0) }
@@ -573,12 +581,12 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                             )
                         }
                         .background (
-                            color = if (entries.indexOf(entry) == clickedEntry) Emerald else Pistachio,
+                            color = if (entries.indexOf(entry) == clickedEntry) colors.background else colors.surface,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .border (
                             width = 2.dp,
-                            color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Color.Transparent,
+                            color = if (entries.indexOf(entry) == clickedEntry) colors.surface else Color.Transparent,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -588,7 +596,7 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                         fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,
                         fontStyle = FontStyle.Normal,
-                        color = if (entries.indexOf(entry) == clickedEntry) Pistachio else Emerald
+                        color = if (entries.indexOf(entry) == clickedEntry) colors.surface else colors.background
                     )
                 }
             }
@@ -598,6 +606,8 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
 
 @Composable
 fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
+
+    val colors = LocalAppColors.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -625,11 +635,11 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_TAKE_PICTURE) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.End
     ) {
         AddReceiptMenu (
             expanded,
@@ -648,7 +658,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 18.dp),
             text = if (currency.length == 1) currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-            color = Emerald,
+            color = colors.textPrimary,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
         )
@@ -658,7 +668,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 2.dp),
             text = "Average spent per transaction",
-            color = Emerald,
+            color = colors.textPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal
         )
@@ -668,26 +678,42 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                 .weight(1f)
         )
 
-        Image (
-            painter = painterResource(R.drawable.kamerasymbol_foreground),
-            contentDescription = "Kamerasymbol",
+        Box (
             modifier = Modifier
-                .align(Alignment.End)
-                .padding(end = 12.dp, bottom = 12.dp)
+                .padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
                 .size(64.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    expanded = true
-                },
-            alignment = Alignment.BottomEnd
-        )
+                .clip(CircleShape)
+                .border (
+                    width = 1.dp,
+                    color = colors.background,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Image (
+                painter = painterResource(R.drawable.kamera_foreground),
+                contentDescription = "Kamerasymbol",
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(bottom = 2.dp)
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        expanded = true
+                    },
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center,
+                colorFilter = ColorFilter.tint(colors.background)
+            )
+        }
     }
 }
 
 @Composable
 fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
+
+    val colors = LocalAppColors.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -716,7 +742,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_SUM_SECTION) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -727,7 +753,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 18.dp),
             text = "$timeRangeText:",
-            color = Emerald,
+            color = colors.textPrimary,
             textAlign = TextAlign.Start,
             fontSize = 22.sp,
             fontWeight = FontWeight.Normal,
@@ -739,7 +765,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 9.dp),
             text = if (currency.length == 1) currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-            color = Emerald,
+            color = colors.textPrimary,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold
         )
@@ -757,7 +783,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
         ) {
             Text (
                 text = receipts.size.toString(),
-                color = Emerald,
+                color = colors.textPrimary,
                 fontSize = 64.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -771,7 +797,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
         ) {
             Text (
                 text = "Purchases recorded",
-                color = Emerald,
+                color = colors.textPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal
             )
@@ -781,6 +807,8 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
 @Composable
 fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
+
+    val colors = LocalAppColors.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -802,7 +830,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_LOG_SECTION) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
             .fillMaxWidth(),
@@ -814,7 +842,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                 .align(Alignment.Start)
                 .padding(start = 24.dp, top = 18.dp),
             text = "Receipt log",
-            color = Emerald,
+            color = colors.textPrimary,
             textAlign = TextAlign.Start,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
@@ -847,7 +875,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp))
-                            .clickable(
+                            .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
@@ -865,8 +893,8 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    color = Pistachio,
+                .background (
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .weight(1f),
@@ -896,7 +924,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                 ) {
                     Text (
                         text = receipt.description,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
@@ -906,7 +934,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
 
                     Text (
                         text = receipt.date,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
@@ -915,7 +943,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
 
                     Text (
                         text = if (currency.length == 1) currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier

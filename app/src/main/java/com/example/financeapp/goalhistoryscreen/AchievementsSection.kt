@@ -34,9 +34,12 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.repositories.GoalRepository
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val achievementsSectionViewModel: AchievementsSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -57,7 +60,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_ACHIEVEMENTS) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -67,7 +70,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = Pistachio,
+                    color = colors.surface,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -75,13 +78,13 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
         ) {
             Text (
                 text = "What You've Achieved:",
-                color = Emerald,
+                color = colors.textPrimary,
                 fontSize = 24.sp,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                        color = Pistachio
+                        color = colors.surface
                     )
                     .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 24.dp)
             )
@@ -93,7 +96,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
             modifier = Modifier
                 .fillMaxSize()
                 .background (
-                    color = Pistachio,
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .weight(1f),
@@ -106,7 +109,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                 ) {
                     Text (
                         text = it.goal,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.SemiBold,
@@ -117,7 +120,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
 
                     Text (
                         text = it.dateWhenFinished,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Italic,
                         modifier = Modifier

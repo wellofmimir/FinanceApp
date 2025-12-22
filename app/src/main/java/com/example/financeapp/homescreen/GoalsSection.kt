@@ -15,8 +15,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +24,13 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -38,13 +38,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.example.financeapp.homescreen.GoalsSectionViewModel
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val goals by goalsSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
@@ -55,17 +57,17 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOALS) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = Pistachio,
+                    color = colors.surface,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
             verticalAlignment = Alignment.Top,
@@ -73,15 +75,15 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         ) {
             Text (
                 text = "Stuff you're working on:",
-                color = Emerald,
+                color = colors.textPrimary,
                 fontSize = 24.sp,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                        color = Pistachio
+                        color = colors.surface
                     )
-                    .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)
+                    .padding(start = 12.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
                     .weight(2f)
             )
 
@@ -91,10 +93,19 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Image (
-                    painter = painterResource(R.drawable.pluszeichen_foreground),
+                    painter = painterResource(R.drawable.pluszeichenstandard_foreground),
                     contentDescription = "Pluszeichen",
                     modifier = Modifier
                         .size(64.dp)
+                        .background (
+                            color = colors.surface,
+                            shape = CircleShape
+                        )
+                        .border (
+                            width = 1.dp,
+                            shape = CircleShape,
+                            color = colors.background
+                        )
                         .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
@@ -104,7 +115,8 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
                             expanded = true
                             visible = true
-                        }
+                        },
+                    colorFilter = ColorFilter.tint(colors.background)
                 )
             }
 
@@ -141,7 +153,7 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     .fillMaxSize()
                     .padding(horizontal = 36.dp)
                     .background (
-                        color = Pistachio,
+                        color = colors.surface,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .weight(1f),
@@ -158,10 +170,10 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                             contentDescription = "Bulletpoint",
                             modifier = Modifier
                                 .background (
-                                    color = Pistachio
+                                    color = colors.surface
                                 )
                                 .size(24.dp),
-                            colorFilter = ColorFilter.tint(Emerald)
+                            colorFilter = ColorFilter.tint(colors.background)
                         )
 
                         Spacer (
@@ -171,7 +183,7 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
 
                         Text (
                             text = it.goal,
-                            color = Emerald,
+                            color = colors.textPrimary,
                             fontSize = 18.sp,
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.SemiBold,

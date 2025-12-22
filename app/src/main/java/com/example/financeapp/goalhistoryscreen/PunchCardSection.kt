@@ -41,7 +41,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
@@ -50,9 +49,12 @@ import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val punchCardSectionViewModel: PunchCardSectionViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -78,13 +80,13 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
 
         Column (
             modifier = modifier
-                .background(
-                    color = Emerald,
+                .background (
+                    color = colors.background,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .border (
                     width = 2.dp,
-                    color = Pistachio,
+                    color = colors.background,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(4.dp),
@@ -99,7 +101,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
             Text (
                 text = "Nice Job!",
                 fontSize = 40.sp,
-                color = Pistachio
+                color = colors.textPrimary
             )
 
             Spacer (
@@ -131,7 +133,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                 text = buildAnnotatedString {
                     withStyle (
                         style = SpanStyle (
-                            color = Pistachio,
+                            color = colors.textPrimary,
                             fontWeight = FontWeight.Bold
                         )
                     ) {
@@ -139,7 +141,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                     }
                 },
                 fontSize = 16.sp,
-                color = Pistachio,
+                color = colors.textPrimary,
                 textAlign = TextAlign.Center
             )
 
@@ -151,7 +153,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
             Text (
                 text = "Now give yourself a little treat. Or a big one. The world is your oyster.",
                 fontSize = 16.sp,
-                color = Pistachio,
+                color = colors.textPrimary,
                 textAlign = TextAlign.Center
             )
 
@@ -163,11 +165,11 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
             Box (
                 modifier = Modifier
                     .background (
-                        color = Emerald,
+                        color = colors.surface,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .border (
-                        color = Pistachio,
+                        color = colors.background,
                         width = 2.dp,
                         shape = RoundedCornerShape(12.dp)
                     )
@@ -186,7 +188,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                 Text (
                     text = "I've treated myself!",
                     fontSize = 18.sp,
-                    color = Pistachio,
+                    color = colors.textPrimary,
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
                 )
@@ -199,7 +201,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
             modifier = modifier
                 .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_PUNCHCARD) 0.1f else 1.0f)
                 .background (
-                    color = Pistachio,
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(4.dp)
@@ -222,7 +224,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                                 .aspectRatio(1f)
                         ) {
                             drawCircle (
-                                color = Emerald,
+                                color = colors.background,
                                 style = if (filled) Fill else Stroke(4f)
                             )
                         }
@@ -246,14 +248,14 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                 Text (
                     text = buildAnnotatedString {
                         withStyle (
-                            style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)
+                            style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.textSecondary)
                         ) {
                             append("Treat yourself ")
                         }
                         append("once this card is completed.")
                     },
                     fontSize = 16.sp,
-                    color = Emerald,
+                    color = colors.background,
                     textAlign = TextAlign.Center
                 )
             }

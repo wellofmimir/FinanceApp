@@ -38,9 +38,12 @@ import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -71,9 +74,9 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(
+                .background (
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                    color = Pistachio
+                    color = colors.surface
                 )
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp)
         ) {
@@ -85,7 +88,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     fontSize = 20.sp,
                     textAlign = TextAlign.Left,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Emerald
+                    color = colors.textPrimary
                 )
             }
         }
@@ -94,9 +97,9 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.3f)
-                .background(
+                .background (
                     shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-                    color = Pistachio
+                    color = colors.surface
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -116,7 +119,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 Image (
                     painter = painterResource(R.drawable.herzzumliken_foreground),
                     contentDescription = "HerzZumLiken",
-                    colorFilter = ColorFilter.tint(if (herzZumLikenClicked) Color.Red else Color.Black),
+                    colorFilter = ColorFilter.tint(if (herzZumLikenClicked) Color.Red else colors.textPrimary),
                     modifier = Modifier
                         .aspectRatio(1f)
                         .clickable (
@@ -142,7 +145,7 @@ fun QuoteSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
                     fontStyle = FontStyle.Italic,
-                    color = Emerald
+                    color = colors.textPrimary
                 )
             }
         }

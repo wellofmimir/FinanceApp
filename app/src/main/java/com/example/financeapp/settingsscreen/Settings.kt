@@ -1,4 +1,5 @@
 package com.example.financeapp.settingsscreen
+import com.example.financeapp.ui.theme.LocalAppColors
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -15,8 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -71,6 +70,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         }
     )
 
+    val colors = LocalAppColors.current
+
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -103,7 +104,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         modifier = modifier
             .fillMaxWidth()
             .background (
-                color = Emerald,
+                color = colors.background,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -112,8 +113,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = Pistachio,
+                .background (
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -127,7 +128,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text (
                     text = "Name:",
-                    color = Emerald,
+                    color = colors.textPrimary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -149,19 +150,19 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                color = Pistachio
+                            .background (
+                                color = colors.textPrimary
                             )
                     )
                 } else {
-                    Text(
+                    Text (
                         text = user,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 32.sp,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .clickable(
+                            .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
@@ -173,7 +174,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             }
 
             if (isEditingTheName) {
-                Box(
+                Box (
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
@@ -184,7 +185,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         contentDescription = "CheckHook",
                         modifier = Modifier
                             .size(56.dp)
-                            .clickable(
+                            .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
@@ -207,8 +208,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = Pistachio,
+                .background (
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -218,11 +219,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         ) {
             Box (
                 modifier = Modifier
-                    .weight(0.7f)
+                    .weight(0.75f)
             ) {
                 Text (
                     text = "Currency:",
-                    color = Emerald,
+                    color = colors.textPrimary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -232,16 +233,15 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .weight(0.5f)
-                    .clickable(
+                    .clickable (
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-
                     },
                 contentAlignment = Alignment.CenterEnd
             ) {
                 if (isEditingTheCurrency) {
-                    TextField(
+                    TextField (
                         value = newCurrency,
                         onValueChange = {
                             if (it.length <= 3) {
@@ -251,16 +251,16 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         },
                         singleLine = true,
                         modifier = Modifier
-                            .width(150.dp)
+                            .width(200.dp)
                             .padding(10.dp)
-                            .background(
-                                color = Pistachio
+                            .background (
+                                color = colors.background
                             )
                     )
                 } else {
-                    Text(
+                    Text (
                         text = currency,
-                        color = Emerald,
+                        color = colors.textPrimary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 32.sp,
                         modifier = Modifier
@@ -288,7 +288,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         contentDescription = "CheckHook",
                         modifier = Modifier
                             .size(56.dp)
-                            .clickable(
+                            .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
@@ -315,8 +315,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = Pistachio,
+                .background (
+                    color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -330,7 +330,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text(
                     text = "Version Info:",
-                    color = Emerald,
+                    color = colors.textPrimary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -344,7 +344,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text(
                     text = "1.0.0.0",
-                    color = Emerald,
+                    color = colors.textPrimary,
                     fontWeight = FontWeight.Normal,
                     fontSize = 32.sp
                 )
@@ -362,7 +362,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 AlertDialog (
                     modifier = Modifier
                         .background (
-                            color = Emerald,
+                            color = colors.background,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .height(225.dp),
@@ -372,13 +372,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     title = {
                         Text (
                             text = "A bit more, please ...",
-                            color = Pistachio
+                            color = colors.textPrimary
                         )
                     },
                     text = {
                         Text (
                             text = "Please give us a little bit more elaborate feedback ... :)",
-                            color = Pistachio
+                            color = colors.textPrimary
                         )
                     },
                     confirmButton = {
@@ -389,11 +389,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         ) {
                             Text (
                                 text = "Okay",
-                                color = Pistachio
+                                color = colors.textPrimary
                             )
                         }
                     },
-                    containerColor = Emerald
+                    containerColor = colors.background
                 )
             }
 
@@ -401,8 +401,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(if (feedbackTextFieldIsFocused) 0.5f else 0.8f)
-                    .background(
-                        color = Pistachio,
+                    .background (
+                        color = colors.surface,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .height(100.dp)
@@ -414,7 +414,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 ) {
                     Text (
                         text = "Feedback",
-                        color = Emerald,
+                        color = colors.background,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 32.sp
                     )
@@ -426,9 +426,9 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         feedbackText = it
                     },
                     label = {
-                        Text(
+                        Text (
                             text = labelText,
-                            color = Emerald
+                            color = colors.textPrimary
                         )
                     },
                     modifier = Modifier
@@ -436,7 +436,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         .fillMaxWidth()
                         .padding(end = 12.dp)
                         .background(
-                            color = Pistachio
+                            color = colors.surface
                         )
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
@@ -456,12 +456,12 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     Box (
                         modifier = Modifier
                             .padding(end = 2.dp)
-                            .background(
-                                color = Emerald,
+                            .background (
+                                color = colors.background,
                                 shape = RoundedCornerShape(12.dp)
                             )
-                            .border(
-                                color = Pistachio,
+                            .border (
+                                color = colors.surface,
                                 width = 2.dp,
                                 shape = RoundedCornerShape(12.dp)
                             )
@@ -472,7 +472,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = "Dismiss",
                             fontSize = 18.sp,
-                            color = Pistachio,
+                            color = colors.surface,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -489,11 +489,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         modifier = Modifier
                             .padding(end = 12.dp)
                             .background (
-                                color = Emerald,
+                                color = colors.background,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .border (
-                                color = Pistachio,
+                                color = colors.surface,
                                 width = 2.dp,
                                 shape = RoundedCornerShape(12.dp)
                             )
@@ -506,7 +506,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = sendButtonText,
                             fontSize = 18.sp,
-                            color = Pistachio,
+                            color = colors.surface,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -532,8 +532,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f)
-                    .background(
-                        color = Pistachio,
+                    .background (
+                        color = colors.surface,
                         shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -541,7 +541,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 Text (
                     text = textAfterFeedbackButtonClicked,
                     fontSize = 32.sp,
-                    color = Emerald,
+                    color = colors.background,
                     textAlign = TextAlign.Center
                 )
             }

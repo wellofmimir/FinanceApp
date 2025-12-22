@@ -29,9 +29,12 @@ import androidx.compose.ui.graphics.Color
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     val goals by goalsSectionViewModel.completedGoals.collectAsState()
 
@@ -45,7 +48,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) 0.1f else 1.0f)
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         horizontalAlignment = Alignment.Start,
@@ -53,7 +56,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
     ) {
         Text (
             text = "Recently Completed:",
-            color = Emerald,
+            color = colors.textPrimary,
             fontSize = 18.sp,
             fontStyle = FontStyle.Italic,
             modifier = Modifier
@@ -83,11 +86,11 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                     painter = painterResource(R.drawable.bulletpointfilled_foreground),
                     contentDescription = "Bulletpoint",
                     modifier = Modifier
-                        .background(
-                            color = Pistachio
+                        .background (
+                            color = colors.surface
                         )
                         .size(24.dp),
-                    colorFilter = ColorFilter.tint(Emerald)
+                    colorFilter = ColorFilter.tint(colors.background)
                 )
 
                 Spacer (
@@ -98,7 +101,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                 Text (
                     fontSize = 18.sp,
                     text = item.goal,
-                    color = Emerald
+                    color = colors.textPrimary
                 )
             }
         }
