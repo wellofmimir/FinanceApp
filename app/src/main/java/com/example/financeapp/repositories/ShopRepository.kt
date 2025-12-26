@@ -1,7 +1,7 @@
 package com.example.financeapp.repositories
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
-import com.example.financeapp.billing.BillingManager
+import com.example.financeapp.billingmanager.BillingManager
 import com.example.financeapp.database.FinanceAppDatabase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

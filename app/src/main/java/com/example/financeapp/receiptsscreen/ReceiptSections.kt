@@ -146,7 +146,7 @@ fun shareToWhatsapp(context: Context, imageUri: Uri, text: String) {
     try {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "WhatsApp not installed.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
     }
 }
 

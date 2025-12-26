@@ -1,6 +1,6 @@
 package com.example.financeapp.shopscreen
 import com.example.financeapp.repositories.ShopRepository
-import com.example.financeapp.billing.BillingManager
+import com.example.financeapp.billingmanager.BillingManager
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateMapOf

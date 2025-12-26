@@ -3,12 +3,12 @@ import com.example.financeapp.advertisement.AdSectionLargeBanner
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
+import com.example.financeapp.billingmanager.BillingManager
 import com.example.financeapp.goalhistoryscreen.AchievementsSection
 import com.example.financeapp.goalhistoryscreen.PunchCardSection
 import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
 import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewModel
 import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
-import com.example.financeapp.billing.BillingManager
 import com.example.financeapp.repositories.ShopRepository
 import com.example.financeapp.homescreen.ShopSection
 import com.example.financeapp.header.HeaderSection

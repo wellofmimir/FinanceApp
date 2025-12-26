@@ -24,7 +24,8 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
     fun shareReceipt(receipt: Receipt) {
         viewModelScope.launch {
-            internShareEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Receipt: ${receipt.description}: ${receipt.amount}"))
+            getCurrency()
+            internShareEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
         }
     }
 
