@@ -7,7 +7,6 @@ import com.example.financeapp.repositories.ReceiptRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import android.net.Uri
-import androidx.compose.runtime.collectAsState
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,7 +30,6 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
     private val internInsertState = MutableStateFlow<Boolean>(false)
     val insertState = internInsertState.asStateFlow()
-
     private val internReceipts = MutableStateFlow<List<Receipt>>(emptyList())
     val receipts = internReceipts.asStateFlow()
     private val internReceiptsAverage = MutableStateFlow<Float>(0.0f)
@@ -123,7 +121,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
         val average = receipts.map { receipt ->
             receipt.amount
-        }.sum().toFloat()
+        }.sum()
 
         internReceiptsSum.value = average
     }

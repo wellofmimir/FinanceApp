@@ -32,8 +32,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
 import android.widget.Toast
@@ -95,7 +93,6 @@ import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
 import android.net.Uri
-import androidx.core.net.toUri
 
 enum class Timespan (id: Int) {
 
@@ -131,6 +128,11 @@ fun Bitmap.fixOrientation(path: String): Bitmap {
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
+fun getShareableImageUri(context: Context, path: String): Uri {
+
+    val file = File(path)
+    return FileProvider.getUriForFile(context, "com.example.financeapp.provider", file)
+}
 fun shareToWhatsapp(context: Context, imageUri: Uri, text: String) {
 
     val intent = Intent(Intent.ACTION_SEND).apply {
@@ -857,7 +859,8 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
         receiptSectionsViewModel.shareEvent.collect { event ->
             when (event) {
                 is ShareEvent.SharedReceipt -> {
-                    shareToWhatsapp(context, event.imageUri, event.text)
+                    val uri = getShareableImageUri(context, event.imageUri.toString())
+                    shareToWhatsapp(context, uri, event.text)
                 }
             }
         }
