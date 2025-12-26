@@ -16,14 +16,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
@@ -37,7 +39,7 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, onReceiptsLogoClicked: () -> Unit, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
 
@@ -74,7 +76,11 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
                     .padding(top = 8.dp, end = 8.dp)
                     .size(64.dp)
                     .clip(CircleShape)
-                    .border(
+                    .background (
+                        color = colors.background,
+                        shape = CircleShape
+                    )
+                    .border (
                         width = 1.dp,
                         color = colors.background,
                         shape = CircleShape
@@ -86,8 +92,18 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
                     contentDescription = "ReceiptLogo",
                     modifier = Modifier
                         .size(48.dp)
-                        .padding(top = 4.dp, start = 4.dp),
-                    colorFilter = ColorFilter.tint(colors.background),
+                        .padding(top = 4.dp, start = 4.dp)
+                        .background (
+                            color = colors.background,
+                            shape = CircleShape
+                        )
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            onReceiptsLogoClicked()
+                        },
+                    colorFilter = ColorFilter.tint(colors.surface),
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.BottomEnd
                 )

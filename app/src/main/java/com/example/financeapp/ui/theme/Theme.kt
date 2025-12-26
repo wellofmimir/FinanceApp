@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
 
 private val DarkColorScheme = darkColorScheme (
     primary = Purple80,
@@ -31,7 +32,7 @@ private val LightColorScheme = lightColorScheme (
 
 @Composable
 fun FinanceAppTheme (
-    appColors: AppColors,
+    appColors: MutableState<AppColors>,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -42,7 +43,7 @@ fun FinanceAppTheme (
     }
 
     CompositionLocalProvider (
-        LocalAppColors provides appColors
+        LocalAppColors provides appColors.value
     ) {
         MaterialTheme (
             colorScheme = materialColors,

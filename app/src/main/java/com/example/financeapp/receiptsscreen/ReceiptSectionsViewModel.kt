@@ -6,8 +6,28 @@ import com.example.financeapp.repositories.AdRepository
 import com.example.financeapp.repositories.ReceiptRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import android.net.Uri
+import androidx.compose.runtime.collectAsState
+import androidx.core.net.toUri
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+
+sealed interface ShareEvent {
+    data class SharedReceipt (val imageUri: Uri, val text: String): ShareEvent
+}
 
 class ReceiptSectionsViewModel(private val repository: ReceiptRepository, private val adRepository: AdRepository): ViewModel() {
+
+    private val internShareEvent = MutableSharedFlow<ShareEvent>()
+    val shareEvent = internShareEvent.asSharedFlow()
+
+    fun shareReceipt(receipt: Receipt) {
+        viewModelScope.launch {
+            internShareEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Receipt: ${receipt.description}: ${receipt.amount}"))
+        }
+    }
 
     private val internInsertState = MutableStateFlow<Boolean>(false)
     val insertState = internInsertState.asStateFlow()

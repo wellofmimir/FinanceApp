@@ -1,4 +1,5 @@
 package com.example.financeapp.header
+import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.Emerald
+import androidx.compose.foundation.border
+import com.example.financeapp.ui.theme.Pistachio
 
 
 @Composable
@@ -29,12 +31,19 @@ fun DreiPunkteMenu(expanded: Boolean,
                    onReceiptsClicked: () -> Unit,
                    onSettingsClicked:() -> Unit) {
 
+    val colors = LocalAppColors.current
+
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = onDismissRequested,
         modifier = Modifier
+            .border (
+                width = 1.dp,
+                color = if (colors.secondary == Pistachio) Color.Transparent else colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background (
-                color = Emerald,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             ),
         containerColor = Color.Transparent

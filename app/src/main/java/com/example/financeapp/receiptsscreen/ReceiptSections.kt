@@ -55,10 +55,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import java.io.File
 import androidx.core.content.FileProvider
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
@@ -81,6 +82,8 @@ import java.util.Locale
 import android.media.ExifInterface
 import android.graphics.Matrix
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
@@ -91,6 +94,8 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
+import android.net.Uri
+import androidx.core.net.toUri
 
 enum class Timespan (id: Int) {
 
@@ -124,6 +129,23 @@ fun Bitmap.fixOrientation(path: String): Bitmap {
     }
 
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun shareToWhatsapp(context: Context, imageUri: Uri, text: String) {
+
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/*"
+        putExtra(Intent.EXTRA_STREAM, imageUri)
+        putExtra(Intent.EXTRA_TEXT, text)
+        setPackage("com.whatsapp")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "WhatsApp not installed.", Toast.LENGTH_SHORT).show()
+    }
 }
 
 @Composable
@@ -169,7 +191,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
     LaunchedEffect(errorMessage) {
 
         if (!errorMessage.isEmpty()) {
-            delay(3000)
+            delay(1000)
             errorMessage = ""
         }
     }
@@ -246,11 +268,10 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(425.dp)
-            .heightIn(min = 425.dp)
+            .height(450.dp)
+            .heightIn(min = 450.dp)
             .background (
-                color = colors.surface,
-                shape = RoundedCornerShape(12.dp)
+                color = colors.primary
             )
     ) {
         Column (
@@ -266,7 +287,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 
             Text (
                 text = "Add a receipt",
-                color = Color.White,
+                color = colors.textSecondary,
                 fontSize = 24.sp
             )
 
@@ -280,7 +301,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                     .fillMaxWidth(0.8f)
                     .align(Alignment.CenterHorizontally),
                 thickness = 1.dp,
-                color = Color.White
+                color = colors.secondary
             )
 
             Spacer (
@@ -295,7 +316,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
             ) {
                 Text (
                     text = "Name",
-                    color = Color.White,
+                    color = colors.textSecondary,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
@@ -308,15 +329,15 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                         nameOfReceipt = newText
                     },
                     singleLine = true,
-                    colors = TextFieldDefaults.colors(
+                    colors = TextFieldDefaults.colors (
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
                         disabledContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.White,
-                        focusedIndicatorColor = Color.White,
-                        cursorColor = Color.White,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        unfocusedIndicatorColor = colors.textSecondary,
+                        focusedIndicatorColor = colors.textSecondary,
+                        cursorColor = colors.textSecondary,
+                        focusedTextColor = colors.textSecondary,
+                        unfocusedTextColor = colors.textSecondary
                     )
                 )
             }
@@ -333,7 +354,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                 Text (
                     text = "Amount",
                     textAlign = TextAlign.Justify,
-                    color = Color.White,
+                    color = colors.textSecondary,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
@@ -358,11 +379,11 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
                         disabledContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.White,
-                        focusedIndicatorColor = Color.White,
-                        cursorColor = Color.White,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        unfocusedIndicatorColor = colors.textSecondary,
+                        focusedIndicatorColor = colors.textSecondary,
+                        cursorColor = colors.textSecondary,
+                        focusedTextColor = colors.textSecondary,
+                        unfocusedTextColor = colors.textSecondary
                     ),
                     keyboardOptions = KeyboardOptions (
                         keyboardType = KeyboardType.Number
@@ -384,7 +405,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                 Text (
                     text = "Remind me",
                     textAlign = TextAlign.Justify,
-                    color = Color.White,
+                    color = colors.textSecondary,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .padding(start = 4.dp)
@@ -495,7 +516,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                     ),
                     border = BorderStroke (
                         width = 1.dp,
-                        color = Color.White
+                        color = colors.textSecondary
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
@@ -596,7 +617,7 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
                         fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,
                         fontStyle = FontStyle.Normal,
-                        color = if (entries.indexOf(entry) == clickedEntry) colors.surface else colors.background
+                        color = if (entries.indexOf(entry) == clickedEntry) colors.surface else colors.textPrimary
                     )
                 }
             }
@@ -683,6 +704,10 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                 .padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
                 .size(64.dp)
                 .clip(CircleShape)
+                .background (
+                    color = colors.background,
+                    shape = CircleShape
+                )
                 .border (
                     width = 1.dp,
                     color = colors.background,
@@ -704,7 +729,7 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
                     },
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
-                colorFilter = ColorFilter.tint(colors.background)
+                colorFilter = ColorFilter.tint(colors.surface)
             )
         }
     }
@@ -806,7 +831,7 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 }
 
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
+fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
 
@@ -825,6 +850,123 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
 
     val currency by receiptSectionsViewModel.currency.collectAsState()
     receiptSectionsViewModel.getCurrency()
+
+    var currentReceipt by remember { mutableStateOf<Receipt?>(null) }
+
+    LaunchedEffect(Unit) {
+        receiptSectionsViewModel.shareEvent.collect { event ->
+            when (event) {
+                is ShareEvent.SharedReceipt -> {
+                    shareToWhatsapp(context, event.imageUri, event.text)
+                }
+            }
+        }
+    }
+
+    if (showDialog && bitmap != null) {
+
+        Dialog (
+            onDismissRequest = {
+                showDialog = false
+            },
+            properties = DialogProperties (
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image (
+                    bitmap = bitmap!!.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .weight(5f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            if (showDialog) {
+                                showDialog = false
+                            }
+                        }
+                )
+
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .border (
+                            width = 1.dp,
+                            shape = RoundedCornerShape(12.dp),
+                            color = colors.secondary
+                        )
+                        .background (
+                            color = colors.background
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column (
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 12.dp),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        currentReceipt?.let { currentReceipt ->
+                            Text (
+                                text = currentReceipt.description,
+                                color = colors.textSecondary
+                            )
+
+                            Text (
+                                text = if (currency.length == 1) currency + " " + currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
+                                color = colors.textSecondary
+                            )
+
+                            if (currentReceipt.remindMeDate.isNotEmpty()) {
+                                Text (
+                                    text = "When to remind you:\n" + currentReceipt.remindMeDate,
+                                    color = colors.textSecondary
+                                )
+                            }
+
+                            Text (
+                                text = "Share",
+                                color = colors.textSecondary
+                            )
+
+                            Spacer (
+                                modifier = Modifier
+                                    .height(12.dp)
+                            )
+
+                            Image (
+                                painter = painterResource(R.drawable.whatsapplogo_foreground),
+                                contentDescription = "Whatsapp-Logo",
+                                colorFilter = ColorFilter.tint(colors.secondary),
+                                modifier = Modifier
+                                    .size(26.dp)
+                                    .clickable (
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) {
+                                        receiptSectionsViewModel.shareReceipt(currentReceipt)
+                                    }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     Column (
         modifier = modifier
@@ -854,40 +996,6 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                 .height(4.dp)
         )
 
-        if (showDialog && bitmap != null) {
-
-            Dialog (
-                onDismissRequest = {
-                    showDialog = false
-                },
-                properties = DialogProperties (
-                    usePlatformDefaultWidth = false
-                )
-            ) {
-                Box (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    Image (
-                        bitmap = bitmap!!.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable (
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
-                            ) {
-                                if (showDialog) {
-                                    showDialog = false
-                                }
-                            }
-                    )
-                }
-            }
-        }
-
         val listState = rememberLazyListState()
 
         LazyColumn (
@@ -915,6 +1023,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                             if (file.exists()) {
                                 bitmap = BitmapFactory.decodeFile(file.absolutePath).fixOrientation(file.absolutePath)
                                 showDialog = true
+                                currentReceipt = receipt
                             }
                             
                             //TODO: Behandlung einbauen für den Fall, das file nicht existiert

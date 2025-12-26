@@ -414,7 +414,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 ) {
                     Text (
                         text = "Feedback",
-                        color = colors.background,
+                        color = colors.textPrimary,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 32.sp
                     )
@@ -472,7 +472,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = "Dismiss",
                             fontSize = 18.sp,
-                            color = colors.surface,
+                            color = colors.textPrimary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -506,7 +506,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = sendButtonText,
                             fontSize = 18.sp,
-                            color = colors.surface,
+                            color = colors.textPrimary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)

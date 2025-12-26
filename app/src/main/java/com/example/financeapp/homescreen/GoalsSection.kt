@@ -35,7 +35,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.R
@@ -66,11 +68,12 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
         Row (
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = 8.dp, end = 8.dp)
                 .background (
                     color = colors.surface,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Text (
@@ -83,40 +86,43 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = colors.surface
                     )
-                    .padding(start = 12.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
+                    .padding(start = 18.dp, end = 0.dp, bottom = 0.dp)
                     .weight(2f)
             )
 
             Box (
                 modifier = Modifier
-                    .padding(top = 8.dp, end = 8.dp),
-                contentAlignment = Alignment.CenterEnd
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .background (
+                        color = colors.background,
+                        shape = CircleShape
+                    )
+                    .border (
+                        width = 1.dp,
+                        color = colors.background,
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Image (
-                    painter = painterResource(R.drawable.pluszeichenstandard_foreground),
+                    painter = painterResource(R.drawable.pluszeichen_standard_pistachio_foreground),
                     contentDescription = "Pluszeichen",
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(48.dp)
                         .background (
-                            color = colors.surface,
+                            color = colors.background,
                             shape = CircleShape
-                        )
-                        .border (
-                            width = 1.dp,
-                            shape = CircleShape,
-                            color = colors.background
                         )
                         .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
-                        ){
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
+                        ) {
                             expanded = true
-                            visible = true
                         },
-                    colorFilter = ColorFilter.tint(colors.background)
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    colorFilter = ColorFilter.tint(colors.surface)
                 )
             }
 

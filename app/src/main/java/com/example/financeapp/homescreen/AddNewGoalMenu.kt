@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -58,7 +59,6 @@ import com.example.financeapp.ui.theme.Pistachio
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var errorInInput by remember { mutableStateOf(false) }
@@ -79,11 +79,16 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 .clip (
                     RoundedCornerShape(12.dp)
                 )
+                .border (
+                    width = 1.dp,
+                    color = colors.surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .shadow (
-                    elevation = 8.dp,
+                    elevation = 12.dp,
                     shape = RoundedCornerShape(12.dp))
                 .background (
-                    color = colors.surface
+                    color = colors.background
                 )
                 .fillMaxWidth()
                 .fillMaxHeight(0.65f),
@@ -94,7 +99,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = colors.surface
+                        color = colors.background
                     )
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -102,7 +107,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
             ) {
                 Text (
                     text = "New Goal",
-                    color = Color.White,
+                    color = colors.secondary,
                     fontSize = 24.sp
                 )
 
@@ -116,7 +121,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .fillMaxWidth(0.8f)
                         .align(Alignment.CenterHorizontally),
                     thickness = 1.dp,
-                    color = Color.White
+                    color = colors.secondary
                 )
 
                 Spacer (
@@ -131,7 +136,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 ) {
                     Text (
                         text = "Name",
-                        color = Color.White,
+                        color = colors.secondary,
                         fontSize = 24.sp,
                         modifier = Modifier
                             .fillMaxWidth(0.3f)
@@ -147,11 +152,11 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent,
                             disabledContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.White,
-                            focusedIndicatorColor = Color.White,
-                            cursorColor = Color.White,
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White
+                            unfocusedIndicatorColor = colors.secondary,
+                            focusedIndicatorColor = colors.secondary,
+                            cursorColor = colors.secondary,
+                            focusedTextColor = colors.secondary,
+                            unfocusedTextColor = colors.secondary
                         )
                     )
                 }
@@ -168,7 +173,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     Text (
                         text = "Amount",
                         textAlign = TextAlign.Justify,
-                        color = Color.White,
+                        color = colors.secondary,
                         fontSize = 24.sp,
                         modifier = Modifier
                             .fillMaxWidth(0.3f)
@@ -193,11 +198,11 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent,
                             disabledContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.White,
-                            focusedIndicatorColor = Color.White,
-                            cursorColor = Color.White,
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White
+                            unfocusedIndicatorColor = colors.secondary,
+                            focusedIndicatorColor = colors.secondary,
+                            cursorColor = colors.secondary,
+                            focusedTextColor = colors.secondary,
+                            unfocusedTextColor = colors.secondary
                         ),
                         keyboardOptions = KeyboardOptions (
                             keyboardType = KeyboardType.Number
@@ -224,7 +229,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = colors.background,
+                            color = colors.secondary,
                             style = Fill
                         )
                     }
@@ -235,7 +240,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = colors.background,
+                            color = colors.secondary,
                             style = if (tokenIdentifier >= 1) Fill else Stroke(4f)
                         )
                     }
@@ -246,7 +251,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = colors.background,
+                            color = colors.secondary,
                             style = if (tokenIdentifier >= 2) Fill else Stroke(4f)
                         )
                     }
@@ -257,7 +262,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = colors.background,
+                            color = colors.secondary,
                             style = if (tokenIdentifier >= 3) Fill else Stroke(4f)
                         )
                     }
@@ -268,7 +273,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             .aspectRatio(1f)
                     ) {
                         drawCircle (
-                            color = colors.background,
+                            color = colors.secondary,
                             style = if (tokenIdentifier >= 4) Fill else Stroke(4f)
                         )
                     }
@@ -286,7 +291,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                         .fillMaxWidth(0.25f)
                         .fillMaxHeight(0.3f)
                         .background (
-                            color = colors.surface,
+                            color = colors.primary,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .padding(start = 5.dp, end = 5.dp)
@@ -307,10 +312,10 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    if (tokenIdentifier > 0 && tokenIdentifier <= 4)
+                                    if (tokenIdentifier in 1..4)
                                         --tokenIdentifier
                                 },
-                            colorFilter = ColorFilter.tint(colors.background)
+                            colorFilter = ColorFilter.tint(colors.secondary)
                         )
 
                         Spacer (
@@ -328,10 +333,10 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    if (tokenIdentifier >= 0 && tokenIdentifier < 4)
+                                    if (tokenIdentifier in 0..<4)
                                         ++tokenIdentifier
                                 },
-                            colorFilter = ColorFilter.tint(colors.background)
+                            colorFilter = ColorFilter.tint(colors.secondary)
                         )
                     }
                 }
@@ -386,12 +391,12 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                             feedbackTrigger++
                         },
                         colors = ButtonDefaults.buttonColors (
-                            containerColor = colors.surface,
-                            contentColor = colors.background
+                            containerColor = colors.secondary,
+                            contentColor = colors.primary
                         ),
                         border = BorderStroke (
                             width = 1.dp,
-                            color = Color.White
+                            color = colors.primary
                         ),
                         modifier = Modifier
                             .fillMaxWidth(0.3f)

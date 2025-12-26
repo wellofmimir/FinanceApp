@@ -6,6 +6,9 @@ import android.content.Context
 import kotlin.getValue
 import androidx.core.content.edit
 
+import androidx.security.crypto.MasterKey
+import androidx.security.crypto.EncryptedSharedPreferences
+
 data class Goal (
     val id: Int,
     val goal: String,
@@ -89,6 +92,22 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     //PREFERENCES - START
 
+    //Hier wird der MasterKey erzeugt, der dann in den AndroidKeystore abgelegt wird
+
+    private val masterKey by lazy {
+        MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+    }
+
+    private val securePreferences by lazy {
+        EncryptedSharedPreferences.create (
+            context,
+            "securePreferences",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
     private val tutorialPreferences by lazy {
         context.getSharedPreferences("tutorialPreferences", Context.MODE_PRIVATE)
     }
@@ -107,6 +126,16 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun setThemePurchased(theme: String) {
+        securePreferences.edit {
+            putBoolean(theme, true)
+        }
+    }
+
+    fun getThemePurchased(theme: String): Boolean {
+        return securePreferences.getBoolean(theme, false)
     }
 
     fun getGoalHistoryTutorialDone(): Boolean {

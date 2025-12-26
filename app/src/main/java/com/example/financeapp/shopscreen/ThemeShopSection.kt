@@ -1,6 +1,13 @@
 package com.example.financeapp.shopscreen
+import android.app.Activity
 import com.example.financeapp.ui.theme.Pistachio
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.AzureBlue
+import com.example.financeapp.ui.theme.CharcoalGreen
+import com.example.financeapp.ui.theme.ElectricPurple
+import com.example.financeapp.ui.theme.LocalAppColors
+import com.example.financeapp.ui.theme.Peach
+import com.example.financeapp.ui.theme.AppColors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -9,6 +16,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,15 +36,16 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.runtime.remember
 
 @Composable
-fun ThemeShopIntroSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, context: Context = LocalContext.current) {
 
     Column (
         modifier = modifier
             .fillMaxWidth()
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -42,7 +53,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, context: Context = Loca
     ) {
         Text (
             text = "We get it! Green isn't for everyone!",
-            color = Emerald,
+            color = colors.textPrimary,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
@@ -59,7 +70,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, context: Context = Loca
 
         Text (
             text = "Check out our purchasable content here. Purchasing themes from us also helps us make cool products for you, and keep our apps free.",
-            color = Emerald,
+            color = colors.textPrimary,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             modifier = Modifier
@@ -68,14 +79,14 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, context: Context = Loca
     }
 }
 @Composable
-fun ThemeShopEntry(modifier: Modifier = Modifier, title: String, price: String) {
+fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, alreadyBought: Boolean, title: String, price: String, color: Color, previewRequested: () -> Unit, applyThemeRequested: () -> Unit, purchaseRequested: () -> Unit) {
 
     Column (
         modifier = modifier
             .fillMaxSize()
             .padding()
             .background (
-                color = Pistachio,
+                color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Center,
@@ -85,7 +96,7 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, title: String, price: String) 
             text = "$title $price",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Emerald
+            color = colors.textPrimary
         )
 
         Spacer (
@@ -97,8 +108,13 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, title: String, price: String) 
             modifier = Modifier
                 .fillMaxWidth(0.7f)
                 .aspectRatio(1f)
+                .border (
+                    width = 1.dp,
+                    color = Color.White,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .background (
-                    color = Emerald,
+                    color = color,
                     shape = RoundedCornerShape(12.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -116,60 +132,115 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, title: String, price: String) 
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box (
-                modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp)
-                    .background (
-                        color = Emerald,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = "Preview",
-                    color = Pistachio,
-                    fontSize = 18.sp,
-                    fontStyle = FontStyle.Italic
-                )
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .width (
-                        12.dp
+            if (alreadyBought) {
+                Box (
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp)
+                        .border (
+                            width = 1.dp,
+                            color = Pistachio,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = Emerald,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            applyThemeRequested()
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text (
+                        text = "Apply",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Bold
                     )
-            )
+                }
 
-            Box (
-                modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp)
-                    .background (
-                        color = Emerald,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = "Buy",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontStyle = FontStyle.Italic
+            } else {
+                Box (
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp)
+                        .border (
+                            width = 1.dp,
+                            color = Pistachio,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = Emerald,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            previewRequested()
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text (
+                        text = "Preview",
+                        color = Color.Gray,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+
+                Spacer (
+                    modifier = Modifier
+                        .width (
+                            12.dp
+                        )
                 )
+
+                Box (
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp)
+                        .border (
+                            width = 1.dp,
+                            color = Pistachio,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = Emerald, //Die Farbe soll immmer Emerald sein, um mehr zum Kauf anzuregen ;)
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            purchaseRequested()
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text (
+                        text = "Buy",
+                        color = Pistachio,
+                        fontSize = 18.sp,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ThemeShopSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, themeShopViewModel: ThemeShopViewModel, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
     Column (
         modifier = modifier
             .fillMaxSize()
             .background (
-                color = Emerald,
+                color = colors.background,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Center,
@@ -185,8 +256,19 @@ fun ThemeShopSection(modifier: Modifier = Modifier, context: Context = LocalCont
             ThemeShopEntry (
                 modifier = Modifier
                     .weight(1f),
+                alreadyBought = themeShopViewModel.getThemePurchased("Charcoal"),
                 title = "Charcoal",
-                price = "$1.99"
+                price = "$1.99",
+                color = CharcoalGreen,
+                previewRequested = {
+                    previewRequested("Charcoal")
+                },
+                applyThemeRequested = {
+                    applyThemeRequested("Charcoal")
+                },
+                purchaseRequested = {
+                    themeShopViewModel.purchaseTheme(context as Activity,"Charcoal")
+                }
             )
 
             Spacer (
@@ -199,8 +281,19 @@ fun ThemeShopSection(modifier: Modifier = Modifier, context: Context = LocalCont
             ThemeShopEntry (
                 modifier = Modifier
                     .weight(1f),
+                alreadyBought = themeShopViewModel.getThemePurchased("Electric"),
                 title = "Electric",
-                price = "$1.99"
+                price = "$1.99",
+                color = ElectricPurple,
+                previewRequested = {
+                    previewRequested("Electric")
+                },
+                applyThemeRequested = {
+                    applyThemeRequested("Electric")
+                },
+                purchaseRequested = {
+                    themeShopViewModel.purchaseTheme(context as Activity, "Electric")
+                }
             )
         }
 
@@ -219,19 +312,43 @@ fun ThemeShopSection(modifier: Modifier = Modifier, context: Context = LocalCont
             ThemeShopEntry (
                 modifier = Modifier
                     .weight(1f),
+                alreadyBought = themeShopViewModel.getThemePurchased("Azure"),
                 title = "Azure",
-                price = "$1.99"
+                price = "$1.99",
+                color = AzureBlue,
+                previewRequested = {
+                    previewRequested("Azure")
+                },
+                applyThemeRequested = {
+                    applyThemeRequested("Azure")
+                },
+                purchaseRequested = {
+                    themeShopViewModel.purchaseTheme(context as Activity,"Azure")
+                }
             )
 
             Spacer (
                 modifier = Modifier
                     .width (4.dp)
             )
+
             ThemeShopEntry (
                 modifier = Modifier
                     .weight(1f),
+                alreadyBought = themeShopViewModel.getThemePurchased("Peach"),
                 title = "Peach",
-                price = "$1.99"
+                price = "$1.99",
+                color = Peach,
+                previewRequested = {
+                    previewRequested("Peach")
+                },
+                applyThemeRequested = {
+                    applyThemeRequested("Peach")
+                },
+                purchaseRequested = {
+                    val activity = context as Activity
+                    themeShopViewModel.purchaseTheme(activity, "Peach")
+                }
             )
         }
     }

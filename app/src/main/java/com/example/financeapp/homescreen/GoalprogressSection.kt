@@ -6,20 +6,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,17 +25,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
-import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
@@ -81,8 +75,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
         modifier = modifier
             .aspectRatio(1f)
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOAL) 0.1f else 1.0f),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.Top
     ) {
         Row (
             modifier = Modifier
@@ -168,10 +162,15 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
             Box (
                 modifier = Modifier
                     .size(64.dp)
+                    .clip(CircleShape)
+                    .background (
+                        color = colors.background,
+                        shape = CircleShape
+                    )
                     .border (
                         width = 1.dp,
-                        shape = CircleShape,
-                        color = colors.background
+                        color = colors.background,
+                        shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -179,23 +178,22 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                     painter = painterResource(R.drawable.doppelpfeileruntersymbol_foreground),
                     contentDescription = "Doppelpfeile",
                     modifier = Modifier
-                        .height(32.dp)
-                        .aspectRatio(1f)
+                        .size(32.dp)
+                        .background (
+                            color = colors.background,
+                            shape = CircleShape
+                        )
                         .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
                             expanded = true
                         },
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(colors.background)
+                    alignment = Alignment.Center,
+                    colorFilter = ColorFilter.tint(colors.surface)
                 )
             }
-
-
 
             SwapCurrentGoalMenu (
                 expanded = expanded,

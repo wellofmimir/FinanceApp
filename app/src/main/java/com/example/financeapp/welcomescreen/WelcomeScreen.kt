@@ -89,7 +89,7 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
         modifier = Modifier
             .fillMaxWidth()
             .height((heightPx / 2).dp)
-            .background(
+            .background (
                 color = Emerald,
                 shape = RoundedCornerShape(12.dp)
             ),
@@ -1476,11 +1476,11 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
 
     Box (
         modifier = Modifier
-            .offset(
+            .offset (
                 x = with(density) { imagePosition.x.toDp() },
                 y = with(density) { imagePosition.y.toDp() }
             )
-            .size(
+            .size (
                 width = with(density) { imageSize.height.toDp() },
                 height = with(density) { imageSize.width.toDp() }
             )
