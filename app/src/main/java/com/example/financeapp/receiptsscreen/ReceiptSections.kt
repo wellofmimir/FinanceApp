@@ -2,6 +2,9 @@ package com.example.financeapp.receiptsscreen
 
 import com.example.financeapp.R
 import com.example.financeapp.database.Receipt
+import com.example.financeapp.commonutils.fixOrientation
+import com.example.financeapp.commonutils.shareToWhatsapp
+import com.example.financeapp.commonutils.getShareableImageUri
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -92,7 +95,6 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
-import android.net.Uri
 
 enum class Timespan (id: Int) {
 
@@ -102,52 +104,6 @@ enum class Timespan (id: Int) {
     LAST_SIX_MONTHS (2),
     WHOLE_YEAR (3),
     ALL (4)
-}
-
-fun Bitmap.fixOrientation(path: String): Bitmap {
-
-    val exif = ExifInterface(path)
-
-    val rotation = when (exif.getAttributeInt (
-        ExifInterface.TAG_ORIENTATION,
-        ExifInterface.ORIENTATION_NORMAL
-    )) {
-        ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-        ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-        ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-        else -> 0f
-    }
-
-    if (rotation == 0f)
-        return this
-
-    val matrix = Matrix().apply {
-        postRotate(rotation)
-    }
-
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
-
-fun getShareableImageUri(context: Context, path: String): Uri {
-
-    val file = File(path)
-    return FileProvider.getUriForFile(context, "com.example.financeapp.provider", file)
-}
-fun shareToWhatsapp(context: Context, imageUri: Uri, text: String) {
-
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/*"
-        putExtra(Intent.EXTRA_STREAM, imageUri)
-        putExtra(Intent.EXTRA_TEXT, text)
-        setPackage("com.whatsapp")
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-
-    try {
-        context.startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
-    }
 }
 
 @Composable
@@ -236,7 +192,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 
     // Permission prüfen
     val permissionLauncher = rememberLauncherForActivityResult (
-        ActivityResultContracts.RequestPermission()
+         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
 

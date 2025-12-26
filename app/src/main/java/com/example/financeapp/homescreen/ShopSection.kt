@@ -89,8 +89,8 @@ fun ShopSection(modifier: Modifier = Modifier, context: Context = LocalContext.c
         Text (
             text = "Theme\nShop",
             color = colors.textPrimary,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = 8.dp)

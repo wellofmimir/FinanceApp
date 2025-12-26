@@ -23,9 +23,9 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun getExampleGoals() {
         val exampleGoals = listOf (
-            Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5),
-            Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2),
-            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4)
+            Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5, ""),
+            Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2, ""),
+            Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4, "")
         )
 
         internCompletedGoals.value = exampleGoals
@@ -80,6 +80,10 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     }
     fun setGoalCompleted(goal: Goal) {
         repository.setGoalCompleted(goal)
+    }
+
+    fun updateImageToGoal(idGoal: Int, pathToImage: String) {
+        repository.updateImageToGoal(idGoal, pathToImage)
     }
 
     fun addToTotalTokensEarned(amount: Int) {

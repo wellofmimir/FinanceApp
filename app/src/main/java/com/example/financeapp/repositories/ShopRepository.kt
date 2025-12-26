@@ -1,10 +1,6 @@
 package com.example.financeapp.repositories
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewModelScope
 import com.example.financeapp.billingmanager.BillingManager
 import com.example.financeapp.database.FinanceAppDatabase
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import android.app.Activity
 
 class ShopRepository(private val database: FinanceAppDatabase, private val billingManager: BillingManager) {

@@ -16,7 +16,8 @@ data class Goal (
     var saved: Float,
     var idStatus: Int,
     val dateWhenFinished: String,
-    val tokenCount: Int
+    val tokenCount: Int,
+    val pathToImage: String
 )
 
 data class GoalStatus (
@@ -69,7 +70,7 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, pathtoimage TEXT NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentGoal (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, idGoal INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
@@ -582,17 +583,34 @@ class FinanceAppDatabase private constructor(context: Context) {
         cursor.close()
 
         val values = ContentValues().apply {
-            put("id",         goal.id)
-            put("goal",       goal.goal)
-            put("amount",     goal.amount)
-            put("saved",      goal.saved)
-            put("idStatus",   goal.idStatus)
-            put("finishdate", goal.dateWhenFinished)
-            put("tokencount", goal.tokenCount)
+            put("id",          goal.id)
+            put("goal",        goal.goal)
+            put("amount",      goal.amount)
+            put("saved",       goal.saved)
+            put("idStatus",    goal.idStatus)
+            put("finishdate",  goal.dateWhenFinished)
+            put("tokencount",  goal.tokenCount)
+            put("pathtoimage", goal.pathToImage)
         }
 
         if (exists) {
             database.update("goals", values, "id = ?", arrayOf(goal.id.toString()))
+        }
+    }
+
+    fun updateImageToGoal(idGoal: Int, pathToImage: String) {
+
+        val cursor = database.rawQuery("SELECT id FROM goals WHERE id = ?", arrayOf(idGoal.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("id",          idGoal)
+            put("pathtoimage", pathToImage)
+        }
+
+        if (exists) {
+            database.update("goals", values, "id = ?", arrayOf(idGoal.toString()))
         }
     }
 
@@ -611,8 +629,9 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val idStatus = it.getInt(it.getColumnIndexOrThrow("idStatus"))
                 val dateWhenFinished = it.getString(it.getColumnIndexOrThrow("finishdate"))
                 val tokenCount = it.getInt(it.getColumnIndexOrThrow("tokencount"))
+                val pathToImage = it.getString(it.getColumnIndexOrThrow("pathtoimage"))
 
-                return Goal(id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount)
+                return Goal(id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount, pathToImage)
             }
         }
 
@@ -686,8 +705,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
             val dateWhenFinished = cursor.getString(cursor.getColumnIndexOrThrow("finishdate"))
             val tokenCount = cursor.getInt(cursor.getColumnIndexOrThrow("tokencount"))
+            val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
 
-            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount))
+            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount, pathToImage))
         }
 
         cursor.close()
@@ -707,6 +727,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
         values.put("finishdate", "")
         values.put("tokencount", tokenCount)
+        values.put("pathtoimage", "")
 
         if (exists) {
             database.update("goals", values, "goal = ?", arrayOf(nameOfGoal))
@@ -722,12 +743,13 @@ class FinanceAppDatabase private constructor(context: Context) {
         cursor.close()
 
         val values = ContentValues()
-        values.put("goal", goal.goal)
-        values.put("amount", goal.amount)
-        values.put("saved", goal.saved)
-        values.put("idStatus", goal.idStatus)
-        values.put("finishdate", goal.dateWhenFinished)
-        values.put("tokencount", goal.tokenCount)
+        values.put("goal",        goal.goal)
+        values.put("amount",      goal.amount)
+        values.put("saved",       goal.saved)
+        values.put("idStatus",    goal.idStatus)
+        values.put("finishdate",  goal.dateWhenFinished)
+        values.put("tokencount",  goal.tokenCount)
+        values.put("pathtoimage", goal.pathToImage)
 
         if (exists) {
             database.update("goals", values, "goal = ?", arrayOf(goal.goal))

@@ -14,6 +14,11 @@ class GoalRepository(private val database: FinanceAppDatabase) {
         }
     }
 
+    fun updateImageToGoal(idGoal: Int, pathToImage: String) {
+        database.run {
+            updateImageToGoal(idGoal, pathToImage)
+        }
+    }
     fun insertGoal(goal: Goal) {
         database.run {
             insertGoal(goal)
@@ -69,7 +74,7 @@ class GoalRepository(private val database: FinanceAppDatabase) {
             val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
             val formattedDate = currentDate.format(formatter)
 
-            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate, 3)
+            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate, 3, "")
         }
 
         val completedStatus = database.getIDGoalStatus("Completed")

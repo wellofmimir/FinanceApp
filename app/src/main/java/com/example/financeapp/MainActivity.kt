@@ -73,6 +73,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -847,6 +848,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
     val colors = LocalAppColors.current
 
     var goalAchieved by remember { mutableStateOf(false) }
+    var idGoalAchieved by remember { mutableIntStateOf(0)}
 
     Column (
         modifier = Modifier
@@ -859,9 +861,12 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
         if (goalAchieved) {
 
             onGoalAchieved()
+
             WellDoneSection (
                 modifier = Modifier
                     .fillMaxHeight(),
+                goalsSectionViewModel = goalsSectionViewModel,
+                idGoal = idGoalAchieved,
                 onFinished = {
                     onWellDoneSectionDismissed()
                     goalAchieved = false
@@ -878,8 +883,9 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                 GoalprogressSection (
                     modifier = Modifier
                         .weight(1f),
-                    onGoalReached = {
+                    onGoalAchieved = { idGoal ->
                         goalAchieved = true
+                        idGoalAchieved = idGoal
                     },
                     goalsSectionViewModel = goalsSectionViewModel,
                     tutorialInformation = tutorialInformation

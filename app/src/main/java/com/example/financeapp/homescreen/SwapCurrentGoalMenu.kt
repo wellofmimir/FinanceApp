@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -32,16 +33,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
 
     DropdownMenu (
         expanded = expanded,
         onDissmissRequest,
         modifier = Modifier
+            .border (
+                width = 1.dp,
+                color = colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background (
-                color = Emerald,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
             .fillMaxWidth()
@@ -52,7 +61,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
             modifier = Modifier
                 .background (
                     shape = RoundedCornerShape(12.dp),
-                    color = Emerald
+                    color = colors.primary
                 )
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -60,7 +69,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
         ) {
             Text (
                 text = "Swap current goal",
-                color = Color.White,
+                color = colors.secondary,
                 fontSize = 24.sp
             )
 
@@ -74,7 +83,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                     .fillMaxWidth(0.8f)
                     .align(Alignment.CenterHorizontally),
                 thickness = 1.dp,
-                color = Color.White
+                color = colors.secondary
             )
 
             Spacer (
@@ -98,7 +107,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                                 bottomStart = if (item == goals.last()) 12.dp else 0.dp,
                                 bottomEnd = if (item == goals.last()) 12.dp else 0.dp
                             ),
-                            color = Emerald
+                            color = colors.primary
                         )
                         .padding(horizontal = 36.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -132,7 +141,7 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
 
                     Text (
                         fontSize = 18.sp,
-                        color = Color.White,
+                        color = colors.secondary,
                         text = item.goal
                     )
                 }

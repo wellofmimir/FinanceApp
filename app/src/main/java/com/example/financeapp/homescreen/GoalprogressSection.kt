@@ -38,7 +38,7 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: Int) -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
 
@@ -123,7 +123,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalReached: () -> Unit
                         if (goalPercentage >= 100) {
                             goalsSectionViewModel.setGoalCompleted(updatedCurrentGoal)
                             goalsSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
-                            onGoalReached()
+                            onGoalAchieved(updatedCurrentGoal.id)
                         }
                     },
                     currentGoalText

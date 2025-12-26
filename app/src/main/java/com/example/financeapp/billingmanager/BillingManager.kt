@@ -88,7 +88,7 @@ class BillingManager(private val context: Context) {
 
         billingClient.queryProductDetailsAsync(productDetailParameters) { _, productDetailsList ->
             val productDetails = productDetailsList.firstOrNull() ?:
-            return@queryProductDetailsAsync
+                return@queryProductDetailsAsync
 
             val flowParameters = BillingFlowParams
                 .newBuilder()

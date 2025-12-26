@@ -1,4 +1,6 @@
 package com.example.financeapp.homescreen
+import com.example.financeapp.R
+import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,23 +33,137 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 import android.content.Context
-import com.example.financeapp.R
+import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.FileProvider
+import java.io.File
+
 
 @Composable
-fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, context: Context = LocalContext.current) {
+fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
+
+    val colors = LocalAppColors.current
+
+    AlertDialog (
+        modifier = Modifier
+            .background (
+                color = colors.background,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .height(225.dp),
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        title = {
+            Text (
+                text = "You did it!",
+                color = colors.secondary
+            )
+        },
+        text = {
+            Text (
+                text = "Do you want to snap a photo to remember it?",
+                color = colors.secondary
+            )
+        },
+        confirmButton = {
+            TextButton (
+                onClick = {
+                    onConfirm()
+                },
+                modifier = Modifier
+                    .border (
+                        width = 1.dp,
+                        color = colors.secondary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .background (
+                        color = colors.secondary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+            ) {
+                Text (
+                    text = "Yes, take a photo",
+                    color = colors.primary,
+
+                )
+            }
+        },
+        dismissButton = {
+            TextButton (
+                onClick = {
+                    onDismissRequest()
+                },
+                modifier = Modifier
+                    .border (
+                        width = 1.dp,
+                        color = colors.secondary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+            ) {
+                Text (
+                    text = "No",
+                    color = colors.secondary
+                )
+            }
+        },
+        containerColor = colors.primary
+    )
+}
+
+@Composable
+fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, idGoal: Int, onFinished: () -> Unit, context: Context = LocalContext.current) {
+
+    val colors = LocalAppColors.current
+    var showDialog by remember { mutableStateOf(false) }
+
+    val photos = remember { mutableStateListOf<File>() }
+
+    val takePictureLauncher = rememberLauncherForActivityResult (
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            photos.lastOrNull()?.let { pathToImage ->
+
+                goalsSectionViewModel.updateImageToGoal(idGoal, pathToImage.absolutePath)
+                Toast.makeText(context, "Picture of treat saved: ${pathToImage.absolutePath}", Toast.LENGTH_LONG).show()
+                onFinished()
+            }
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult (
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+
+            val photoFile = File(context.cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+            val photoUri = FileProvider.getUriForFile(context, "com.example.financeapp.provider", photoFile)
+            photos.add(photoFile)
+
+            takePictureLauncher.launch(photoUri)
+
+        } else {
+            Toast.makeText(context, "Permission for camera needed.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Column (
         modifier = modifier
-            .background(
-                color = Emerald,
+            .background (
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
             .border (
                 width = 2.dp,
-                color = Pistachio,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(4.dp),
@@ -60,7 +178,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
         Text (
             text = "Well done!",
             fontSize = 40.sp,
-            color = Pistachio
+            color = colors.secondary
         )
 
         Spacer (
@@ -92,7 +210,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
             text = buildAnnotatedString {
                 withStyle (
                     style = SpanStyle (
-                        color = Pistachio,
+                        color = colors.secondary,
                         fontWeight = FontWeight.Bold
                     )
                 ) {
@@ -100,7 +218,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
                 }
             },
             fontSize = 16.sp,
-            color = Pistachio,
+            color = colors.secondary,
             textAlign = TextAlign.Center
         )
 
@@ -112,7 +230,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
         Text (
             text = "Now give yourself a little treat. Or a big one. The world is your oyster.",
             fontSize = 16.sp,
-            color = Pistachio,
+            color = colors.secondary,
             textAlign = TextAlign.Center
         )
 
@@ -124,11 +242,11 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
         Box (
             modifier = Modifier
                 .background (
-                    color = Emerald,
+                    color = colors.primary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .border (
-                    color = Pistachio,
+                    color = colors.secondary,
                     width = 2.dp,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -139,16 +257,28 @@ fun WellDoneSection(modifier: Modifier = Modifier, onFinished: () -> Unit, conte
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    onFinished()
+                    showDialog = true
                 },
             contentAlignment = Alignment.Center
         ) {
             Text (
                 text = "I've treated myself!",
                 fontSize = 18.sp,
-                color = Pistachio,
+                color = colors.secondary,
                 modifier = Modifier
                     .padding(horizontal = 2.dp)
+            )
+        }
+
+        if (showDialog) {
+            QuestionDialog (
+                onConfirm = {
+                    if (Build.VERSION.SDK_INT >= 33)
+                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                },
+                onDismissRequest = {
+                    onFinished()
+                }
             )
         }
     }

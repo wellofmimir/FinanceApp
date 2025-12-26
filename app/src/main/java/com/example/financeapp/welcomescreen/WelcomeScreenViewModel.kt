@@ -23,7 +23,8 @@ class WelcomeScreenViewModel(private val userRepository: UserRepository, private
             goal.saved,
             goal.idStatus,
             formattedDate,
-            goal.tokenCount
+            goal.tokenCount,
+            ""
         )
         goalRepository.insertGoal(newGoal)
 
@@ -35,7 +36,8 @@ class WelcomeScreenViewModel(private val userRepository: UserRepository, private
             goal.saved,
             goal.idStatus,
             formattedDate,
-            goal.tokenCount
+            goal.tokenCount,
+            ""
         )
         goalRepository.setCurrentGoal(newGoal)
     }

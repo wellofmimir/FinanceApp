@@ -1,9 +1,10 @@
 package com.example.financeapp.homescreen
 
+import android.R
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +20,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.financeapp.ui.theme.Emerald
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
@@ -34,22 +33,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.example.financeapp.database.Goal
-import com.example.financeapp.ui.theme.Pistachio
+import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
 
 fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, onNewAmount: (String) -> Unit, onSaved: (String) -> Unit, currentGoalText: String) {
+
+    val colors = LocalAppColors.current
 
     var isEditingInitialAmount by remember { mutableStateOf(false) }
     var isEditingSavedAmount by remember { mutableStateOf(false) }
@@ -66,7 +65,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
         mutableStateOf(TextFieldValue(originalSavedAmountText))
     }
 
-    var tokenCount by remember { mutableIntStateOf(5) }
     var hasChanged by remember { mutableStateOf(false) }
 
     LaunchedEffect(expanded) {
@@ -77,8 +75,6 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
 
             savedAmountText = goal.saved.toString()
             originalSavedAmountText = savedAmountText
-
-            tokenCount = goal.tokenCount
         }
     }
 
@@ -107,8 +103,13 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
         },
         modifier = Modifier
             .fillMaxWidth()
+            .border (
+                width = 1.dp,
+                color = colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background (
-                color = Emerald,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable (
@@ -133,7 +134,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
             modifier = Modifier
                 .background (
                     shape = RoundedCornerShape(12.dp),
-                    color = Emerald
+                    color = colors.primary
                 )
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,7 +142,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
         ) {
             Text (
                 text = currentGoalText,
-                color = Color.White,
+                color = colors.secondary,
                 fontSize = 24.sp
             )
 
@@ -167,7 +168,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Emerald
+                        color = colors.primary
                     )
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -184,7 +185,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Emerald
+                        color = colors.primary
                     )
                     .fillMaxWidth()
                     .animateContentSize()
@@ -194,7 +195,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
             ) {
                 Text (
                     text = "Amount: ",
-                    color = Color.White,
+                    color = colors.secondary,
                     fontSize = 24.sp
                 )
 
@@ -258,7 +259,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
 
                     Text (
                         text = amountText,
-                        color = Color.White,
+                        color = colors.secondary,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -277,7 +278,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Emerald
+                        color = colors.primary
                     )
                     .fillMaxWidth()
                     .animateContentSize()
@@ -287,12 +288,11 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
             ) {
                 Text (
                     text = "Already saved: ",
-                    color = Color.White,
+                    color = colors.secondary,
                     fontSize = 24.sp,
                 )
 
                 val focusRequester = remember { FocusRequester() }
-                var hasFocus by remember { mutableStateOf(false) }
 
                 if (isEditingSavedAmount) {
 
@@ -353,7 +353,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
 
                     Text (
                         text = savedAmountText,
-                        color = Color.White,
+                        color = colors.secondary,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -377,7 +377,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = Emerald
+                        color = colors.primary
                     )
                     .fillMaxWidth()
                     .padding(8.dp),
@@ -406,7 +406,7 @@ fun EditGoalMenu(expanded: Boolean, goal: Goal?, onDismissRequest: () -> Unit, o
                     ),
                     border = BorderStroke (
                         width = 1.dp,
-                        color = Color.White
+                        color = colors.secondary
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
