@@ -53,7 +53,14 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
-            ),
+            )
+            .clickable (
+            ) {
+                if (tutorialInformation.isActive)
+                    return@clickable
+
+                onReceiptsLogoClicked()
+            },
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {

@@ -95,6 +95,7 @@ import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.financeapp.dailytipscreen.DailyTipScreen
 import java.util.concurrent.TimeUnit
 
 
@@ -110,7 +111,9 @@ enum class Screen (id: Int) {
 
     USER_SETTINGS(id = 7),
 
-    SHOP (id = 8)
+    SHOP (id = 8),
+
+    DAILY_TIPS(id = 9)
 }
 
 enum class TutorialStep (id: Int) {
@@ -355,7 +358,7 @@ class MainActivity : ComponentActivity() {
                             }
                     ) {
                         // Header nur, wenn nicht Welcome
-                        if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP).contains(sectionIdentifier)) {
+                        if (listOf<Screen>(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP, Screen.DAILY_TIPS).contains(sectionIdentifier)) {
 
                             if (goalAchieved) {
 
@@ -415,6 +418,12 @@ class MainActivity : ComponentActivity() {
                                 },
                                 shopSectionClicked = {
                                     sectionIdentifier = Screen.SHOP
+                                },
+                                receiptLogoClicked = {
+                                    sectionIdentifier = Screen.RECEIPTS
+                                },
+                                dailyTipsSectionClicked = {
+                                    sectionIdentifier = Screen.DAILY_TIPS
                                 }
                             )
                         }
@@ -486,6 +495,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
+                        if (sectionIdentifier == Screen.DAILY_TIPS)
+                            DailyTipScreen ()
 
                         AnimatedVisibility (
                             visible = sectionIdentifier == Screen.SPLASH,
@@ -843,7 +855,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewModel: ReceiptSectionsViewModel, goalsSectionViewModel: GoalsSectionViewModel, onGoalAchieved: () -> Unit, onWellDoneSectionDismissed: () -> Unit, shopSectionClicked: () -> Unit, context: Context = LocalContext.current) {
+fun HomeScreen (
+        tutorialInformation: TutorialInformation,
+        receiptSectionsViewModel: ReceiptSectionsViewModel,
+        goalsSectionViewModel: GoalsSectionViewModel,
+        onGoalAchieved: () -> Unit,
+        onWellDoneSectionDismissed: () -> Unit,
+        shopSectionClicked: () -> Unit,
+        receiptLogoClicked: () -> Unit,
+        dailyTipsSectionClicked: () -> Unit,
+        context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
 
@@ -946,7 +967,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                                 .weight(3f)
                                 .fillMaxHeight(),
                             dailyTipSectionClicked = {
-
+                                dailyTipsSectionClicked()
                             }
                         )
 
@@ -993,7 +1014,7 @@ fun HomeScreen(tutorialInformation: TutorialInformation, receiptSectionsViewMode
                         receiptSectionsViewModel = receiptSectionsViewModel,
                         tutorialInformation = tutorialInformation,
                         onReceiptsLogoClicked = {
-
+                            receiptLogoClicked()
                         }
                     )
                 }

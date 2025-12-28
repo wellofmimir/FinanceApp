@@ -144,6 +144,12 @@ drawable doppelpfeilerunter_background
 drawable doppelpfeilerunter_foreground
 drawable doppelpfeileruntersymbol_background
 drawable doppelpfeileruntersymbol_foreground
+drawable facebook_background
+drawable facebook_foreground
+drawable facebooklogo_background
+drawable facebooklogo_foreground
+drawable facebookmessenger_background
+drawable facebookmessenger_foreground
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable herzzumliken_background
@@ -202,6 +208,8 @@ drawable ringmitduennemrand_background
 drawable ringmitduennemrand_foreground
 drawable starfilledpistachio_background
 drawable starfilledpistachio_foreground
+drawable whatsapp_background
+drawable whatsapp_foreground
 drawable whatsapplogo_background
 drawable whatsapplogo_foreground
 id accessibility_action_clickable_span
@@ -341,6 +349,12 @@ mipmap doppelpfeilerunter
 mipmap doppelpfeilerunter_round
 mipmap doppelpfeileruntersymbol
 mipmap doppelpfeileruntersymbol_round
+mipmap facebook
+mipmap facebook_round
+mipmap facebooklogo
+mipmap facebooklogo_round
+mipmap facebookmessenger
+mipmap facebookmessenger_round
 mipmap herzzumliken
 mipmap herzzumliken_round
 mipmap ic_launcher
@@ -378,6 +392,8 @@ mipmap ringmitduennemrand
 mipmap ringmitduennemrand_round
 mipmap starfilledpistachio
 mipmap starfilledpistachio_round
+mipmap whatsapp
+mipmap whatsapp_round
 mipmap whatsapplogo
 mipmap whatsapplogo_round
 raw com_android_billingclient_heterodyne_info

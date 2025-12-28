@@ -46,7 +46,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val tokenIdentifier = currentGoal?.tokenCount ?: 3
+        val tokenIdentifier = currentGoal?.tokenCount ?: 0
 
         val circleSize = 64.dp
         val strokeWidth = 2.dp

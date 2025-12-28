@@ -1,6 +1,7 @@
 package com.example.financeapp.settingsscreen
 import com.example.financeapp.ui.theme.LocalAppColors
 
+import androidx.compose.ui.graphics.Color
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,6 +55,9 @@ import com.example.financeapp.repositories.FeedbackRepository
 import com.example.financeapp.repositories.CurrencyRepository
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
+import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current, focusManager: FocusManager = LocalFocusManager.current) {
@@ -102,7 +107,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         modifier = modifier
             .fillMaxWidth()
             .background (
-                color = colors.background,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -112,7 +117,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -126,7 +131,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text (
                     text = "Name:",
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -149,13 +154,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         modifier = Modifier
                             .fillMaxWidth()
                             .background (
-                                color = colors.textPrimary
+                                color = Color.White
                             )
                     )
                 } else {
                     Text (
                         text = user,
-                        color = colors.textPrimary,
+                        color = colors.primary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 32.sp,
                         modifier = Modifier
@@ -207,7 +212,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -221,7 +226,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text (
                     text = "Currency:",
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -252,13 +257,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                             .width(200.dp)
                             .padding(10.dp)
                             .background (
-                                color = colors.background
+                                color = Color.White
                             )
                     )
                 } else {
                     Text (
                         text = currency,
-                        color = colors.textPrimary,
+                        color = colors.primary,
                         fontWeight = FontWeight.Normal,
                         fontSize = 32.sp,
                         modifier = Modifier
@@ -314,7 +319,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
@@ -328,7 +333,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text(
                     text = "Version Info:",
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 32.sp
                 )
@@ -342,7 +347,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text(
                     text = "1.0.0.0",
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     fontWeight = FontWeight.Normal,
                     fontSize = 32.sp
                 )
@@ -360,7 +365,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 AlertDialog (
                     modifier = Modifier
                         .background (
-                            color = colors.background,
+                            color = colors.primary,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .height(225.dp),
@@ -370,13 +375,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     title = {
                         Text (
                             text = "A bit more, please ...",
-                            color = colors.textPrimary
+                            color = colors.secondary
                         )
                     },
                     text = {
                         Text (
                             text = "Please give us a little bit more elaborate feedback ... :)",
-                            color = colors.textPrimary
+                            color = colors.secondary
                         )
                     },
                     confirmButton = {
@@ -387,11 +392,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         ) {
                             Text (
                                 text = "Okay",
-                                color = colors.textPrimary
+                                color = colors.secondary
                             )
                         }
                     },
-                    containerColor = colors.background
+                    containerColor = colors.primary
                 )
             }
 
@@ -400,7 +405,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     .fillMaxWidth()
                     .fillMaxHeight(if (feedbackTextFieldIsFocused) 0.5f else 0.8f)
                     .background (
-                        color = colors.surface,
+                        color = colors.secondary,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .height(100.dp)
@@ -412,7 +417,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 ) {
                     Text (
                         text = "Feedback",
-                        color = colors.textPrimary,
+                        color = colors.primary,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 32.sp
                     )
@@ -426,15 +431,15 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     label = {
                         Text (
                             text = labelText,
-                            color = colors.textPrimary
+                            color = colors.primary
                         )
                     },
                     modifier = Modifier
                         .weight(0.8f)
                         .fillMaxWidth()
                         .padding(end = 12.dp)
-                        .background(
-                            color = colors.surface
+                        .background (
+                            color = colors.secondary
                         )
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
@@ -442,7 +447,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                                 isEditingTheCurrency = false
                                 feedbackTextFieldIsFocused = true
                             }
-                        }
+                        },
+                        colors = OutlinedTextFieldDefaults.colors (
+                            focusedTextColor = Emerald,
+                            unfocusedTextColor = Emerald
+                        )
                 )
 
                 Row (
@@ -455,11 +464,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         modifier = Modifier
                             .padding(end = 2.dp)
                             .background (
-                                color = colors.background,
+                                color = colors.primary,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .border (
-                                color = colors.surface,
+                                color = colors.secondary,
                                 width = 2.dp,
                                 shape = RoundedCornerShape(12.dp)
                             )
@@ -470,7 +479,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = "Dismiss",
                             fontSize = 18.sp,
-                            color = colors.textPrimary,
+                            color = colors.secondary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -487,11 +496,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         modifier = Modifier
                             .padding(end = 12.dp)
                             .background (
-                                color = colors.background,
+                                color = colors.primary,
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .border (
-                                color = colors.surface,
+                                color = colors.secondary,
                                 width = 2.dp,
                                 shape = RoundedCornerShape(12.dp)
                             )
@@ -504,7 +513,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         Text (
                             text = sendButtonText,
                             fontSize = 18.sp,
-                            color = colors.textPrimary,
+                            color = colors.secondary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -539,7 +548,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 Text (
                     text = textAfterFeedbackButtonClicked,
                     fontSize = 32.sp,
-                    color = colors.background,
+                    color = colors.primary,
                     textAlign = TextAlign.Center
                 )
             }

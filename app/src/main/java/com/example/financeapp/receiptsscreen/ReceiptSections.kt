@@ -56,8 +56,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import java.io.File
 import androidx.core.content.FileProvider
 import android.Manifest
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.mutableIntStateOf
@@ -80,8 +78,6 @@ import java.time.format.DateTimeFormatter
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
-import android.media.ExifInterface
-import android.graphics.Matrix
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -228,8 +224,14 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
             .fillMaxWidth()
             .height(450.dp)
             .heightIn(min = 450.dp)
+            .border (
+                width = 1.dp,
+                color = colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background (
-                color = colors.primary
+                color = colors.primary,
+                shape = RoundedCornerShape(12.dp)
             )
     ) {
         Column (
@@ -868,6 +870,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                             color = colors.secondary
                         )
                         .background (
+                            shape = RoundedCornerShape(12.dp),
                             color = colors.background
                         ),
                     contentAlignment = Alignment.Center
@@ -875,36 +878,41 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                     Column (
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 12.dp),
+                            .padding(top = 12.dp)
+                            .background (
+                                color = colors.primary,
+                                shape = RoundedCornerShape(12.dp)
+                            ),
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         currentReceipt?.let { currentReceipt ->
                             Text (
                                 text = currentReceipt.description,
-                                color = colors.textSecondary
+                                color = colors.secondary,
+                                fontSize = 24.sp
                             )
 
                             Text (
                                 text = if (currency.length == 1) currency + " " + currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-                                color = colors.textSecondary
+                                color = colors.secondary
                             )
 
                             if (currentReceipt.remindMeDate.isNotEmpty()) {
                                 Text (
                                     text = "When to remind you:\n" + currentReceipt.remindMeDate,
-                                    color = colors.textSecondary
+                                    color = colors.secondary
                                 )
                             }
 
                             Text (
                                 text = "Share",
-                                color = colors.textSecondary
+                                color = colors.secondary
                             )
 
                             Spacer (
                                 modifier = Modifier
-                                    .height(12.dp)
+                                    .height(6.dp)
                             )
 
                             Image (

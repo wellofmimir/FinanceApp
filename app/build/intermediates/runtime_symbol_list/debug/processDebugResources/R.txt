@@ -143,6 +143,12 @@ int drawable doppelpfeilerunter_background 0x7f050022
 int drawable doppelpfeilerunter_foreground 0x7f050023
 int drawable doppelpfeileruntersymbol_background 0x7f050024
 int drawable doppelpfeileruntersymbol_foreground 0x7f050025
+int drawable facebook_background 0x7f050066
+int drawable facebook_foreground 0x7f050067
+int drawable facebooklogo_background 0x7f050062
+int drawable facebooklogo_foreground 0x7f050063
+int drawable facebookmessenger_background 0x7f050064
+int drawable facebookmessenger_foreground 0x7f050065
 int drawable googleg_disabled_color_18 0x7f050026
 int drawable googleg_standard_color_18 0x7f050027
 int drawable herzzumliken_background 0x7f050028
@@ -201,6 +207,8 @@ int drawable ringmitduennemrand_background 0x7f05005c
 int drawable ringmitduennemrand_foreground 0x7f05005d
 int drawable starfilledpistachio_background 0x7f05005e
 int drawable starfilledpistachio_foreground 0x7f05005f
+int drawable whatsapp_background 0x7f050068
+int drawable whatsapp_foreground 0x7f050069
 int drawable whatsapplogo_background 0x7f050060
 int drawable whatsapplogo_foreground 0x7f050061
 int id accessibility_action_clickable_span 0x7f060000
@@ -340,6 +348,12 @@ int mipmap doppelpfeilerunter 0x7f090006
 int mipmap doppelpfeilerunter_round 0x7f090007
 int mipmap doppelpfeileruntersymbol 0x7f090008
 int mipmap doppelpfeileruntersymbol_round 0x7f090009
+int mipmap facebook 0x7f090035
+int mipmap facebook_round 0x7f090036
+int mipmap facebooklogo 0x7f090031
+int mipmap facebooklogo_round 0x7f090032
+int mipmap facebookmessenger 0x7f090033
+int mipmap facebookmessenger_round 0x7f090034
 int mipmap herzzumliken 0x7f09000a
 int mipmap herzzumliken_round 0x7f09000b
 int mipmap ic_launcher 0x7f09000c
@@ -377,6 +391,8 @@ int mipmap ringmitduennemrand 0x7f09002b
 int mipmap ringmitduennemrand_round 0x7f09002c
 int mipmap starfilledpistachio 0x7f09002d
 int mipmap starfilledpistachio_round 0x7f09002e
+int mipmap whatsapp 0x7f090037
+int mipmap whatsapp_round 0x7f090038
 int mipmap whatsapplogo 0x7f09002f
 int mipmap whatsapplogo_round 0x7f090030
 int raw com_android_billingclient_heterodyne_info 0x7f0a0000

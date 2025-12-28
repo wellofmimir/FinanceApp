@@ -1,6 +1,4 @@
 package com.example.financeapp.homescreen
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +25,9 @@ fun DailyTipSection(modifier: Modifier = Modifier, context: Context = LocalConte
 
     Box (
         modifier = modifier
+            .clickable {
+                dailyTipSectionClicked()
+            }
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
@@ -42,12 +42,6 @@ fun DailyTipSection(modifier: Modifier = Modifier, context: Context = LocalConte
             color = colors.textPrimary,
             modifier = Modifier
                 .padding(horizontal = 12.dp)
-                .clickable (
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    dailyTipSectionClicked()
-                }
         )
     }
 }

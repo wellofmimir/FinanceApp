@@ -29,7 +29,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                    onGoalHistoryClicked: () -> Unit,
                    onYourQuotesClicked: () -> Unit,
                    onReceiptsClicked: () -> Unit,
-                   onSettingsClicked:() -> Unit) {
+                   onSettingsClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
 

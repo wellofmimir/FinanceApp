@@ -81,7 +81,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 )
                 .border (
                     width = 1.dp,
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .shadow (

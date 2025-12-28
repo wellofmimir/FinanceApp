@@ -32,9 +32,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,8 @@ import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.commonutils.fixOrientation
 import com.example.financeapp.commonutils.getShareableImageUri
+import com.example.financeapp.commonutils.shareToFacebook
+import com.example.financeapp.commonutils.shareToFacebookMessenger
 import com.example.financeapp.commonutils.shareToWhatsapp
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.database.FinanceAppDatabase
@@ -87,12 +91,41 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var openedGoal by remember { mutableStateOf<Goal?>(null) }
 
-    LaunchedEffect(Unit) {
-        achievementsSectionViewModel.shareEvent.collect { event ->
+    var whatsAppClicked by remember { mutableStateOf(false) }
+    var facebookClicked by remember { mutableStateOf(false) }
+    var facebookMessengerClicked by remember {mutableStateOf(false)}
+
+    LaunchedEffect(whatsAppClicked) {
+        achievementsSectionViewModel.shareEventForWhatsApp.collect { event ->
             when (event) {
                 is ShareAchievementEvent.SharedAchievement -> {
                     val uri = getShareableImageUri(context, event.imageUri.toString())
                     shareToWhatsapp(context, uri, event.text)
+                    whatsAppClicked = false
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(facebookClicked) {
+        achievementsSectionViewModel.shareEventForFacebook.collect { event ->
+            when (event) {
+                is ShareAchievementEvent.SharedAchievement -> {
+                    val uri = getShareableImageUri(context, event.imageUri.toString())
+                    shareToFacebook(context, uri)
+                    facebookClicked = false
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(facebookMessengerClicked) {
+        achievementsSectionViewModel.shareEventForFacebookMessenger.collect { event ->
+            when (event) {
+                is ShareAchievementEvent.SharedAchievement -> {
+                    val uri = getShareableImageUri(context, event.imageUri.toString())
+                    shareToFacebookMessenger(context, uri)
+                    facebookMessengerClicked = false
                 }
             }
         }
@@ -144,7 +177,8 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                             color = colors.secondary
                         )
                         .background (
-                            color = colors.background
+                            color = colors.background,
+                            shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -156,8 +190,9 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text (
-                            text = "Share",
-                            color = colors.textSecondary
+                            text = openedGoal?.goal.toString(),
+                            color = colors.textSecondary,
+                            fontSize = 24.sp
                         )
 
                         Spacer (
@@ -165,21 +200,95 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                                 .height(12.dp)
                         )
 
-                        Image (
-                            painter = painterResource(R.drawable.whatsapplogo_foreground),
-                            contentDescription = "Whatsapp-Logo",
-                            colorFilter = ColorFilter.tint(colors.secondary),
-                            modifier = Modifier
-                                .size(26.dp)
-                                .clickable (
-                                    indication = null,
-                                    interactionSource = remember { MutableInteractionSource() }
-                                ) {
-                                    openedGoal?.let {
-                                        achievementsSectionViewModel.shareAchievement(it)
-                                    }
-                                }
+                        Text (
+                            text = "Share",
+                            color = colors.textSecondary
                         )
+
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f)
+                        ) {
+                            Box (
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(200.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image (
+                                    painter = painterResource(R.drawable.whatsapp_foreground),
+                                    contentDescription = "Whatsapp-Logo",
+                                    colorFilter = ColorFilter.tint(colors.secondary),
+                                    modifier = Modifier
+                                        .clickable (
+                                            indication = null,
+                                            interactionSource = remember { MutableInteractionSource() }
+                                        ) {
+                                            if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                return@clickable
+
+                                            openedGoal?.let {
+                                                achievementsSectionViewModel.shareAchievementOnWhatsApp(it)
+                                                whatsAppClicked = true
+                                            }
+                                        }
+                                )
+                            }
+
+                            Box (
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(200.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image (
+                                    painter = painterResource(R.drawable.facebook_foreground),
+                                    contentDescription = "Facebook-Logo",
+                                    colorFilter = ColorFilter.tint(colors.secondary),
+                                    modifier = Modifier
+                                        .clickable (
+                                            indication = null,
+                                            interactionSource = remember { MutableInteractionSource() }
+                                        ) {
+                                            if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                return@clickable
+
+                                            openedGoal?.let {
+                                                achievementsSectionViewModel.shareAchievementOnFacebook(it)
+                                                facebookClicked = true
+                                            }
+                                        }
+                                )
+                            }
+
+                            Box (
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .size(200.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image (
+                                    painter = painterResource(R.drawable.facebookmessenger_foreground),
+                                    contentDescription = "Facebook-Messenger",
+                                    colorFilter = ColorFilter.tint(colors.secondary),
+                                    modifier = Modifier
+                                        .clickable (
+                                            indication = null,
+                                            interactionSource = remember { MutableInteractionSource() }
+                                        ) {
+                                            if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                return@clickable
+
+                                            openedGoal?.let {
+                                                achievementsSectionViewModel.shareAchievementOnFacebookMessenger(it)
+                                                facebookMessengerClicked = true
+                                            }
+                                        }
+                                )
+                            }
+                        }
                     }
                 }
             }

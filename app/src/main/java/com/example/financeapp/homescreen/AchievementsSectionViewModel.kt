@@ -16,14 +16,48 @@ sealed interface ShareAchievementEvent {
     data class SharedAchievement (val imageUri: Uri, val text: String): ShareAchievementEvent
 }
 class AchievementsSectionViewModel(private val repository: GoalRepository): ViewModel() {
-    private val internShareEvent = MutableSharedFlow<ShareAchievementEvent>()
-    val shareEvent = internShareEvent.asSharedFlow()
 
-    fun shareAchievement(goal: Goal) {
+    private val internShareEventForFacebook = MutableSharedFlow<ShareAchievementEvent>()
+    val shareEventForFacebook = internShareEventForFacebook.asSharedFlow()
+
+    fun shareAchievementOnFacebook(goal: Goal) {
         viewModelScope.launch {
-            internShareEvent.emit(ShareAchievementEvent.SharedAchievement(imageUri = goal.pathToImage.toUri(), text = "I achieved my goal with the Greeen-App!"))
+            internShareEventForFacebook.emit (
+                ShareAchievementEvent.SharedAchievement (
+                    imageUri = goal.pathToImage.toUri(),
+                    text = "I achieved my goal with the Greeen-App!"
+                )
+            )
         }
     }
+    private val internShareEventForWhatsApp = MutableSharedFlow<ShareAchievementEvent>()
+    val shareEventForWhatsApp = internShareEventForWhatsApp.asSharedFlow()
+
+    fun shareAchievementOnWhatsApp(goal: Goal) {
+        viewModelScope.launch {
+            internShareEventForWhatsApp.emit (
+                ShareAchievementEvent.SharedAchievement (
+                    imageUri = goal.pathToImage.toUri(),
+                    text = "I achieved my goal with the Greeen-App!"
+                )
+            )
+        }
+    }
+
+    private val internShareEventForFacebookMessenger = MutableSharedFlow<ShareAchievementEvent>()
+    val shareEventForFacebookMessenger = internShareEventForFacebookMessenger.asSharedFlow()
+
+    fun shareAchievementOnFacebookMessenger(goal: Goal) {
+        viewModelScope.launch {
+            internShareEventForFacebookMessenger.emit (
+                ShareAchievementEvent.SharedAchievement (
+                    imageUri = goal.pathToImage.toUri(),
+                    text = "I achieved my goal with the Greeen-App!"
+                )
+            )
+        }
+    }
+
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
     private fun insertExampleGoals() {

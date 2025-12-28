@@ -1,8 +1,9 @@
 package com.example.financeapp.header
+
 import com.example.financeapp.R
 import com.example.financeapp.Screen
 import com.example.financeapp.TutorialInformation
-import com.example.financeapp.ui.theme.Emerald
+import com.example.financeapp.ui.theme.LocalAppColors
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -26,13 +27,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
-import com.example.financeapp.ui.theme.LocalAppColors
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -60,6 +59,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
         4 -> "About Greeen"
         7 -> "Settings"
         8 -> "Shop"
+        9 -> "Daily Tips"
         else -> "Welcome!"
     }
 

@@ -2,6 +2,7 @@ package com.example.financeapp.homescreen
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,8 +54,13 @@ fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
 
     AlertDialog (
         modifier = Modifier
+            .border (
+                width = 1.dp,
+                color = colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background (
-                color = colors.background,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
             .height(225.dp),
@@ -81,7 +87,7 @@ fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
                 modifier = Modifier
                     .border (
                         width = 1.dp,
-                        color = colors.secondary,
+                        color = Color.White,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .background (
