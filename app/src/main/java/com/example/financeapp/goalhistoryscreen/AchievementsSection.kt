@@ -77,7 +77,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
             override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository(database)
+                val repository = GoalRepository.getInstance(database)
 
                 return AchievementsSectionViewModel(repository) as T
             }

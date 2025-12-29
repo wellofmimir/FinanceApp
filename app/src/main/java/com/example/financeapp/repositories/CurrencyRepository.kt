@@ -4,7 +4,7 @@ import com.example.financeapp.database.FinanceAppDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CurrencyRepository(private val database: FinanceAppDatabase) {
+class CurrencyRepository private constructor (private val database: FinanceAppDatabase) {
     companion object {
         private var instance: CurrencyRepository? = null
 

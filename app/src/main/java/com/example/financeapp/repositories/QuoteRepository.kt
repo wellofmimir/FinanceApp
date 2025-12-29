@@ -4,16 +4,16 @@ import com.example.financeapp.network.QuoteClient
 import com.example.financeapp.network.QuoteClientCallback
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.database.Quote
+import com.example.financeapp.commonutils.isValidJson
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class QuoteRepository private constructor(val database: FinanceAppDatabase) {
+class QuoteRepository private constructor (val database: FinanceAppDatabase) {
 
     companion object {
         private var instance: QuoteRepository? = null
@@ -31,20 +31,6 @@ class QuoteRepository private constructor(val database: FinanceAppDatabase) {
     private var internQuoteToQuotedPerson = MutableStateFlow<Pair<String, String>>("" to "")
     var quoteToQuotedPerson = internQuoteToQuotedPerson.asStateFlow()
     private val client = QuoteClient.getInstance()
-
-    private fun isValidJson(json: String): Any {
-
-        return try {
-            when {
-                json.trim().startsWith("{") -> JSONObject(json)
-                json.trim().startsWith("[") -> JSONArray(json)
-                else -> false
-            }
-
-        } catch (e: Exception) {
-            return false
-        }
-    }
 
     fun hasError(): Boolean {
         return client.hasError
@@ -83,20 +69,18 @@ class QuoteRepository private constructor(val database: FinanceAppDatabase) {
             override fun result(response: String) {
 
                 if (isValidJson(response) == false) {
-
                     internQuoteToQuotedPerson.value = Pair<String, String>("A little error occurred - no quote today :(", "Anonymous")
-                    return;
+                    return
                 }
 
                 if (!response.startsWith("{")) {
-
                     internQuoteToQuotedPerson.value = Pair<String, String>("A little error occurred - no quote today :(", "Anonymous")
-                    return;
+                    return
                 }
 
                 val jsonObject = JSONObject(response)
                 internQuoteToQuotedPerson.value = Pair<String, String>(jsonObject.getString("quote"), jsonObject.getString("person"))
-                database.saveDailyQuoteFetched(internQuoteToQuotedPerson.value)
+                database.setDailyQuote(internQuoteToQuotedPerson.value)
             }
         })
     }

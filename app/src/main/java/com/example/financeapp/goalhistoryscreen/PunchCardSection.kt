@@ -61,7 +61,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
             override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.Companion.getInstance(context)
-                val goalRepository = GoalRepository(database)
+                val goalRepository = GoalRepository.getInstance(database)
 
                 return PunchCardSectionViewModel(goalRepository) as T
             }

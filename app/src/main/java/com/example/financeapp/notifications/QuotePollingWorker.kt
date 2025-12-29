@@ -9,7 +9,7 @@ import androidx.work.WorkerParameters
 
 class QuotePollingWorker(context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
     private val database = FinanceAppDatabase.getInstance(applicationContext)
-    private val quoteRepository = QuoteRepository.Companion.getInstance(database)
+    private val quoteRepository = QuoteRepository.getInstance(database)
     private val notifier = Notifier(applicationContext)
 
     override suspend fun doWork(): Result {

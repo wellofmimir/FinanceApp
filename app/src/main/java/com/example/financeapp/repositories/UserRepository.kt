@@ -2,7 +2,18 @@ package com.example.financeapp.repositories
 
 import com.example.financeapp.database.FinanceAppDatabase
 
-class UserRepository(private val database: FinanceAppDatabase) {
+class UserRepository private constructor (private val database: FinanceAppDatabase) {
+    companion object {
+        private var instance: UserRepository? = null
+
+        fun getIntance(database: FinanceAppDatabase): UserRepository {
+            if (instance == null)
+                instance = UserRepository(database)
+
+            return instance!!
+        }
+    }
+
     fun getUser(): String {
         return database.getUser()
     }

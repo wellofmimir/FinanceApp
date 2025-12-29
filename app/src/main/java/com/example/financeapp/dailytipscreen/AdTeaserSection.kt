@@ -4,7 +4,6 @@ import com.example.financeapp.ui.theme.LocalAppColors
 
 
 import android.content.Context
-import android.webkit.WebSettings
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AdTeaserSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun AdTeaserSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, onConfirmButtonClicked: () -> Unit, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
 
@@ -108,6 +107,7 @@ fun AdTeaserSection(modifier: Modifier = Modifier, context: Context = LocalConte
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
+                        onConfirmButtonClicked()
                     },
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,

@@ -3,7 +3,7 @@ import com.example.financeapp.billingmanager.BillingManager
 import com.example.financeapp.database.FinanceAppDatabase
 import android.app.Activity
 
-class ShopRepository(private val database: FinanceAppDatabase, private val billingManager: BillingManager) {
+class ShopRepository private constructor (private val database: FinanceAppDatabase, private val billingManager: BillingManager) {
 
     companion object {
         private var instance: ShopRepository? = null

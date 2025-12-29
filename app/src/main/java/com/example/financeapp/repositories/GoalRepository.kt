@@ -6,7 +6,18 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class GoalRepository(private val database: FinanceAppDatabase) {
+class GoalRepository private constructor (private val database: FinanceAppDatabase) {
+
+    companion object {
+        private var instance: GoalRepository? = null
+
+        fun getInstance(database: FinanceAppDatabase): GoalRepository {
+            if (instance == null)
+                instance = GoalRepository(database)
+
+            return instance!!
+        }
+    }
 
     fun insertGoal(goal: String, amount: Float, saved: Float, statusDescription: String, amountOfTokens: Int) {
         database.run {

@@ -96,6 +96,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.financeapp.dailytipscreen.DailyTipScreen
+import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
+import com.example.financeapp.notifications.DailyTipWorker
+import com.example.financeapp.repositories.DailyTipRepository
 import java.util.concurrent.TimeUnit
 
 
@@ -168,6 +171,7 @@ class MainActivity : ComponentActivity() {
                 var context = LocalContext.current
                 scheduleDailyQuoteWorker(context)
                 scheduleDailyReminderMeWorker(context)
+                scheduleDailyTipWorker(context)
 
                 val manager = getSystemService(NotificationManager::class.java)
                 manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
@@ -179,7 +183,7 @@ class MainActivity : ComponentActivity() {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                             val database = FinanceAppDatabase.getInstance(context)
-                            val repository = UserRepository(database)
+                            val repository = UserRepository.getIntance(database)
 
                             return MainActivityViewModel(repository) as T
                         }
@@ -213,7 +217,7 @@ class MainActivity : ComponentActivity() {
                         override fun<T : ViewModel> create(modelClass: Class<T>): T {
 
                             val database = FinanceAppDatabase.getInstance(context)
-                            val repository = GoalRepository(database)
+                            val repository = GoalRepository.getInstance(database)
 
                             return GoalsSectionViewModel(repository) as T
                         }
@@ -225,7 +229,7 @@ class MainActivity : ComponentActivity() {
                         override fun <T: ViewModel> create(modelClass: Class<T>): T {
 
                             val database = FinanceAppDatabase.getInstance(context)
-                            val repository = GoalRepository(database)
+                            val repository = GoalRepository.getInstance(database)
                             return TotalGoalsAchievedSectionViewModel(repository) as T
                         }
                     }
@@ -237,8 +241,19 @@ class MainActivity : ComponentActivity() {
 
                             val database = FinanceAppDatabase.getInstance(context)
                             val billingManager = BillingManager(context)
-                            val repository = ShopRepository(database, billingManager)
+                            val repository = ShopRepository.getInstance(database, billingManager)
                             return ThemeShopViewModel(billingManager = billingManager, shopRepository = repository) as T
+                        }
+                    }
+                )
+
+                val dailyTipScreenViewModel: DailyTipScreenViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val repository = DailyTipRepository.getInstance(database)
+                            return DailyTipScreenViewModel(repository) as T
                         }
                     }
                 )
@@ -497,7 +512,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         if (sectionIdentifier == Screen.DAILY_TIPS)
-                            DailyTipScreen ()
+                            DailyTipScreen (
+                                dailyTipScreenViewModel = dailyTipScreenViewModel
+                            )
 
                         AnimatedVisibility (
                             visible = sectionIdentifier == Screen.SPLASH,
@@ -1153,7 +1170,7 @@ fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: Receipt
             if (receiptSectionsViewModel.interstitialAdAfterReceiptSeen())
                 return@LaunchedEffect
 
-            InterstitialAdManager.instance.showInterstitial(
+            InterstitialAdManager.instance.showInterstitial (
                 activity = it,
                 onAdClosed = {
                     receiptAdded = false
@@ -1336,6 +1353,33 @@ fun scheduleDailyQuoteWorker(context: Context) {
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork (
         "dailyQuoteWorker",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        workRequest
+    )
+}
+
+fun scheduleDailyTipWorker(context: Context) {
+
+    val now = Calendar.getInstance()
+    val next22 = Calendar.getInstance().apply {
+
+        set(Calendar.HOUR_OF_DAY, 3)
+        set(Calendar.MINUTE, 25)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+
+        if (before(now))
+            add(Calendar.DAY_OF_MONTH, 1)
+    }
+
+    val initialDelay = next22.timeInMillis - now.timeInMillis
+
+    val workRequest = PeriodicWorkRequestBuilder<DailyTipWorker>(1, TimeUnit.DAYS)
+        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .build()
+
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork (
+        "dailyTipWorker",
         ExistingPeriodicWorkPolicy.REPLACE,
         workRequest
     )

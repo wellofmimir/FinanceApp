@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONObject
 
-class FeedbackRepository(private val database: FinanceAppDatabase) {
+class FeedbackRepository private constructor (private val database: FinanceAppDatabase) {
 
     companion object {
         private var instance: FeedbackRepository? = null

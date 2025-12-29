@@ -30,7 +30,10 @@ class QuoteClient private constructor(){
 
         Thread {
             try {
-                val response = client.newCall(request).execute()
+                val response = client
+                    .newCall(request)
+                    .execute()
+
                 val responseBody = response.body?.string()
                 response.close()
 

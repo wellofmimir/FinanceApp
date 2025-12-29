@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class ReceiptRepository private constructor(private val database: FinanceAppDatabase) {
+class ReceiptRepository private constructor (private val database: FinanceAppDatabase) {
     companion object {
         private var instance: ReceiptRepository? = null
 

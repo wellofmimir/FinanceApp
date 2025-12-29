@@ -8,6 +8,7 @@ import androidx.core.content.edit
 
 import androidx.security.crypto.MasterKey
 import androidx.security.crypto.EncryptedSharedPreferences
+import com.example.financeapp.network.DailyTip
 
 data class Goal (
     val id: Int,
@@ -117,6 +118,10 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("quotePreferences", Context.MODE_PRIVATE)
     }
 
+    private val dailyTipPreferences by lazy {
+        context.getSharedPreferences("tipPreferences", Context.MODE_PRIVATE)
+    }
+
     private val feedbackPreferences by lazy {
         context.getSharedPreferences("feedbackPreferences", Context.MODE_PRIVATE)
     }
@@ -127,6 +132,36 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun newDailyTipAvailable(): Boolean {
+        return securePreferences.getBoolean("newDailyTipAvailable", true)
+    }
+
+    fun setNewDailyTipAvailable() {
+        securePreferences.edit {
+            putBoolean("newDailyTipAvailable", true)
+        }
+    }
+
+    fun getDailyTip(): DailyTip {
+        return DailyTip (
+            title = dailyTipPreferences.getString("title", "") ?: "",
+            tip = dailyTipPreferences.getString("tip", "") ?: ""
+        )
+    }
+
+    fun setDailyTip(title: String, tip: String) {
+        dailyTipPreferences.edit {
+            putString("title", title)
+            putString("tip", tip)
+        }
+    }
+
+    fun resetNewDailyTipAvailable() {
+        securePreferences.edit() {
+            putBoolean("newDailyTipAvailable", false)
+        }
     }
 
     fun setThemePurchased(theme: String) {
@@ -212,19 +247,27 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
-    fun resetDailyQuoteFetched() {
+    fun setDailyQuote(quote: Pair<String, String>) {
         quotePreferences.edit {
-            putBoolean("dailyQuoteFetched", false)
-            putString("quote", "")
-            putString("quotedPerson", "")
+            putString("quote", quote.first)
+            putString("quotedPerson", quote.second)
         }
     }
 
-    fun saveDailyQuoteFetched(quote: Pair<String, String>) {
-        quotePreferences.edit {
+    fun setDailyQuoteFetched() {
+        securePreferences.edit {
             putBoolean("dailyQuoteFetched", true)
-            putString("quote", quote.first)
-            putString("quotedPerson", quote.second)
+        }
+    }
+
+    fun resetDailyQuoteFetched() {
+        securePreferences.edit {
+            putBoolean("dailyQuoteFetched", false)
+        }
+
+        quotePreferences.edit {
+            putString("quote", "")
+            putString("quotedPerson", "")
         }
     }
 
@@ -239,19 +282,35 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun setInterstitialAdAfterReceiptSeen() {
-        adPreferences.edit {
+        securePreferences.edit {
             putBoolean("interstitialAdAfterReceiptSeen", true)
         }
     }
 
     fun resetInterstitialAdAfterReceiptSeen() {
-        adPreferences.edit {
+        securePreferences.edit {
             putBoolean("interstitialAdAfterReceiptSeen", false)
         }
     }
 
     fun interstitialAdAfterReceiptSeen(): Boolean {
-        return adPreferences.getBoolean("interstitialAdAfterReceiptSeen", false)
+        return securePreferences.getBoolean("interstitialAdAfterReceiptSeen", true)
+    }
+
+    fun setInterstitialAdAfterDailyTipSeen() {
+        securePreferences.edit {
+            putBoolean("interstitialAdAfterDailyTipSeen", true)
+        }
+    }
+
+    fun resetInterstitialAdAfterDailyTip() {
+        securePreferences.edit {
+            putBoolean("interstitialAdAfterDailyTipSeen", false)
+        }
+    }
+
+    fun interstitialAdAfterDailyTipSeen(): Boolean {
+        return securePreferences.getBoolean("interstitialAdAfterDailyTipSeen", true)
     }
 
     //PREFERENCES - END

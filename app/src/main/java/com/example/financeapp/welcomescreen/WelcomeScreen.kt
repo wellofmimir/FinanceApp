@@ -1025,8 +1025,8 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
             override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                 val database = FinanceAppDatabase.Companion.getInstance(context)
-                val userRepository = UserRepository(database)
-                val goalRepository = GoalRepository(database)
+                val userRepository = UserRepository.getIntance(database)
+                val goalRepository = GoalRepository.getInstance(database)
 
                 return WelcomeScreenViewModel(userRepository, goalRepository) as T
             }

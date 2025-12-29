@@ -1,22 +1,63 @@
 package com.example.financeapp.dailytipscreen
 import com.example.financeapp.ui.theme.LocalAppColors
+import com.example.financeapp.advertisement.InterstitialAdManager
+import com.example.financeapp.BuildConfig
 
 import android.content.Context
+import android.app.Activity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DailyTipScreen(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
+    val activity = context as? Activity
+
+    var interstitialAdCanBeShown by remember { mutableStateOf(false) }
+    var newDailyTipCanBeShown by remember { mutableStateOf(false) }
+
+    LaunchedEffect(interstitialAdCanBeShown) {
+        activity?.let {
+
+            dailyTipScreenViewModel.fetchDailyTip()
+
+            if (dailyTipScreenViewModel.interstitialAdAfterDailyTipSeen()) {
+                newDailyTipCanBeShown = true
+                return@LaunchedEffect
+            }
+
+            if (!interstitialAdCanBeShown)
+                return@LaunchedEffect
+
+            InterstitialAdManager.instance.showInterstitial (
+                activity = it,
+                onAdClosed = {
+                    dailyTipScreenViewModel.setInterstitialAdAfterDailyTipSeen()
+                    newDailyTipCanBeShown = true
+                },
+                onAdFailed = {
+                    newDailyTipCanBeShown = true
+                }
+            )
+        }
+    }
 
     Column (
         verticalArrangement = Arrangement.Center,
@@ -26,16 +67,57 @@ fun DailyTipScreen(modifier: Modifier = Modifier, context: Context = LocalContex
                 color = colors.primary
             )
     ) {
-        AdTeaserSection (
-        )
+        if (dailyTipScreenViewModel.newDailyTipAvailable())
+            if (newDailyTipCanBeShown) {
+                DailyTipSection (
+                    dailyTipScreenViewModel = dailyTipScreenViewModel
+                )
+            } else {
+                AdTeaserSection (
+                    dailyTipScreenViewModel = dailyTipScreenViewModel,
+                    onConfirmButtonClicked = {
+                        interstitialAdCanBeShown = true
+                    }
+                )
+            }
+        else
+            DailyTipSection (
+                dailyTipScreenViewModel = dailyTipScreenViewModel
+            )
 
         Spacer (
             modifier = Modifier
-                .height(12.dp)
+                .padding(2.dp)
         )
 
-        AdTeaserSection (
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            NumberOfTipsSection (
+                modifier = modifier
+                    .weight(1f),
+                dailyTipScreenViewModel = dailyTipScreenViewModel
+            )
 
+            Spacer (
+                modifier = Modifier
+                    .padding(2.dp)
+            )
+
+            RandomTipSection (
+                modifier = modifier
+                    .weight(1f)
+            )
+        }
+
+        Spacer (
+            modifier = Modifier
+                .padding(2.dp)
+        )
+
+        FavouriteTipsSection (
+            dailyTipScreenViewModel = dailyTipScreenViewModel
         )
     }
 }
