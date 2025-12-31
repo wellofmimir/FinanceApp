@@ -1,5 +1,6 @@
 package com.example.financeapp.dailytipscreen
 import com.example.financeapp.R
+import com.example.financeapp.database.Tip
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -13,9 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,9 +35,11 @@ import androidx.compose.ui.unit.sp
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun RandomTipSection(modifier: Modifier = Modifier, context: Context = LocalContext.current) {
+fun RandomTipSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
+    val randomTips = dailyTipScreenViewModel.likedTipsRandomlyOrdered.collectAsState()
+    dailyTipScreenViewModel.getLikedTipsOrderedRandomly()
 
     Column (
         modifier = modifier
@@ -38,9 +48,8 @@ fun RandomTipSection(modifier: Modifier = Modifier, context: Context = LocalCont
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Top,
+            ),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
         Text (
@@ -49,6 +58,8 @@ fun RandomTipSection(modifier: Modifier = Modifier, context: Context = LocalCont
             color = colors.primary,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
+                .weight(1f)
+                .padding(top = 12.dp, start = 12.dp)
         )
 
         Spacer (
@@ -56,51 +67,50 @@ fun RandomTipSection(modifier: Modifier = Modifier, context: Context = LocalCont
                 .padding(2.dp)
         )
 
+        var scrollState = rememberScrollState()
+        val tip = randomTips.value.firstOrNull()
+
         Text (
-            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
+            text = tip?.dailyTip?.tip ?: "Eat fewer avocado toasts ;)",
             fontSize = 14.sp,
             color = colors.primary,
             fontWeight = FontWeight.Light,
             fontStyle = FontStyle.Italic,
             modifier = Modifier
+                .padding(start = 12.dp)
+                .weight(3f)
+                .verticalScroll(scrollState)
         )
 
         Spacer (
             modifier = Modifier
-                .padding(12.dp)
+                .padding(2.dp)
         )
 
         Row (
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp, end = 12.dp)
+                .fillMaxWidth()
         ) {
             Box (
                 modifier = Modifier
-                    .weight(1f)
+                    .size(43.dp)
                     .aspectRatio(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Image (
                     painter = painterResource(R.drawable.herzzumliken_foreground),
-                    contentDescription = "Herz"
+                    contentDescription = "Herz",
                 )
             }
 
-            Spacer (
-                modifier = Modifier
-                    .padding(horizontal = 6.dp)
+            Text (
+                text = if (tip == null) "" else "Tip No. ${tip.id}",
+                color = colors.primary
             )
-
-            Box (
-                modifier = Modifier
-                    .weight(3f),
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = "Tip no. 11234",
-                    color = colors.primary
-                )
-            }
         }
     }
 }

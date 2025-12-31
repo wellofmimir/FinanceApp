@@ -88,7 +88,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import android.content.Context
 import android.icu.util.Calendar
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -97,8 +96,15 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.financeapp.dailytipscreen.DailyTipScreen
 import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
+import com.example.financeapp.goalhistoryscreen.RandomMemoryPictureSection
+import com.example.financeapp.homescreen.AchievementsSectionViewModel
+import com.example.financeapp.homescreen.QuoteViewModel
 import com.example.financeapp.notifications.DailyTipWorker
+import com.example.financeapp.repositories.CurrencyRepository
 import com.example.financeapp.repositories.DailyTipRepository
+import com.example.financeapp.repositories.FeedbackRepository
+import com.example.financeapp.repositories.QuoteRepository
+import com.example.financeapp.settingsscreen.SettingsViewModel
 import java.util.concurrent.TimeUnit
 
 
@@ -129,6 +135,9 @@ enum class TutorialStep (id: Int) {
     HOMESCREEN_CURRENT_GOAL (4),
     HOMESCREEN_QUOTE (5),
     HOMESCREEN_SAVED_RECEIPTS (6),
+    HOMESCREEN_DAILY_FINANCIAL_TIP (20),
+    HOMESCREEN_SHOP (21),
+    HOMESCREEN_TOKEN_BANNER (22),
     HOMESCREEN_END (7),
 
     RECEIPTS_START(8),
@@ -177,6 +186,7 @@ class MainActivity : ComponentActivity() {
                 manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
                 manager.createNotificationChannel(NotificationChannel("receipts", "Receipt", NotificationManager.IMPORTANCE_HIGH))
                 manager.createNotificationChannel(NotificationChannel("reminders", "Reminders", NotificationManager.IMPORTANCE_HIGH))
+                manager.createNotificationChannel(NotificationChannel("tips", "Tips", NotificationManager.IMPORTANCE_HIGH))
 
                 val mainActivityViewModel: MainActivityViewModel = viewModel (
                     factory = object: ViewModelProvider.Factory {
@@ -186,6 +196,18 @@ class MainActivity : ComponentActivity() {
                             val repository = UserRepository.getIntance(database)
 
                             return MainActivityViewModel(repository) as T
+                        }
+                    }
+                )
+
+                val achievementsSectionViewModel: AchievementsSectionViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val repository = GoalRepository.getInstance(database)
+
+                            return AchievementsSectionViewModel(repository) as T
                         }
                     }
                 )
@@ -258,6 +280,29 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
+                val quoteViewModel: QuoteViewModel = viewModel (
+                    factory = remember {
+                        object: ViewModelProvider.Factory {
+                            override fun <T: ViewModel> create(modelClass: Class<T>): T {
+                                val database = FinanceAppDatabase.getInstance(context)
+                                val repository = QuoteRepository.getInstance(database)
+                                return QuoteViewModel(repository) as T
+                            }
+                        }
+                    }
+                )
+
+                val settingsViewModel: SettingsViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun <T: ViewModel> create(modelClass: Class<T>): T {
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val feedbackRepository = FeedbackRepository.getInstance(database)
+                            val currencyRepository = CurrencyRepository.getInstance(database)
+                            return SettingsViewModel(feedbackRepository, currencyRepository) as T
+                        }
+                    }
+                )
+
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
                 mainActivityViewModel.loadUser()
@@ -299,8 +344,10 @@ class MainActivity : ComponentActivity() {
                                             TutorialStep.HOMESCREEN_START -> TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS
                                             TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOALS
                                             TutorialStep.HOMESCREEN_CURRENT_GOALS -> TutorialStep.HOMESCREEN_CURRENT_GOAL
-                                            TutorialStep.HOMESCREEN_CURRENT_GOAL -> TutorialStep.HOMESCREEN_QUOTE
-                                            TutorialStep.HOMESCREEN_QUOTE -> TutorialStep.HOMESCREEN_END
+                                            TutorialStep.HOMESCREEN_CURRENT_GOAL -> TutorialStep.HOMESCREEN_DAILY_FINANCIAL_TIP
+                                            TutorialStep.HOMESCREEN_DAILY_FINANCIAL_TIP -> TutorialStep.HOMESCREEN_QUOTE
+                                            TutorialStep.HOMESCREEN_QUOTE -> TutorialStep.HOMESCREEN_SHOP
+                                            TutorialStep.HOMESCREEN_SHOP -> TutorialStep.HOMESCREEN_END
                                             else -> TutorialStep.HOMESCREEN_END
                                         }
                                     )
@@ -424,7 +471,9 @@ class MainActivity : ComponentActivity() {
                             HomeScreen (
                                 tutorialInformation = tutorialInformation,
                                 receiptSectionsViewModel = receiptSectionsViewModel,
+                                dailyTipScreenViewModel = dailyTipScreenViewModel,
                                 goalsSectionViewModel = goalSectionViewModel,
+                                quoteViewModel = quoteViewModel,
                                 onGoalAchieved = {
                                     goalAchieved = true
                                 },
@@ -451,7 +500,7 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.GOALHISTORY)
                             GoalHistorySection (
                                 totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                                mainActivityViewModel = mainActivityViewModel,
+                                achievementsSectionViewModel = achievementsSectionViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
@@ -471,12 +520,12 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.USER_SETTINGS)
                             SettingsScreen (
                                 headerSectionViewModel = headerSectionViewModel,
+                                settingsViewModel = settingsViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.SHOP) {
                             ShopScreen (
-                                headerSectionViewModel = headerSectionViewModel,
                                 themeShopViewModel = themeShopViewModel,
                                 tutorialInformation = tutorialInformation,
                                 previewRequested = { theme ->
@@ -513,7 +562,8 @@ class MainActivity : ComponentActivity() {
 
                         if (sectionIdentifier == Screen.DAILY_TIPS)
                             DailyTipScreen (
-                                dailyTipScreenViewModel = dailyTipScreenViewModel
+                                dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                tutorialInformation = tutorialInformation
                             )
 
                         AnimatedVisibility (
@@ -633,6 +683,42 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
+                        } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_DAILY_FINANCIAL_TIP) {
+                            Box (
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column (
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text (
+                                        text = "A daily financial tip is waiting for you.\nMake sure to check it out!",
+                                        fontSize = 24.sp,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_SHOP) {
+                            Box (
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column (
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text (
+                                        text = "Green is not for everyone - we get it.\nOur shop offers different themes to colour up your experience.",
+                                        fontSize = 24.sp,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
                         } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.HOMESCREEN_END) {
                             Box (
                                 modifier = Modifier
@@ -644,7 +730,7 @@ class MainActivity : ComponentActivity() {
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text (
-                                        text = "Have fun exploring the app!\n\nCheck out the Receipts-Section where you can track all you receipts.\n\nCheck the Remind-me button and we'll send you a notification as a reminder.",
+                                        text = "This is where you see your progress on your current goal. Here you can swap what you want to be working on.\n\nTap the percentage to update your current goal.",
                                         fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
@@ -876,12 +962,13 @@ fun HomeScreen (
         tutorialInformation: TutorialInformation,
         receiptSectionsViewModel: ReceiptSectionsViewModel,
         goalsSectionViewModel: GoalsSectionViewModel,
+        dailyTipScreenViewModel: DailyTipScreenViewModel,
+        quoteViewModel: QuoteViewModel,
         onGoalAchieved: () -> Unit,
         onWellDoneSectionDismissed: () -> Unit,
         shopSectionClicked: () -> Unit,
         receiptLogoClicked: () -> Unit,
-        dailyTipsSectionClicked: () -> Unit,
-        context: Context = LocalContext.current) {
+        dailyTipsSectionClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -932,6 +1019,7 @@ fun HomeScreen (
                 QuoteSection (
                     modifier = Modifier
                         .weight(1f),
+                    quoteViewModel = quoteViewModel,
                     tutorialInformation = tutorialInformation
                 )
             }
@@ -983,6 +1071,8 @@ fun HomeScreen (
                             modifier = Modifier
                                 .weight(3f)
                                 .fillMaxHeight(),
+                            dailyTipScreenViewModel = dailyTipScreenViewModel,
+                            tutorialInformation = tutorialInformation,
                             dailyTipSectionClicked = {
                                 dailyTipsSectionClicked()
                             }
@@ -997,6 +1087,7 @@ fun HomeScreen (
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight(),
+                            tutorialInformation = tutorialInformation,
                             shopSectionClicked = {
                                 shopSectionClicked()
                             }
@@ -1058,9 +1149,7 @@ fun HomeScreen (
 }
 
 @Composable
-fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation) {
-
-    val colors = LocalAppColors.current
+fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation) {
 
     Row (
         modifier = Modifier
@@ -1083,50 +1172,39 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row (
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
+            var randomBoolean by remember { mutableStateOf( kotlin.random.Random.nextBoolean()) }
+
+            if (randomBoolean)
                 TotalGoalsAchievedSection (
                     modifier = Modifier
-                        .weight(1f),
+                        .weight(1f)
+                        .clickable() {
+                            randomBoolean = !randomBoolean
+                        },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                     tutorialInformation = tutorialInformation
                 )
-
+            else
                 TotalTokensEarnedSection (
                     modifier = Modifier
-                        .weight(1f),
+                        .weight(1f)
+                        .clickable() {
+                            randomBoolean = !randomBoolean
+                        },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                     tutorialInformation = tutorialInformation
                 )
-            }
 
             Spacer (
                 modifier = Modifier
                     .padding(2.dp)
             )
 
-            Box (
+            RandomMemoryPictureSection (
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .background (
-                        color = colors.background,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .border (
-                        color = colors.surface,
-                        width = 4.dp,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = "photo memory random\ntreat pic cycle",
-                    color = colors.textPrimary,
-                    textAlign = TextAlign.Center
-                )
-            }
+                    .weight(1f),
+                achievementsSectionViewModel = achievementsSectionViewModel
+            )
         }
     }
 
@@ -1139,6 +1217,7 @@ fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSec
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.75f),
+        achievementsSectionViewModel = achievementsSectionViewModel,
         tutorialInformation = tutorialInformation
     )
 
@@ -1242,7 +1321,7 @@ fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: Receipt
 }
 
 @Composable
-fun ShopScreen(headerSectionViewModel: HeaderSectionViewModel, themeShopViewModel: ThemeShopViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
+fun ShopScreen(themeShopViewModel: ThemeShopViewModel, tutorialInformation: TutorialInformation, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -1290,10 +1369,11 @@ fun ShopScreen(headerSectionViewModel: HeaderSectionViewModel, themeShopViewMode
 }
 
 @Composable
-fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, tutorialInformation: TutorialInformation) {
 
     SettingsSection (
-        headerSectionViewModel = headerSectionViewModel
+        headerSectionViewModel = headerSectionViewModel,
+        settingsViewModel = settingsViewModel
     )
 
     Spacer (
@@ -1364,7 +1444,7 @@ fun scheduleDailyTipWorker(context: Context) {
     val next22 = Calendar.getInstance().apply {
 
         set(Calendar.HOUR_OF_DAY, 3)
-        set(Calendar.MINUTE, 25)
+        set(Calendar.MINUTE, 2)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 
@@ -1384,4 +1464,3 @@ fun scheduleDailyTipWorker(context: Context) {
         workRequest
     )
 }
-

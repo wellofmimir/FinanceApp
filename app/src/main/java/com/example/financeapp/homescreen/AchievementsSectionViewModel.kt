@@ -71,14 +71,20 @@ class AchievementsSectionViewModel(private val repository: GoalRepository): View
     }
 
     fun getCompletedGoals() {
-
         viewModelScope.launch {
-
             val result = repository.getCompletedGoals()
             internGoals.value = result
 
             if (internGoals.value.isEmpty())
                 insertExampleGoals()
         }
+    }
+
+    private val internGoalsOrderedRandomly = MutableStateFlow<List<Goal>>(emptyList())
+    val goalsOrderedRandomly = internGoalsOrderedRandomly.asStateFlow()
+
+    fun getCompletedGoalsOrderedRandomly() {
+        val result = repository.getCompletedGoalsOrderedRandomly()
+        internGoalsOrderedRandomly.value = result
     }
 }

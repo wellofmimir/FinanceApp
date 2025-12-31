@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,6 +36,7 @@ fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedS
     Box (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_TOTAL_GOALS) 0.1f else 1.0f)
+            .fillMaxWidth()
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)

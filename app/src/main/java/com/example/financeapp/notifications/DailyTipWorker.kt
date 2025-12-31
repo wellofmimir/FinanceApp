@@ -15,11 +15,15 @@ class DailyTipWorker(context: Context, parameters: WorkerParameters) : Coroutine
 
     override suspend fun doWork(): Result {
 
-        database.resetNewDailyTipAvailable()
         database.setDailyTip("", "")
         database.resetInterstitialAdAfterDailyTip()
-
         dailyTipRepository.fetchDailyTipFromServer()
+
+        val dailyTip = dailyTipRepository.getDailyTip()
+
+        if (dailyTip.tip.isNotEmpty() && dailyTip.title.isNotEmpty())
+            notifier.sendNewDailyTipAvailableNotification(dailyTipRepository.getDailyTip())
+
         return Result.success()
     }
 }

@@ -41,6 +41,11 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     }
 
     fun updateGoal(goal: Goal) {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
+        val formattedDate = currentDate.format(formatter)
+
+        goal.dateWhenFinished = formattedDate
         database.updateGoal(goal)
     }
 
@@ -65,15 +70,21 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     }
 
     fun getCompletedGoals(): List<Goal> {
-       val completedStatus = database.getIDGoalStatus("Completed") ?: return emptyList()
+       val completedStatus = database.getIDGoalStatus("Completed") ?:
+            return emptyList()
 
         return database.getGoals().filter {
             it.idStatus == completedStatus.id
         }
     }
 
-    fun setCurrentGoal() {
+    fun getCompletedGoalsOrderedRandomly(): List<Goal> {
+        val completedStatus = database.getIDGoalStatus("Completed") ?:
+            return emptyList()
 
+        return database.getGoalsOrderedRandomly().filter {
+            it.idStatus == completedStatus.id
+        }
     }
 
     fun getCurrentGoal(): Goal? {

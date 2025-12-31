@@ -23,10 +23,12 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
+import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
 
@@ -35,6 +37,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
 
     Row (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_TOKEN_BANNER) 0.1f else 1.0f)
             .fillMaxWidth()
             .background (
                 color = colors.surface,

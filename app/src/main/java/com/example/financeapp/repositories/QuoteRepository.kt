@@ -26,10 +26,7 @@ class QuoteRepository private constructor (val database: FinanceAppDatabase) {
         }
     }
 
-    private var internDailyQuoteObtained = MutableStateFlow(false)
 
-    private var internQuoteToQuotedPerson = MutableStateFlow<Pair<String, String>>("" to "")
-    var quoteToQuotedPerson = internQuoteToQuotedPerson.asStateFlow()
     private val client = QuoteClient.getInstance()
 
     fun hasError(): Boolean {
@@ -40,8 +37,9 @@ class QuoteRepository private constructor (val database: FinanceAppDatabase) {
         return database.getAllQuotes()
     }
 
-    fun updateCurrentQuote(currentQuote: String) {
-        database.updateCurrentQuote(currentQuote)
+    fun getDailyQuote(): Quote {
+        val dailyQuote = database.dailyQuote()
+        return Quote(1, dailyQuote.first, dailyQuote.second, "")
     }
 
     fun insertQuote(quote: String, name: String) {
@@ -53,7 +51,7 @@ class QuoteRepository private constructor (val database: FinanceAppDatabase) {
         database.insertQuote(quote, name, formattedDate)
     }
 
-    fun fetchQuoteFromServer() {
+    suspend fun fetchQuoteFromServer(): Quote {
 
         //Ich will den Server nicht hardcore penetrieren,
         //da jede Abfrage mich bares Geld kostet.
@@ -61,32 +59,26 @@ class QuoteRepository private constructor (val database: FinanceAppDatabase) {
         //und das Ergebnis dann in den Shared Preferences gespeichert und davon bei Abfrage zurückgegeben.
 
         if (database.dailyQuoteFetched()) {
-            internQuoteToQuotedPerson.value = database.dailyQuote()
-            return
+            return getDailyQuote()
         }
 
-        val result = client.fetchQuote(object: QuoteClientCallback {
-            override fun result(response: String) {
+        val result = client.fetchQuote()
 
-                if (isValidJson(response) == false) {
-                    internQuoteToQuotedPerson.value = Pair<String, String>("A little error occurred - no quote today :(", "Anonymous")
-                    return
-                }
+        if (isValidJson(result) == false) {
+            val dailyQuote = Pair("A little error occurred - no quote today :(", "Anonymous")
+            return Quote(1, dailyQuote.first, dailyQuote.second, "")
+        }
 
-                if (!response.startsWith("{")) {
-                    internQuoteToQuotedPerson.value = Pair<String, String>("A little error occurred - no quote today :(", "Anonymous")
-                    return
-                }
+        if (!result.startsWith("{")) {
+            val dailyQuote = Pair("A little error occurred - no quote today :(", "Anonymous")
+            return Quote(1, dailyQuote.first, dailyQuote.second, "")
+        }
 
-                val jsonObject = JSONObject(response)
-                internQuoteToQuotedPerson.value = Pair<String, String>(jsonObject.getString("quote"), jsonObject.getString("person"))
-                database.setDailyQuote(internQuoteToQuotedPerson.value)
-            }
-        })
-    }
+        val jsonObject = JSONObject(result)
+        val dailyQuote = Pair<String, String>(jsonObject.getString("quote"), jsonObject.getString("person"))
+        database.setDailyQuote(dailyQuote)
 
-    fun getCurrentQuote(): String {
-        return database.getCurrentQuote()
+        return Quote(1, dailyQuote.first, dailyQuote.second, "")
     }
 
     fun deleteQuote(quote: String) {

@@ -3,8 +3,6 @@ package com.example.financeapp.network
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-import android.os.Handler
-import android.os.Looper
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -12,11 +10,6 @@ import org.json.JSONObject
 interface FeedbackClientCallback {
     fun result(response: String)
 }
-
-data class Feedback (
-    val name: String,
-    val text: String
-)
 
 class FeedbackClient private constructor() {
     companion object {
@@ -31,38 +24,30 @@ class FeedbackClient private constructor() {
     }
 
     private val client = OkHttpClient()
+    var hasError = false
 
-    fun sendFeedback(name: String, text: String, callback: FeedbackClientCallback) {
+    suspend fun sendFeedback(name: String, text: String): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
         val mediaType = "application/json; charset=utf-8".toMediaType()
 
-        val jsonAsRequestBody = JSONObject().apply {
+        val jsonRequestBody = JSONObject().apply {
             put("name", name)
-            put ("text", text)
-
+            put("text", text)
         }.toString().toRequestBody(mediaType)
 
         val request = Request.Builder()
             .url("https://shortlyfi.me/api/feedback")
             .addHeader("Content-Type", "application/json")
-            .post(jsonAsRequestBody)
+            .post(jsonRequestBody)
             .build()
 
-        Thread {
-            try {
-                val response = client.newCall(request).execute()
-                val responseBody = response.body?.string()
-                response.close()
-
-                Handler (Looper.getMainLooper()).post {
-                    callback.result(responseBody!!)
-                }
-
-            } catch (e: kotlin.Exception) {
-                Handler (Looper.getMainLooper()).post {
-                    callback.result("")
-                }
+        try {
+            client.newCall(request).execute().use { response ->
+                response.body?.string() ?: ""
             }
-        }.start()
+        } catch (e: Exception) {
+            hasError = true
+            ""
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.financeapp.repositories
 
-import androidx.compose.runtime.collectAsState
+import com.example.financeapp.database.Tip
 import com.example.financeapp.commonutils.isValidJson
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.DailyTip
@@ -22,6 +22,33 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     private val client = DailyTipClient.getInstance()
 
+    fun resetNewDailyTipAvailable() {
+        database.resetNewDailyTipAvailable()
+    }
+    fun newDailyTipAvailable(): Boolean {
+        return database.newDailyTipAvailable()
+    }
+
+    fun insertDailyTip(dailyTip: DailyTip) {
+        database.insertTip(dailyTip)
+    }
+
+    fun getLikedTips(): List<Tip> {
+        return database.getTips()
+    }
+
+    fun getLikedTipsRandomlyOrdered(): List<Tip> {
+        return database.getTipsRandomlyOrdered()
+    }
+
+    fun removeDailyTip(dailyTip: DailyTip) {
+        database.removeDailyTip(dailyTip)
+    }
+
+    fun resetDailyTip() {
+        database.setDailyTip("", "")
+    }
+
     fun interstitialAdAfterDailyTipSeen(): Boolean {
         return database.interstitialAdAfterDailyTipSeen()
     }
@@ -34,47 +61,33 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         return database.getDailyTip()
     }
 
-    fun newDailyTipAvailable(): Boolean {
-        return database.newDailyTipAvailable()
-    }
-
-    fun setDailyTipAvailable() {
-        database.setNewDailyTipAvailable()
-    }
-
-    fun resetDailyTipAvailable() {
-        database.resetNewDailyTipAvailable()
-    }
-
-    fun fetchDailyTipFromServer() {
+    suspend fun fetchDailyTipFromServer(): DailyTip {
 
         //Ich will den Server nicht hardcore penetrieren,
         //da jede Abfrage mich bares Geld kostet.
         //Deswegen wird der Server nur einmal täglich abgefragt,
         //und das Ergebnis dann in den Shared Preferences gespeichert und davon bei Abfrage zurückgegeben.
 
-        if (database.newDailyTipAvailable()) {
-            return
+        if (database.getDailyTip().tip.isNotEmpty()) {
+            return DailyTip("", "")
         }
 
-        val result = client.fetchDailyTip(object: DailyTipCallback {
-            override fun result(response: String) {
+        val result = client.fetchDailyTip()
 
-                if (isValidJson(response) == false) {
-                    return
-                }
+        if (isValidJson(result) == false)
+            return DailyTip("", "")
 
-                if (!response.startsWith("{")) {
-                    return
-                }
+        if (!result.startsWith("{"))
+            return DailyTip("", "")
 
-                val jsonObject = JSONObject(response)
-                val dailyTip = DailyTip(jsonObject.getString("title"), jsonObject.getString("fact"))
+        val jsonObject = JSONObject(result)
+        val dailyTip = DailyTip(jsonObject.getString("title"), jsonObject.getString("fact"))
 
-                setDailyTipAvailable()
-                database.setDailyTip(dailyTip.title, dailyTip.tip)
-            }
-        })
+        if (dailyTip.tip != database.getDailyTip().tip) {
+            database.setDailyTip(dailyTip.title, dailyTip.tip)
+            database.setNewDailyTipAvailable()
+        }
+
+        return dailyTip
     }
-
 }

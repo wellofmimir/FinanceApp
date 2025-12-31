@@ -62,27 +62,14 @@ import com.example.financeapp.commonutils.shareToWhatsapp
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.homescreen.ShareAchievementEvent
-import com.example.financeapp.receiptsscreen.ShareEvent
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.io.File
 
 @Composable
-fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
-
-    val achievementsSectionViewModel: AchievementsSectionViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = GoalRepository.getInstance(database)
-
-                return AchievementsSectionViewModel(repository) as T
-            }
-        }
-    )
 
     val goals by achievementsSectionViewModel.goals.collectAsState()
     achievementsSectionViewModel.getCompletedGoals()
@@ -346,7 +333,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
 
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .clickable (
                             indication = null,
@@ -355,7 +342,10 @@ fun AchievementsSection(modifier: Modifier = Modifier, tutorialInformation: Tuto
                             val file = File(goal.pathToImage)
 
                             if (file.exists()) {
-                                bitmap = BitmapFactory.decodeFile(file.absolutePath).fixOrientation(file.absolutePath)
+                                bitmap = BitmapFactory
+                                    .decodeFile(file.absolutePath)
+                                    .fixOrientation(file.absolutePath)
+
                                 openedGoal = goal
                                 showDialog = true
                             }

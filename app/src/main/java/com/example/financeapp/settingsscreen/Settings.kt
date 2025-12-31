@@ -55,23 +55,10 @@ import com.example.financeapp.repositories.FeedbackRepository
 import com.example.financeapp.repositories.CurrencyRepository
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
-fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current, focusManager: FocusManager = LocalFocusManager.current) {
-
-    val settingsViewModel: SettingsViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun <T: ViewModel> create(modelClass: Class<T>): T {
-                val database = FinanceAppDatabase.getInstance(context)
-                val feedbackRepository = FeedbackRepository.getInstance(database)
-                val currencyRepository = CurrencyRepository.getInstance(database)
-                return SettingsViewModel(feedbackRepository, currencyRepository) as T
-            }
-        }
-    )
+fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, context: Context = LocalContext.current, focusManager: FocusManager = LocalFocusManager.current) {
 
     val colors = LocalAppColors.current
 
@@ -86,7 +73,10 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
     var labelText by remember { mutableStateOf("We love to hear from you! Please let us know how we can improve here ...") }
     var feedbackText by remember { mutableStateOf("") }
     val isFeedbackAlreadySent by settingsViewModel.isFeedbackAlreadySent.collectAsState()
-    settingsViewModel.feedbackAlreadySent()
+
+    LaunchedEffect(Unit) {
+        settingsViewModel.isFeedBackSent()
+    }
 
     var textAfterFeedbackButtonClicked by remember { mutableStateOf("Thank you for your feedback!") }
     var isEditingTheName by remember { mutableStateOf(false) }
@@ -360,7 +350,6 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         )
 
         if (!isFeedbackAlreadySent) {
-
             if (showErrorDialog) {
                 AlertDialog (
                     modifier = Modifier

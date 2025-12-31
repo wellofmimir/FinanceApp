@@ -41,10 +41,12 @@ import com.example.financeapp.ui.theme.LocalAppColors
 fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: Int) -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
-
     val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
-    goalsSectionViewModel.getCurrentGoal()
+
+    LaunchedEffect(Unit) {
+        goalsSectionViewModel.getCurrentGoal()
+    }
 
     var currentGoalText by remember { mutableStateOf("") }
 
@@ -59,7 +61,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
     }
 
     LaunchedEffect(currentGoalText) {
-
         if (currentGoal == null)
             currentGoalText = ""
 
@@ -96,7 +97,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                         color = colors.surface
                     ),
             ) {
-
                 EditGoalMenu (
                     expandedEditMenu,
                     goal = currentGoal,
@@ -132,16 +132,16 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text (
-                        text = "Current goal:\n",
+                        text = "Current goal:",
                         color = colors.textPrimary,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp)
+                            .padding(top = 8.dp)
                     )
 
                     Text (
@@ -152,7 +152,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                         color = colors.textPrimary,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 2.dp, start = 2.dp, end = 2.dp)
+                            .padding(start = 2.dp, end = 2.dp)
                     )
                 }
             }
@@ -187,6 +187,9 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             expanded = true
                         },
                     contentScale = ContentScale.Fit,
@@ -206,7 +209,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1.0f)
+                .fillMaxHeight()
+                .weight(1f)
                 .background (
                     color = colors.surface,
                     shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
@@ -222,8 +226,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                     fontWeight = FontWeight.Bold,
                     color = colors.textPrimary,
                     modifier = modifier
-                        .padding(end = 8.dp, bottom = 8.dp)
-                        .clickable(
+                        .padding(end = 8.dp, bottom = 2.dp)
+                        .clickable (
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
                         ) {

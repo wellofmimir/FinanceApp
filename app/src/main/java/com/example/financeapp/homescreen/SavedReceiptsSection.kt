@@ -108,6 +108,9 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             onReceiptsLogoClicked()
                         },
                     colorFilter = ColorFilter.tint(colors.surface),

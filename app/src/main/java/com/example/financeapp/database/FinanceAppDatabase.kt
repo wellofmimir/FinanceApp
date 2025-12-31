@@ -10,13 +10,18 @@ import androidx.security.crypto.MasterKey
 import androidx.security.crypto.EncryptedSharedPreferences
 import com.example.financeapp.network.DailyTip
 
+data class Tip (
+    val id: Int,
+    val dailyTip: DailyTip
+)
+
 data class Goal (
     val id: Int,
     val goal: String,
     var amount: Float,
     var saved: Float,
     var idStatus: Int,
-    val dateWhenFinished: String,
+    var dateWhenFinished: String,
     val tokenCount: Int,
     val pathToImage: String
 )
@@ -79,6 +84,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id))".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -121,21 +127,18 @@ class FinanceAppDatabase private constructor(context: Context) {
     private val dailyTipPreferences by lazy {
         context.getSharedPreferences("tipPreferences", Context.MODE_PRIVATE)
     }
-
-    private val feedbackPreferences by lazy {
-        context.getSharedPreferences("feedbackPreferences", Context.MODE_PRIVATE)
-    }
-
-    private val adPreferences by lazy {
-        context.getSharedPreferences("adPreferences", Context.MODE_PRIVATE)
-    }
-
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
     fun newDailyTipAvailable(): Boolean {
         return securePreferences.getBoolean("newDailyTipAvailable", true)
+    }
+
+    fun resetNewDailyTipAvailable() {
+        securePreferences.edit() {
+            putBoolean("newDailyTipAvailable", false)
+        }
     }
 
     fun setNewDailyTipAvailable() {
@@ -157,13 +160,6 @@ class FinanceAppDatabase private constructor(context: Context) {
             putString("tip", tip)
         }
     }
-
-    fun resetNewDailyTipAvailable() {
-        securePreferences.edit() {
-            putBoolean("newDailyTipAvailable", false)
-        }
-    }
-
     fun setThemePurchased(theme: String) {
         securePreferences.edit {
             putBoolean(theme, true)
@@ -232,17 +228,17 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun feedbackAlreadySent(): Boolean {
-        return feedbackPreferences.getBoolean("feedbackSent", false)
+        return securePreferences.getBoolean("feedbackSent", false)
     }
 
     fun setFeedbackSent() {
-        feedbackPreferences.edit {
+        securePreferences.edit {
             putBoolean("feedbackSent", true)
         }
     }
 
     fun resetFeedbackSent() {
-        feedbackPreferences.edit {
+        securePreferences.edit {
             putBoolean("feedbackSent", false)
         }
     }
@@ -252,9 +248,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             putString("quote", quote.first)
             putString("quotedPerson", quote.second)
         }
-    }
 
-    fun setDailyQuoteFetched() {
         securePreferences.edit {
             putBoolean("dailyQuoteFetched", true)
         }
@@ -272,7 +266,7 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun dailyQuoteFetched(): Boolean {
-        return quotePreferences.getBoolean("dailyQuoteFetched", false)
+        return securePreferences.getBoolean("dailyQuoteFetched", false)
     }
 
     fun dailyQuote(): Pair<String, String> {
@@ -314,6 +308,66 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     //PREFERENCES - END
+
+    fun insertTip(dailyTip: DailyTip) {
+
+        val cursor = database.rawQuery("SELECT * FROM tips WHERE tip = ?", arrayOf(dailyTip.tip))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("title", dailyTip.title)
+            put("tip",   dailyTip.tip)
+        }
+
+        if (exists) {
+            return
+        } else {
+            database.insert("tips", null, values)
+        }
+    }
+
+    fun getTips(): List<Tip> {
+
+        val cursor = database.rawQuery("SELECT * FROM tips ORDER BY id DESC", null)
+        val tips = mutableListOf<Tip>()
+
+        while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+            val tip = cursor.getString(cursor.getColumnIndexOrThrow("tip"))
+            val entry = Tip(id, DailyTip(title = title, tip = tip))
+            tips.add(entry)
+        }
+
+        cursor.close()
+        return tips
+    }
+
+    fun getTipsRandomlyOrdered(): List<Tip> {
+
+        val cursor = database.rawQuery("SELECT * FROM tips ORDER BY RANDOM()", null)
+        val tips = mutableListOf<Tip>()
+
+        while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+            val tip = cursor.getString(cursor.getColumnIndexOrThrow("tip"))
+            val entry = Tip(id, DailyTip(title = title, tip = tip))
+            tips.add(entry)
+        }
+
+        cursor.close()
+        return tips
+    }
+
+    fun removeDailyTip(dailyTip: DailyTip) {
+
+        val sql = "DELETE FROM tips WHERE tip = ?"
+        database.execSQL(sql, arrayOf(dailyTip.tip))
+    }
 
     fun updateReceiptRemindMe(idReceipt: Int, date: String) {
 
@@ -678,7 +732,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         val cursor = database.rawQuery("SELECT * FROM goals WHERE id = ?", arrayOf(id.toString()))
 
         cursor.use {
-
             if (it.moveToFirst()) {
 
                 val id = it.getInt(it.getColumnIndexOrThrow("id"))
@@ -701,7 +754,6 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         val cursor = database.rawQuery("SELECT tokensofar FROM punchcard WHERE id = ?", arrayOf("1"))
         val exists = cursor.moveToFirst()
-        val current = if (exists) cursor.getInt(0) else 0
         cursor.close()
 
         val values = ContentValues().apply {
@@ -753,6 +805,29 @@ class FinanceAppDatabase private constructor(context: Context) {
     fun getGoals(): List<Goal> {
 
         val cursor = database.rawQuery("SELECT * FROM goals", null)
+        val goals = mutableListOf<Goal>()
+
+        while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val goal = cursor.getString(cursor.getColumnIndexOrThrow("goal"))
+            val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
+            val savedAmount = cursor.getFloat(cursor.getColumnIndexOrThrow("saved"))
+            val idStatus = cursor.getInt(cursor.getColumnIndexOrThrow("idStatus"))
+            val dateWhenFinished = cursor.getString(cursor.getColumnIndexOrThrow("finishdate"))
+            val tokenCount = cursor.getInt(cursor.getColumnIndexOrThrow("tokencount"))
+            val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
+
+            goals.add(Goal (id, goal, amount, savedAmount, idStatus, dateWhenFinished, tokenCount, pathToImage))
+        }
+
+        cursor.close()
+        return goals
+    }
+
+    fun getGoalsOrderedRandomly(): List<Goal> {
+
+        val cursor = database.rawQuery("SELECT * FROM goals ORDER BY RANDOM()", null)
         val goals = mutableListOf<Goal>()
 
         while (cursor.moveToNext()) {
@@ -833,7 +908,6 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
     
     fun deleteDatabase() {
-
         if (databasePath.exists()) {
             databasePath.delete()
         }

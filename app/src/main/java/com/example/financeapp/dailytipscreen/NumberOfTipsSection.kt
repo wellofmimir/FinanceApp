@@ -22,11 +22,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 
 @Composable
 fun NumberOfTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
+    val numberOfThingsLearned = dailyTipScreenViewModel.likedTips.collectAsState().value.size
+    dailyTipScreenViewModel.getLikedTips()
 
     Column (
         modifier = modifier
@@ -54,7 +58,7 @@ fun NumberOfTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: 
         )
 
         Text (
-            text = "999",
+            text = numberOfThingsLearned.toString(),
             fontSize = 80.sp,
             color = colors.primary,
             fontWeight = FontWeight.Bold,

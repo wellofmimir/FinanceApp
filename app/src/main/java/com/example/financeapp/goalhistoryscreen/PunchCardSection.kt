@@ -248,7 +248,7 @@ fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: Tutoria
                 Text (
                     text = buildAnnotatedString {
                         withStyle (
-                            style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.textSecondary)
+                            style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.primary)
                         ) {
                             append("Treat yourself ")
                         }

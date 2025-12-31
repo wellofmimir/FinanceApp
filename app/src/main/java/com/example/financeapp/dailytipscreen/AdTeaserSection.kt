@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AdTeaserSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, onConfirmButtonClicked: () -> Unit, context: Context = LocalContext.current) {
+fun AdTeaserSection(modifier: Modifier = Modifier, onConfirmButtonClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -62,7 +62,6 @@ fun AdTeaserSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: Dail
                 color = colors.primary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
-
             )
 
             Spacer (

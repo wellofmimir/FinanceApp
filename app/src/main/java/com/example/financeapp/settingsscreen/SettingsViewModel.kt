@@ -1,22 +1,28 @@
 package com.example.financeapp.settingsscreen
 
-import androidx.lifecycle.ViewModel
 import com.example.financeapp.repositories.CurrencyRepository
 import com.example.financeapp.repositories.FeedbackRepository
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
 
 class SettingsViewModel(private val feedbackRepository: FeedbackRepository, private val currencyRepository: CurrencyRepository): ViewModel() {
-
-    val isFeedbackAlreadySent = feedbackRepository.isFeedbackAlreadySent
+    private val internFeedbackAlreadySent = MutableStateFlow(false)
+    val isFeedbackAlreadySent = internFeedbackAlreadySent.asStateFlow()
     val currency = currencyRepository.currency
 
-    fun feedbackAlreadySent(): Boolean {
-        val isSent = feedbackRepository.feedbackAlreadySent()
-        return isSent
+    fun isFeedBackSent() {
+        internFeedbackAlreadySent.value = feedbackRepository.feedbackAlreadySent()
     }
     fun sendFeedback(name: String, text: String) {
-        feedbackRepository.sendFeedback(name, text)
-        feedbackAlreadySent()
+        viewModelScope.launch {
+            internFeedbackAlreadySent.value = true
+            feedbackRepository.sendFeedback(name, text)
+        }
     }
 
     fun getCurrency() {

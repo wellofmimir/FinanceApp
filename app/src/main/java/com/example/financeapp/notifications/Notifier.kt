@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.financeapp.MainActivity
 import com.example.financeapp.R
+import com.example.financeapp.network.DailyTip
 
 class Notifier(private val context: Context) {
     fun sendQuoteNotification() {
@@ -34,7 +35,7 @@ class Notifier(private val context: Context) {
         )
 
         val notification = NotificationCompat.Builder(context, "quotes")
-            .setSmallIcon(R.drawable.starfilledpistachio_foreground)
+            .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("New quote available")
             .setContentText("A new quote is waiting for you ...")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -54,9 +55,28 @@ class Notifier(private val context: Context) {
         ) return
 
         val notification = NotificationCompat.Builder(context, "reminders")
-            .setSmallIcon(R.drawable.starfilledpistachio_foreground)
+            .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("Check your receipt!")
             .setContentText("Hey, you wanted us to remind you of your receipt: ${receiptName}")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationId = System.currentTimeMillis().toInt()
+        NotificationManagerCompat.from(context).notify(notificationId, notification.build())
+    }
+
+    fun sendNewDailyTipAvailableNotification(dailyTip: DailyTip) {
+
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ActivityCompat.checkSelfPermission (
+                context,
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+
+        val notification = NotificationCompat.Builder(context, "tips")
+            .setSmallIcon(R.drawable.dollarsign_foreground)
+            .setContentTitle("New financial tip available!")
+            .setContentText("A teaser ;) It's about: ${dailyTip.title}")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val notificationId = System.currentTimeMillis().toInt()
@@ -73,7 +93,7 @@ class Notifier(private val context: Context) {
         ) return
 
         val notification = NotificationCompat.Builder(context, "receipts")
-            .setSmallIcon(R.drawable.starfilledpistachio_foreground)
+            .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("Track your receipt")
             .setContentText("Hey, do you want to track your latest receipt?")
             .setPriority(NotificationCompat.PRIORITY_HIGH)

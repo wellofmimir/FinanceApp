@@ -22,10 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 
 @Composable
-fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
+fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     val activity = context as? Activity
@@ -67,23 +70,25 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 color = colors.primary
             )
     ) {
-        if (dailyTipScreenViewModel.newDailyTipAvailable())
+        if (dailyTipScreenViewModel.newDailyTipAvailable()) {
             if (newDailyTipCanBeShown) {
+                dailyTipScreenViewModel.resetNewDailyTipAvailable()
+
                 DailyTipSection (
                     dailyTipScreenViewModel = dailyTipScreenViewModel
                 )
             } else {
                 AdTeaserSection (
-                    dailyTipScreenViewModel = dailyTipScreenViewModel,
                     onConfirmButtonClicked = {
                         interstitialAdCanBeShown = true
                     }
                 )
             }
-        else
+        } else {
             DailyTipSection (
                 dailyTipScreenViewModel = dailyTipScreenViewModel
             )
+        }
 
         Spacer (
             modifier = Modifier
@@ -107,7 +112,8 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
 
             RandomTipSection (
                 modifier = modifier
-                    .weight(1f)
+                    .weight(1f),
+                dailyTipScreenViewModel = dailyTipScreenViewModel
             )
         }
 

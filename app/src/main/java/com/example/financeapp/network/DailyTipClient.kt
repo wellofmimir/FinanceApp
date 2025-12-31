@@ -11,8 +11,8 @@ interface DailyTipCallback {
 }
 
 data class DailyTip (
-    val title: String,
-    val tip: String
+    var title: String,
+    var tip: String
 )
 
 class DailyTipClient private constructor() {
@@ -29,34 +29,20 @@ class DailyTipClient private constructor() {
     private val client = OkHttpClient()
     var hasError = false
 
-    fun fetchDailyTip(callback: DailyTipCallback) {
+    suspend fun fetchDailyTip(): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
-        val request = Request
-            .Builder()
+        val request = Request.Builder()
             .get()
             .url("https://shortlyfi.me/api/fact")
             .build()
 
-        Thread {
-            try {
-                val response = client
-                    .newCall(request)
-                    .execute()
-
-                val responseBody = response.body?.string()
-                response.close()
-
-                Handler (Looper.getMainLooper()).post {
-                    callback.result(responseBody!!)
-                }
-
-            } catch (e: Exception) {
-                hasError = true
-
-                Handler (Looper.getMainLooper()).post {
-                    callback.result("")
-                }
+        try {
+            client.newCall(request).execute().use { response ->
+                response.body?.string() ?: ""
             }
-        }.start()
+        } catch (e: Exception) {
+            hasError = true
+            ""
+        }
     }
 }

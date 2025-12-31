@@ -19,25 +19,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.content.Context
-import android.text.Layout
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun ShopSection(modifier: Modifier = Modifier, context: Context = LocalContext.current, shopSectionClicked: () -> Unit) {
+fun ShopSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, shopSectionClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
 
     Box (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_SHOP) 0.1f else 1.0f)
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
@@ -46,6 +49,9 @@ fun ShopSection(modifier: Modifier = Modifier, context: Context = LocalContext.c
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
+                if (tutorialInformation.isActive)
+                    return@clickable
+
                 shopSectionClicked()
             },
         contentAlignment = Alignment.TopEnd
@@ -87,13 +93,13 @@ fun ShopSection(modifier: Modifier = Modifier, context: Context = LocalContext.c
         }
 
         Text (
-            text = "Theme\nShop",
+            text = "Shop",
             color = colors.textPrimary,
-            fontSize = 20.sp,
+            fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 8.dp)
+                .padding(start = 8.dp, bottom = 4.dp)
         )
     }
 }
