@@ -14,6 +14,14 @@ class UserRepository private constructor (private val database: FinanceAppDataba
         }
     }
 
+    fun setCurrentTheme(theme: String) {
+        database.setCurrentTheme(theme)
+    }
+
+    fun getCurrentTheme(): String {
+        return database.getCurrentTheme()
+    }
+
     fun getUser(): String {
         return database.getUser()
     }

@@ -1,18 +1,16 @@
 package com.example.financeapp.likedquotes
+import com.example.financeapp.advertisement.AdSectionLargeBanner
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.ui.theme.LocalAppColors
 
-import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.Pistachio
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontStyle
@@ -22,31 +20,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import com.example.financeapp.advertisement.AdSectionLargeBanner
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.QuoteRepository
-import com.example.financeapp.TutorialInformation
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.LocalAppColors
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
+    val likedQuotes by likedQuotesSectionViewModel.likedQuotes.collectAsState()
 
-    val likedQuotesSectionViewModel: LikedQuotesSectionViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val repository = QuoteRepository.Companion.getInstance(database)
-
-                return LikedQuotesSectionViewModel(repository) as T
-            }
-        }
-    )
-
-    var likedQuotes = likedQuotesSectionViewModel.getLikedQuotes()
+    LaunchedEffect(Unit) {
+        likedQuotesSectionViewModel.getLikedQuotes()
+    }
 
     Box (
         modifier = Modifier
@@ -124,7 +109,7 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
                             .fillMaxWidth()
                             .weight(0.3f)
                             .background (
-                                shape = RoundedCornerShape(
+                                shape = RoundedCornerShape (
                                     bottomStart = 12.dp,
                                     bottomEnd = 12.dp
                                 ),
@@ -151,7 +136,6 @@ fun LikedQuotesSection(tutorialInformation: TutorialInformation, context: Contex
             }
 
             if (likedQuotes.size <= 3) {
-
                 Box (
                     modifier = Modifier
                         .fillMaxSize()

@@ -1,13 +1,8 @@
 package com.example.financeapp.network
 
-import android.os.Handler
-import android.os.Looper
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-interface QuoteClientCallback {
-    fun result(response: String)
-}
 class QuoteClient private constructor(){
     companion object {
         private var instance: QuoteClient? = null

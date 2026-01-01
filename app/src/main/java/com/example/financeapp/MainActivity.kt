@@ -1,45 +1,37 @@
 package com.example.financeapp
-import com.example.financeapp.advertisement.AdSectionLargeBanner
-import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.billingmanager.BillingManager
-import com.example.financeapp.goalhistoryscreen.AchievementsSection
-import com.example.financeapp.goalhistoryscreen.PunchCardSection
-import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSection
 import com.example.financeapp.goalhistoryscreen.TotalGoalsAchievedSectionViewModel
-import com.example.financeapp.goalhistoryscreen.TotalTokensEarnedSection
 import com.example.financeapp.repositories.ShopRepository
-import com.example.financeapp.homescreen.ShopSection
+import com.example.financeapp.shopscreen.ShopScreen
 import com.example.financeapp.header.HeaderSection
 import com.example.financeapp.header.HeaderSectionViewModel
-import com.example.financeapp.homescreen.DailyTipSection
-import com.example.financeapp.homescreen.GoalprogressSection
-import com.example.financeapp.homescreen.GoalsSection
 import com.example.financeapp.homescreen.GoalsSectionViewModel
-import com.example.financeapp.homescreen.QuoteSection
-import com.example.financeapp.homescreen.RecentlyCompletedGoalsSection
-import com.example.financeapp.homescreen.SavedReceiptsSection
-import com.example.financeapp.homescreen.TokenBanner
-import com.example.financeapp.homescreen.WellDoneSection
 import com.example.financeapp.likedquotes.LikedQuotesSection
 import com.example.financeapp.notifications.QuotePollingWorker
 import com.example.financeapp.notifications.ReceiptReminderPollingWorker
-import com.example.financeapp.receiptsscreen.AverageSpentSection
-import com.example.financeapp.receiptsscreen.ExpensesOverviewSection
-import com.example.financeapp.receiptsscreen.ReceiptLogSection
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
-import com.example.financeapp.receiptsscreen.SinceWhenSection
-import com.example.financeapp.receiptsscreen.Timespan
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.repositories.ReceiptRepository
 import com.example.financeapp.repositories.UserRepository
-import com.example.financeapp.settingsscreen.SettingsSection
 import com.example.financeapp.welcomescreen.WelcomeScreen
 import com.example.financeapp.repositories.AdRepository
-import com.example.financeapp.shopscreen.ThemeShopIntroSection
-import com.example.financeapp.shopscreen.ThemeShopSection
 import com.example.financeapp.shopscreen.ThemeShopViewModel
+import com.example.financeapp.dailytipscreen.DailyTipScreen
+import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
+import com.example.financeapp.goalhistoryscreen.GoalHistoryScreen
+import com.example.financeapp.homescreen.AchievementsSectionViewModel
+import com.example.financeapp.homescreen.HomeScreen
+import com.example.financeapp.homescreen.QuoteViewModel
+import com.example.financeapp.notifications.DailyTipWorker
+import com.example.financeapp.receiptsscreen.ReceiptScreen
+import com.example.financeapp.repositories.CurrencyRepository
+import com.example.financeapp.repositories.DailyTipRepository
+import com.example.financeapp.repositories.FeedbackRepository
+import com.example.financeapp.repositories.QuoteRepository
+import com.example.financeapp.settingsscreen.SettingsScreen
+import com.example.financeapp.settingsscreen.SettingsViewModel
 import com.example.financeapp.ui.theme.AppColors
 import com.example.financeapp.ui.theme.AzureAppColors
 import com.example.financeapp.ui.theme.CharcoalAppColors
@@ -49,7 +41,6 @@ import com.example.financeapp.ui.theme.GreenAppColors
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.PeachAppColors
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Bundle
@@ -61,19 +52,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -85,7 +73,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.shape.RoundedCornerShape
 import android.content.Context
 import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
@@ -94,17 +81,7 @@ import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.financeapp.dailytipscreen.DailyTipScreen
-import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
-import com.example.financeapp.goalhistoryscreen.RandomMemoryPictureSection
-import com.example.financeapp.homescreen.AchievementsSectionViewModel
-import com.example.financeapp.homescreen.QuoteViewModel
-import com.example.financeapp.notifications.DailyTipWorker
-import com.example.financeapp.repositories.CurrencyRepository
-import com.example.financeapp.repositories.DailyTipRepository
-import com.example.financeapp.repositories.FeedbackRepository
-import com.example.financeapp.repositories.QuoteRepository
-import com.example.financeapp.settingsscreen.SettingsViewModel
+import com.example.financeapp.likedquotes.LikedQuotesSectionViewModel
 import java.util.concurrent.TimeUnit
 
 
@@ -252,6 +229,7 @@ class MainActivity : ComponentActivity() {
 
                             val database = FinanceAppDatabase.getInstance(context)
                             val repository = GoalRepository.getInstance(database)
+
                             return TotalGoalsAchievedSectionViewModel(repository) as T
                         }
                     }
@@ -264,6 +242,7 @@ class MainActivity : ComponentActivity() {
                             val database = FinanceAppDatabase.getInstance(context)
                             val billingManager = BillingManager(context)
                             val repository = ShopRepository.getInstance(database, billingManager)
+
                             return ThemeShopViewModel(billingManager = billingManager, shopRepository = repository) as T
                         }
                     }
@@ -275,6 +254,7 @@ class MainActivity : ComponentActivity() {
 
                             val database = FinanceAppDatabase.getInstance(context)
                             val repository = DailyTipRepository.getInstance(database)
+
                             return DailyTipScreenViewModel(repository) as T
                         }
                     }
@@ -284,8 +264,10 @@ class MainActivity : ComponentActivity() {
                     factory = remember {
                         object: ViewModelProvider.Factory {
                             override fun <T: ViewModel> create(modelClass: Class<T>): T {
+
                                 val database = FinanceAppDatabase.getInstance(context)
                                 val repository = QuoteRepository.getInstance(database)
+
                                 return QuoteViewModel(repository) as T
                             }
                         }
@@ -296,9 +278,23 @@ class MainActivity : ComponentActivity() {
                     factory = object: ViewModelProvider.Factory {
                         override fun <T: ViewModel> create(modelClass: Class<T>): T {
                             val database = FinanceAppDatabase.getInstance(context)
+
                             val feedbackRepository = FeedbackRepository.getInstance(database)
                             val currencyRepository = CurrencyRepository.getInstance(database)
+
                             return SettingsViewModel(feedbackRepository, currencyRepository) as T
+                        }
+                    }
+                )
+
+                val likedQuotesSectionViewModel: LikedQuotesSectionViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val repository = QuoteRepository.getInstance(database)
+
+                            return LikedQuotesSectionViewModel(repository) as T
                         }
                     }
                 )
@@ -325,12 +321,28 @@ class MainActivity : ComponentActivity() {
 
                 var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
 
+                LaunchedEffect(Unit) {
+                    val currentTheme = mainActivityViewModel.getCurrentTheme()
+
+                    appColorsState.value = if (currentTheme == "Charcoal") {
+                        CharcoalAppColors
+                    }
+                    else if (currentTheme == "Electric")
+                        ElectricAppColors
+                    else if (currentTheme == "Azure")
+                        AzureAppColors
+                    else if (currentTheme == "Peach")
+                        PeachAppColors
+                    else
+                        GreenAppColors
+                }
+
                 CompositionLocalProvider (
                     LocalAppColors provides (previewColors ?: appColorsState.value)
                 ) {
                     Column (
                         modifier = Modifier
-                            .background(previewColors?.background ?: appColorsState.value.background) //damit der verkackte Streifen zwischen HeaderSection und den darunterliegenden Sections auch eingefärbt wird
+                            .background(previewColors?.primary ?: appColorsState.value.primary) //damit der verkackte Streifen zwischen HeaderSection und den darunterliegenden Sections auch eingefärbt wird
                             .fillMaxSize()
                             .clickable (
                                 indication = null,
@@ -409,7 +421,7 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                     if (tutorialInformation.tutorialStep == TutorialStep.GOALS_END) {
-                                        tutorialInformation = tutorialInformation.copy(
+                                        tutorialInformation = tutorialInformation.copy (
                                             isActive = false,
                                             tutorialStep = TutorialStep.GOALS_START
                                         )
@@ -494,18 +506,19 @@ class MainActivity : ComponentActivity() {
 
                         if (sectionIdentifier == Screen.LIKEDQUOTES)
                             LikedQuotesSection (
+                                likedQuotesSectionViewModel = likedQuotesSectionViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.GOALHISTORY)
-                            GoalHistorySection (
+                            GoalHistoryScreen (
                                 totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                                 achievementsSectionViewModel = achievementsSectionViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.RECEIPTS)
-                            ReceiptsSection (
+                            ReceiptScreen (
                                 onReceiptAdded = {
                                     tutorialInformation = tutorialInformation.copy (
                                         isActive = tutorialInformation.isActive,
@@ -556,6 +569,8 @@ class MainActivity : ComponentActivity() {
                                         PeachAppColors
                                     else
                                         GreenAppColors
+
+                                    mainActivityViewModel.setCurrentTheme(theme)
                                 }
                             )
                         }
@@ -583,8 +598,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    if (sectionIdentifier == Screen.HOME)
-                    {
+                    if (sectionIdentifier == Screen.HOME) {
                         if (!mainActivityViewModel.getHomeScreenTutorialDone() && !tutorialInformation.isActive) {
                             tutorialInformation = tutorialInformation.copy (
                                 isActive = true,
@@ -632,7 +646,7 @@ class MainActivity : ComponentActivity() {
                             Box (
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .offset(y = -200.dp),
+                                    .offset(y = (-200).dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column (
@@ -901,7 +915,7 @@ class MainActivity : ComponentActivity() {
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text (
-                                        text = "The more goals the better ;)",
+                                        text = "The more goals the better.",
                                         fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
@@ -955,433 +969,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-fun HomeScreen (
-        tutorialInformation: TutorialInformation,
-        receiptSectionsViewModel: ReceiptSectionsViewModel,
-        goalsSectionViewModel: GoalsSectionViewModel,
-        dailyTipScreenViewModel: DailyTipScreenViewModel,
-        quoteViewModel: QuoteViewModel,
-        onGoalAchieved: () -> Unit,
-        onWellDoneSectionDismissed: () -> Unit,
-        shopSectionClicked: () -> Unit,
-        receiptLogoClicked: () -> Unit,
-        dailyTipsSectionClicked: () -> Unit) {
-
-    val colors = LocalAppColors.current
-
-    var goalAchieved by remember { mutableStateOf(false) }
-    var idGoalAchieved by remember { mutableIntStateOf(0)}
-
-    Column (
-        modifier = Modifier
-            .background (
-                color = colors.background
-            ),
-        verticalArrangement = Arrangement.Top
-    ) {
-
-        if (goalAchieved) {
-
-            onGoalAchieved()
-
-            WellDoneSection (
-                modifier = Modifier
-                    .fillMaxHeight(),
-                goalsSectionViewModel = goalsSectionViewModel,
-                idGoal = idGoalAchieved,
-                onFinished = {
-                    onWellDoneSectionDismissed()
-                    goalAchieved = false
-                }
-            )
-
-        } else {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                GoalprogressSection (
-                    modifier = Modifier
-                        .weight(1f),
-                    onGoalAchieved = { idGoal ->
-                        goalAchieved = true
-                        idGoalAchieved = idGoal
-                    },
-                    goalsSectionViewModel = goalsSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-
-                QuoteSection (
-                    modifier = Modifier
-                        .weight(1f),
-                    quoteViewModel = quoteViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .padding(2.dp)
-            )
-
-            Column (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background (
-                        color = Color.Transparent,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                GoalsSection (
-                    modifier = Modifier
-                        .weight(1f),
-                    tutorialInformation = tutorialInformation,
-                    goalsSectionViewModel = goalsSectionViewModel
-                )
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(2.dp)
-                )
-
-                Box (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(72.dp)
-                        .background (
-                            color = colors.background,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                ) {
-                    Row (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        DailyTipSection (
-                            modifier = Modifier
-                                .weight(3f)
-                                .fillMaxHeight(),
-                            dailyTipScreenViewModel = dailyTipScreenViewModel,
-                            tutorialInformation = tutorialInformation,
-                            dailyTipSectionClicked = {
-                                dailyTipsSectionClicked()
-                            }
-                        )
-
-                        Spacer (
-                            modifier = Modifier
-                                .width(4.dp)
-                        )
-
-                        ShopSection (
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
-                            tutorialInformation = tutorialInformation,
-                            shopSectionClicked = {
-                                shopSectionClicked()
-                            }
-                        )
-                    }
-                }
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(2.dp)
-                )
-
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    RecentlyCompletedGoalsSection (
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f),
-                        tutorialInformation = tutorialInformation,
-                        goalsSectionViewModel = goalsSectionViewModel
-                    )
-
-                    SavedReceiptsSection (
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f)
-                            .fillMaxHeight(),
-                        receiptSectionsViewModel = receiptSectionsViewModel,
-                        tutorialInformation = tutorialInformation,
-                        onReceiptsLogoClicked = {
-                            receiptLogoClicked()
-                        }
-                    )
-                }
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(2.dp)
-                )
-
-                TokenBanner (
-                    modifier = Modifier
-                        .weight(0.5f),
-                    goalsSectionViewModel = goalsSectionViewModel,
-                    tutorialInformation = tutorialInformation)
-
-                AdSectionMiddleBanner (
-                    modifier = Modifier
-                        .weight(0.3f),
-                    tutorialInformation = tutorialInformation
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun GoalHistorySection(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation) {
-
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.5f),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        PunchCardSection (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            tutorialInformation = tutorialInformation
-        )
-
-        Column (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            var randomBoolean by remember { mutableStateOf( kotlin.random.Random.nextBoolean()) }
-
-            if (randomBoolean)
-                TotalGoalsAchievedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable() {
-                            randomBoolean = !randomBoolean
-                        },
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-            else
-                TotalTokensEarnedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable() {
-                            randomBoolean = !randomBoolean
-                        },
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-
-            Spacer (
-                modifier = Modifier
-                    .padding(2.dp)
-            )
-
-            RandomMemoryPictureSection (
-                modifier = Modifier
-                    .weight(1f),
-                achievementsSectionViewModel = achievementsSectionViewModel
-            )
-        }
-    }
-
-    Spacer (
-        modifier = Modifier
-            .padding(2.dp)
-    )
-
-    AchievementsSection (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.75f),
-        achievementsSectionViewModel = achievementsSectionViewModel,
-        tutorialInformation = tutorialInformation
-    )
-
-    Spacer (
-        modifier = Modifier
-            .padding(2.dp)
-    )
-
-    AdSectionLargeBanner (
-        tutorialInformation = tutorialInformation
-    )
-}
-
-@Composable
-fun ReceiptsSection(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
-    var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
-    val activity = context as? Activity
-    var receiptAdded by remember { mutableStateOf(false) }
-
-    LaunchedEffect(receiptAdded) {
-        activity?.let {
-            if (!receiptAdded)
-                return@LaunchedEffect
-
-            if (!mainActivityViewModel.getReceiptsTutorialDone())
-                return@LaunchedEffect
-
-            if (receiptSectionsViewModel.interstitialAdAfterReceiptSeen())
-                return@LaunchedEffect
-
-            InterstitialAdManager.instance.showInterstitial (
-                activity = it,
-                onAdClosed = {
-                    receiptAdded = false
-                    receiptSectionsViewModel.setInterstitialAdAfterReceiptSeen()
-                },
-                onAdFailed = {
-                }
-            )
-        }
-    }
-
-    Column (
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        SinceWhenSection (
-            onCurrentMonth = {
-                timespan = it
-            },
-            receiptSectionsViewModel = receiptSectionsViewModel,
-            tutorialInformation = tutorialInformation
-        )
-
-        Row (
-            modifier = Modifier,
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            AverageSpentSection (
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f),
-                timespan = timespan,
-                receiptAdded = {
-                    receiptAdded = true
-                    onReceiptAdded()
-                },
-                onDismissRequest = {
-
-                },
-                receiptSectionsViewModel = receiptSectionsViewModel,
-                tutorialInformation = tutorialInformation
-            )
-
-            ExpensesOverviewSection (
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f),
-                timespan,
-                receiptSectionsViewModel,
-                tutorialInformation = tutorialInformation
-            )
-        }
-
-        ReceiptLogSection (
-            modifier = Modifier
-                .fillMaxHeight(0.8f),
-            timespan = timespan,
-            receiptSectionsViewModel = receiptSectionsViewModel,
-            tutorialInformation = tutorialInformation
-        )
-
-        AdSectionLargeBanner (
-            tutorialInformation = tutorialInformation
-        )
-    }
-}
-
-@Composable
-fun ShopScreen(themeShopViewModel: ThemeShopViewModel, tutorialInformation: TutorialInformation, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
-
-    val colors = LocalAppColors.current
-
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .background (
-                color = colors.background,
-                shape = RoundedCornerShape(12.dp)
-            ),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ThemeShopIntroSection (
-            modifier = Modifier
-                .weight(1f)
-        )
-
-        Spacer (
-            modifier = Modifier
-                .padding (
-                    2.dp
-                )
-        )
-
-        ThemeShopSection (
-            modifier = Modifier
-                .weight(5f),
-            themeShopViewModel = themeShopViewModel,
-            previewRequested = { theme ->
-                previewRequested(theme)
-            },
-            applyThemeRequested = { theme ->
-                applyThemeRequested(theme)
-            }
-        )
-
-        Spacer (
-            modifier = Modifier
-                .height(4.dp)
-        )
-
-        AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
-    }
-}
-
-@Composable
-fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, tutorialInformation: TutorialInformation) {
-
-    SettingsSection (
-        headerSectionViewModel = headerSectionViewModel,
-        settingsViewModel = settingsViewModel
-    )
-
-    Spacer (
-        modifier = Modifier
-            .height(4.dp)
-    )
-
-    AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
 }
 
 fun scheduleDailyReminderMeWorker(context: Context) {

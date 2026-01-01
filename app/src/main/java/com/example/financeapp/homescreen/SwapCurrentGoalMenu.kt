@@ -27,22 +27,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.example.financeapp.R
-import com.example.financeapp.ui.theme.Emerald
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDissmissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
+fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel) {
 
     val colors = LocalAppColors.current
 
     DropdownMenu (
         expanded = expanded,
-        onDissmissRequest,
+        onDismissRequest,
         modifier = Modifier
             .border (
                 width = 1.dp,
@@ -93,9 +93,6 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
 
             val goals by goalsSectionViewModel.goals.collectAsState()
             val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
-            goalsSectionViewModel.reloadGoals()
-
-            var newCurrentGoal by remember { mutableIntStateOf(goals.indexOf(currentGoal)) }
 
             goals.take(5).forEach { item ->
 
@@ -113,14 +110,17 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val painter = painterResource (
-                        if (newCurrentGoal == goals.indexOf(item) || item.id == currentGoal?.id) R.drawable.bulletpointpistachiofilled_foreground else R.drawable.bulletpointpistachio_foreground
+                        id = if (item.id == currentGoal?.id)
+                                R.drawable.bulletpointpistachiofilled_foreground
+                            else
+                                R.drawable.bulletpointpistachio_foreground
                     )
 
                     Image (
                         painter = painter,
                         contentDescription = "BulletpointPistachio",
                         modifier = Modifier
-                            .background(
+                            .background (
                                 color = Color.Transparent
                             )
                             .size(24.dp)
@@ -128,9 +128,8 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                                 indication = null,
                                 interactionSource = remember {MutableInteractionSource()}
                             ) {
-                                newCurrentGoal = goals.indexOf(item)
                                 goalsSectionViewModel.setCurrentGoal(item)
-                                onCurrentGoalChanged(goals.get(newCurrentGoal).goal)
+                                onCurrentGoalChanged(item.goal)
                             }
                     )
 

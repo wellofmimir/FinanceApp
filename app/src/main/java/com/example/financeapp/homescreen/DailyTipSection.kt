@@ -47,7 +47,7 @@ fun DailyTipSection(modifier: Modifier = Modifier, tutorialInformation: Tutorial
                 dailyTipSectionClicked()
             }
             .background (
-                color = colors.surface,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             ),
         contentAlignment = Alignment.Center
@@ -57,7 +57,7 @@ fun DailyTipSection(modifier: Modifier = Modifier, tutorialInformation: Tutorial
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            color = colors.textPrimary,
+            color = colors.primary,
             modifier = Modifier
                 .padding(horizontal = 12.dp)
         )

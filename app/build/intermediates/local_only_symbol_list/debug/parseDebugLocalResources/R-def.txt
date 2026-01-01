@@ -17,6 +17,8 @@ drawable bulletpointpistachiofilled_background
 drawable bulletpointpistachiofilled_foreground
 drawable checkhook_background
 drawable checkhook_foreground
+drawable checkhooksymbol_background
+drawable checkhooksymbol_foreground
 drawable dollarsign_background
 drawable dollarsign_foreground
 drawable doppelpfeilerunter_background
@@ -74,6 +76,8 @@ mipmap bulletpointpistachio
 mipmap bulletpointpistachio_round
 mipmap checkhook
 mipmap checkhook_round
+mipmap checkhooksymbol
+mipmap checkhooksymbol_round
 mipmap doppelpfeilerunter
 mipmap doppelpfeilerunter_round
 mipmap doppelpfeileruntersymbol

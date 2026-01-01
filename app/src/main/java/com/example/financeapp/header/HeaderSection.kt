@@ -68,7 +68,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
             .fillMaxWidth()
             .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .background (
-                color = colors.surface,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -84,7 +84,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
 
         Text (
             text = formattedDate,
-            color = colors.textPrimary,
+            color = colors.primary,
             fontSize = 16.sp,
             fontFamily = FontFamily.SansSerif
         )
@@ -102,7 +102,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
             ) {
                 Text (
                     text = headerText,
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -117,7 +117,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
                 Image (
                     painter = painterResource(R.drawable.punktemenu_foreground),
                     contentDescription = "Punktemenu",
-                    colorFilter = ColorFilter.tint(colors.background),
+                    colorFilter = ColorFilter.tint(colors.primary),
                     modifier = Modifier
                         .height(40.dp)
                         .clickable (

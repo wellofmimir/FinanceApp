@@ -13,6 +13,14 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
     private var internUser = MutableStateFlow<String>("")
     var user = internUser.asStateFlow()
 
+    fun setCurrentTheme(theme: String) {
+        repository.setCurrentTheme(theme)
+    }
+
+    fun getCurrentTheme(): String {
+        return repository.getCurrentTheme()
+    }
+
     fun setHomeScreenTutorialDone() {
         repository.setHomeScreenTutorialDone()
     }

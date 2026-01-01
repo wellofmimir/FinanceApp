@@ -2,16 +2,6 @@ package com.example.financeapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.MutableState
-
-
-@Composable
-fun rememberDynamicAppColors(initialColors: AppColors): MutableState<AppColors> {
-    return remember { mutableStateOf(initialColors) }
-}
 
 data class AppColors (
     val primary: Color,
@@ -35,37 +25,37 @@ val GreenAppColors = AppColors (
 )
 
 val ElectricAppColors = AppColors (
-    primary = ElectricPurple,
-    secondary = SoftAmber,
-    background = ElectricPurple,
-    surface = SoftAmber,
-    textPrimary = ElectricPurple,
-    textSecondary = SoftAmber
+    primary = CalmBlue,
+    secondary = ElectricPurple,
+    background = CalmBlue,
+    surface = ElectricPurple,
+    textPrimary = CalmBlue,
+    textSecondary = ElectricPurple
 )
 
 val AzureAppColors = AppColors (
     primary = AzureBlue,
-    secondary = ComplementaryOrange,
+    secondary = AzureComplimentary,
     background = AzureBlue,
-    surface = ComplementaryOrange,
+    surface = AzureComplimentary,
     textPrimary = AzureBlue,
     textSecondary = AzureBlue
 )
 
 val PeachAppColors = AppColors (
     primary = Peach,
-    secondary = CalmBlue,
+    secondary = PeachComplimentary,
     background = Peach,
-    surface = CalmBlue,
-    textPrimary = Color.Black,
-    textSecondary = CalmBlue
+    surface = PeachComplimentary,
+    textPrimary = Peach,
+    textSecondary = Peach
 )
 
 val CharcoalAppColors = AppColors (
     primary = CharcoalGreen,
     secondary = WarmLightStone,
-    background = WarmLightStone,
-    surface = CharcoalGreen,
+    background = CharcoalGreen,
+    surface = WarmLightStone,
     textPrimary = CharcoalGreen,
     textSecondary = WarmLightStone
 )

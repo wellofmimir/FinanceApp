@@ -1,12 +1,10 @@
 package com.example.financeapp.homescreen
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.financeapp.database.Goal
 import com.example.financeapp.repositories.GoalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel() {
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
@@ -96,6 +94,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun setCurrentGoal(goal: Goal) {
         repository.setCurrentGoal(goal)
+        internCurrentGoal.value = goal
     }
 
     fun reloadGoals() {

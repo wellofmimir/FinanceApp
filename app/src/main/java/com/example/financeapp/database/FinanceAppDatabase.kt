@@ -160,6 +160,17 @@ class FinanceAppDatabase private constructor(context: Context) {
             putString("tip", tip)
         }
     }
+
+    fun setCurrentTheme(theme: String) {
+        securePreferences.edit {
+            putString("currentTheme", theme)
+        }
+    }
+
+    fun getCurrentTheme(): String {
+        return securePreferences.getString("currentTheme", "Green") ?: "Green"
+    }
+
     fun setThemePurchased(theme: String) {
         securePreferences.edit {
             putBoolean(theme, true)

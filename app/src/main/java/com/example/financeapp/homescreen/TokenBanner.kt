@@ -40,7 +40,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_TOKEN_BANNER) 0.1f else 1.0f)
             .fillMaxWidth()
             .background (
-                color = colors.surface,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding (
@@ -67,7 +67,7 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
                     val radius = size.minDimension / 2 - strokePx / 2
 
                     drawCircle (
-                        color = colors.background,
+                        color = colors.primary,
                         radius = radius,
                         style = if (i <= tokenIdentifier) Fill else Stroke(strokePx)
                     )

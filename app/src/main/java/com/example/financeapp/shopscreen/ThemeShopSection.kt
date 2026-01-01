@@ -45,7 +45,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
         modifier = modifier
             .fillMaxWidth()
             .background (
-                color = colors.surface,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -53,7 +53,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
     ) {
         Text (
             text = "We get it! Green isn't for everyone!",
-            color = colors.textPrimary,
+            color = colors.secondary,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
@@ -70,11 +70,11 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
 
         Text (
             text = "Check out our purchasable content here. Purchasing themes from us also helps us make cool products for you, and keep our apps free.",
-            color = colors.textPrimary,
+            color = colors.secondary,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             modifier = Modifier
-                .padding(start = 12.dp)
+                .padding(start = 12.dp, bottom = 4.dp)
         )
     }
 }
@@ -86,7 +86,7 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
             .fillMaxSize()
             .padding()
             .background (
-                color = colors.surface,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Center,
@@ -240,7 +240,7 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
         modifier = modifier
             .fillMaxSize()
             .background (
-                color = colors.background,
+                color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Center,

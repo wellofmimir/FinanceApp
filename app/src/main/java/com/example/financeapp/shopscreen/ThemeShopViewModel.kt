@@ -34,7 +34,9 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
     fun getThemePurchased(theme: String): Boolean {
         val alreadyPurchased = purchasedThemes[theme] ?: shopRepository.getThemePurchased(theme)
         purchasedThemes[theme] = alreadyPurchased
-        return alreadyPurchased
+
+        return true //TODO: Wieder einkommentieren
+        //return alreadyPurchased
     }
     fun purchaseTheme(activity: Activity, theme: String) {
         shopRepository.purchaseTheme(activity, theme)

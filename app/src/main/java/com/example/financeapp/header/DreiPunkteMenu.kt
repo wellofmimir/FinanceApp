@@ -39,7 +39,7 @@ fun DreiPunkteMenu(expanded: Boolean,
         modifier = Modifier
             .border (
                 width = 1.dp,
-                color = if (colors.secondary == Pistachio) Color.Transparent else colors.secondary,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .background (

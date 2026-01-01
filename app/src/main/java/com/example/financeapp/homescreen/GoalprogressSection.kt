@@ -85,7 +85,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                 .weight(2f)
                 .background (
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                    color = colors.surface
+                    color = colors.secondary
                 )
                 .padding(top = 8.dp, end = 8.dp)
         ) {
@@ -201,7 +201,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
             SwapCurrentGoalMenu (
                 expanded = expanded,
                 onCurrentGoalChanged = { newText -> currentGoalText = newText },
-                onDissmissRequest = { expanded = false },
+                onDismissRequest = { expanded = false },
                 goalsSectionViewModel = goalsSectionViewModel
             )
         }

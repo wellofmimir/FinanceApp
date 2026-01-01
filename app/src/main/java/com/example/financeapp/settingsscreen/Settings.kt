@@ -3,6 +3,7 @@ import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.ui.graphics.Color
 import android.content.Context
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -173,11 +175,16 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         .padding(end = 8.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.checkhook_foreground),
+                    Image (
+                        painter = painterResource(R.drawable.checkhooksymbol_foreground),
                         contentDescription = "CheckHook",
+                        colorFilter = ColorFilter.tint(colors.secondary),
                         modifier = Modifier
                             .size(56.dp)
+                            .background (
+                                color = colors.primary,
+                                shape = CircleShape
+                            )
                             .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
@@ -277,10 +284,15 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.checkhook_foreground),
+                        painter = painterResource(R.drawable.checkhooksymbol_foreground),
                         contentDescription = "CheckHook",
+                        colorFilter = ColorFilter.tint(colors.secondary),
                         modifier = Modifier
                             .size(56.dp)
+                            .background (
+                                color = colors.primary,
+                                shape = CircleShape
+                            )
                             .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
@@ -438,8 +450,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                             }
                         },
                         colors = OutlinedTextFieldDefaults.colors (
-                            focusedTextColor = Emerald,
-                            unfocusedTextColor = Emerald
+                            focusedTextColor = colors.primary,
+                            unfocusedTextColor = colors.primary
                         )
                 )
 

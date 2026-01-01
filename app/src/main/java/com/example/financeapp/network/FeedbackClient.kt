@@ -7,10 +7,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-interface FeedbackClientCallback {
-    fun result(response: String)
-}
-
 class FeedbackClient private constructor() {
     companion object {
         private var instance: FeedbackClient? = null

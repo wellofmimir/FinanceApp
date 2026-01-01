@@ -79,7 +79,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\facebookmessenger.svg" />
+                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\checkhook_symbol.svg" />
                                                 <entry key="scalingPercent" value="42" />
                                               </map>
                                             </option>
@@ -112,7 +112,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="facebookmessenger" />
+                                      <entry key="outputName" value="checkhooksymbol" />
                                     </map>
                                   </option>
                                 </PersistentState>

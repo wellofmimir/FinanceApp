@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.height
-import com.example.financeapp.ui.theme.Emerald
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.HorizontalDivider
@@ -48,12 +48,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
-import com.example.financeapp.ui.theme.Pistachio
 
 @Composable
 fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
@@ -70,7 +70,9 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
     Column (
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .offset(y = (-100).dp)
     ) {
         DropdownMenu (
             expanded = expanded,
@@ -88,7 +90,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     elevation = 12.dp,
                     shape = RoundedCornerShape(12.dp))
                 .background (
-                    color = colors.background
+                    color = colors.primary
                 )
                 .fillMaxWidth()
                 .fillMaxHeight(0.65f),
@@ -99,7 +101,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(12.dp),
-                        color = colors.background
+                        color = colors.primary
                     )
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -386,6 +388,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
 
                                 amount = 0.0f
                                 nameOfGoalText = ""
+                                amountText = ""
                             }
 
                             feedbackTrigger++
@@ -413,7 +416,7 @@ fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: 
                     LaunchedEffect (feedbackTrigger) {
                         keyboardController?.hide()
 
-                        delay (3000)
+                        delay (1000)
                         errorInInput = false
                         errorMessage = null
 

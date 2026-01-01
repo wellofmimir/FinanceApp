@@ -118,6 +118,8 @@ int drawable bulletpointpistachiofilled_background 0x7f050009
 int drawable bulletpointpistachiofilled_foreground 0x7f05000a
 int drawable checkhook_background 0x7f05000b
 int drawable checkhook_foreground 0x7f05000c
+int drawable checkhooksymbol_background 0x7f05006a
+int drawable checkhooksymbol_foreground 0x7f05006b
 int drawable common_full_open_on_phone 0x7f05000d
 int drawable common_google_signin_btn_icon_dark 0x7f05000e
 int drawable common_google_signin_btn_icon_dark_focused 0x7f05000f
@@ -344,6 +346,8 @@ int mipmap bulletpointpistachio 0x7f090002
 int mipmap bulletpointpistachio_round 0x7f090003
 int mipmap checkhook 0x7f090004
 int mipmap checkhook_round 0x7f090005
+int mipmap checkhooksymbol 0x7f090039
+int mipmap checkhooksymbol_round 0x7f09003a
 int mipmap doppelpfeilerunter 0x7f090006
 int mipmap doppelpfeilerunter_round 0x7f090007
 int mipmap doppelpfeileruntersymbol 0x7f090008

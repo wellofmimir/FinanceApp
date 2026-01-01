@@ -119,6 +119,8 @@ drawable bulletpointpistachiofilled_background
 drawable bulletpointpistachiofilled_foreground
 drawable checkhook_background
 drawable checkhook_foreground
+drawable checkhooksymbol_background
+drawable checkhooksymbol_foreground
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -345,6 +347,8 @@ mipmap bulletpointpistachio
 mipmap bulletpointpistachio_round
 mipmap checkhook
 mipmap checkhook_round
+mipmap checkhooksymbol
+mipmap checkhooksymbol_round
 mipmap doppelpfeilerunter
 mipmap doppelpfeilerunter_round
 mipmap doppelpfeileruntersymbol
