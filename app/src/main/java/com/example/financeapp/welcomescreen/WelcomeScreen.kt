@@ -1485,15 +1485,21 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                 width = with(density) { imageSize.height.toDp() },
                 height = with(density) { imageSize.width.toDp() }
             )
-            .background(
+            .background (
                 color = Color.Gray,
                 shape = RoundedCornerShape(16.dp)
             ),
         contentAlignment = Alignment.Center
     ) {
         Image (
-            painter = painterResource(R.mipmap.logo_foreground),
-            contentDescription = "Logo"
+            painter = painterResource(R.mipmap.applogo_foreground),
+            contentDescription = "Logo",
+            modifier = Modifier
+                .fillMaxSize()
+                .background (
+                    color = Pistachio,
+                    shape = RoundedCornerShape(12.dp)
+                )
         )
     }
 }

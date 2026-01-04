@@ -1,5 +1,12 @@
 package com.example.financeapp.goalhistoryscreen
 
+import com.example.financeapp.database.FinanceAppDatabase
+import com.example.financeapp.repositories.GoalRepository
+import com.example.financeapp.R
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
+import com.example.financeapp.ui.theme.LocalAppColors
+
 import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -8,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -23,9 +29,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import com.example.financeapp.ui.theme.Emerald
-import com.example.financeapp.ui.theme.Pistachio
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -44,156 +47,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.GoalRepository
-import com.example.financeapp.R
-import com.example.financeapp.TutorialInformation
-import com.example.financeapp.TutorialStep
-import com.example.financeapp.ui.theme.LocalAppColors
+
 
 @Composable
-fun PunchCardSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun PunchCardSection(modifier: Modifier = Modifier, onPunchCardFilled: () -> Unit, punchCardSectionViewModel: PunchCardSectionViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
-
-    val punchCardSectionViewModel: PunchCardSectionViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val goalRepository = GoalRepository.getInstance(database)
-
-                return PunchCardSectionViewModel(goalRepository) as T
-            }
-        }
-    )
 
     LaunchedEffect(Unit) {
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
     }
 
     val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsState()
-    val isPunchcardFull = tokenSoFar >= 15
+    val isPunchCardFull = tokenSoFar >= 15
 
-    if (isPunchcardFull) { //15 token sind in der punchardsection zu sehen
+    if (isPunchCardFull) { //15 token sind in der punchCardSection zu sehen
         val spareToken = tokenSoFar - 15
+        punchCardSectionViewModel.resetTokenSoFarForPunchcard(spareToken = spareToken)
+        punchCardSectionViewModel.getTokenSoFarForPunchcard()
 
-        Column (
-            modifier = modifier
-                .background (
-                    color = colors.background,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .border (
-                    width = 2.dp,
-                    color = colors.background,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(4.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer (
-                modifier = Modifier
-                    .height(50.dp)
-            )
-
-            Text (
-                text = "Nice Job!",
-                fontSize = 40.sp,
-                color = colors.textPrimary
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(10.dp)
-            )
-
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                for (i in 1 .. 3) {
-                    Image (
-                        painter = painterResource(R.drawable.starfilledpistachio_foreground),
-                        contentDescription = "Stern_$i",
-                        modifier = Modifier
-                            .height(50.dp)
-                            .aspectRatio(1f)
-                    )
-                }
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .height(20.dp)
-            )
-
-            Text (
-                text = buildAnnotatedString {
-                    withStyle (
-                        style = SpanStyle (
-                            color = colors.textPrimary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        append ("You've completed a full card!")
-                    }
-                },
-                fontSize = 16.sp,
-                color = colors.textPrimary,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(2.dp)
-            )
-
-            Text (
-                text = "Now give yourself a little treat. Or a big one. The world is your oyster.",
-                fontSize = 16.sp,
-                color = colors.textPrimary,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(40.dp)
-            )
-
-            Box (
-                modifier = Modifier
-                    .background (
-                        color = colors.surface,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .border (
-                        color = colors.background,
-                        width = 2.dp,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .height(40.dp)
-                    .fillMaxWidth(0.9f)
-                    .align(Alignment.CenterHorizontally)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        punchCardSectionViewModel.resetTokenSoFarForPunchcard(spareToken = spareToken)
-                        punchCardSectionViewModel.getTokenSoFarForPunchcard()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Text (
-                    text = "I've treated myself!",
-                    fontSize = 18.sp,
-                    color = colors.textPrimary,
-                    modifier = Modifier
-                        .padding(horizontal = 2.dp)
-                )
-            }
-        }
+        onPunchCardFilled()
 
     } else {
 

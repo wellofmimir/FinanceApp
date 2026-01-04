@@ -9,30 +9,30 @@
 9        android:targetSdkVersion="36" />
 10
 11    <uses-feature
-11-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:5:5-84
+11-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:4:5-84
 12        android:name="android.hardware.camera"
-12-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:5:19-57
+12-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:4:19-57
 13        android:required="false" />
-13-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:5:58-82
+13-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:4:58-82
 14
 15    <uses-permission android:name="android.permission.INTERNET" />
-15-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:7:5-66
-15-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:7:22-64
+15-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:6:5-66
+15-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:6:22-64
 16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-16-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:8:5-78
-16-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:8:22-76
+16-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:7:5-78
+16-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:7:22-76
 17    <uses-permission android:name="android.permission.CAMERA" />
-17-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:9:5-64
-17-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:9:22-62
+17-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:8:5-64
+17-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:8:22-62
 18    <uses-permission
-18-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:5-107
+18-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:9:5-107
 19        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-19-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:22-78
+19-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:9:22-78
 20        android:maxSdkVersion="28" />
-20-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:79-105
+20-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:9:79-105
 21    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:11:5-77
-21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:11:22-74
+21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:5-77
+21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:22-74
 22    <uses-permission android:name="com.android.vending.BILLING" />
 22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:5-67
 22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:22-64
@@ -100,79 +100,79 @@
 53-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
 54
 55    <application
-55-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:13:5-51:19
+55-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:12:5-50:19
 56        android:allowBackup="true"
-56-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:14:9-35
+56-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:13:9-35
 57        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 57-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
 58        android:dataExtractionRules="@xml/data_extraction_rules"
-58-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:15:9-65
+58-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:14:9-65
 59        android:debuggable="true"
 60        android:extractNativeLibs="false"
 61        android:fullBackupContent="@xml/backup_rules"
-61-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:16:9-54
-62        android:icon="@mipmap/logo_foreground"
-62-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:17:9-47
-63        android:label="@string/app_name"
-63-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:18:9-41
-64        android:roundIcon="@mipmap/logo_foreground"
-64-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:19:9-52
+61-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:15:9-54
+62        android:icon="@mipmap/applogo_round"
+62-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:16:9-45
+63        android:label="Greeen"
+63-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:17:9-31
+64        android:roundIcon="@mipmap/applogo_foreground"
+64-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:18:9-55
 65        android:supportsRtl="true"
-65-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:20:9-35
+65-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:19:9-35
 66        android:testOnly="true"
 67        android:theme="@style/Theme.FinanceApp" >
-67-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:21:9-48
+67-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:20:9-48
 68
 69        <!-- Google Ads App ID -->
 70        <meta-data
-70-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:24:9-26:69
+70-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:23:9-25:69
 71            android:name="com.google.android.gms.ads.APPLICATION_ID"
-71-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:25:13-69
+71-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:24:13-69
 72            android:value="ca-app-pub-3940256099942544~3347511713" />
-72-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:26:13-67
+72-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:25:13-67
 73
 74        <activity
-74-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:28:9-39:20
+74-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:27:9-38:20
 75            android:name="com.example.financeapp.MainActivity"
-75-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:29:13-41
+75-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:28:13-41
 76            android:exported="true"
-76-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:31:13-36
-77            android:label="@string/app_name"
-77-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:32:13-45
+76-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:30:13-36
+77            android:label="Greeen"
+77-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:31:13-35
 78            android:screenOrientation="portrait"
-78-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:30:13-49
+78-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:29:13-49
 79            android:theme="@style/Theme.FinanceApp"
-79-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:34:13-52
+79-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:33:13-52
 80            android:windowSoftInputMode="adjustNothing" >
-80-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:33:13-56
+80-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:32:13-56
 81            <intent-filter>
-81-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:35:13-38:29
+81-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:34:13-37:29
 82                <action android:name="android.intent.action.MAIN" />
-82-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:36:17-69
-82-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:36:25-66
+82-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:35:17-69
+82-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:35:25-66
 83
 84                <category android:name="android.intent.category.LAUNCHER" />
-84-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:37:17-77
-84-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:37:27-74
+84-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:36:17-77
+84-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:36:27-74
 85            </intent-filter>
 86        </activity>
 87
 88        <provider
-88-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:41:9-50:20
+88-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:40:9-49:20
 89            android:name="androidx.core.content.FileProvider"
-89-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:42:13-62
+89-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:41:13-62
 90            android:authorities="com.example.financeapp.provider"
-90-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:43:13-66
+90-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:42:13-66
 91            android:exported="false"
-91-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:44:13-37
+91-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:43:13-37
 92            android:grantUriPermissions="true" >
-92-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:45:13-47
+92-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:44:13-47
 93            <meta-data
-93-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:46:13-49:25
+93-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:45:13-48:25
 94                android:name="android.support.FILE_PROVIDER_PATHS"
-94-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:47:17-67
+94-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:46:17-67
 95                android:resource="@xml/file_paths" >
-95-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:48:17-51
+95-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:47:17-51
 96            </meta-data>
 97        </provider>
 98

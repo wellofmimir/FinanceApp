@@ -11,7 +11,7 @@ class TotalGoalsAchievedSectionViewModel(private val repository: GoalRepository)
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
 
-    private val internTotalTokensEarned = MutableStateFlow<Int>(0)
+    private val internTotalTokensEarned = MutableStateFlow(0)
     val totalTokensEarned = internTotalTokensEarned.asStateFlow()
 
     fun getCompletedGoals() {

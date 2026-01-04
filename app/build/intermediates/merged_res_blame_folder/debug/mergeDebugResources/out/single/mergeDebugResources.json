@@ -100,6 +100,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\bulletpointpistachio_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_checkhooksymbol.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\checkhooksymbol.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_receiptsymbol.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\receiptsymbol.webp"
     },
@@ -138,10 +142,6 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_ringmitdickemrand.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\ringmitdickemrand.webp"
-    },
-    {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xxhdpi_checkhooksymbol_round.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xxhdpi/checkhooksymbol_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
@@ -200,12 +200,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\pluszeichen_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_pfeilnachrechtspistachio_round.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\pfeilnachrechtspistachio_round.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_facebooklogo_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\facebooklogo_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_pfeilnachrechtspistachio_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\pfeilnachrechtspistachio_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_ic_launcher_foreground.xml.flat",
@@ -236,12 +236,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\pluszeichenstandard_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_pfeilnachrechts_round.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\pfeilnachrechts_round.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_bulletpointpistachio.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\bulletpointpistachio.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_pfeilnachrechts_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\pfeilnachrechts_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_kamera_round.xml.flat",
@@ -268,12 +268,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\logo.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_whatsapp_round.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\whatsapp_round.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_facebooklogo_round.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\facebooklogo_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_whatsapp_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\whatsapp_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_ic_launcher.webp.flat",
@@ -296,28 +296,40 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\pluszeichenstandard_background.xml"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_facebook.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\facebook.webp"
+        "merged": "com.example.financeapp-debug-59:/mipmap-mdpi_applogo_foreground.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-mdpi/applogo_foreground.png"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_facebooklogo.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\facebooklogo.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_whatsapp.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\whatsapp.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_facebook.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\facebook.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_checkhook.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\checkhook.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_applogo.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\applogo.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_whatsapp.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\whatsapp.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pluszeichenstandard_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pluszeichenstandard_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_checkhook.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\checkhook.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_kamera.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\kamera.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_applogo_round.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\applogo_round.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_minuszeichenstandard.webp.flat",
@@ -330,6 +342,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_pluszeichen.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\pluszeichen.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_applogo.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\applogo.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_whatsapplogo_round.webp.flat",
@@ -372,6 +388,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\whatsapplogo_round.xml"
     },
     {
+        "merged": "com.example.financeapp-debug-59:/mipmap-xhdpi_applogo_foreground.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xhdpi/applogo_foreground.png"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_minuszeichen_standard_pistachio_round.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\minuszeichen_standard_pistachio_round.xml"
     },
@@ -392,12 +412,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\ringmitduennemrand_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_bulletpointpistachio_foreground.xml.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\bulletpointpistachio_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_whatsapplogo_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\whatsapplogo_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_bulletpointpistachio_foreground.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\bulletpointpistachio_foreground.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_herzzumliken_round.webp.flat",
@@ -412,12 +432,16 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\checkhook.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_kamera_foreground.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\kamera_foreground.xml"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_minuszeichen_standard_pistachio_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\minuszeichen_standard_pistachio_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_kamera_foreground.xml.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\kamera_foreground.xml"
+        "merged": "com.example.financeapp-debug-59:/mipmap-xxhdpi_applogo.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xxhdpi/applogo.png"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_bulletpointpistachio.webp.flat",
@@ -432,12 +456,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\punktemenu.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xxxhdpi_checkhooksymbol.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xxxhdpi/checkhooksymbol.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_doppelpfeilerunter.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\doppelpfeilerunter.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_checkhooksymbol.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\checkhooksymbol.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_bulletpoint.webp.flat",
@@ -480,6 +504,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\bulletpointpistachio.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_applogo_foreground.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\applogo_foreground.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_whatsapp.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\whatsapp.webp"
     },
@@ -492,12 +520,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\pfeilnachrechtspistachio_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pluszeichen.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pluszeichen.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_ringmitduennemrand_round.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\ringmitduennemrand_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pluszeichen.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pluszeichen.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pfeilnachrechts.webp.flat",
@@ -516,20 +544,28 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\doppelpfeilerunter.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_facebook_foreground.xml.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\facebook_foreground.xml"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_applogo.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\applogo.xml"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pfeilnachrechtspistachio.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pfeilnachrechtspistachio.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_applogo.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\applogo.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_pfeilnachrechtspistachio_background.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\pfeilnachrechtspistachio_background.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_receipt_background.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\receipt_background.xml"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_pfeilnachrechtspistachio_background.xml.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\pfeilnachrechtspistachio_background.xml"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pfeilnachrechtspistachio.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pfeilnachrechtspistachio.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_facebook_foreground.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\facebook_foreground.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_minuszeichen_standard_pistachio.xml.flat",
@@ -544,10 +580,6 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\checkhook_foreground.xml"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-anydpi-v26_checkhooksymbol_round.xml.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-anydpi-v26/checkhooksymbol_round.xml"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_ringmitdickemrand_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\ringmitdickemrand_round.webp"
     },
@@ -556,12 +588,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-mdpi_checkhooksymbol.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-mdpi/checkhooksymbol.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_pluszeichenstandard_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\pluszeichenstandard_round.webp"
+    },
+    {
+        "merged": "com.example.financeapp-debug-59:/mipmap-xxxhdpi_applogo.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xxxhdpi/applogo.png"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_punktemenu_round.webp.flat",
@@ -612,12 +644,16 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\minuszeichenstandard_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_facebooklogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\facebooklogo_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_facebook.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\facebook.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_facebooklogo_round.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\facebooklogo_round.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_applogo_foreground.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\applogo_foreground.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_kamera_background.xml.flat",
@@ -640,6 +676,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\pluszeichen.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_checkhooksymbol_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\checkhooksymbol_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_punktemenu_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\punktemenu_round.webp"
     },
@@ -656,12 +696,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\facebooklogo_background.xml"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_whatsapp_foreground.xml.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\whatsapp_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pluszeichen_standard_pistachio.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\pluszeichen_standard_pistachio.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_whatsapp_foreground.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\whatsapp_foreground.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_starfilledpistachio_round.webp.flat",
@@ -772,12 +812,16 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\receipt_round.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-mdpi_checkhooksymbol_round.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-mdpi/checkhooksymbol_round.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_applogo_foreground.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\applogo_foreground.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_logo_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\logo_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_checkhooksymbol.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\checkhooksymbol.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_bulletpoint_round.webp.flat",
@@ -794,6 +838,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_bulletpoint_foreground.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\bulletpoint_foreground.xml"
+    },
+    {
+        "merged": "com.example.financeapp-debug-59:/mipmap-xxxhdpi_applogo_foreground.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xxxhdpi/applogo_foreground.png"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_ringmitduennemrand_round.webp.flat",
@@ -820,6 +868,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\pfeilnachrechts_background.xml"
     },
     {
+        "merged": "com.example.financeapp-debug-59:/mipmap-hdpi_applogo_foreground.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-hdpi/applogo_foreground.png"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_starfilledpistachio.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\starfilledpistachio.xml"
     },
@@ -830,6 +882,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_whatsapplogo.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\whatsapplogo.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_checkhooksymbol.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\checkhooksymbol.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_facebook_round.webp.flat",
@@ -880,8 +936,8 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\checkhook_round.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-hdpi_checkhooksymbol_round.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-hdpi/checkhooksymbol_round.webp"
+        "merged": "com.example.financeapp-debug-59:/mipmap-xhdpi_applogo.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xhdpi/applogo.png"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_ringmitduennemrand_round.webp.flat",
@@ -956,8 +1012,8 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\receipt.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-anydpi-v26_checkhooksymbol.xml.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-anydpi-v26/checkhooksymbol.xml"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_applogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\applogo_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_logo_round.webp.flat",
@@ -974,6 +1030,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_kamerasymbol_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\kamerasymbol_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_checkhooksymbol_foreground.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\checkhooksymbol_foreground.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_pluszeichen_standard_pistachio_round.webp.flat",
@@ -998,10 +1058,6 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_receipt_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\receipt_round.webp"
-    },
-    {
-        "merged": "com.example.financeapp-debug-59:/drawable_checkhooksymbol_foreground.xml.flat",
-        "source": "com.example.financeapp-main-61:/drawable/checkhooksymbol_foreground.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_pfeilnachrechts.webp.flat",
@@ -1044,6 +1100,14 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\minuszeichenstandard.xml"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_checkhooksymbol_background.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\checkhooksymbol_background.xml"
+    },
+    {
+        "merged": "com.example.financeapp-debug-59:/mipmap-mdpi_applogo.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-mdpi/applogo.png"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_starfilledpistachio.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\starfilledpistachio.webp"
     },
@@ -1074,10 +1138,6 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_pluszeichen_background.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\pluszeichen_background.xml"
-    },
-    {
-        "merged": "com.example.financeapp-debug-59:/drawable_checkhooksymbol_background.xml.flat",
-        "source": "com.example.financeapp-main-61:/drawable/checkhooksymbol_background.xml"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_pfeilnachrechtspistachio_foreground.xml.flat",
@@ -1128,6 +1188,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\logo_round.xml"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_checkhooksymbol.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\checkhooksymbol.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_kamerasymbol_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\kamerasymbol_round.webp"
     },
@@ -1142,6 +1206,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_pluszeichen_round.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\pluszeichen_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_checkhooksymbol_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\checkhooksymbol_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_whatsapplogo.webp.flat",
@@ -1196,8 +1264,16 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\facebook_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_checkhooksymbol.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\checkhooksymbol.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_pfeilnachrechts.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\pfeilnachrechts.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_checkhooksymbol_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\checkhooksymbol_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_doppelpfeileruntersymbol_foreground.xml.flat",
@@ -1232,10 +1308,6 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\herzzumliken.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-hdpi_checkhooksymbol.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-hdpi/checkhooksymbol.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_facebook.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\facebook.xml"
     },
@@ -1256,6 +1328,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\minuszeichen_standard_pistachio.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_checkhooksymbol_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\checkhooksymbol_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_whatsapplogo_foreground.xml.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\whatsapplogo_foreground.xml"
     },
@@ -1266,6 +1342,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_starfilledpistachio_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\starfilledpistachio_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_applogo.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\applogo.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_logo.webp.flat",
@@ -1294,6 +1374,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_facebook.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\facebook.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_applogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\applogo_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_starfilledpistachio.webp.flat",
@@ -1348,6 +1432,14 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\kamerasymbol_round.xml"
     },
     {
+        "merged": "com.example.financeapp-debug-59:/mipmap-hdpi_applogo.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-hdpi/applogo.png"
+    },
+    {
+        "merged": "com.example.financeapp-debug-59:/mipmap-xxhdpi_applogo_foreground.png.flat",
+        "source": "com.example.financeapp-main-61:/mipmap-xxhdpi/applogo_foreground.png"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_whatsapp_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\whatsapp_round.webp"
     },
@@ -1400,12 +1492,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\checkhook_round.webp"
     },
     {
-        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_pfeilnachrechtspistachio.webp.flat",
-        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\pfeilnachrechtspistachio.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_applogo.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\applogo.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xhdpi_checkhooksymbol.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xhdpi/checkhooksymbol.webp"
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_pfeilnachrechtspistachio.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\pfeilnachrechtspistachio.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_facebook_round.webp.flat",
@@ -1414,6 +1506,10 @@
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_ringmitdickemrand.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\ringmitdickemrand.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_applogo_foreground.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\applogo_foreground.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_ringmitduennemrand_round.webp.flat",
@@ -1440,6 +1536,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\doppelpfeileruntersymbol_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_applogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\applogo_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_facebook.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\facebook.webp"
     },
@@ -1456,12 +1556,12 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\doppelpfeileruntersymbol_round.xml"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xhdpi_checkhooksymbol_round.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xhdpi/checkhooksymbol_round.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_checkhook.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\checkhook.webp"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_checkhooksymbol_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\checkhooksymbol_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_minuszeichenstandard_round.webp.flat",
@@ -1512,6 +1612,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\minuszeichen_standard_pistachio.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xhdpi_applogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xhdpi\\applogo_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_whatsapp_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\whatsapp_round.webp"
     },
@@ -1560,10 +1664,6 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xxhdpi_checkhooksymbol.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xxhdpi/checkhooksymbol.webp"
-    },
-    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_checkhook_round.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\checkhook_round.webp"
     },
@@ -1600,6 +1700,14 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\doppelpfeilerunter_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\drawable_applogo_background.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\drawable\\applogo_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_applogo_foreground.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\applogo_foreground.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_logo_foreground.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\logo_foreground.webp"
     },
@@ -1612,6 +1720,10 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\ringmitdickemrand_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-hdpi_applogo_round.webp.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\applogo_round.webp"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-mdpi_ic_launcher.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-mdpi\\ic_launcher.webp"
     },
@@ -1620,16 +1732,16 @@
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-hdpi\\herzzumliken_round.webp"
     },
     {
+        "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-anydpi-v26_checkhooksymbol_round.xml.flat",
+        "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-anydpi-v26\\checkhooksymbol_round.xml"
+    },
+    {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxxhdpi_ringmitduennemrand.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxxhdpi\\ringmitduennemrand.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_facebooklogo.webp.flat",
         "source": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-main-61:\\mipmap-xxhdpi\\facebooklogo.webp"
-    },
-    {
-        "merged": "com.example.financeapp-debug-59:/mipmap-xxxhdpi_checkhooksymbol_round.webp.flat",
-        "source": "com.example.financeapp-main-61:/mipmap-xxxhdpi/checkhooksymbol_round.webp"
     },
     {
         "merged": "C:\\Users\\pmlec\\.gradle\\daemon\\8.13\\com.example.financeapp-debug-59:\\mipmap-xxhdpi_herzzumliken.webp.flat",

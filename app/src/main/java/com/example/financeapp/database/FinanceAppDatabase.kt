@@ -96,6 +96,8 @@ class FinanceAppDatabase private constructor(context: Context) {
         //einfügen von Werten in die goalStatus-Tabelle
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
+        database.execSQL("INSERT INTO goalStatus (description) SELECT 'PunchCard' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'PunchCard')")
+
     }
 
     //PREFERENCES - START
@@ -129,6 +131,26 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun setAppliedTheme(theme: String) {
+        securePreferences.edit {
+            putString("AppliedTheme", theme)
+        }
+    }
+
+    fun getAppliedTheme(): String {
+        return securePreferences.getString("AppliedTheme", "") ?: ""
+    }
+
+    fun setRemoveAllAds() {
+        securePreferences.edit {
+            putBoolean("RemoveAllAds", true)
+        }
+    }
+
+    fun getRemoveAllAds(): Boolean {
+        return securePreferences.getBoolean("RemoveAllAds", false)
     }
 
     fun newDailyTipAvailable(): Boolean {
@@ -559,38 +581,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
-    fun getCurrentQuote(): String {
-
-        val cursor = database.rawQuery("SELECT id FROM currentQuote WHERE id = 1", null)
-
-        val currentQuote = if (cursor.moveToFirst()) {
-            cursor.getString(cursor.getColumnIndexOrThrow("quote"))
-        } else {
-            ""
-        }
-
-        cursor.close()
-        return currentQuote
-    }
-
-    fun updateCurrentQuote(quote: String) {
-
-        val cursor = database.rawQuery("SELECT id FROM currentQuote WHERE id = 1", null)
-        val exists = cursor.moveToFirst()
-        cursor.close()
-
-        val values = ContentValues().apply {
-            put("quote", quote)
-        }
-
-        if (exists) {
-            database.update("currentQuote", values, "id = ?", arrayOf("1"))
-        } else {
-            values.put("id", 1)
-            database.insert("currentQuote", null, values)
-        }
-    }
-
     fun getAllQuotes(): List<Quote> {
 
         val cursor = database.rawQuery("SELECT * FROM quotes", null)
@@ -859,10 +849,9 @@ class FinanceAppDatabase private constructor(context: Context) {
         return goals
     }
 
-    fun insertGoal(nameOfGoal: String, amount: Float, savedAmount: Float, goalStatus: String, tokenCount: Int = 1) {
+    fun insertGoal(nameOfGoal: String, amount: Float, savedAmount: Float, goalStatus: String, tokenCount: Int = 1, finishDate: String) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(nameOfGoal))
-        val exists = cursor.moveToFirst()
         cursor.close()
 
         val values = ContentValues()
@@ -870,21 +859,16 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("amount", amount)
         values.put("saved", savedAmount)
         values.put("idStatus", getIDGoalStatus(goalStatus)!!.id)
-        values.put("finishdate", "")
+        values.put("finishdate", finishDate)
         values.put("tokencount", tokenCount)
         values.put("pathtoimage", "")
 
-        if (exists) {
-            database.update("goals", values, "goal = ?", arrayOf(nameOfGoal))
-        } else {
-            database.insert("goals", null, values)
-        }
+        database.insert("goals", null, values)
     }
 
     fun insertGoal(goal: Goal) {
 
         val cursor = database.rawQuery("SELECT * FROM goals WHERE goal = ?", arrayOf(goal.goal))
-        val exists = cursor.moveToFirst()
         cursor.close()
 
         val values = ContentValues()
@@ -896,11 +880,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         values.put("tokencount",  goal.tokenCount)
         values.put("pathtoimage", goal.pathToImage)
 
-        if (exists) {
-            database.update("goals", values, "goal = ?", arrayOf(goal.goal))
-        } else {
-            database.insert("goals", null, values)
-        }
+        database.insert("goals", null, values)
     }
 
     fun getNewestGoalId(): Int {

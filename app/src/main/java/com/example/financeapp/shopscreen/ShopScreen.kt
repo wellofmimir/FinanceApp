@@ -12,12 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.TutorialInformation
-import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun ShopScreen(themeShopViewModel: ThemeShopViewModel, tutorialInformation: TutorialInformation, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
+fun ShopScreen(themeShopViewModel: ThemeShopViewModel, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -45,7 +43,7 @@ fun ShopScreen(themeShopViewModel: ThemeShopViewModel, tutorialInformation: Tuto
 
         ThemeShopSection (
             modifier = Modifier
-                .weight(5f),
+                .weight(4f),
             themeShopViewModel = themeShopViewModel,
             previewRequested = { theme ->
                 previewRequested(theme)
@@ -54,12 +52,5 @@ fun ShopScreen(themeShopViewModel: ThemeShopViewModel, tutorialInformation: Tuto
                 applyThemeRequested(theme)
             }
         )
-
-        Spacer (
-            modifier = Modifier
-                .height(4.dp)
-        )
-
-        AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -31,10 +32,12 @@ fun DailyTipSection(modifier: Modifier = Modifier, tutorialInformation: Tutorial
     val colors = LocalAppColors.current
     var buttonText by remember { mutableStateOf("") }
 
-    buttonText = if (dailyTipScreenViewModel.newDailyTipAvailable()) {
-        "Your daily finance tip is ready! Hooray!"
-    } else {
-        "See your finance tips."
+    LaunchedEffect(Unit) {
+        buttonText = if (dailyTipScreenViewModel.newDailyTipAvailable()) {
+            "Your daily finance tip is ready! Hooray!"
+        } else {
+            "See your finance tips."
+        }
     }
 
     Box (

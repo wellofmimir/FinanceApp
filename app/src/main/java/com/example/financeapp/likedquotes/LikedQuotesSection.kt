@@ -22,9 +22,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import com.example.financeapp.advertisement.AdvertisementViewModel
 
 @Composable
-fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel, tutorialInformation: TutorialInformation) {
+fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel, advertisementViewModel: AdvertisementViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
     val likedQuotes by likedQuotesSectionViewModel.likedQuotes.collectAsState()
@@ -51,6 +52,10 @@ fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel,
             likedQuotes.take(likedQuotes.size).forEachIndexed { index, quote ->
 
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
+
+                    if (advertisementViewModel.getRemoveAllAds())
+                        return@Column
+
                     AdSectionLargeBanner (
                         tutorialInformation = tutorialInformation
                     )
@@ -153,6 +158,9 @@ fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel,
                             modifier = Modifier
                                 .height(2.dp)
                         )
+
+                        if (advertisementViewModel.getRemoveAllAds())
+                            return@Column
 
                         AdSectionLargeBanner (
                             tutorialInformation = tutorialInformation

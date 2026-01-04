@@ -32,10 +32,10 @@ fun AdSectionFullBanner(modifier: Modifier = Modifier, tutorialInformation: Tuto
 }
 
 @Composable
-fun AdSectionLargeBanner(tutorialInformation: TutorialInformation) {
+fun AdSectionLargeBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
 
     AndroidView (
-        modifier = Modifier
+        modifier = modifier
             .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .fillMaxWidth()
             .fillMaxHeight(),
@@ -56,7 +56,7 @@ fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: Tu
         modifier = modifier
             .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
             .fillMaxWidth()
-            .height(50.dp),
+            .fillMaxHeight(),
         factory = { context ->
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)

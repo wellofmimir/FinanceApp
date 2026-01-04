@@ -21,14 +21,16 @@ val SlateBlueGray = Color(0xFF5C6470)
 val SoftOffWhite = Color(0xFFF3F2EE)
 val WarmLightStone = Color(0xFFE6E3DC)
 val ElectricPurple = Color(0xFF9A2EE1)
-val ElectricComplimentary = Color(0xFF282C24)
+val Lilac = Color(0xFFEED6FD)
 val SoftAmber = Color(0xFFE1A12E)
 val AzureBlue = Color(0xFF174574)
-val AzureComplimentary = Color(0xFFB5D2EF)
+val Powder = Color(0xFFB5D2EF)
 val ComplementaryOrange = Color(0xFFD87A2F)
 val Peach = Color(0xFFE67A50)
-val PeachComplimentary = Color(0xFFF8EAAB)
+val Sunny = Color(0xFFF8EAAB)
 val CalmBlue = Color(0xFF517CA1)
+
+val Steel = Color(0xFFB9BEC3)
 
 
 

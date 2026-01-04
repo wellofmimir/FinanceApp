@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,44 +27,60 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.TutorialStep
 import com.example.financeapp.commonutils.fixOrientation
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.io.File
 
 @Composable
-fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel) {
+fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
-    val goals by achievementsSectionViewModel.goalsOrderedRandomly.collectAsState()
+    val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsState()
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         achievementsSectionViewModel.getCompletedGoalsOrderedRandomly()
+        achievementsSectionViewModel.startGoalRotation(5000)
     }
 
-    val goal = goals.firstOrNull()
+    DisposableEffect(Unit) {
+        onDispose {
+            achievementsSectionViewModel.stopGoalRotation()
+        }
+    }
 
-    LaunchedEffect(goal) {
-        goal?.let {
-            if (goals.isNotEmpty()) {
-                val file = File(goals.first().pathToImage)
+    LaunchedEffect(firstGoal) {
+        firstGoal?.let {
+            val file = File(it.pathToImage)
 
-                if (file.exists()) {
-                    bitmap = BitmapFactory
-                        .decodeFile(file.absolutePath)
-                        .fixOrientation(file.absolutePath)
+            if (file.exists()) {
+                val newBitmap = BitmapFactory
+                    .decodeFile(file.absolutePath)
+                    .fixOrientation(file.absolutePath)
+
+                bitmap?.let {
+                    if (newBitmap == bitmap) {
+                        achievementsSectionViewModel.getCompletedGoalsOrderedRandomly()
+                        return@LaunchedEffect
+                    }
                 }
+
+                bitmap = newBitmap
             }
         }
     }
+
 
     if (showDialog && bitmap != null) {
         Dialog (
@@ -89,7 +106,7 @@ fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectio
                     ) {
                         if (showDialog) {
                             showDialog = false
-                            achievementsSectionViewModel.getCompletedGoalsOrderedRandomly()
+                            achievementsSectionViewModel.startGoalRotation(5000)
                         }
                     }
             )
@@ -98,6 +115,7 @@ fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectio
 
     Box (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_RANDOM_MEMORY) 0.1f else 1.0f)
             .fillMaxSize()
             .background (
                 color = colors.background,
@@ -110,6 +128,7 @@ fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectio
             )
             .clickable (
             ) {
+                achievementsSectionViewModel.stopGoalRotation()
                 showDialog = true
             },
         contentAlignment = Alignment.Center

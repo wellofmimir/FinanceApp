@@ -1,10 +1,12 @@
 package com.example.financeapp.homescreen
 
+import com.example.financeapp.R
+import com.example.financeapp.ui.theme.LocalAppColors
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
-import android.content.Context
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +15,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.unit.dp
@@ -27,18 +28,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
-import com.example.financeapp.R
-import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Unit, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel) {
+fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel) {
 
     val colors = LocalAppColors.current
+    val goals by goalsSectionViewModel.goals.collectAsState()
+    val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
 
     DropdownMenu (
         expanded = expanded,
@@ -91,22 +90,24 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                     .height(48.dp)
             )
 
-            val goals by goalsSectionViewModel.goals.collectAsState()
-            val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
-
             goals.take(5).forEach { item ->
-
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(
-                            shape = RoundedCornerShape(
+                        .background (
+                            shape = RoundedCornerShape (
                                 bottomStart = if (item == goals.last()) 12.dp else 0.dp,
                                 bottomEnd = if (item == goals.last()) 12.dp else 0.dp
                             ),
                             color = colors.primary
                         )
-                        .padding(horizontal = 36.dp, vertical = 8.dp),
+                        .padding(horizontal = 36.dp, vertical = 8.dp)
+                        .clickable (
+                            indication = null,
+                            interactionSource = remember {MutableInteractionSource()}
+                        ) {
+                            goalsSectionViewModel.setCurrentGoal(item)
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val painter = painterResource (
@@ -119,18 +120,12 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onCurrentGoalChanged: (String) -> Uni
                     Image (
                         painter = painter,
                         contentDescription = "BulletpointPistachio",
+                        colorFilter = ColorFilter.tint(colors.secondary),
                         modifier = Modifier
                             .background (
                                 color = Color.Transparent
                             )
                             .size(24.dp)
-                            .clickable (
-                                indication = null,
-                                interactionSource = remember {MutableInteractionSource()}
-                            ) {
-                                goalsSectionViewModel.setCurrentGoal(item)
-                                onCurrentGoalChanged(item.goal)
-                            }
                     )
 
                     Spacer (

@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
-import kotlinx.coroutines.delay
 
 @Composable
 fun QuoteSection(modifier: Modifier = Modifier, quoteViewModel: QuoteViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
@@ -39,11 +38,10 @@ fun QuoteSection(modifier: Modifier = Modifier, quoteViewModel: QuoteViewModel, 
     val colors = LocalAppColors.current
     val quote by quoteViewModel.quote.collectAsState()
     val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
+    val isLoading by quoteViewModel.isLoading.collectAsState()
 
     LaunchedEffect(Unit) {
-        delay(5000)
-        quoteViewModel.getLikedQuotes()
-        quoteViewModel.fetchQuote()
+        quoteViewModel.loadQuoteWithDelay()
     }
 
     Column (
@@ -102,6 +100,9 @@ fun QuoteSection(modifier: Modifier = Modifier, quoteViewModel: QuoteViewModel, 
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ){
+                            if (isLoading)
+                                return@clickable
+
                             if (quoteViewModel.hasError())
                                 return@clickable
 

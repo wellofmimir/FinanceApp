@@ -67,6 +67,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="color" value="000000" />
                                                 <entry key="imagePath" value="C:\Users\pmlec\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
@@ -79,8 +80,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\checkhook_symbol.svg" />
-                                                <entry key="scalingPercent" value="42" />
+                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\applogo.png" />
+                                                <entry key="scalingPercent" value="66" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -112,7 +113,12 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="checkhooksymbol" />
+                                      <entry key="generatePlayStoreIcon" value="false" />
+                                      <entry key="generateRoundIcon" value="false" />
+                                      <entry key="generateWebpIcons" value="false" />
+                                      <entry key="legacyIconShape" value="NONE" />
+                                      <entry key="outputName" value="applogo" />
+                                      <entry key="previewDensity" value="hdpi" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -276,6 +282,11 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="previewDensity" value="hdpi" />
                                     </map>
                                   </option>
                                 </PersistentState>

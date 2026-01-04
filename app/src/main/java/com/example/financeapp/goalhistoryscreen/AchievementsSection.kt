@@ -23,20 +23,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -60,9 +55,7 @@ import com.example.financeapp.commonutils.shareToFacebook
 import com.example.financeapp.commonutils.shareToFacebookMessenger
 import com.example.financeapp.commonutils.shareToWhatsapp
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
-import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.homescreen.ShareAchievementEvent
-import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.io.File
 
@@ -70,9 +63,8 @@ import java.io.File
 fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
-
     val goals by achievementsSectionViewModel.goals.collectAsState()
-    achievementsSectionViewModel.getCompletedGoals()
+    achievementsSectionViewModel.getCompletedGoals(tutorialInformation.isActive)
 
     var showDialog by remember { mutableStateOf(false) }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -178,7 +170,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
                     ) {
                         Text (
                             text = openedGoal?.goal.toString(),
-                            color = colors.textSecondary,
+                            color = colors.secondary,
                             fontSize = 24.sp
                         )
 
@@ -189,7 +181,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
 
                         Text (
                             text = "Share",
-                            color = colors.textSecondary
+                            color = colors.secondary
                         )
 
                         Row (
@@ -287,7 +279,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_ACHIEVEMENTS) 0.1f else 1.0f)
             .background (
-                color = colors.surface,
+                color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             ),
         verticalArrangement = Arrangement.Top,
@@ -297,7 +289,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
             modifier = Modifier
                 .fillMaxWidth()
                 .background (
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -305,13 +297,13 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
         ) {
             Text (
                 text = "What You've Achieved:",
-                color = colors.textPrimary,
+                color = colors.primary,
                 fontSize = 24.sp,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                        color = colors.surface
+                        color = colors.secondary
                     )
                     .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 24.dp)
             )
@@ -323,7 +315,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
             modifier = Modifier
                 .fillMaxSize()
                 .background (
-                    color = colors.surface,
+                    color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .weight(1f),
@@ -353,7 +345,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
                 ) {
                     Text (
                         text = goal.goal,
-                        color = colors.textPrimary,
+                        color = colors.primary,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.SemiBold,
@@ -364,7 +356,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
 
                     Text (
                         text = goal.dateWhenFinished,
-                        color = colors.textPrimary,
+                        color = colors.primary,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Italic,
                         modifier = Modifier

@@ -14,6 +14,14 @@ class AdRepository private constructor (private val database: FinanceAppDatabase
         }
     }
 
+    fun setRemoveAllAds() {
+        database.setRemoveAllAds()
+    }
+
+    fun getRemoveAllAds(): Boolean {
+        return database.getRemoveAllAds()
+    }
+
     fun setInterstitialAdAfterReceiptSeen() {
         database.setInterstitialAdAfterReceiptSeen()
     }

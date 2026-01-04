@@ -32,4 +32,12 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         billingManager.start()
         billingManager.buyTestProduct(activity)
     }
+
+    fun setAppliedTheme(theme: String) {
+        database.setAppliedTheme(theme)
+    }
+
+    fun getAppliedTheme(): String {
+        return database.getAppliedTheme()
+    }
 }

@@ -1,5 +1,8 @@
 package com.example.financeapp.settingsscreen
+
 import com.example.financeapp.ui.theme.LocalAppColors
+import com.example.financeapp.header.HeaderSectionViewModel
+import com.example.financeapp.R
 
 import androidx.compose.ui.graphics.Color
 import android.content.Context
@@ -47,20 +50,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.financeapp.header.HeaderSectionViewModel
-import com.example.financeapp.R
-import com.example.financeapp.database.FinanceAppDatabase
-import com.example.financeapp.repositories.FeedbackRepository
-import com.example.financeapp.repositories.CurrencyRepository
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.material3.TextButton
-import com.example.financeapp.ui.theme.Emerald
 
 @Composable
-fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, context: Context = LocalContext.current, focusManager: FocusManager = LocalFocusManager.current) {
+fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, focusManager: FocusManager = LocalFocusManager.current) {
 
     val colors = LocalAppColors.current
 
@@ -341,7 +335,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                 )
             }
 
-            Box(
+            Box (
                 modifier = Modifier
                     .weight(0.5f)
                     .padding(end = 8.dp),
@@ -387,13 +381,23 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     },
                     confirmButton = {
                         TextButton (
+                            modifier = Modifier
+                                .border (
+                                    width = 1.dp,
+                                    color = Color.White,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .background (
+                                    color = colors.secondary,
+                                    shape = RoundedCornerShape(12.dp)
+                                ),
                             onClick = {
                                 showErrorDialog = false
                             }
                         ) {
                             Text (
                                 text = "Okay",
-                                color = colors.secondary
+                                color = colors.primary
                             )
                         }
                     },
@@ -404,7 +408,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if (feedbackTextFieldIsFocused) 0.5f else 0.8f)
+                    .fillMaxHeight(if (feedbackTextFieldIsFocused) 0.55f else 1.0f)
                     .background (
                         color = colors.secondary,
                         shape = RoundedCornerShape(12.dp)
@@ -539,7 +543,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             Box (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+                    .fillMaxHeight()
                     .background (
                         color = colors.surface,
                         shape = RoundedCornerShape(12.dp)

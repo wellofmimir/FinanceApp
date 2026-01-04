@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
@@ -39,12 +40,14 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, onReceiptsLogoClicked: () -> Unit, context: Context = LocalContext.current) {
+fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, onReceiptsLogoClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
-
-    receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
     val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
+
+    LaunchedEffect(Unit) {
+        receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
+    }
 
     Column (
         modifier = modifier

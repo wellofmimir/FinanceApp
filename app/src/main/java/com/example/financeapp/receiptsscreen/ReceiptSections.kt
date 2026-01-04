@@ -120,7 +120,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
     var showDatepickerDialog by remember { mutableStateOf(false) }
     var selectedDate by remember {mutableStateOf<String>("")}
 
-    val datepickerState = rememberDatePickerState (
+    val datePickerState = rememberDatePickerState (
         initialSelectedDateMillis = System.currentTimeMillis(),
         selectableDates = object: SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
@@ -130,7 +130,6 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
     )
 
     val resetAndDismiss = {
-
         amountText = ""
         nameOfReceipt = ""
         errorMessage = ""
@@ -396,14 +395,14 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                         confirmButton = {
                             TextButton (
                                 onClick = {
-                                    val dateMillis = datepickerState.selectedDateMillis
+                                    val dateMillis = datePickerState.selectedDateMillis
 
                                     if (dateMillis != null) {
                                         val localDate = Instant.ofEpochMilli(dateMillis)
                                             .atZone(ZoneId.systemDefault())
                                             .toLocalDate()
 
-                                        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+                                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
                                         selectedDate = formatter.format(localDate)
                                     }
 
@@ -428,7 +427,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                         }
                     ) {
                         DatePicker (
-                            state = datepickerState
+                            state = datePickerState
                         )
                     }
                 }
@@ -514,7 +513,6 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
 fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
-
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
     var clickedEntry by remember { mutableIntStateOf(0) }
 

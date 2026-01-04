@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,15 +45,35 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
         contentAlignment = Alignment.Center
     ) {
         Column (
-            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val textSize = when (totalTokensEarned.toString().length) {
+                2 -> 128.sp
+                3 -> 92.sp
+                4 -> 64.sp
+                5 -> 32.sp
+                else -> 16.sp
+            }
+
+            Spacer (
+                modifier = Modifier
+                    .weight(1f)
+            )
+
             Text (
                 text = totalTokensEarned.toString(),
                 textAlign = TextAlign.Center,
-                fontSize = 128.sp,
+                fontSize = textSize,
                 fontWeight = FontWeight.Bold,
                 color = colors.textPrimary
+            )
+
+            Spacer (
+                modifier = Modifier
+                    .weight(1f)
             )
 
             Text (

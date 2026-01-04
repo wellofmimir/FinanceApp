@@ -21,10 +21,11 @@ import androidx.compose.ui.unit.dp
 import com.example.financeapp.MainActivityViewModel
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.advertisement.AdSectionLargeBanner
+import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.advertisement.InterstitialAdManager
 
 @Composable
-fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, mainActivityViewModel: MainActivityViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
+fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, mainActivityViewModel: MainActivityViewModel, advertisementViewModel: AdvertisementViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
@@ -100,13 +101,19 @@ fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSe
 
         ReceiptLogSection (
             modifier = Modifier
-                .fillMaxHeight(0.8f),
+                .fillMaxHeight()
+                .weight(4f),
             timespan = timespan,
             receiptSectionsViewModel = receiptSectionsViewModel,
             tutorialInformation = tutorialInformation
         )
 
+        if (advertisementViewModel.getRemoveAllAds())
+            return@Column
+
         AdSectionLargeBanner (
+            modifier = Modifier
+                .weight(1f),
             tutorialInformation = tutorialInformation
         )
     }

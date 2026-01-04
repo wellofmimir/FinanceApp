@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.app.Activity
+import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class ThemeShopViewModel(private val billingManager: BillingManager, private val shopRepository: ShopRepository): ViewModel() {
 
@@ -41,5 +44,21 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
     fun purchaseTheme(activity: Activity, theme: String) {
         shopRepository.purchaseTheme(activity, theme)
         getThemePurchased(theme)
+    }
+
+    private val internAppliedTheme = MutableStateFlow(shopRepository.getAppliedTheme())
+    val appliedTheme = internAppliedTheme.asStateFlow()
+
+    fun setAppliedTheme(theme: String) {
+        shopRepository.setAppliedTheme(theme)
+        internAppliedTheme.value = theme
+    }
+
+    fun getAppliedTheme() {
+        internAppliedTheme.value = shopRepository.getAppliedTheme()
+    }
+
+    fun purchaseRemoveAllAds(activity: Activity) {
+        
     }
 }

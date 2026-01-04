@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -31,9 +32,11 @@ import com.example.financeapp.ui.theme.LocalAppColors
 fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
-
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
-    goalsSectionViewModel.getCurrentGoal()
+
+    LaunchedEffect(Unit) {
+        goalsSectionViewModel.getCurrentGoal()
+    }
 
     Row (
         modifier = modifier
@@ -50,7 +53,6 @@ fun TokenBanner(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSecti
         verticalAlignment = Alignment.CenterVertically
     ) {
         val tokenIdentifier = currentGoal?.tokenCount ?: 0
-
         val circleSize = 64.dp
         val strokeWidth = 2.dp
 

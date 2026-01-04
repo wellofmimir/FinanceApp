@@ -20,8 +20,12 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     }
 
     fun insertGoal(goal: String, amount: Float, saved: Float, statusDescription: String, amountOfTokens: Int) {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
+        val formattedDate = currentDate.format(formatter)
+
         database.run {
-            insertGoal(goal, amount, saved,statusDescription, amountOfTokens)
+            insertGoal(goal, amount, saved,statusDescription, amountOfTokens, formattedDate)
         }
     }
 
@@ -70,11 +74,14 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     }
 
     fun getCompletedGoals(): List<Goal> {
-       val completedStatus = database.getIDGoalStatus("Completed") ?:
+        val completedStatus = database.getIDGoalStatus("Completed") ?:
+            return emptyList()
+
+        val punchCardStatus = database.getIDGoalStatus("PunchCard") ?:
             return emptyList()
 
         return database.getGoals().filter {
-            it.idStatus == completedStatus.id
+            it.idStatus == completedStatus.id || it.idStatus == punchCardStatus.id
         }
     }
 
@@ -82,8 +89,11 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
         val completedStatus = database.getIDGoalStatus("Completed") ?:
             return emptyList()
 
+        val punchCardStatus = database.getIDGoalStatus("PunchCard") ?:
+            return emptyList()
+
         return database.getGoalsOrderedRandomly().filter {
-            it.idStatus == completedStatus.id
+            it.idStatus == completedStatus.id || it.idStatus == punchCardStatus.id
         }
     }
 

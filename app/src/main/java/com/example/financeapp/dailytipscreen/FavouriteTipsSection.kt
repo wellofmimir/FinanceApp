@@ -2,7 +2,6 @@ package com.example.financeapp.dailytipscreen
 import com.example.financeapp.ui.theme.LocalAppColors
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
@@ -37,11 +37,14 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.R
 
 @Composable
-fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
+fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel) {
 
     val colors = LocalAppColors.current
     val favouriteTips = dailyTipScreenViewModel.likedTips.collectAsState()
-    dailyTipScreenViewModel.getLikedTips()
+
+    LaunchedEffect(Unit) {
+        dailyTipScreenViewModel.getLikedTips()
+    }
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,

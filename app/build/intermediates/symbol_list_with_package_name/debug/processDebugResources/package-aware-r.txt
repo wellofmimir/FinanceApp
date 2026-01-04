@@ -109,6 +109,7 @@ dimen notification_top_pad_large_text
 drawable admob_close_button_black_circle_white_cross
 drawable admob_close_button_white_circle_black_cross
 drawable admob_close_button_white_cross
+drawable applogo_background
 drawable bulletpoint_background
 drawable bulletpoint_foreground
 drawable bulletpointfilled_background
@@ -341,6 +342,9 @@ layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
 layout offline_ads_dialog
+mipmap applogo
+mipmap applogo_foreground
+mipmap applogo_round
 mipmap bulletpoint
 mipmap bulletpoint_round
 mipmap bulletpointpistachio

@@ -1,11 +1,20 @@
 package com.example.financeapp.goalhistoryscreen
 
+import com.example.financeapp.TutorialInformation
+import com.example.financeapp.advertisement.AdSectionLargeBanner
+import com.example.financeapp.advertisement.AdvertisementViewModel
+import com.example.financeapp.homescreen.AchievementsSectionViewModel
+import com.example.financeapp.homescreen.GoalsSectionViewModel
+import com.example.financeapp.welldone.WellDoneSection
+import com.example.financeapp.database.Goal
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -16,12 +25,42 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.TutorialInformation
-import com.example.financeapp.advertisement.AdSectionLargeBanner
-import com.example.financeapp.homescreen.AchievementsSectionViewModel
 
 @Composable
-fun GoalHistoryScreen(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation) {
+fun GoalHistoryScreen (
+    goalsSectionViewModel: GoalsSectionViewModel,
+    totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel,
+    punchCardSectionViewModel: PunchCardSectionViewModel,
+    achievementsSectionViewModel: AchievementsSectionViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    tutorialInformation: TutorialInformation,
+    onPunchCardFilled: () -> Unit,
+    onWellDoneSectionDismissed: () -> Unit) {
+
+    var punchCardFilled by remember { mutableStateOf(false) }
+
+    if (punchCardFilled) {
+
+        //Jede ausgefüllte PunchCard soll auch einfach als erfülltes Goal behandelt werden.
+        //Deshalb nuss ein neues Ziel in die Datenbank gesetzt werden
+
+        goalsSectionViewModel.insertGoal("Filled out the punch card", 0.0f, "PunchCard", 15)
+        val newestGoalId = goalsSectionViewModel.getNewestGoalId()
+
+        WellDoneSection (
+            modifier = Modifier
+                .fillMaxHeight(),
+            goalsSectionViewModel = goalsSectionViewModel,
+            punchCardFilled = true,
+            idGoal = newestGoalId,
+            onFinished = {
+                onWellDoneSectionDismissed()
+                punchCardFilled = false
+            }
+        )
+
+        onPunchCardFilled()
+    }
 
     Row (
         modifier = Modifier
@@ -34,7 +73,11 @@ fun GoalHistoryScreen(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSect
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight(),
-            tutorialInformation = tutorialInformation
+            tutorialInformation = tutorialInformation,
+            punchCardSectionViewModel = punchCardSectionViewModel,
+            onPunchCardFilled = {
+                punchCardFilled = true
+            }
         )
 
         Column (
@@ -75,6 +118,7 @@ fun GoalHistoryScreen(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSect
             RandomMemoryPictureSection (
                 modifier = Modifier
                     .weight(1f),
+                tutorialInformation = tutorialInformation,
                 achievementsSectionViewModel = achievementsSectionViewModel
             )
         }
@@ -85,20 +129,31 @@ fun GoalHistoryScreen(totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSect
             .padding(2.dp)
     )
 
-    AchievementsSection (
+    Column (
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.75f),
-        achievementsSectionViewModel = achievementsSectionViewModel,
-        tutorialInformation = tutorialInformation
-    )
+            .fillMaxSize()
+    ) {
+        AchievementsSection (
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .weight(3f),
+            achievementsSectionViewModel = achievementsSectionViewModel,
+            tutorialInformation = tutorialInformation
+        )
 
-    Spacer (
-        modifier = Modifier
-            .padding(2.dp)
-    )
+        Spacer (
+            modifier = Modifier
+                .padding(2.dp)
+        )
 
-    AdSectionLargeBanner (
-        tutorialInformation = tutorialInformation
-    )
+        if (advertisementViewModel.getRemoveAllAds())
+            return@Column
+
+        AdSectionLargeBanner (
+            modifier = Modifier
+                .weight(1f),
+            tutorialInformation = tutorialInformation
+        )
+    }
 }

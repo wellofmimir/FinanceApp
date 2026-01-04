@@ -26,9 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
+import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
+import com.example.financeapp.welldone.WellDoneSection
 
 @Composable
 fun HomeScreen (
@@ -37,6 +39,7 @@ fun HomeScreen (
     goalsSectionViewModel: GoalsSectionViewModel,
     dailyTipScreenViewModel: DailyTipScreenViewModel,
     quoteViewModel: QuoteViewModel,
+    advertisementViewModel: AdvertisementViewModel,
     onGoalAchieved: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit,
     shopSectionClicked: () -> Unit,
@@ -55,15 +58,14 @@ fun HomeScreen (
             ),
         verticalArrangement = Arrangement.Top
     ) {
-
         if (goalAchieved) {
-
             onGoalAchieved()
 
             WellDoneSection (
                 modifier = Modifier
                     .fillMaxHeight(),
                 goalsSectionViewModel = goalsSectionViewModel,
+                punchCardFilled = false,
                 idGoal = idGoalAchieved,
                 onFinished = {
                     onWellDoneSectionDismissed()
@@ -210,6 +212,9 @@ fun HomeScreen (
                         .weight(0.5f),
                     goalsSectionViewModel = goalsSectionViewModel,
                     tutorialInformation = tutorialInformation)
+
+                if (advertisementViewModel.getRemoveAllAds())
+                    return@Column
 
                 AdSectionMiddleBanner (
                     modifier = Modifier

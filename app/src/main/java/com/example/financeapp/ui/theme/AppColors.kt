@@ -26,36 +26,36 @@ val GreenAppColors = AppColors (
 
 val ElectricAppColors = AppColors (
     primary = CalmBlue,
-    secondary = ElectricPurple,
+    secondary = Lilac,
     background = CalmBlue,
-    surface = ElectricPurple,
+    surface = Lilac,
     textPrimary = CalmBlue,
-    textSecondary = ElectricPurple
+    textSecondary = Lilac
 )
 
 val AzureAppColors = AppColors (
     primary = AzureBlue,
-    secondary = AzureComplimentary,
+    secondary = ComplementaryOrange,
     background = AzureBlue,
-    surface = AzureComplimentary,
+    surface = ComplementaryOrange,
     textPrimary = AzureBlue,
     textSecondary = AzureBlue
 )
 
 val PeachAppColors = AppColors (
     primary = Peach,
-    secondary = PeachComplimentary,
+    secondary = Sunny,
     background = Peach,
-    surface = PeachComplimentary,
+    surface = Sunny,
     textPrimary = Peach,
-    textSecondary = Peach
+    textSecondary = Sunny
 )
 
 val CharcoalAppColors = AppColors (
     primary = CharcoalGreen,
-    secondary = WarmLightStone,
+    secondary = Steel,
     background = CharcoalGreen,
-    surface = WarmLightStone,
+    surface = Steel,
     textPrimary = CharcoalGreen,
-    textSecondary = WarmLightStone
+    textSecondary = Steel
 )

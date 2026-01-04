@@ -1,4 +1,5 @@
-package com.example.financeapp.homescreen
+package com.example.financeapp.welldone
+import android.Manifest
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
 
@@ -44,6 +45,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.FileProvider
+import com.example.financeapp.homescreen.GoalsSectionViewModel
 import java.io.File
 
 
@@ -125,11 +127,10 @@ fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, idGoal: Int, onFinished: () -> Unit, context: Context = LocalContext.current) {
+fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, idGoal: Int, punchCardFilled: Boolean, onFinished: () -> Unit, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     var showDialog by remember { mutableStateOf(false) }
-
     val photos = remember { mutableStateListOf<File>() }
 
     val takePictureLauncher = rememberLauncherForActivityResult (
@@ -220,7 +221,10 @@ fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsS
                         fontWeight = FontWeight.Bold
                     )
                 ) {
-                    append ("You've accomplished a goal!")
+                    if (punchCardFilled)
+                        append("You've filled out the punchcard!")
+                    else
+                        append ("You've accomplished a goal!")
                 }
             },
             fontSize = 16.sp,
@@ -234,7 +238,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsS
         )
 
         Text (
-            text = "Now give yourself a little treat. Or a big one. The world is your oyster.",
+            text = if (punchCardFilled) "Give yourself a BIG treat. You are on a good streak - you've earned it!" else "Now give yourself a little treat. Or a big one. The world is your oyster.",
             fontSize = 16.sp,
             color = colors.secondary,
             textAlign = TextAlign.Center
@@ -280,7 +284,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsS
             QuestionDialog (
                 onConfirm = {
                     if (Build.VERSION.SDK_INT >= 33)
-                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
                 },
                 onDismissRequest = {
                     onFinished()

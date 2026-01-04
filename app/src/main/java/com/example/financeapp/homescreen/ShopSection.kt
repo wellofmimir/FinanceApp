@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors

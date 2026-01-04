@@ -10,6 +10,8 @@ import com.example.financeapp.ui.theme.Peach
 import com.example.financeapp.ui.theme.AppColors
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +35,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Text
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
@@ -93,7 +99,7 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text (
-            text = "$title $price",
+            text = if (alreadyBought) title else "$title $price",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = colors.textPrimary
@@ -236,6 +242,8 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
 @Composable
 fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, themeShopViewModel: ThemeShopViewModel, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
+
+
     Column (
         modifier = modifier
             .fillMaxSize()
@@ -253,23 +261,47 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            ThemeShopEntry (
-                modifier = Modifier
-                    .weight(1f),
-                alreadyBought = themeShopViewModel.getThemePurchased("Charcoal"),
-                title = "Charcoal",
-                price = "$1.99",
-                color = CharcoalGreen,
-                previewRequested = {
-                    previewRequested("Charcoal")
-                },
-                applyThemeRequested = {
-                    applyThemeRequested("Charcoal")
-                },
-                purchaseRequested = {
-                    themeShopViewModel.purchaseTheme(context as Activity,"Charcoal")
-                }
-            )
+            val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
+            val isCharcoalApplied = appliedTheme.value == "Charcoal"
+            val isElectricApplied = appliedTheme.value == "Electric"
+
+            if (isCharcoalApplied) {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = true,
+                    title = "Greeen",
+                    price = "",
+                    color = Emerald,
+                    previewRequested = {
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Greeen")
+                        themeShopViewModel.setAppliedTheme("Greeen")
+                    },
+                    purchaseRequested = {
+                    }
+                )
+            } else {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = themeShopViewModel.getThemePurchased("Charcoal"),
+                    title = "Charcoal",
+                    price = "$1.99",
+                    color = CharcoalGreen,
+                    previewRequested = {
+                        previewRequested("Charcoal")
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Charcoal")
+                        themeShopViewModel.setAppliedTheme("Charcoal")
+                    },
+                    purchaseRequested = {
+                        themeShopViewModel.purchaseTheme(context as Activity,"Charcoal")
+                    }
+                )
+            }
 
             Spacer (
                 modifier = Modifier
@@ -278,23 +310,43 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
                     )
             )
 
-            ThemeShopEntry (
-                modifier = Modifier
-                    .weight(1f),
-                alreadyBought = themeShopViewModel.getThemePurchased("Electric"),
-                title = "Electric",
-                price = "$1.99",
-                color = ElectricPurple,
-                previewRequested = {
-                    previewRequested("Electric")
-                },
-                applyThemeRequested = {
-                    applyThemeRequested("Electric")
-                },
-                purchaseRequested = {
-                    themeShopViewModel.purchaseTheme(context as Activity, "Electric")
-                }
-            )
+            if (isElectricApplied) {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = true,
+                    title = "Greeen",
+                    price = "",
+                    color = Emerald,
+                    previewRequested = {
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Greeen")
+                        themeShopViewModel.setAppliedTheme("Greeen")
+                    },
+                    purchaseRequested = {
+                    }
+                )
+            } else {
+                ThemeShopEntry(
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = themeShopViewModel.getThemePurchased("Electric"),
+                    title = "Electric",
+                    price = "$1.99",
+                    color = ElectricPurple,
+                    previewRequested = {
+                        previewRequested("Electric")
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Electric")
+                        themeShopViewModel.setAppliedTheme("Electric")
+                    },
+                    purchaseRequested = {
+                        themeShopViewModel.purchaseTheme(context as Activity, "Electric")
+                    }
+                )
+            }
         }
 
         Spacer (
@@ -309,47 +361,104 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            ThemeShopEntry (
-                modifier = Modifier
-                    .weight(1f),
-                alreadyBought = themeShopViewModel.getThemePurchased("Azure"),
-                title = "Azure",
-                price = "$1.99",
-                color = AzureBlue,
-                previewRequested = {
-                    previewRequested("Azure")
-                },
-                applyThemeRequested = {
-                    applyThemeRequested("Azure")
-                },
-                purchaseRequested = {
-                    themeShopViewModel.purchaseTheme(context as Activity,"Azure")
-                }
-            )
+            val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
+            val isAzureApplied = appliedTheme.value == "Azure"
+            val isPeachApplied = appliedTheme.value == "Peach"
+
+            if (isAzureApplied) {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = true,
+                    title = "Greeen",
+                    price = "",
+                    color = Emerald,
+                    previewRequested = {
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Greeen")
+                        themeShopViewModel.setAppliedTheme("Greeen")
+                    },
+                    purchaseRequested = {
+                    }
+                )
+            } else {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = themeShopViewModel.getThemePurchased("Azure"),
+                    title = "Azure",
+                    price = "$1.99",
+                    color = AzureBlue,
+                    previewRequested = {
+                        previewRequested("Azure")
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Azure")
+                        themeShopViewModel.setAppliedTheme("Azure")
+                    },
+                    purchaseRequested = {
+                        themeShopViewModel.purchaseTheme(context as Activity,"Azure")
+                    }
+                )
+            }
 
             Spacer (
                 modifier = Modifier
                     .width (4.dp)
             )
 
-            ThemeShopEntry (
-                modifier = Modifier
-                    .weight(1f),
-                alreadyBought = themeShopViewModel.getThemePurchased("Peach"),
-                title = "Peach",
-                price = "$1.99",
-                color = Peach,
-                previewRequested = {
-                    previewRequested("Peach")
-                },
-                applyThemeRequested = {
-                    applyThemeRequested("Peach")
-                },
-                purchaseRequested = {
-                    val activity = context as Activity
-                    themeShopViewModel.purchaseTheme(activity, "Peach")
-                }
-            )
+            if (isPeachApplied) {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = true,
+                    title = "Greeen",
+                    price = "",
+                    color = Emerald,
+                    previewRequested = {
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Greeen")
+                        themeShopViewModel.setAppliedTheme("Greeen")
+                    },
+                    purchaseRequested = {
+                    }
+                )
+            } else {
+                ThemeShopEntry (
+                    modifier = Modifier
+                        .weight(1f),
+                    alreadyBought = themeShopViewModel.getThemePurchased("Peach"),
+                    title = "Peach",
+                    price = "$1.99",
+                    color = Peach,
+                    previewRequested = {
+                        previewRequested("Peach")
+                    },
+                    applyThemeRequested = {
+                        applyThemeRequested("Peach")
+                        themeShopViewModel.setAppliedTheme("Peach")
+                    },
+                    purchaseRequested = {
+                        val activity = context as Activity
+                        themeShopViewModel.purchaseTheme(activity, "Peach")
+                    }
+                )
+            }
         }
+
+        Spacer (
+            modifier = Modifier
+                .height(4.dp)
+        )
+
+        RemoveAdsSection (
+            modifier = Modifier
+                .weight(0.35f),
+            purchaseRequested = {
+                val activity = context as Activity
+            }
+        )
     }
 }

@@ -48,7 +48,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
         goalsSectionViewModel.getCurrentGoal()
     }
 
-    var currentGoalText by remember { mutableStateOf("") }
+    var currentGoalText by remember { mutableStateOf(currentGoal?.goal.toString()) }
 
     LaunchedEffect(currentGoal) {
         if (currentGoal == null)
@@ -71,6 +71,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
     }
 
     var expandedEditMenu by remember {mutableStateOf(false)}
+    var expanded by remember { mutableStateOf(false) }
 
     Column (
         modifier = modifier
@@ -157,8 +158,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                 }
             }
 
-            var expanded by remember {mutableStateOf(false)}
-
             Box (
                 modifier = Modifier
                     .size(64.dp)
@@ -200,7 +199,6 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
 
             SwapCurrentGoalMenu (
                 expanded = expanded,
-                onCurrentGoalChanged = { newText -> currentGoalText = newText },
                 onDismissRequest = { expanded = false },
                 goalsSectionViewModel = goalsSectionViewModel
             )
@@ -220,7 +218,7 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
         ) {
             if (currentGoal != null) {
                 Text (
-                    text = currentGoalPercentage.toString() + "%",
+                    text = "$currentGoalPercentage%",
                     fontSize = 64.sp,
                     textAlign = TextAlign.Right,
                     fontWeight = FontWeight.Bold,

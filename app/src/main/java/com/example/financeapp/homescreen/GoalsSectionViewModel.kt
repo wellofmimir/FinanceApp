@@ -62,11 +62,10 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
         if (result == null) {
             reloadGoals()
 
-            if (internGoals.value.isNotEmpty()) {
+            if (internGoals.value.isNotEmpty())
                 internCurrentGoal.value = internGoals.value.first()
-            } else {
+            else
                 internCurrentGoal.value = null
-            }
 
             return
         }
@@ -90,6 +89,11 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun insertGoal(goal: String, amount: Float, statusDescription: String, amountOfTokens: Int) {
         repository.insertGoal(goal, amount, 0f, statusDescription, amountOfTokens)
+        getCompletedGoals()
+    }
+
+    fun getNewestGoalId(): Int {
+        return repository.getNewestGoalId()
     }
 
     fun setCurrentGoal(goal: Goal) {

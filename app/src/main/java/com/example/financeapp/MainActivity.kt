@@ -40,6 +40,9 @@ import com.example.financeapp.ui.theme.FinanceAppTheme
 import com.example.financeapp.ui.theme.GreenAppColors
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.PeachAppColors
+import com.example.financeapp.advertisement.AdSectionMiddleBanner
+import com.example.financeapp.advertisement.AdvertisementViewModel
+import com.example.financeapp.likedquotes.LikedQuotesSectionViewModel
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -81,9 +84,11 @@ import androidx.compose.ui.Alignment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.financeapp.likedquotes.LikedQuotesSectionViewModel
+import androidx.core.view.WindowInsetsControllerCompat
 import java.util.concurrent.TimeUnit
-
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -122,6 +127,8 @@ enum class TutorialStep (id: Int) {
     RECEIPTS_SUM_SECTION(10),
     RECEIPTS_LOG_SECTION(11),
     RECEIPTS_TAKE_PICTURE(12),
+
+    RECEIPTS_RANDOM_MEMORY(23),
     RECEIPTS_END(13),
     GOALS_START (14),
     GOALS_PUNCHCARD (15),
@@ -143,8 +150,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        setContent {
             val appColorsState = remember { mutableStateOf(GreenAppColors) }
 
             FinanceAppTheme (
@@ -299,6 +312,30 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
+                val advertisementViewModel: AdvertisementViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val repository = AdRepository.getInstance(database)
+
+                            return AdvertisementViewModel(repository) as T
+                        }
+                    }
+                )
+
+                val punchCardSectionViewModel: PunchCardSectionViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val goalRepository = GoalRepository.getInstance(database)
+
+                            return PunchCardSectionViewModel(goalRepository) as T
+                        }
+                    }
+                )
+
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
                 mainActivityViewModel.loadUser()
@@ -333,8 +370,12 @@ class MainActivity : ComponentActivity() {
                         AzureAppColors
                     else if (currentTheme == "Peach")
                         PeachAppColors
+                    else if (currentTheme == "Greeen")
+                        GreenAppColors
                     else
                         GreenAppColors
+
+                    themeShopViewModel.setAppliedTheme(currentTheme)
                 }
 
                 CompositionLocalProvider (
@@ -412,9 +453,7 @@ class MainActivity : ComponentActivity() {
                                         isActive = true,
                                         tutorialStep = when (tutorialInformation.tutorialStep) {
                                             TutorialStep.GOALS_START -> TutorialStep.GOALS_PUNCHCARD
-                                            TutorialStep.GOALS_PUNCHCARD -> TutorialStep.GOALS_TOTAL_GOALS
-                                            TutorialStep.GOALS_TOTAL_GOALS -> TutorialStep.GOALS_TOTAL_TOKENS
-                                            TutorialStep.GOALS_TOTAL_TOKENS -> TutorialStep.GOALS_ACHIEVEMENTS
+                                            TutorialStep.GOALS_PUNCHCARD -> TutorialStep.GOALS_ACHIEVEMENTS
                                             TutorialStep.GOALS_ACHIEVEMENTS -> TutorialStep.GOALS_END
                                             else -> TutorialStep.GOALS_START
                                         }
@@ -486,6 +525,7 @@ class MainActivity : ComponentActivity() {
                                 dailyTipScreenViewModel = dailyTipScreenViewModel,
                                 goalsSectionViewModel = goalSectionViewModel,
                                 quoteViewModel = quoteViewModel,
+                                advertisementViewModel = advertisementViewModel,
                                 onGoalAchieved = {
                                     goalAchieved = true
                                 },
@@ -507,40 +547,52 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.LIKEDQUOTES)
                             LikedQuotesSection (
                                 likedQuotesSectionViewModel = likedQuotesSectionViewModel,
+                                advertisementViewModel = advertisementViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.GOALHISTORY)
                             GoalHistoryScreen (
+                                goalsSectionViewModel = goalSectionViewModel,
                                 totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                                 achievementsSectionViewModel = achievementsSectionViewModel,
-                                tutorialInformation = tutorialInformation
+                                advertisementViewModel = advertisementViewModel,
+                                punchCardSectionViewModel = punchCardSectionViewModel,
+                                tutorialInformation = tutorialInformation,
+                                onPunchCardFilled = {
+                                    goalAchieved = true
+                                },
+                                onWellDoneSectionDismissed = {
+                                    goalAchieved = false
+                                }
                             )
 
-                        if (sectionIdentifier == Screen.RECEIPTS)
+                        if (sectionIdentifier == Screen.RECEIPTS) {
                             ReceiptScreen (
                                 onReceiptAdded = {
-                                    tutorialInformation = tutorialInformation.copy (
+                                    tutorialInformation = tutorialInformation.copy(
                                         isActive = tutorialInformation.isActive,
                                         tutorialStep = if (tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_TAKE_PICTURE) TutorialStep.RECEIPTS_LOG_SECTION else TutorialStep.NONE
                                     )
                                 },
                                 receiptSectionsViewModel = receiptSectionsViewModel,
                                 mainActivityViewModel = mainActivityViewModel,
+                                advertisementViewModel = advertisementViewModel,
                                 tutorialInformation = tutorialInformation
                             )
+                        }
 
                         if (sectionIdentifier == Screen.USER_SETTINGS)
                             SettingsScreen (
                                 headerSectionViewModel = headerSectionViewModel,
                                 settingsViewModel = settingsViewModel,
+                                advertisementViewModel = advertisementViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.SHOP) {
                             ShopScreen (
                                 themeShopViewModel = themeShopViewModel,
-                                tutorialInformation = tutorialInformation,
                                 previewRequested = { theme ->
 
                                     previewColors = if (theme == "Charcoal") {
@@ -573,12 +625,13 @@ class MainActivity : ComponentActivity() {
                                     mainActivityViewModel.setCurrentTheme(theme)
                                 }
                             )
+
+                            AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
                         }
 
                         if (sectionIdentifier == Screen.DAILY_TIPS)
                             DailyTipScreen (
-                                dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                tutorialInformation = tutorialInformation
+                                dailyTipScreenViewModel = dailyTipScreenViewModel
                             )
 
                         AnimatedVisibility (
@@ -893,52 +946,11 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     Spacer (
                                         modifier = Modifier
-                                            .height(75.dp)
-                                    )
-
-                                    Text (
-                                        text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
-                                        fontSize = 24.sp,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                        } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_GOALS) {
-                            Box (
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Column (
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text (
-                                        text = "The more goals the better.",
-                                        fontSize = 24.sp,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                        } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_TOTAL_TOKENS) {
-                            Box (
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.TopCenter
-                            ) {
-                                Column (
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Spacer (
-                                        modifier = Modifier
                                             .height(275.dp)
                                     )
 
                                     Text (
-                                        text = "The more token the better, too!",
+                                        text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
                                         fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
