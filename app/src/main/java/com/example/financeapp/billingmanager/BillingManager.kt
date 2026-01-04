@@ -10,7 +10,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.QueryProductDetailsParams
 
-class BillingManager(private val context: Context) {
+class BillingManager(context: Context) {
     interface Listener {
         fun onPurchaseSuccess(idProduct: String)
     }

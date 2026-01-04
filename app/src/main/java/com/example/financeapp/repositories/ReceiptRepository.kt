@@ -27,6 +27,10 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
         return database.insertReceipt(receipt, formattedDate)
     }
 
+    fun deleteReceipt(receipt: Receipt) {
+        database.deleteReceipt(receipt)
+    }
+
     fun updateReceiptRemindMe(idReceipt: Int, date: String) {
         database.updateReceiptRemindMe(idReceipt, date)
     }

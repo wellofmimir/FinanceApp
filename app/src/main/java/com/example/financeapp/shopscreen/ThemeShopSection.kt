@@ -8,10 +8,10 @@ import com.example.financeapp.ui.theme.ElectricPurple
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.Peach
 import com.example.financeapp.ui.theme.AppColors
+import com.example.financeapp.advertisement.AdvertisementViewModel
+import com.example.financeapp.advertisement.AdSectionSmallBanner
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,14 +35,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Text
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.runtime.remember
+
 
 @Composable
 fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, context: Context = LocalContext.current) {
@@ -69,9 +67,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
 
         Spacer (
             modifier = Modifier
-                .padding (
-                    6.dp
-                )
+                .padding (6.dp)
         )
 
         Text (
@@ -229,7 +225,7 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
                 ) {
                     Text (
                         text = "Buy",
-                        color = Pistachio,
+                        color = Color.White,
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Italic
                     )
@@ -240,9 +236,7 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
 }
 
 @Composable
-fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, themeShopViewModel: ThemeShopViewModel, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
-
-
+fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, themeShopViewModel: ThemeShopViewModel, advertisementViewModel: AdvertisementViewModel, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
     Column (
         modifier = modifier
@@ -448,17 +442,26 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             }
         }
 
-        Spacer (
-            modifier = Modifier
-                .height(4.dp)
-        )
+        if (!advertisementViewModel.getRemoveAllAds()) {
 
-        RemoveAdsSection (
-            modifier = Modifier
-                .weight(0.35f),
-            purchaseRequested = {
-                val activity = context as Activity
-            }
-        )
+            Spacer (
+                modifier = Modifier
+                    .height(4.dp)
+            )
+
+            RemoveAdsSection(
+                modifier = Modifier
+                    .weight(0.35f),
+                purchaseRequested = {
+                    val activity = context as Activity
+                    themeShopViewModel.purchaseRemoveAllAds(activity = activity)
+                }
+            )
+
+            AdSectionSmallBanner (
+                modifier = Modifier
+                    .weight(0.2f)
+            )
+        }
     }
 }

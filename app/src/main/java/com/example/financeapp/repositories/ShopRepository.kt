@@ -33,6 +33,23 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         billingManager.buyTestProduct(activity)
     }
 
+    fun purchaseRemoveAllAds(activity: Activity) {
+        billingManager.clearListener()
+
+        billingManager.setListener(object: BillingManager.Listener {
+            override fun onPurchaseSuccess(idProduct: String) {
+                database.setRemoveAllAds()
+            }
+        })
+
+        billingManager.start()
+        billingManager.buyTestProduct(activity)
+    }
+
+    fun setRemoveAllAdsAsPurchased() {
+        database.setRemoveAllAds()
+    }
+
     fun setAppliedTheme(theme: String) {
         database.setAppliedTheme(theme)
     }

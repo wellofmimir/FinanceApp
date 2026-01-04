@@ -45,6 +45,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -79,6 +80,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
 import android.os.Build
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.CircleShape
@@ -136,7 +138,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
         photoCanBeTaken = false
         onDismissRequest()
         onReceiptSaved()
-        remindMeCheckboxChecked = false
+        remindMeCheckboxChecked = true
         showDatepickerDialog = false
         selectedDate = ""
     }
@@ -166,20 +168,18 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
             val lastPhoto = photos.lastOrNull()
 
             lastPhoto?.let {
-
-                Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
-
                 receiptSectionsViewModel.insertReceipt (
-                    Receipt (
+                    receipt = Receipt (
                         -1,
                         nameOfReceipt,
                         amountText.toFloat(),
                         it.absolutePath,
                         ""
                     ),
-                    selectedDate
+                    remindMeDate = selectedDate
                 )
 
+                Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
                 resetAndDismiss()
             }
         }
@@ -212,6 +212,13 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
         }
 
         permissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+
+    LaunchedEffect(selectedDate) {
+        if (selectedDate.isNotEmpty()) {
+            if (Build.VERSION.SDK_INT >= 33)
+                notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     DropdownMenu (
@@ -465,9 +472,15 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                             photoCanBeTaken = true
                         }
 
+                        if (remindMeCheckboxChecked) {
+                            if (selectedDate.isEmpty()) {
+                                showDatepickerDialog = true
+                                return@Button
+                            }
+                        }
+
                         if (Build.VERSION.SDK_INT >= 33)
                             notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-
                     },
                     colors = ButtonDefaults.buttonColors (
                         containerColor = colors.surface,
@@ -976,23 +989,30 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
             state = listState
         ) {
             items(receipts.take(receipts.size)) { receipt ->
+                var menuOpen by remember { mutableStateOf(false) }
+
                 Row (
                     modifier = Modifier
-                        .clickable (
-                        ) {
-                            if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_LOG_SECTION)
-                                return@clickable
+                        .combinedClickable (
+                            onClick = {
+                                if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_LOG_SECTION)
+                                    return@combinedClickable
 
-                            val file = File(receipt.pathToImage)
+                                val file = File(receipt.pathToImage)
 
-                            if (file.exists()) {
-                                bitmap = BitmapFactory.decodeFile(file.absolutePath).fixOrientation(file.absolutePath)
-                                showDialog = true
-                                currentReceipt = receipt
+                                if (file.exists()) {
+                                    bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                        .fixOrientation(file.absolutePath)
+                                    showDialog = true
+                                    currentReceipt = receipt
+                                }
+
+                                //TODO: Behandlung einbauen für den Fall, das file nicht existiert
+                            },
+                            onLongClick = {
+                                menuOpen = true
                             }
-                            
-                            //TODO: Behandlung einbauen für den Fall, das file nicht existiert
-                        },
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
@@ -1022,6 +1042,35 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .weight(1f)
+                    )
+                }
+
+                DropdownMenu (
+                    modifier = Modifier
+                        .background (
+                            color = colors.primary
+                        ),
+                    expanded = menuOpen,
+                    onDismissRequest = {
+                        menuOpen = false
+                    }
+                ) {
+                    DropdownMenuItem (
+                        modifier = Modifier
+                            .background (
+                                color = colors.primary,
+                            ),
+                        text = {
+                            Text (
+                                text = "Delete",
+                                color = colors.secondary
+                            )
+                        },
+                        onClick = {
+                            menuOpen = false
+                            receiptSectionsViewModel.deleteReceipt(receipt)
+                            Toast.makeText(context, "Receipt deleted.", Toast.LENGTH_SHORT).show()
+                        }
                     )
                 }
             }

@@ -82,7 +82,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id) ON DELETE CASCADE)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL)".trimIndent())
 
@@ -491,6 +491,17 @@ class FinanceAppDatabase private constructor(context: Context) {
             Result.failure(Exception("Insert into receipts-table failed."))
     }
 
+    fun deleteReceipt(receipt: Receipt) {
+
+        val cursor = database.rawQuery("SELECT * FROM receipts WHERE id = ?", arrayOf(receipt.id.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        if (exists) {
+            database.delete("receipts", "id = ?", arrayOf(receipt.id.toString()))
+        }
+    }
+
     fun getReceipts(startMonth: String, endMonth: String): Result<List<Receipt>>  {
 
         val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, "date DESC")
@@ -725,6 +736,28 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         if (exists) {
             database.update("goals", values, "id = ?", arrayOf(idGoal.toString()))
+        }
+    }
+
+    fun deleteGoal(goal: Goal) {
+
+        val cursor = database.rawQuery("SELECT * FROM goals WHERE id = ?", arrayOf(goal.id.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        if (exists) {
+            database.delete("goals", "goals = ?", arrayOf(goal.id.toString()))
+        }
+    }
+
+    fun deleteGoal(id: Int) {
+
+        val cursor = database.rawQuery("SELECT * FROM goals WHERE id = ?", arrayOf(id.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        if (exists) {
+            database.delete("goals", "id = ?", arrayOf(id.toString()))
         }
     }
 

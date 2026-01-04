@@ -2,8 +2,6 @@ package com.example.financeapp.homescreen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,8 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -26,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
@@ -40,7 +35,7 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, onReceiptsLogoClicked: () -> Unit) {
+fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
 
     val colors = LocalAppColors.current
     val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
@@ -56,14 +51,7 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .clickable (
-            ) {
-                if (tutorialInformation.isActive)
-                    return@clickable
-
-                onReceiptsLogoClicked()
-            },
+            ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -106,16 +94,7 @@ fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel
                         .background (
                             color = colors.background,
                             shape = CircleShape
-                        )
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
-                            onReceiptsLogoClicked()
-                        },
+                        ),
                     colorFilter = ColorFilter.tint(colors.surface),
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.BottomEnd

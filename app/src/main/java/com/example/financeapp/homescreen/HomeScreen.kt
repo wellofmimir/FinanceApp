@@ -1,6 +1,7 @@
 package com.example.financeapp.homescreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,8 @@ fun HomeScreen (
     onGoalAchieved: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit,
     shopSectionClicked: () -> Unit,
-    receiptLogoClicked: () -> Unit,
+    receiptsSectionClicked: () -> Unit,
+    recentlyCompletedGoalsSectionClicked: () -> Unit,
     dailyTipsSectionClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
@@ -184,7 +186,13 @@ fun HomeScreen (
                     RecentlyCompletedGoalsSection (
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f),
+                            .aspectRatio(1f)
+                            .clickable () {
+                                if (tutorialInformation.isActive)
+                                    return@clickable
+
+                                recentlyCompletedGoalsSectionClicked()
+                            },
                         tutorialInformation = tutorialInformation,
                         goalsSectionViewModel = goalsSectionViewModel
                     )
@@ -193,12 +201,15 @@ fun HomeScreen (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
+                            .clickable() {
+                                if (tutorialInformation.isActive)
+                                    return@clickable
+
+                                receiptsSectionClicked()
+                            },
                         receiptSectionsViewModel = receiptSectionsViewModel,
                         tutorialInformation = tutorialInformation,
-                        onReceiptsLogoClicked = {
-                            receiptLogoClicked()
-                        }
                     )
                 }
 
@@ -215,6 +226,11 @@ fun HomeScreen (
 
                 if (advertisementViewModel.getRemoveAllAds())
                     return@Column
+
+                Spacer (
+                    modifier = Modifier
+                        .height(4.dp)
+                )
 
                 AdSectionMiddleBanner (
                     modifier = Modifier

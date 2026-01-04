@@ -75,6 +75,18 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     fun updateGoal(goal: Goal) {
         repository.updateGoal(goal)
     }
+
+    fun deleteGoal(goal: Goal) {
+        repository.deleteGoal(goal)
+        reloadGoals()
+    }
+
+    fun deleteGoal(id: Int) {
+        repository.deleteGoal(id)
+        reloadGoals()
+        getCurrentGoal()
+    }
+
     fun setGoalCompleted(goal: Goal) {
         repository.setGoalCompleted(goal)
     }

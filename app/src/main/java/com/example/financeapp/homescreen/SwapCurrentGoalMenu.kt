@@ -1,16 +1,18 @@
 package com.example.financeapp.homescreen
 
+import android.widget.Toast
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,16 +30,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import android.content.Context
 
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel) {
+fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     val goals by goalsSectionViewModel.goals.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
+    var menuOpen by remember { mutableStateOf(false) }
+    var goalIdToDelete: Int = 0
 
     DropdownMenu (
         expanded = expanded,
@@ -102,12 +110,17 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSe
                             color = colors.primary
                         )
                         .padding(horizontal = 36.dp, vertical = 8.dp)
-                        .clickable (
+                        .combinedClickable (
                             indication = null,
-                            interactionSource = remember {MutableInteractionSource()}
-                        ) {
-                            goalsSectionViewModel.setCurrentGoal(item)
-                        },
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                                goalsSectionViewModel.setCurrentGoal(item)
+                            },
+                            onLongClick = {
+                                menuOpen = true
+                                goalIdToDelete = item.id
+                            }
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val painter = painterResource (
@@ -140,6 +153,35 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSe
                     )
                 }
             }
+        }
+
+        DropdownMenu (
+            modifier = Modifier
+                .background (
+                    color = colors.secondary
+                ),
+            expanded = menuOpen,
+            onDismissRequest = {
+                menuOpen = false
+            },
+        ) {
+            DropdownMenuItem (
+                modifier = Modifier
+                    .background (
+                        color = colors.secondary,
+                    ),
+                text = {
+                    Text(
+                        text = "Delete",
+                        color = colors.primary
+                    )
+                },
+                onClick = {
+                    menuOpen = false
+                    goalsSectionViewModel.deleteGoal(goalIdToDelete)
+                    Toast.makeText(context, "Goal deleted.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }

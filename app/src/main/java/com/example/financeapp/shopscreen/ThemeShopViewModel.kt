@@ -18,6 +18,9 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
         billingManager.setListener(object: BillingManager.Listener {
             override fun onPurchaseSuccess(idProduct: String) {
                 purchasedThemes[idProduct] = true
+
+                if (idProduct == "RemoveAllAds")
+                    shopRepository.setRemoveAllAdsAsPurchased()
             }
         })
 
@@ -37,9 +40,7 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
     fun getThemePurchased(theme: String): Boolean {
         val alreadyPurchased = purchasedThemes[theme] ?: shopRepository.getThemePurchased(theme)
         purchasedThemes[theme] = alreadyPurchased
-
-        return true //TODO: Wieder einkommentieren
-        //return alreadyPurchased
+        return alreadyPurchased
     }
     fun purchaseTheme(activity: Activity, theme: String) {
         shopRepository.purchaseTheme(activity, theme)
@@ -59,6 +60,6 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
     }
 
     fun purchaseRemoveAllAds(activity: Activity) {
-        
+        shopRepository.purchaseRemoveAllAds(activity)
     }
 }

@@ -49,11 +49,20 @@ fun TotalGoalsAchievedSection(modifier: Modifier = Modifier, totalGoalsAchievedS
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val textSize = when (goals.size.toString().length) {
+                1 -> 128.sp
                 2 -> 128.sp
                 3 -> 92.sp
                 4 -> 64.sp
                 5 -> 32.sp
+                6 -> 16.sp
                 else -> 16.sp
+            }
+
+            if (goals.size.toString().length < 2) {
+                Spacer (
+                    modifier = Modifier
+                        .weight(1f)
+                )
             }
 
             Text (

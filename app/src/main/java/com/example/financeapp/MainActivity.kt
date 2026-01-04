@@ -163,14 +163,17 @@ class MainActivity : ComponentActivity() {
             FinanceAppTheme (
                 appColors = appColorsState
             ) {
-                MobileAds.initialize(this)
-                InterstitialAdManager.instance.initialize(this)
-                InterstitialAdManager.instance.loadInterstitial(this)
-
                 var context = LocalContext.current
-                scheduleDailyQuoteWorker(context)
-                scheduleDailyReminderMeWorker(context)
-                scheduleDailyTipWorker(context)
+
+                LaunchedEffect(Unit) {
+                    MobileAds.initialize(context)
+                    InterstitialAdManager.instance.initialize(context)
+                    InterstitialAdManager.instance.loadInterstitial(context)
+
+                    scheduleDailyQuoteWorker(context)
+                    scheduleDailyReminderMeWorker(context)
+                    scheduleDailyTipWorker(context)
+                }
 
                 val manager = getSystemService(NotificationManager::class.java)
                 manager.createNotificationChannel(NotificationChannel("quotes", "Quote", NotificationManager.IMPORTANCE_HIGH))
@@ -535,8 +538,11 @@ class MainActivity : ComponentActivity() {
                                 shopSectionClicked = {
                                     sectionIdentifier = Screen.SHOP
                                 },
-                                receiptLogoClicked = {
+                                receiptsSectionClicked = {
                                     sectionIdentifier = Screen.RECEIPTS
+                                },
+                                recentlyCompletedGoalsSectionClicked = {
+                                    sectionIdentifier = Screen.GOALHISTORY
                                 },
                                 dailyTipsSectionClicked = {
                                     sectionIdentifier = Screen.DAILY_TIPS
@@ -593,6 +599,7 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.SHOP) {
                             ShopScreen (
                                 themeShopViewModel = themeShopViewModel,
+                                advertisementViewModel = advertisementViewModel,
                                 previewRequested = { theme ->
 
                                     previewColors = if (theme == "Charcoal") {

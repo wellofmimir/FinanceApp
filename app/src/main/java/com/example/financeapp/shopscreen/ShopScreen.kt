@@ -5,17 +5,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun ShopScreen(themeShopViewModel: ThemeShopViewModel, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
+fun ShopScreen(themeShopViewModel: ThemeShopViewModel, advertisementViewModel: AdvertisementViewModel, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -43,14 +43,15 @@ fun ShopScreen(themeShopViewModel: ThemeShopViewModel, previewRequested: (theme:
 
         ThemeShopSection (
             modifier = Modifier
-                .weight(4f),
+                .weight(5f),
             themeShopViewModel = themeShopViewModel,
             previewRequested = { theme ->
                 previewRequested(theme)
             },
             applyThemeRequested = { theme ->
                 applyThemeRequested(theme)
-            }
+            },
+            advertisementViewModel = advertisementViewModel
         )
     }
 }

@@ -66,3 +66,20 @@ fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: Tu
         }
     )
 }
+
+@Composable
+fun AdSectionSmallBanner(modifier: Modifier = Modifier) {
+
+    AndroidView (
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        factory = { context ->
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
+}

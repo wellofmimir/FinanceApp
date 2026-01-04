@@ -60,12 +60,16 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
         )
     }
 
+    fun deleteReceipt(receipt: Receipt) {
+        repository.deleteReceipt(receipt)
+        getReceipts()
+    }
+
     fun updateReceiptRemindMe(idReceipt: Int, date: String) {
         repository.updateReceiptRemindMe(idReceipt, date)
     }
 
     fun getReceipts() {
-
         val result = repository.getReceipts()
 
         result.fold (

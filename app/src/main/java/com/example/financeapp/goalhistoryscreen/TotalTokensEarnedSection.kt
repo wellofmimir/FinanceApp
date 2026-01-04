@@ -51,17 +51,21 @@ fun TotalTokensEarnedSection(modifier: Modifier = Modifier, totalGoalsAchievedSe
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val textSize = when (totalTokensEarned.toString().length) {
+                1 -> 128.sp
                 2 -> 128.sp
                 3 -> 92.sp
                 4 -> 64.sp
                 5 -> 32.sp
+                6 -> 16.sp
                 else -> 16.sp
             }
 
-            Spacer (
-                modifier = Modifier
-                    .weight(1f)
-            )
+            if (totalTokensEarned.toString().length < 2) {
+                Spacer (
+                    modifier = Modifier
+                        .weight(1f)
+                )
+            }
 
             Text (
                 text = totalTokensEarned.toString(),

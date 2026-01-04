@@ -40,6 +40,19 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
         }
     }
 
+    fun deleteGoal(goal: Goal) {
+        database.run {
+            deleteGoal(goal)
+        }
+    }
+
+    fun deleteGoal(id: Int) {
+        database.run {
+            deleteGoal(id)
+        }
+    }
+
+
     fun getNewestGoalId(): Int {
         return database.getNewestGoalId()
     }
@@ -100,14 +113,8 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     fun getCurrentGoal(): Goal? {
         val goal = database.currentGoal()
 
-        if (goal == null) {
-
-            val currentDate = LocalDate.now()
-            val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
-            val formattedDate = currentDate.format(formatter)
-
-            return Goal(1, "Test", 1000.0f, 120.0f, 1, formattedDate, 3, "")
-        }
+        if (goal == null)
+            return null
 
         val completedStatus = database.getIDGoalStatus("Completed")
 

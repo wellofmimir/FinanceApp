@@ -1,6 +1,7 @@
 package com.example.financeapp.homescreen
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -25,12 +26,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -54,6 +58,8 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
     var newGoalEntered by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
     var visible by remember { mutableStateOf(true) }
+    var menuOpen by remember { mutableStateOf(false) }
+    var goalIdToDelete by remember { mutableStateOf(0) }
 
     Column (
         modifier = modifier
@@ -172,7 +178,18 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                 items(goals.take(goals.size)) {
                     Row (
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier
+                        .combinedClickable (
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                            },
+                            onLongClick = {
+                                menuOpen = true
+                                goalIdToDelete = it.id
+                            }
+                    )
                     ) {
                         Image (
                             painter = painterResource(R.drawable.bulletpoint_foreground),
@@ -201,6 +218,35 @@ fun GoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInf
                         )
                     }
                 }
+            }
+
+            DropdownMenu (
+                modifier = Modifier
+                    .background (
+                        color = colors.primary
+                    ),
+                expanded = menuOpen,
+                onDismissRequest = {
+                    menuOpen = false
+                },
+            ) {
+                DropdownMenuItem (
+                    modifier = Modifier
+                        .background (
+                            color = colors.primary,
+                        ),
+                    text = {
+                        Text (
+                            text = "Delete",
+                            color = colors.secondary
+                        )
+                    },
+                    onClick = {
+                        menuOpen = false
+                        goalsSectionViewModel.deleteGoal(goalIdToDelete)
+                        Toast.makeText(context, "Goal deleted.", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
     }
