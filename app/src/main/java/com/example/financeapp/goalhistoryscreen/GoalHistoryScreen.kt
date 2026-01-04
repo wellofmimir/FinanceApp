@@ -94,6 +94,10 @@ fun GoalHistoryScreen (
                     modifier = Modifier
                         .weight(1f)
                         .clickable() {
+
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             randomBoolean = !randomBoolean
                         },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
@@ -104,6 +108,10 @@ fun GoalHistoryScreen (
                     modifier = Modifier
                         .weight(1f)
                         .clickable() {
+                            
+                            if (tutorialInformation.isActive)
+                                return@clickable
+
                             randomBoolean = !randomBoolean
                         },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,

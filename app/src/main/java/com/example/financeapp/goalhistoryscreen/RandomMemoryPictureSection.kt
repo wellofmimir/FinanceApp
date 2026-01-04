@@ -91,7 +91,7 @@ fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectio
                 usePlatformDefaultWidth = false
             )
         ) {
-            Image(
+            Image (
                 bitmap = bitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
@@ -128,6 +128,9 @@ fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectio
             )
             .clickable (
             ) {
+                if (tutorialInformation.isActive)
+                    return@clickable
+
                 achievementsSectionViewModel.stopGoalRotation()
                 showDialog = true
             },
