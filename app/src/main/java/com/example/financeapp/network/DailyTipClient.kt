@@ -12,7 +12,9 @@ interface DailyTipCallback {
 
 data class DailyTip (
     var title: String,
-    var tip: String
+    var tip: String,
+    var short: String,
+    var category: String
 )
 
 class DailyTipClient private constructor() {
@@ -33,7 +35,7 @@ class DailyTipClient private constructor() {
 
         val request = Request.Builder()
             .get()
-            .url("https://shortlyfi.me/api/fact")
+            .url("https://shortlyfi.me/api/tip")
             .build()
 
         try {

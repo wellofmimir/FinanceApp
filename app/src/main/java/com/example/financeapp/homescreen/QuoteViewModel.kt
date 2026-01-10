@@ -25,9 +25,9 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
     val isLoading = internIsLoading.asStateFlow()
 
     private val internHasLoaded = MutableStateFlow(false)
-    val hasLoaded = internHasLoaded.asStateFlow()
 
     private val internLikedQuotes = MutableStateFlow<List<Quote>>(emptyList())
+    val likedQuotes = internLikedQuotes.asStateFlow()
     private var internQuoteLiked = MutableStateFlow(false)
     val quoteLiked = internQuoteLiked.asStateFlow()
 
@@ -54,7 +54,7 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
         }
     }
 
-    fun quoteGotLiked(quote: Quote) {
+    fun toggleQuote(quote: Quote) {
         if (isQuoteLiked(quote)) {
             repository.deleteQuote(quote.quote)
             internQuoteLiked.value = false
@@ -73,6 +73,7 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
     fun getLikedQuotes() {
         internLikedQuotes.value = repository.getLikedQuotes()
     }
+
     suspend fun fetchQuote() {
 
         if (internHasLoaded.value)

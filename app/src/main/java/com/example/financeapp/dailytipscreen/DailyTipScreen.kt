@@ -1,7 +1,6 @@
 package com.example.financeapp.dailytipscreen
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.advertisement.InterstitialAdManager
-import com.example.financeapp.BuildConfig
 
 import android.content.Context
 import android.app.Activity
@@ -23,9 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.advertisement.AdSectionLargeBanner
-import com.example.financeapp.advertisement.AdvertisementViewModel
-
 @Composable
 fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
 
@@ -37,7 +33,6 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
 
     LaunchedEffect(interstitialAdCanBeShown) {
         activity?.let {
-
             dailyTipScreenViewModel.fetchDailyTip()
 
             if (dailyTipScreenViewModel.interstitialAdAfterDailyTipSeen()) {

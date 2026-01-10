@@ -46,7 +46,7 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
     }
 
     fun resetDailyTip() {
-        database.setDailyTip("", "")
+        database.setDailyTip("", "", "", "")
     }
 
     fun interstitialAdAfterDailyTipSeen(): Boolean {
@@ -69,22 +69,22 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         //und das Ergebnis dann in den Shared Preferences gespeichert und davon bei Abfrage zurückgegeben.
 
         if (database.getDailyTip().tip.isNotEmpty()) {
-            return DailyTip("", "")
+            return DailyTip("", "", "", "")
         }
 
         val result = client.fetchDailyTip()
 
         if (isValidJson(result) == false)
-            return DailyTip("", "")
+            return DailyTip("", "", "", "")
 
         if (!result.startsWith("{"))
-            return DailyTip("", "")
+            return DailyTip("", "", "", "")
 
         val jsonObject = JSONObject(result)
-        val dailyTip = DailyTip(jsonObject.getString("title"), jsonObject.getString("fact"))
+        val dailyTip = DailyTip(jsonObject.getString("title"), jsonObject.getString("tip"), jsonObject.getString("short"), jsonObject.getString("category"))
 
         if (dailyTip.tip != database.getDailyTip().tip) {
-            database.setDailyTip(dailyTip.title, dailyTip.tip)
+            database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category)
             database.setNewDailyTipAvailable()
         }
 

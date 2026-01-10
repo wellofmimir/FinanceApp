@@ -37,7 +37,7 @@ class Notifier(private val context: Context) {
         val notification = NotificationCompat.Builder(context, "quotes")
             .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("New quote available")
-            .setContentText("A new quote is waiting for you ...")
+            .setContentText("A new quote is waiting for you.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
@@ -57,7 +57,7 @@ class Notifier(private val context: Context) {
         val notification = NotificationCompat.Builder(context, "reminders")
             .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("Check your receipt!")
-            .setContentText("Hey, you wanted us to remind you of your receipt: ${receiptName}")
+            .setContentText("Hey, you wanted us to remind you of your receipt: $receiptName")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val notificationId = System.currentTimeMillis().toInt()
@@ -76,7 +76,7 @@ class Notifier(private val context: Context) {
         val notification = NotificationCompat.Builder(context, "tips")
             .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("New financial tip available!")
-            .setContentText("A teaser ;) It's about: ${dailyTip.title}")
+            .setContentText(dailyTip.title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val notificationId = System.currentTimeMillis().toInt()
@@ -95,7 +95,7 @@ class Notifier(private val context: Context) {
         val notification = NotificationCompat.Builder(context, "receipts")
             .setSmallIcon(R.drawable.dollarsign_foreground)
             .setContentTitle("Track your receipt")
-            .setContentText("Hey, do you want to track your latest receipt?")
+            .setContentText("Any expenses today? Track the receipt!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         NotificationManagerCompat.from(context).notify(1, notification.build())

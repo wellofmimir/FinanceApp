@@ -106,7 +106,7 @@ fun QuoteSection(modifier: Modifier = Modifier, quoteViewModel: QuoteViewModel, 
                             if (quoteViewModel.hasError())
                                 return@clickable
 
-                            quoteViewModel.quoteGotLiked(quote)
+                            quoteViewModel.toggleQuote(quote)
                         }
                 )
             }

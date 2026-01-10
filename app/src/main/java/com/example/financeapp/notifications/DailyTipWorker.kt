@@ -15,7 +15,7 @@ class DailyTipWorker(context: Context, parameters: WorkerParameters) : Coroutine
 
     override suspend fun doWork(): Result {
 
-        database.setDailyTip("", "")
+        database.setDailyTip("", "", "", "")
         database.resetInterstitialAdAfterDailyTip()
         dailyTipRepository.fetchDailyTipFromServer()
 

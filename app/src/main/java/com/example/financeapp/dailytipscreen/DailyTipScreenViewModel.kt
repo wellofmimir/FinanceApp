@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewModel() {
 
-    private var internDailyTip = MutableStateFlow<Tip>(Tip(id = 0, DailyTip("", "")))
+    private var internDailyTip = MutableStateFlow<Tip>(Tip(id = 0, DailyTip("", "", "", "")))
     var dailyTip = internDailyTip.asStateFlow()
 
     private var internLikedTips = MutableStateFlow<List<Tip>>(emptyList())
@@ -20,7 +20,7 @@ class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewM
     private var internLikedTipsRandomlyOrdered = MutableStateFlow<List<Tip>>(emptyList())
     var likedTipsRandomlyOrdered = internLikedTipsRandomlyOrdered.asStateFlow()
 
-    private var internCurrentlyLiked = MutableStateFlow<Boolean>(false)
+    private var internCurrentlyLiked = MutableStateFlow(false)
     val currentlyLiked = internCurrentlyLiked.asStateFlow()
 
     fun newDailyTipAvailable(): Boolean {

@@ -84,14 +84,19 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id) ON DELETE CASCADE)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL, short TEXT NOT NULL, category TEXT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
             put("idGoal", 1)
         }
 
-        database.insert("currentGoal", null, values)
+        val cursor = database.rawQuery("SELECT * FROM currentGoal WHERE id = 1", null)
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        if (!exists)
+            database.insert("currentGoal", null, values)
 
         //einfügen von Werten in die goalStatus-Tabelle
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
@@ -172,14 +177,18 @@ class FinanceAppDatabase private constructor(context: Context) {
     fun getDailyTip(): DailyTip {
         return DailyTip (
             title = dailyTipPreferences.getString("title", "") ?: "",
-            tip = dailyTipPreferences.getString("tip", "") ?: ""
+            tip = dailyTipPreferences.getString("tip", "") ?: "",
+            short = dailyTipPreferences.getString("short", "") ?: "",
+            category = dailyTipPreferences.getString("category", "") ?: ""
         )
     }
 
-    fun setDailyTip(title: String, tip: String) {
+    fun setDailyTip(title: String, tip: String, short: String, category: String) {
         dailyTipPreferences.edit {
             putString("title", title)
             putString("tip", tip)
+            putString("short", short)
+            putString("category", category)
         }
     }
 
@@ -349,8 +358,10 @@ class FinanceAppDatabase private constructor(context: Context) {
         cursor.close()
 
         val values = ContentValues().apply {
-            put("title", dailyTip.title)
-            put("tip",   dailyTip.tip)
+            put("title",    dailyTip.title)
+            put("tip",      dailyTip.tip)
+            put("short",    dailyTip.short)
+            put("category", dailyTip.category)
         }
 
         if (exists) {
@@ -370,7 +381,10 @@ class FinanceAppDatabase private constructor(context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
             val tip = cursor.getString(cursor.getColumnIndexOrThrow("tip"))
-            val entry = Tip(id, DailyTip(title = title, tip = tip))
+            val short = cursor.getString(cursor.getColumnIndexOrThrow("short"))
+            val category = cursor.getString(cursor.getColumnIndexOrThrow("category"))
+
+            val entry = Tip(id, DailyTip(title = title, tip = tip, short = short, category = category))
             tips.add(entry)
         }
 
@@ -388,7 +402,10 @@ class FinanceAppDatabase private constructor(context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
             val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
             val tip = cursor.getString(cursor.getColumnIndexOrThrow("tip"))
-            val entry = Tip(id, DailyTip(title = title, tip = tip))
+            val short = cursor.getString(cursor.getColumnIndexOrThrow("short"))
+            val category = cursor.getString(cursor.getColumnIndexOrThrow("category"))
+
+            val entry = Tip(id, DailyTip(title = title, tip = tip, short = short, category = category))
             tips.add(entry)
         }
 

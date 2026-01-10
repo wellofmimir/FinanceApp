@@ -8,7 +8,7 @@ import com.example.financeapp.shopscreen.ShopScreen
 import com.example.financeapp.header.HeaderSection
 import com.example.financeapp.header.HeaderSectionViewModel
 import com.example.financeapp.homescreen.GoalsSectionViewModel
-import com.example.financeapp.likedquotes.LikedQuotesSection
+import com.example.financeapp.likedquotesscreen.LikedQuotesSection
 import com.example.financeapp.notifications.QuotePollingWorker
 import com.example.financeapp.notifications.ReceiptReminderPollingWorker
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
@@ -42,7 +42,6 @@ import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.PeachAppColors
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.advertisement.AdvertisementViewModel
-import com.example.financeapp.likedquotes.LikedQuotesSectionViewModel
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -303,18 +302,6 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
-                val likedQuotesSectionViewModel: LikedQuotesSectionViewModel = viewModel (
-                    factory = object: ViewModelProvider.Factory {
-                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                            val database = FinanceAppDatabase.getInstance(context)
-                            val repository = QuoteRepository.getInstance(database)
-
-                            return LikedQuotesSectionViewModel(repository) as T
-                        }
-                    }
-                )
-
                 val advertisementViewModel: AdvertisementViewModel = viewModel (
                     factory = object: ViewModelProvider.Factory {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
@@ -552,7 +539,7 @@ class MainActivity : ComponentActivity() {
 
                         if (sectionIdentifier == Screen.LIKEDQUOTES)
                             LikedQuotesSection (
-                                likedQuotesSectionViewModel = likedQuotesSectionViewModel,
+                                quoteViewModel = quoteViewModel,
                                 advertisementViewModel = advertisementViewModel,
                                 tutorialInformation = tutorialInformation
                             )
@@ -1049,8 +1036,8 @@ fun scheduleDailyTipWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 3)
-        set(Calendar.MINUTE, 2)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 34)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 
