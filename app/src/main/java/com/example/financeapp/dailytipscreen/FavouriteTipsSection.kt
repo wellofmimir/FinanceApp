@@ -44,7 +44,7 @@ fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel:
         DailyTipDialog (
             modifier = modifier,
             currentlyLiked = true,
-            dailyTip =  temporaryTip ?: DailyTip("", "", "", ""),
+            dailyTip =  temporaryTip ?: DailyTip("", "", "", "", ""),
             onDismissRequest = {
                 showTip = false
             }

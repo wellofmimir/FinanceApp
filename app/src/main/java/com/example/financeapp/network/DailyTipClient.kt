@@ -14,7 +14,8 @@ data class DailyTip (
     var title: String,
     var tip: String,
     var short: String,
-    var category: String
+    var category: String,
+    var pathToImage: String
 )
 
 class DailyTipClient private constructor() {
@@ -47,4 +48,22 @@ class DailyTipClient private constructor() {
             ""
         }
     }
+
+    suspend fun fetchImageToDailyTip(): ByteArray? = kotlinx.coroutines.withContext(context = kotlinx.coroutines.Dispatchers.IO) {
+
+        val request = Request.Builder()
+            .get()
+            .url(url = "https://shortlyfi.me/api/tip/image/newestImage")
+            .build()
+
+        try {
+            client.newCall(request).execute().use {response ->
+                response.body?.bytes()
+            }
+        } catch (e: Exception) {
+            hasError = true
+            null
+        }
+    }
 }
+

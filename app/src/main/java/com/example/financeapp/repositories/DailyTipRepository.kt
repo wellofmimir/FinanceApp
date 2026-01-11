@@ -4,17 +4,20 @@ import com.example.financeapp.database.Tip
 import com.example.financeapp.commonutils.isValidJson
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.DailyTip
-import com.example.financeapp.network.DailyTipCallback
 import com.example.financeapp.network.DailyTipClient
+import com.example.financeapp.commonutils.FileProvider
+
 import org.json.JSONObject
 
-class DailyTipRepository private constructor (private val database: FinanceAppDatabase) {
+
+class DailyTipRepository private constructor (private val database: FinanceAppDatabase, private val fileProvider: FileProvider) {
+
     companion object {
         private var instance: DailyTipRepository? = null
 
-        fun getInstance(database: FinanceAppDatabase): DailyTipRepository {
+        fun getInstance(database: FinanceAppDatabase, fileProvider: FileProvider): DailyTipRepository {
             if (instance == null)
-                instance = DailyTipRepository(database)
+                instance = DailyTipRepository(database, fileProvider)
 
             return instance!!
         }
@@ -45,10 +48,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         database.removeDailyTip(dailyTip)
     }
 
-    fun resetDailyTip() {
-        database.setDailyTip("", "", "", "")
-    }
-
     fun interstitialAdAfterDailyTipSeen(): Boolean {
         return database.interstitialAdAfterDailyTipSeen()
     }
@@ -69,22 +68,40 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         //und das Ergebnis dann in den Shared Preferences gespeichert und davon bei Abfrage zurückgegeben.
 
         if (database.getDailyTip().tip.isNotEmpty()) {
-            return DailyTip("", "", "", "")
+            return DailyTip("", "", "", "", "")
         }
 
         val result = client.fetchDailyTip()
 
         if (isValidJson(result) == false)
-            return DailyTip("", "", "", "")
+            return DailyTip("", "", "", "", "")
 
         if (!result.startsWith("{"))
-            return DailyTip("", "", "", "")
+            return DailyTip("", "", "", "", "")
+
+        val imageToDailyTipResult = client.fetchImageToDailyTip()
+
+        if (imageToDailyTipResult == null)
+            return DailyTip("", "", "", "", "")
+
+        val imageToDailyTipFile = fileProvider.getPNG()
+
+        imageToDailyTipFile.outputStream().use {
+            it.write(imageToDailyTipResult)
+        }
 
         val jsonObject = JSONObject(result)
-        val dailyTip = DailyTip(jsonObject.getString("title"), jsonObject.getString("tip"), jsonObject.getString("short"), jsonObject.getString("category"))
+
+        val dailyTip = DailyTip (
+            title = jsonObject.getString("title"),
+            tip = jsonObject.getString("tip"),
+            short = jsonObject.getString("short"),
+            category = jsonObject.getString("category"),
+            pathToImage = imageToDailyTipFile.absolutePath
+        )
 
         if (dailyTip.tip != database.getDailyTip().tip) {
-            database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category)
+            database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category, dailyTip.pathToImage)
             database.setNewDailyTipAvailable()
         }
 

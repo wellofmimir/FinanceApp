@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -30,15 +31,12 @@ import com.example.financeapp.ui.theme.LocalAppColors
 fun DailyTipSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, dailyTipScreenViewModel: DailyTipScreenViewModel, dailyTipSectionClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
-    var buttonText by remember { mutableStateOf("") }
+    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
 
-    LaunchedEffect(Unit) {
-        buttonText = if (dailyTipScreenViewModel.newDailyTipAvailable()) {
-            "Your daily finance tip is ready! Hooray!"
-        } else {
-            "See your finance tips."
-        }
-    }
+    val buttonText = if (newDailyTipAvailable)
+        "Your daily finance tip is ready! Hooray!"
+    else
+        "See your finance tips."
 
     Box (
         modifier = modifier

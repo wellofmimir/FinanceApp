@@ -80,7 +80,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\applogo.png" />
+                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\applogo_transparent.png" />
                                                 <entry key="scalingPercent" value="66" />
                                               </map>
                                             </option>
@@ -113,11 +113,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="generatePlayStoreIcon" value="false" />
-                                      <entry key="generateRoundIcon" value="false" />
-                                      <entry key="generateWebpIcons" value="false" />
                                       <entry key="legacyIconShape" value="NONE" />
-                                      <entry key="outputName" value="applogo" />
+                                      <entry key="outputName" value="applogo_transparent" />
                                       <entry key="previewDensity" value="hdpi" />
                                     </map>
                                   </option>

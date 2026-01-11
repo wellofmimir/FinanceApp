@@ -87,6 +87,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import java.util.concurrent.TimeUnit
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
 
 enum class Screen (id: Int) {
@@ -267,8 +268,9 @@ class MainActivity : ComponentActivity() {
                     factory = object: ViewModelProvider.Factory {
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
+                            val fileProvider = FileProvider(context)
                             val database = FinanceAppDatabase.getInstance(context)
-                            val repository = DailyTipRepository.getInstance(database)
+                            val repository = DailyTipRepository.getInstance(database, fileProvider)
 
                             return DailyTipScreenViewModel(repository) as T
                         }
@@ -1036,8 +1038,8 @@ fun scheduleDailyTipWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 34)
+        set(Calendar.HOUR_OF_DAY, 21)
+        set(Calendar.MINUTE, 46)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 

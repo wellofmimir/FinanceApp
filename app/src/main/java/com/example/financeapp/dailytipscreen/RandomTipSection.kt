@@ -1,6 +1,5 @@
 package com.example.financeapp.dailytipscreen
 import com.example.financeapp.R
-import com.example.financeapp.database.Tip
 
 import android.content.Context
 import androidx.compose.foundation.background

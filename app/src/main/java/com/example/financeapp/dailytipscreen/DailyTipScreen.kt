@@ -1,44 +1,52 @@
 package com.example.financeapp.dailytipscreen
+
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.advertisement.InterstitialAdManager
 
 import android.content.Context
 import android.app.Activity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+
 @Composable
 fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     val activity = context as? Activity
 
+    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
     var interstitialAdCanBeShown by remember { mutableStateOf(false) }
     var newDailyTipCanBeShown by remember { mutableStateOf(false) }
 
     LaunchedEffect(interstitialAdCanBeShown) {
         activity?.let {
             dailyTipScreenViewModel.fetchDailyTip()
-
-            if (dailyTipScreenViewModel.interstitialAdAfterDailyTipSeen()) {
-                newDailyTipCanBeShown = true
-                return@LaunchedEffect
-            }
 
             if (!interstitialAdCanBeShown)
                 return@LaunchedEffect
@@ -64,7 +72,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 color = colors.primary
             )
     ) {
-        if (dailyTipScreenViewModel.newDailyTipAvailable()) {
+        if (newDailyTipAvailable) {
             if (newDailyTipCanBeShown) {
                 dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
@@ -104,11 +112,48 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                     .padding(2.dp)
             )
 
-            RandomTipSection (
-                modifier = modifier
-                    .weight(1f),
-                dailyTipScreenViewModel = dailyTipScreenViewModel
-            )
+            if (newDailyTipAvailable) {
+                if (newDailyTipCanBeShown) {
+                    dailyTipScreenViewModel.resetNewDailyTipAvailable()
+
+                    ImageSection (
+                        modifier = modifier
+                            .weight(1f),
+                        dailyTipScreenViewModel = dailyTipScreenViewModel
+                    )
+                } else {
+                    Box (
+                        contentAlignment = Alignment.Center,
+                        modifier = modifier
+                            .weight(1f)
+                            .height(200.dp)
+                            .fillMaxWidth()
+                            .background (
+                                color = colors.background,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .border (
+                                color = colors.surface,
+                                width = 4.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    ) {
+                        Text (
+                            text = "Your next tip is forming...can you make it appear?",
+                            color = colors.secondary,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(4.dp)
+                        )
+                    }
+                }
+            } else {
+                ImageSection (
+                    modifier = modifier
+                        .weight(1f),
+                    dailyTipScreenViewModel = dailyTipScreenViewModel
+                )
+            }
         }
 
         Spacer (

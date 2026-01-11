@@ -8,6 +8,7 @@ color teal_200
 color teal_700
 color white
 drawable applogo_background
+drawable applogo_transparent_background
 drawable bulletpoint_background
 drawable bulletpoint_foreground
 drawable bulletpointfilled_background
@@ -74,6 +75,9 @@ drawable whatsapplogo_foreground
 mipmap applogo
 mipmap applogo_foreground
 mipmap applogo_round
+mipmap applogo_transparent
+mipmap applogo_transparent_foreground
+mipmap applogo_transparent_round
 mipmap bulletpoint
 mipmap bulletpoint_round
 mipmap bulletpointpistachio
