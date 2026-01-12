@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.Alignment
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,33 +25,45 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.window.DialogProperties
 
 
 @Composable
-fun ImageSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel) {
-
+fun ImageSection (
+    imageBitmap: ImageBitmap?,
+    modifier: Modifier = Modifier,
+    onImageClick: () -> Unit
+) {
     val colors = LocalAppColors.current
     var showDialog by remember { mutableStateOf(false) }
-    val bitmap by dailyTipScreenViewModel.imageToDailyTip.collectAsState()
+
+    val dialogInteractionSource = remember { MutableInteractionSource() }
 
     if (showDialog) {
         Dialog (
             onDismissRequest = {
                 showDialog = false
-            }
+            },
+            properties = DialogProperties (
+                usePlatformDefaultWidth = false
+            )
         ) {
-            bitmap?.let {
+            imageBitmap?.let { image ->
                 Image (
-                    bitmap = bitmap!!.asImageBitmap(),
+                    bitmap = image,
                     contentDescription = null,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable (
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
+                            interactionSource = dialogInteractionSource
                         ) {
                             showDialog = false
+                            onImageClick?.invoke()
                         }
                 )
             }
@@ -75,23 +85,21 @@ fun ImageSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTi
             )
             .padding(12.dp)
             .clickable (
+                enabled = imageBitmap != null
             ) {
                 showDialog = true
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box (
-            contentAlignment = Alignment.Center
-        ) {
-            bitmap?.let {
-                Image (
-                    bitmap = bitmap!!.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
-            }
+        imageBitmap?.let { image ->
+            Image (
+                bitmap = image,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
         }
     }
 }

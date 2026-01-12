@@ -41,6 +41,8 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
     val activity = context as? Activity
 
     val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
+    val imageToDailyTip by dailyTipScreenViewModel.imageToDailyTip.collectAsState()
+
     var interstitialAdCanBeShown by remember { mutableStateOf(false) }
     var newDailyTipCanBeShown by remember { mutableStateOf(false) }
 
@@ -117,9 +119,11 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                     dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
                     ImageSection (
+                        imageBitmap = imageToDailyTip,
                         modifier = modifier
                             .weight(1f),
-                        dailyTipScreenViewModel = dailyTipScreenViewModel
+                        onImageClick = {
+                        }
                     )
                 } else {
                     Box (
@@ -149,9 +153,11 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 }
             } else {
                 ImageSection (
+                    imageBitmap = imageToDailyTip,
                     modifier = modifier
                         .weight(1f),
-                    dailyTipScreenViewModel = dailyTipScreenViewModel
+                    onImageClick = {
+                    }
                 )
             }
         }

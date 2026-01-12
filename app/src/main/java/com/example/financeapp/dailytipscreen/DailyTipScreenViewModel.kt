@@ -1,8 +1,12 @@
 package com.example.financeapp.dailytipscreen
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+
 import com.example.financeapp.repositories.DailyTipRepository
 import com.example.financeapp.database.Tip
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,9 +14,12 @@ import com.example.financeapp.commonutils.fixOrientation
 import com.example.financeapp.network.DailyTip
 import com.example.financeapp.notifications.DailyTipEvents
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewModel() {
 
@@ -28,8 +35,16 @@ class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewM
     private var internCurrentlyLiked = MutableStateFlow(false)
     val currentlyLiked = internCurrentlyLiked.asStateFlow()
 
-    private var internImageToDailyTip = MutableStateFlow<Bitmap?>(null)
-    val imageToDailyTip = internImageToDailyTip.asStateFlow()
+    private val internImageToDailyTip = MutableStateFlow<Bitmap?>(null)
+    val imageToDailyTip: StateFlow<ImageBitmap?> = internImageToDailyTip
+        .map {
+            it?.asImageBitmap()
+        }
+        .stateIn (
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     private val internNewDailyTipAvailable = MutableStateFlow(getNewDailyTipAvailable())
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
