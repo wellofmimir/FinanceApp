@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.network.DailyTip
 
 @Composable
 fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
@@ -43,8 +44,18 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
     val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
     val imageToDailyTip by dailyTipScreenViewModel.imageToDailyTip.collectAsState()
 
+    val dailyTip by dailyTipScreenViewModel.dailyTip.collectAsState()
+    val likedTips by dailyTipScreenViewModel.likedTips.collectAsState()
+    val currentlyLiked by dailyTipScreenViewModel.currentlyLiked.collectAsState()
+
+    LaunchedEffect(Unit) {
+        dailyTipScreenViewModel.fetchDailyTip()
+        dailyTipScreenViewModel.getLikedTips()
+    }
+
     var interstitialAdCanBeShown by remember { mutableStateOf(false) }
-    var newDailyTipCanBeShown by remember { mutableStateOf(false) }
+    var showTip by remember { mutableStateOf(false)}
+    var temporaryTip by remember { mutableStateOf<DailyTip?>(null) }
 
     LaunchedEffect(interstitialAdCanBeShown) {
         activity?.let {
@@ -53,18 +64,20 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             if (!interstitialAdCanBeShown)
                 return@LaunchedEffect
 
-            InterstitialAdManager.instance.showInterstitial (
-                activity = it,
-                onAdClosed = {
-                    dailyTipScreenViewModel.setInterstitialAdAfterDailyTipSeen()
-                    newDailyTipCanBeShown = true
-                },
-                onAdFailed = {
-                    newDailyTipCanBeShown = true
-                }
-            )
+            dailyTipScreenViewModel.onWatchAd (activity = activity)
         }
     }
+
+    if (showTip)
+        DailyTipDialog (
+            modifier = modifier,
+            dailyTip = temporaryTip ?: dailyTip.dailyTip,
+            currentlyLiked = currentlyLiked,
+            onDismissRequest = {
+                showTip = false
+                temporaryTip = null
+            }
+        )
 
     Column (
         verticalArrangement = Arrangement.Center,
@@ -75,11 +88,19 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             )
     ) {
         if (newDailyTipAvailable) {
-            if (newDailyTipCanBeShown) {
+            if (dailyTipScreenViewModel.newDailyTipCanBeShown) {
                 dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
-                DailyTipSection (
-                    dailyTipScreenViewModel = dailyTipScreenViewModel
+                DailyTipTile (
+                    modifier = modifier,
+                    currentlyLiked = currentlyLiked,
+                    dailyTip = dailyTip.dailyTip,
+                    onLiked = {
+                        dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
+                    },
+                    onSeeMoreClicked = {
+                        showTip = true
+                    }
                 )
             } else {
                 AdTeaserSection (
@@ -89,8 +110,16 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 )
             }
         } else {
-            DailyTipSection (
-                dailyTipScreenViewModel = dailyTipScreenViewModel
+            DailyTipTile (
+                modifier = modifier,
+                currentlyLiked = currentlyLiked,
+                dailyTip = dailyTip.dailyTip,
+                onLiked = {
+                    dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
+                },
+                onSeeMoreClicked = {
+                    showTip = true
+                }
             )
         }
 
@@ -115,7 +144,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             )
 
             if (newDailyTipAvailable) {
-                if (newDailyTipCanBeShown) {
+                if (dailyTipScreenViewModel.newDailyTipCanBeShown) {
                     dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
                     ImageSection (
@@ -143,7 +172,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                             )
                     ) {
                         Text (
-                            text = "Your next tip is forming...can you make it appear?",
+                            text = "Your next tip is forming...\ncan you make it appear?",
                             color = colors.secondary,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -168,7 +197,11 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
         )
 
         FavouriteTipsSection (
-            dailyTipScreenViewModel = dailyTipScreenViewModel
+            likedTips = likedTips,
+            onFavouriteTipClicked = { favouriteTip ->
+                temporaryTip = favouriteTip
+                showTip = true
+            }
         )
     }
 }

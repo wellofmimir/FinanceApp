@@ -26,30 +26,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
+import com.example.financeapp.database.Tip
 import com.example.financeapp.network.DailyTip
 
 @Composable
-fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel) {
-
+fun FavouriteTipsSection (
+    modifier: Modifier = Modifier,
+    likedTips: List<Tip>,
+    onFavouriteTipClicked: (DailyTip) -> Unit
+) {
     val colors = LocalAppColors.current
-    val favouriteTips = dailyTipScreenViewModel.likedTips.collectAsState()
-    var showTip by remember { mutableStateOf(false) }
-    var temporaryTip by remember { mutableStateOf<DailyTip?>(null) }
-
-    LaunchedEffect(Unit) {
-        dailyTipScreenViewModel.getLikedTips()
-    }
-
-    if (showTip) {
-        DailyTipDialog (
-            modifier = modifier,
-            currentlyLiked = true,
-            dailyTip =  temporaryTip ?: DailyTip("", "", "", "", ""),
-            onDismissRequest = {
-                showTip = false
-            }
-        )
-    }
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,7 +74,7 @@ fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel:
 
         LazyColumn (
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background (
                     color = colors.primary,
                     shape = RoundedCornerShape(12.dp)
@@ -96,18 +82,14 @@ fun FavouriteTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel:
                 .weight(1f),
             state = listState
         ) {
-            items (
-                items =favouriteTips.value.take(favouriteTips.value.size)
-            ) { likedTip ->
-
+            items (likedTips) { likedTip ->
                 DailyTipTile (
                     modifier = Modifier,
                     currentlyLiked = true,
                     dailyTip = likedTip.dailyTip,
                     onLiked = {},
                     onSeeMoreClicked = {
-                        temporaryTip = likedTip.dailyTip
-                        showTip = true
+                        onFavouriteTipClicked(likedTip.dailyTip)
                     }
                 )
 

@@ -87,6 +87,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import java.util.concurrent.TimeUnit
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
 
@@ -163,7 +164,7 @@ class MainActivity : ComponentActivity() {
             FinanceAppTheme (
                 appColors = appColorsState
             ) {
-                var context = LocalContext.current
+                val context = LocalContext.current
 
                 LaunchedEffect(Unit) {
                     MobileAds.initialize(context)
@@ -269,10 +270,13 @@ class MainActivity : ComponentActivity() {
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
                             val fileProvider = FileProvider(context)
+                            val rewardedAdManager = RewardedAdManager(context)
+                            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+
                             val database = FinanceAppDatabase.getInstance(context)
                             val repository = DailyTipRepository.getInstance(database, fileProvider)
 
-                            return DailyTipScreenViewModel(repository) as T
+                            return DailyTipScreenViewModel(rewardedAdManager, repository) as T
                         }
                     }
                 )
@@ -1038,8 +1042,8 @@ fun scheduleDailyTipWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 21)
-        set(Calendar.MINUTE, 46)
+        set(Calendar.HOUR_OF_DAY, 23)
+        set(Calendar.MINUTE, 48)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 

@@ -1,18 +1,27 @@
 package com.example.financeapp.dailytipscreen
 
+import android.app.Activity
+
 import com.example.financeapp.repositories.DailyTipRepository
 import com.example.financeapp.database.Tip
+import com.example.financeapp.advertisement.RewardedAdManager
+import com.example.financeapp.commonutils.fixOrientation
+import com.example.financeapp.network.DailyTip
+import com.example.financeapp.notifications.DailyTipEvents
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.financeapp.commonutils.fixOrientation
-import com.example.financeapp.network.DailyTip
-import com.example.financeapp.notifications.DailyTipEvents
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +30,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewModel() {
+
+class DailyTipScreenViewModel (
+    private val rewardedAdManager: RewardedAdManager,
+    private val repository: DailyTipRepository
+): ViewModel() {
 
     private var internDailyTip = MutableStateFlow<Tip>(Tip(id = 0, DailyTip("", "", "", "", "")))
     var dailyTip = internDailyTip.asStateFlow()
@@ -124,5 +137,26 @@ class DailyTipScreenViewModel(private val repository: DailyTipRepository): ViewM
     fun getLikedTipsOrderedRandomly(): List<Tip> {
         internLikedTipsRandomlyOrdered.value = repository.getLikedTipsRandomlyOrdered()
         return internLikedTipsRandomlyOrdered.value
+    }
+
+    var newDailyTipCanBeShown by mutableStateOf(false)
+        private set
+
+    fun onWatchAd (
+        activity: Activity,
+    ) {
+        if (rewardedAdManager.isReady()) {
+            rewardedAdManager.show (
+                activity,
+                onReward = {
+                    newDailyTipCanBeShown = true
+                },
+                onClosed = {
+                    rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+                }
+            )
+        } else {
+            newDailyTipCanBeShown = true
+        }
     }
 }
