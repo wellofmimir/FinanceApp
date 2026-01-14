@@ -84,7 +84,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 usePlatformDefaultWidth = false
             )
         ) {
-            val imageBitmapFromTemporaryTip = dailyTipScreenViewModel.getImageBitmapFromDailyTip(temporaryTip ?: dailyTip.dailyTip)
+            val imageBitmapFromTemporaryTip = dailyTipScreenViewModel.getImageBitmapFromDailyTip( temporaryTip ?: dailyTip.dailyTip)
 
             Image (
                 bitmap = imageBitmapFromTemporaryTip,
@@ -102,7 +102,6 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                             showTip = true
                     }
             )
-
         }
     }
 
@@ -142,6 +141,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                     },
                     onSeeMoreClicked = {
                         showTip = true
+                        temporaryTip = dailyTip.dailyTip
                     }
                 )
             } else {
@@ -161,6 +161,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 },
                 onSeeMoreClicked = {
                     showTip = true
+                    temporaryTip = dailyTip.dailyTip
                 }
             )
         }
@@ -195,6 +196,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                             .weight(1f),
                         onImageClick = {
                             showDialogWithImageToDailyTip = true
+                            temporaryTip = null
                         }
                     )
                 } else {
@@ -230,6 +232,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                         .weight(1f),
                     onImageClick = {
                         showDialogWithImageToDailyTip = true
+                        temporaryTip = null
                     }
                 )
             }

@@ -1,6 +1,7 @@
 package com.example.financeapp.likedquotesscreen
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import com.example.financeapp.advertisement.AdSectionLargeBanner
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.ui.theme.LocalAppColors
@@ -35,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.homescreen.QuoteViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedQuotesSection(quoteViewModel: QuoteViewModel, advertisementViewModel: AdvertisementViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
 
