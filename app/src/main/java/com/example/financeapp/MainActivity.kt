@@ -1042,8 +1042,8 @@ fun scheduleDailyTipWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 23)
-        set(Calendar.MINUTE, 48)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 27)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 

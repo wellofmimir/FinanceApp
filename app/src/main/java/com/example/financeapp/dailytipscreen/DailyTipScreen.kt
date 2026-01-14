@@ -58,17 +58,17 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
         dailyTipScreenViewModel.getLikedTips()
     }
 
-    var interstitialAdCanBeShown by remember { mutableStateOf(false) }
+    var rewardedAdCanBeShown by remember { mutableStateOf(false) }
     var showTip by remember { mutableStateOf(false)}
     var showDialogWithImageToDailyTip by remember { mutableStateOf(false) }
     var temporaryTip by remember { mutableStateOf<DailyTip?>(null) }
     val dialogInteractionSource = remember { MutableInteractionSource() }
 
-    LaunchedEffect(interstitialAdCanBeShown) {
+    LaunchedEffect(rewardedAdCanBeShown) {
         activity?.let {
             dailyTipScreenViewModel.fetchDailyTip()
 
-            if (!interstitialAdCanBeShown)
+            if (!rewardedAdCanBeShown)
                 return@LaunchedEffect
 
             dailyTipScreenViewModel.onWatchAd(activity = activity)
@@ -147,7 +147,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             } else {
                 AdTeaserSection (
                     onConfirmButtonClicked = {
-                        interstitialAdCanBeShown = true
+                        rewardedAdCanBeShown = true
                     }
                 )
             }
