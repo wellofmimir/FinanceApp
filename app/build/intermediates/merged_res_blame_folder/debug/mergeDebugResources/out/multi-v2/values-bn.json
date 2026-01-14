@@ -1,78 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.financeapp-mergeDebugResources-57:/values-bn/values-bn.xml",
+            "outputFile": "com.example.financeapp-mergeDebugResources-2:/values-bn/values-bn.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\582f1afe5d99f8e623ccd0b5ab5e57a3\\transformed\\jetified-play-services-base-18.0.1\\res\\values-bn\\values.xml",
-                    "from": {
-                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
-                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-                        "startOffsets": "193,298,453,577,684,816,934,1042,1142,1281,1386,1538,1662,1791,1935,1991,2054",
-                        "endColumns": "104,154,123,106,131,117,107,99,138,104,151,123,128,143,55,62,85",
-                        "endOffsets": "297,452,576,683,815,933,1041,1141,1280,1385,1537,1661,1790,1934,1990,2053,2139"
-                    },
-                    "to": {
-                        "startLines": "12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "1085,1194,1353,1481,1592,1728,1850,1962,2218,2361,2470,2626,2754,2887,3035,3095,3162",
-                        "endColumns": "108,158,127,110,135,121,111,103,142,108,155,127,132,147,59,66,89",
-                        "endOffsets": "1189,1348,1476,1587,1723,1845,1957,2061,2356,2465,2621,2749,2882,3030,3090,3157,3247"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\11df0d45d0f7df26a83fd24dd8d45261\\transformed\\jetified-play-services-basement-18.3.0\\res\\values-bn\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "147",
-                        "endOffsets": "342"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2066",
-                        "endColumns": "151",
-                        "endOffsets": "2213"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\de2491aa1cbe3bb057cdc76cf58b5194\\transformed\\browser-1.4.0\\res\\values-bn\\values-bn.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,161,263,372",
-                        "endColumns": "105,101,108,105",
-                        "endOffsets": "156,258,367,473"
-                    },
-                    "to": {
-                        "startLines": "30,34,35,36",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "3252,3632,3734,3843",
-                        "endColumns": "105,101,108,105",
-                        "endOffsets": "3353,3729,3838,3944"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\9b0fbd0d3f2dd1b551cf0e90ff865a6c\\transformed\\core-1.17.0\\res\\values-bn\\values-bn.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,154,256,358,461,562,664,784",
-                        "endColumns": "98,101,101,102,100,101,119,100",
-                        "endOffsets": "149,251,353,456,557,659,779,880"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6,7,8,9,126",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "178,277,379,481,584,685,787,12830",
-                        "endColumns": "98,101,101,102,100,101,119,100",
-                        "endOffsets": "272,374,476,579,680,782,902,12926"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\de65d1890e54da7fe141325a7da6d710\\transformed\\jetified-foundation-release\\res\\values-bn\\values-bn.xml",
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\de65d1890e54da7fe141325a7da6d710\\transformed\\jetified-foundation-release\\res\\values-bn\\values-bn.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",
@@ -89,7 +21,58 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\b55ea2264ba1ce3090d10f22462e335c\\transformed\\jetified-material3-release\\res\\values-bn\\values-bn.xml",
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\de2491aa1cbe3bb057cdc76cf58b5194\\transformed\\browser-1.4.0\\res\\values-bn\\values-bn.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,161,263,372",
+                        "endColumns": "105,101,108,105",
+                        "endOffsets": "156,258,367,473"
+                    },
+                    "to": {
+                        "startLines": "30,34,35,36",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "3252,3632,3734,3843",
+                        "endColumns": "105,101,108,105",
+                        "endOffsets": "3353,3729,3838,3944"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\582f1afe5d99f8e623ccd0b5ab5e57a3\\transformed\\jetified-play-services-base-18.0.1\\res\\values-bn\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "193,298,453,577,684,816,934,1042,1142,1281,1386,1538,1662,1791,1935,1991,2054",
+                        "endColumns": "104,154,123,106,131,117,107,99,138,104,151,123,128,143,55,62,85",
+                        "endOffsets": "297,452,576,683,815,933,1041,1141,1280,1385,1537,1661,1790,1934,1990,2053,2139"
+                    },
+                    "to": {
+                        "startLines": "12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "1085,1194,1353,1481,1592,1728,1850,1962,2218,2361,2470,2626,2754,2887,3035,3095,3162",
+                        "endColumns": "108,158,127,110,135,121,111,103,142,108,155,127,132,147,59,66,89",
+                        "endOffsets": "1189,1348,1476,1587,1723,1845,1957,2061,2356,2465,2621,2749,2882,3030,3090,3157,3247"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\9b0fbd0d3f2dd1b551cf0e90ff865a6c\\transformed\\core-1.17.0\\res\\values-bn\\values-bn.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,154,256,358,461,562,664,784",
+                        "endColumns": "98,101,101,102,100,101,119,100",
+                        "endOffsets": "149,251,353,456,557,659,779,880"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,126",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "178,277,379,481,584,685,787,12830",
+                        "endColumns": "98,101,101,102,100,101,119,100",
+                        "endOffsets": "272,374,476,579,680,782,902,12926"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\b55ea2264ba1ce3090d10f22462e335c\\transformed\\jetified-material3-release\\res\\values-bn\\values-bn.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -106,7 +89,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\a345980b7b16929e4a8a69a1b9d2f7be\\transformed\\jetified-play-services-ads-23.1.0\\res\\values-bn\\values.xml",
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\11df0d45d0f7df26a83fd24dd8d45261\\transformed\\jetified-play-services-basement-18.3.0\\res\\values-bn\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "147",
+                        "endOffsets": "342"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2066",
+                        "endColumns": "151",
+                        "endOffsets": "2213"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\a345980b7b16929e4a8a69a1b9d2f7be\\transformed\\jetified-play-services-ads-23.1.0\\res\\values-bn\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -123,7 +123,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\pmlec\\.gradle\\caches\\8.13\\transforms\\665b66bb55069b29b7ee578b6c1839f9\\transformed\\jetified-ui-release\\res\\values-bn\\values-bn.xml",
+                    "source": "C:\\Users\\pmlec\\AndroidStudioProjects\\FinanceApp\\gradle\\caches\\8.13\\transforms\\665b66bb55069b29b7ee578b6c1839f9\\transformed\\jetified-ui-release\\res\\values-bn\\values-bn.xml",
                     "from": {
                         "startLines": "3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

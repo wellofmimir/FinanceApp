@@ -1,13 +1,16 @@
 package com.example.financeapp.dailytipscreen
 
 import com.example.financeapp.ui.theme.LocalAppColors
-import com.example.financeapp.advertisement.InterstitialAdManager
+import com.example.financeapp.network.DailyTip
 
 import android.content.Context
 import android.app.Activity
+import androidx.compose.foundation.Image
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,9 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.network.DailyTip
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
@@ -55,7 +60,9 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
 
     var interstitialAdCanBeShown by remember { mutableStateOf(false) }
     var showTip by remember { mutableStateOf(false)}
+    var showDialogWithImageToDailyTip by remember { mutableStateOf(false) }
     var temporaryTip by remember { mutableStateOf<DailyTip?>(null) }
+    val dialogInteractionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(interstitialAdCanBeShown) {
         activity?.let {
@@ -64,7 +71,38 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             if (!interstitialAdCanBeShown)
                 return@LaunchedEffect
 
-            dailyTipScreenViewModel.onWatchAd (activity = activity)
+            dailyTipScreenViewModel.onWatchAd(activity = activity)
+        }
+    }
+
+    if (showDialogWithImageToDailyTip) {
+        Dialog (
+            onDismissRequest = {
+                showDialogWithImageToDailyTip = false
+            },
+            properties = DialogProperties (
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            val imageBitmapFromTemporaryTip = dailyTipScreenViewModel.getImageBitmapFromDailyTip(temporaryTip ?: dailyTip.dailyTip)
+
+            Image (
+                bitmap = imageBitmapFromTemporaryTip,
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable (
+                        indication = null,
+                        interactionSource = dialogInteractionSource
+                    ) {
+                        showDialogWithImageToDailyTip = false
+
+                        if (temporaryTip != null)
+                            showTip = true
+                    }
+            )
+
         }
     }
 
@@ -76,6 +114,10 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             onDismissRequest = {
                 showTip = false
                 temporaryTip = null
+            },
+            onShowImage = {
+                showTip = false
+                showDialogWithImageToDailyTip = true
             }
         )
 
@@ -152,6 +194,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                         modifier = modifier
                             .weight(1f),
                         onImageClick = {
+                            showDialogWithImageToDailyTip = true
                         }
                     )
                 } else {
@@ -186,6 +229,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                     modifier = modifier
                         .weight(1f),
                     onImageClick = {
+                        showDialogWithImageToDailyTip = true
                     }
                 )
             }

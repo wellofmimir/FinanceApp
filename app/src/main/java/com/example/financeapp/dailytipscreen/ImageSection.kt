@@ -5,12 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.Alignment
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,15 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.window.DialogProperties
 
 
 @Composable
@@ -38,37 +31,6 @@ fun ImageSection (
     onImageClick: () -> Unit
 ) {
     val colors = LocalAppColors.current
-    var showDialog by remember { mutableStateOf(false) }
-
-    val dialogInteractionSource = remember { MutableInteractionSource() }
-
-    if (showDialog) {
-        Dialog (
-            onDismissRequest = {
-                showDialog = false
-            },
-            properties = DialogProperties (
-                usePlatformDefaultWidth = false
-            )
-        ) {
-            imageBitmap?.let { image ->
-                Image (
-                    bitmap = image,
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable (
-                            indication = null,
-                            interactionSource = dialogInteractionSource
-                        ) {
-                            showDialog = false
-                            onImageClick?.invoke()
-                        }
-                )
-            }
-        }
-    }
 
     Column (
         modifier = modifier
@@ -87,7 +49,7 @@ fun ImageSection (
             .clickable (
                 enabled = imageBitmap != null
             ) {
-                showDialog = true
+                onImageClick()
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

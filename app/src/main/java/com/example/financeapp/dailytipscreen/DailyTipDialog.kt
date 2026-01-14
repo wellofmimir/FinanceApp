@@ -19,9 +19,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,7 +44,8 @@ fun DailyTipDialog (
     modifier: Modifier = Modifier,
     dailyTip: DailyTip,
     currentlyLiked: Boolean = false,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onShowImage: () -> Unit
 ) {
     val colors = LocalAppColors.current
 
@@ -130,14 +136,63 @@ fun DailyTipDialog (
                     },
                 horizontalArrangement = Arrangement.End
             ) {
-                Text (
-                    text = "Close",
-                    color = colors.primary,
-                    fontSize = 16.sp,
+                Box (
                     modifier = Modifier
-                        .clickable () {
-                            onDismissRequest()
-                        }
+                        .border (
+                            width = 1.dp,
+                            color = colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding (horizontal = 2.dp)
+                ) {
+                    Text (
+                        text = "Show Image",
+                        color = colors.secondary,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .clickable () {
+                                onShowImage()
+                            }
+                            .padding (horizontal = 4.dp)
+                    )
+                }
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(4.dp)
+                )
+
+                Box (
+                    modifier = Modifier
+                        .border (
+                            width = 1.dp,
+                            color = colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    Text (
+                        text = "Close",
+                        color = colors.secondary,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .clickable () {
+                                onDismissRequest()
+                            }
+                            .padding (horizontal = 4.dp)
+                    )
+                }
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(8.dp)
                 )
             }
         }

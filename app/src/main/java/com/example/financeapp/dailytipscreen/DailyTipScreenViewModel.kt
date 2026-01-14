@@ -79,14 +79,6 @@ class DailyTipScreenViewModel (
         return repository.newDailyTipAvailable()
     }
 
-    fun interstitialAdAfterDailyTipSeen(): Boolean {
-        return repository.interstitialAdAfterDailyTipSeen()
-    }
-
-    fun setInterstitialAdAfterDailyTipSeen() {
-        repository.setInterstitialAdAfterDailyTipSeen()
-    }
-
     fun isDailyTipLiked(dailyTip: DailyTip): Boolean {
         return internLikedTips.value.any { likedTip ->
             likedTip.dailyTip.tip == dailyTip.tip
@@ -121,6 +113,15 @@ class DailyTipScreenViewModel (
 
             internCurrentlyLiked.value = isDailyTipLiked(internDailyTip.value.dailyTip)
         }
+    }
+
+    fun getImageBitmapFromDailyTip(dailyTip: DailyTip): ImageBitmap {
+        val imageBitmap = BitmapFactory
+            .decodeFile(dailyTip.pathToImage)
+            .fixOrientation(dailyTip.pathToImage)
+            .asImageBitmap()
+
+        return imageBitmap
     }
 
     fun insertDailyTip(dailyTip: DailyTip) {

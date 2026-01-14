@@ -34,77 +34,77 @@
 21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:5-77
 21-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:10:22-74
 22    <uses-permission android:name="com.android.vending.BILLING" />
-22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:5-67
-22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:22-64
+22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:5-67
+22-->[com.android.billingclient:billing-ktx:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\00ef9782c7f4df7f19f7d63c80996607\transformed\jetified-billing-ktx-6.1.0\AndroidManifest.xml:9:22-64
 23
 24    <queries>
-24-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:12:5-16:15
+24-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:12:5-16:15
 25        <intent>
-25-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:13:9-15:18
+25-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:13:9-15:18
 26            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
-26-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:14:13-91
-26-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:14:21-88
+26-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:14:13-91
+26-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:14:21-88
 27        </intent>
 28        <!-- For browser content -->
 29        <intent>
-29-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:38:9-44:18
+29-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:38:9-44:18
 30            <action android:name="android.intent.action.VIEW" />
-30-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:39:13-65
-30-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:39:21-62
+30-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:39:13-65
+30-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:39:21-62
 31
 32            <category android:name="android.intent.category.BROWSABLE" />
-32-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:41:13-74
-32-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:41:23-71
+32-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:41:13-74
+32-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:41:23-71
 33
 34            <data android:scheme="https" />
-34-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:43:13-44
-34-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:43:19-41
+34-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:43:13-44
+34-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:43:19-41
 35        </intent> <!-- End of browser content -->
 36        <!-- For CustomTabsService -->
 37        <intent>
-37-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:47:9-49:18
+37-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:47:9-49:18
 38            <action android:name="android.support.customtabs.action.CustomTabsService" />
-38-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:48:13-90
-38-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:48:21-87
+38-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:48:13-90
+38-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:48:21-87
 39        </intent>
 40    </queries>
 41
 42    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-42-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:26:5-79
-42-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:26:22-76
+42-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:26:5-79
+42-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:26:22-76
 43    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
-43-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:27:5-82
-43-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:27:22-79
+43-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:27:5-82
+43-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:27:22-79
 44    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
-44-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:28:5-88
-44-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:28:22-85
+44-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:28:5-88
+44-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:28:22-85
 45    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_TOPICS" />
-45-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:29:5-83
-45-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:29:22-80
+45-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:29:5-83
+45-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:29:22-80
 46    <uses-permission android:name="android.permission.WAKE_LOCK" />
-46-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:23:5-68
-46-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:23:22-65
+46-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:23:5-68
+46-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:23:22-65
 47    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-47-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:26:5-77
-47-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:26:22-74
+47-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:26:5-77
+47-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:26:22-74
 48
 49    <permission
-49-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
+49-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
 50        android:name="com.example.financeapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-50-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:23:9-81
+50-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:23:9-81
 51        android:protectionLevel="signature" />
-51-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:24:9-44
+51-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:24:9-44
 52
 53    <uses-permission android:name="com.example.financeapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-53-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:26:5-97
-53-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
+53-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:26:5-97
+53-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
 54
 55    <application
 55-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:12:5-50:19
 56        android:allowBackup="true"
 56-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:13:9-35
 57        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-57-->[androidx.core:core:1.17.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
+57-->[androidx.core:core:1.17.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\9b0fbd0d3f2dd1b551cf0e90ff865a6c\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
 58        android:dataExtractionRules="@xml/data_extraction_rules"
 58-->C:\Users\pmlec\AndroidStudioProjects\FinanceApp\app\src\main\AndroidManifest.xml:14:9-65
 59        android:debuggable="true"
@@ -177,301 +177,301 @@
 97        </provider>
 98
 99        <meta-data
-99-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:19:9-21:37
+99-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:19:9-21:37
 100            android:name="com.google.android.play.billingclient.version"
-100-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:20:13-73
+100-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:20:13-73
 101            android:value="6.1.0" />
-101-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:21:13-34
+101-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:21:13-34
 102
 103        <activity
-103-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:23:9-27:75
+103-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:23:9-27:75
 104            android:name="com.android.billingclient.api.ProxyBillingActivity"
-104-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:24:13-78
+104-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:24:13-78
 105            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-105-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:25:13-96
+105-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:25:13-96
 106            android:exported="false"
-106-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:26:13-37
+106-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:26:13-37
 107            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
-107-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:27:13-72
+107-->[com.android.billingclient:billing:6.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\4edcd63781e82b16cf1fd84cb828dc26\transformed\jetified-billing-6.1.0\AndroidManifest.xml:27:13-72
 108        <activity
-108-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:56:9-61:43
+108-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:56:9-61:43
 109            android:name="com.google.android.gms.ads.AdActivity"
-109-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:57:13-65
+109-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:57:13-65
 110            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-110-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:58:13-122
+110-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:58:13-122
 111            android:exported="false"
-111-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:59:13-37
+111-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:59:13-37
 112            android:theme="@android:style/Theme.Translucent" />
-112-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:60:13-61
+112-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:60:13-61
 113
 114        <provider
-114-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:63:9-68:43
+114-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:63:9-68:43
 115            android:name="com.google.android.gms.ads.MobileAdsInitProvider"
-115-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:64:13-76
+115-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:64:13-76
 116            android:authorities="com.example.financeapp.mobileadsinitprovider"
-116-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:65:13-73
+116-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:65:13-73
 117            android:exported="false"
-117-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:66:13-37
+117-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:66:13-37
 118            android:initOrder="100" />
-118-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:67:13-36
+118-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:67:13-36
 119
 120        <service
-120-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:70:9-74:43
+120-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:70:9-74:43
 121            android:name="com.google.android.gms.ads.AdService"
-121-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:71:13-64
+121-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:71:13-64
 122            android:enabled="true"
-122-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:72:13-35
+122-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:72:13-35
 123            android:exported="false" />
-123-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:73:13-37
+123-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:73:13-37
 124
 125        <activity
-125-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:76:9-80:43
+125-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:76:9-80:43
 126            android:name="com.google.android.gms.ads.OutOfContextTestingActivity"
-126-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:77:13-82
+126-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:77:13-82
 127            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-127-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:78:13-122
+127-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:78:13-122
 128            android:exported="false" />
-128-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:79:13-37
+128-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:79:13-37
 129        <activity
-129-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:81:9-88:43
+129-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:81:9-88:43
 130            android:name="com.google.android.gms.ads.NotificationHandlerActivity"
-130-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:82:13-82
+130-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:82:13-82
 131            android:excludeFromRecents="true"
-131-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:83:13-46
+131-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:83:13-46
 132            android:exported="false"
-132-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:84:13-37
+132-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:84:13-37
 133            android:launchMode="singleTask"
-133-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:85:13-44
+133-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:85:13-44
 134            android:taskAffinity=""
-134-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:86:13-36
+134-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:86:13-36
 135            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-135-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:87:13-72
+135-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:87:13-72
 136
 137        <property
-137-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:90:9-92:62
+137-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:90:9-92:62
 138            android:name="android.adservices.AD_SERVICES_CONFIG"
-138-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:91:13-65
+138-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:91:13-65
 139            android:resource="@xml/gma_ad_services_config" />
-139-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:92:13-59
+139-->[com.google.android.gms:play-services-ads-lite:23.1.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\22b278b44507f0bb679e3fe8114b019a\transformed\jetified-play-services-ads-lite-23.1.0\AndroidManifest.xml:92:13-59
 140
 141        <provider
-141-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:29:9-37:20
+141-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:29:9-37:20
 142            android:name="androidx.startup.InitializationProvider"
-142-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:30:13-67
+142-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:30:13-67
 143            android:authorities="com.example.financeapp.androidx-startup"
-143-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:31:13-68
+143-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:31:13-68
 144            android:exported="false" >
-144-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:32:13-37
+144-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:32:13-37
 145            <meta-data
-145-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:34:13-36:52
+145-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:34:13-36:52
 146                android:name="androidx.work.WorkManagerInitializer"
-146-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:35:17-68
+146-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:35:17-68
 147                android:value="androidx.startup" />
-147-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:36:17-49
+147-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:36:17-49
 148            <meta-data
-148-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:29:13-31:52
+148-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:29:13-31:52
 149                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-149-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:30:17-75
+149-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:30:17-75
 150                android:value="androidx.startup" />
-150-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:31:17-49
+150-->[androidx.emoji2:emoji2:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\eba6cc6c541e4a3c4f22624ad068f939\transformed\jetified-emoji2-1.4.0\AndroidManifest.xml:31:17-49
 151            <meta-data
-151-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\.gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:29:13-31:52
+151-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:29:13-31:52
 152                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-152-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\.gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:30:17-78
+152-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:30:17-78
 153                android:value="androidx.startup" />
-153-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\.gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:31:17-49
+153-->[androidx.lifecycle:lifecycle-process:2.9.4] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\e4cf2a26383f9636a3839a294facf70a\transformed\jetified-lifecycle-process-2.9.4\AndroidManifest.xml:31:17-49
 154            <meta-data
-154-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+154-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
 155                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-155-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+155-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
 156                android:value="androidx.startup" />
-156-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+156-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
 157        </provider>
 158
 159        <service
-159-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:39:9-45:35
+159-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:39:9-45:35
 160            android:name="androidx.work.impl.background.systemjob.SystemJobService"
-160-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:40:13-84
+160-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:40:13-84
 161            android:directBootAware="false"
-161-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:41:13-44
+161-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:41:13-44
 162            android:enabled="@bool/enable_system_job_service_default"
-162-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:42:13-70
+162-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:42:13-70
 163            android:exported="true"
-163-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:43:13-36
+163-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:43:13-36
 164            android:permission="android.permission.BIND_JOB_SERVICE" />
-164-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:44:13-69
+164-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:44:13-69
 165        <service
-165-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:46:9-52:35
+165-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:46:9-52:35
 166            android:name="androidx.work.impl.foreground.SystemForegroundService"
-166-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:47:13-81
+166-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:47:13-81
 167            android:directBootAware="false"
-167-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:48:13-44
+167-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:48:13-44
 168            android:enabled="@bool/enable_system_foreground_service_default"
-168-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:49:13-77
+168-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:49:13-77
 169            android:exported="false" />
-169-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:50:13-37
+169-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:50:13-37
 170
 171        <receiver
-171-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:54:9-59:35
+171-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:54:9-59:35
 172            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
-172-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:55:13-88
+172-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:55:13-88
 173            android:directBootAware="false"
-173-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:56:13-44
+173-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:56:13-44
 174            android:enabled="true"
-174-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:57:13-35
+174-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:57:13-35
 175            android:exported="false" />
-175-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:58:13-37
+175-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:58:13-37
 176        <receiver
-176-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:60:9-69:20
+176-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:60:9-69:20
 177            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
-177-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:61:13-88
+177-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:61:13-88
 178            android:directBootAware="false"
-178-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:62:13-44
+178-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:62:13-44
 179            android:enabled="false"
-179-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:63:13-36
+179-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:63:13-36
 180            android:exported="false" >
-180-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:64:13-37
+180-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:64:13-37
 181            <intent-filter>
-181-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:66:13-68:29
+181-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:66:13-68:29
 182                <action android:name="android.intent.action.BOOT_COMPLETED" />
-182-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:67:17-79
-182-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:67:25-76
+182-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:67:17-79
+182-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:67:25-76
 183            </intent-filter>
 184        </receiver>
 185        <receiver
-185-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:70:9-80:20
+185-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:70:9-80:20
 186            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
-186-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:71:13-78
+186-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:71:13-78
 187            android:directBootAware="false"
-187-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:72:13-44
+187-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:72:13-44
 188            android:enabled="true"
-188-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:73:13-35
+188-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:73:13-35
 189            android:exported="true"
-189-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:74:13-36
+189-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:74:13-36
 190            android:permission="android.permission.DUMP" >
-190-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:75:13-57
+190-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:75:13-57
 191            <intent-filter>
-191-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:77:13-79:29
+191-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:77:13-79:29
 192                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
-192-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:78:17-88
-192-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:78:25-85
+192-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:78:17-88
+192-->[androidx.work:work-runtime:2.11.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\2a72c887429bbc446974f8c928befa37\transformed\work-runtime-2.11.0\AndroidManifest.xml:78:25-85
 193            </intent-filter>
 194        </receiver>
 195
 196        <activity
-196-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\.gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+196-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
 197            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-197-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\.gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+197-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
 198            android:exported="false"
-198-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\.gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+198-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
 199            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-199-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\.gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+199-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\582f1afe5d99f8e623ccd0b5ab5e57a3\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
 200
 201        <meta-data
-201-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+201-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
 202            android:name="com.google.android.gms.version"
-202-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
+202-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
 203            android:value="@integer/google_play_services_version" />
-203-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
+203-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\11df0d45d0f7df26a83fd24dd8d45261\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
 204
 205        <activity
-205-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:23:9-25:39
+205-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:23:9-25:39
 206            android:name="androidx.compose.ui.tooling.PreviewActivity"
-206-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:24:13-71
+206-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:24:13-71
 207            android:exported="true" />
-207-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:25:13-36
+207-->[androidx.compose.ui:ui-tooling-android:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\6890d526fc1d798b24f1176cbcea4f51\transformed\jetified-ui-tooling\AndroidManifest.xml:25:13-36
 208        <activity
-208-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:23:9-26:79
+208-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:23:9-26:79
 209            android:name="androidx.activity.ComponentActivity"
-209-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:24:13-63
+209-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:24:13-63
 210            android:exported="true"
-210-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:25:13-36
+210-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:25:13-36
 211            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
-211-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\.gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:26:13-76
+211-->[androidx.compose.ui:ui-test-manifest:1.9.2] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\289bfab9b273b3949747a567bd74f659\transformed\jetified-ui-test-manifest-1.9.2\AndroidManifest.xml:26:13-76
 212
 213        <uses-library
-213-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\.gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
+213-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
 214            android:name="android.ext.adservices"
-214-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\.gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:24:13-50
+214-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:24:13-50
 215            android:required="false" />
-215-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\.gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:25:13-37
+215-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\723ada9bea4bed4ee1761f8db4fe08f7\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:25:13-37
 216
 217        <service
-217-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:24:9-28:63
+217-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:24:9-28:63
 218            android:name="androidx.room.MultiInstanceInvalidationService"
-218-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:25:13-74
+218-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:25:13-74
 219            android:directBootAware="true"
-219-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:26:13-43
+219-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:26:13-43
 220            android:exported="false" />
-220-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:27:13-37
+220-->[androidx.room:room-runtime-android:2.7.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\7c3f3dc264b104a48b6c8b8ed0bc004f\transformed\jetified-room-runtime-release\AndroidManifest.xml:27:13-37
 221
 222        <receiver
-222-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+222-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
 223            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-223-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+223-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
 224            android:directBootAware="false"
-224-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+224-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
 225            android:enabled="true"
-225-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+225-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
 226            android:exported="true"
-226-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+226-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
 227            android:permission="android.permission.DUMP" >
-227-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+227-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
 228            <intent-filter>
-228-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+228-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
 229                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-229-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
-229-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+229-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+229-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
 230            </intent-filter>
 231            <intent-filter>
-231-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+231-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
 232                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-232-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
-232-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+232-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+232-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
 233            </intent-filter>
 234            <intent-filter>
-234-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+234-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
 235                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-235-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
-235-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+235-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+235-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
 236            </intent-filter>
 237            <intent-filter>
-237-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+237-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
 238                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-238-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
-238-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\.gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+238-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+238-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3649cdfd53cc1f95fe09a6e446dc5138\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
 239            </intent-filter>
 240        </receiver>
 241
 242        <service
-242-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+242-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
 243            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-243-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+243-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
 244            android:exported="false" >
-244-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+244-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
 245            <meta-data
-245-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+245-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
 246                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-246-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+246-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
 247                android:value="cct" />
-247-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+247-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\49e4d3b2c406557b6c9edf85ec2ad2e1\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
 248        </service>
 249        <service
-249-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+249-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
 250            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
-250-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+250-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
 251            android:exported="false"
-251-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+251-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
 252            android:permission="android.permission.BIND_JOB_SERVICE" >
-252-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+252-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
 253        </service>
 254
 255        <receiver
-255-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+255-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
 256            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
-256-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+256-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
 257            android:exported="false" />
-257-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\.gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+257-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\pmlec\AndroidStudioProjects\FinanceApp\gradle\caches\8.13\transforms\3789496b4dd833a8e3cfdda5c28a3765\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
 258    </application>
 259
 260</manifest>
