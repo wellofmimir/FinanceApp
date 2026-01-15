@@ -53,10 +53,8 @@ fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel,
 
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
 
-                    if (advertisementViewModel.getRemoveAllAds())
-                        return@Column
-
                     AdSectionLargeBanner (
+                        supressAd = advertisementViewModel.getRemoveAllAds(),
                         tutorialInformation = tutorialInformation
                     )
 
@@ -159,10 +157,8 @@ fun LikedQuotesSection(likedQuotesSectionViewModel: LikedQuotesSectionViewModel,
                                 .height(2.dp)
                         )
 
-                        if (advertisementViewModel.getRemoveAllAds())
-                            return@Column
-
                         AdSectionLargeBanner (
+                            supressAd = advertisementViewModel.getRemoveAllAds(),
                             tutorialInformation = tutorialInformation
                         )
                     }

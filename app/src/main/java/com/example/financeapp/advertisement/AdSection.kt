@@ -14,7 +14,13 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 @Composable
-fun AdSectionFullBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
+fun AdSectionFullBanner (
+    modifier: Modifier = Modifier,
+    supressAd: Boolean,
+    tutorialInformation: TutorialInformation
+) {
+    if (supressAd)
+        return
 
     AndroidView (
         modifier = modifier
@@ -32,7 +38,13 @@ fun AdSectionFullBanner(modifier: Modifier = Modifier, tutorialInformation: Tuto
 }
 
 @Composable
-fun AdSectionLargeBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
+fun AdSectionLargeBanner (
+    modifier: Modifier = Modifier,
+    supressAd: Boolean,
+    tutorialInformation: TutorialInformation
+) {
+    if (supressAd)
+        return
 
     AndroidView (
         modifier = modifier
@@ -50,7 +62,13 @@ fun AdSectionLargeBanner(modifier: Modifier = Modifier, tutorialInformation: Tut
 }
 
 @Composable
-fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation) {
+fun AdSectionMiddleBanner (
+    modifier: Modifier = Modifier,
+    supressAd: Boolean,
+    tutorialInformation: TutorialInformation
+) {
+    if (supressAd)
+        return
 
     AndroidView (
         modifier = modifier
@@ -68,7 +86,12 @@ fun AdSectionMiddleBanner(modifier: Modifier = Modifier, tutorialInformation: Tu
 }
 
 @Composable
-fun AdSectionSmallBanner(modifier: Modifier = Modifier) {
+fun AdSectionSmallBanner (
+    modifier: Modifier = Modifier,
+    supressAd: Boolean
+) {
+    if (supressAd)
+        return
 
     AndroidView (
         modifier = modifier

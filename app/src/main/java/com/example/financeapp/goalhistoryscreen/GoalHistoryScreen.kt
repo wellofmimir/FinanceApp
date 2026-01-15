@@ -155,12 +155,10 @@ fun GoalHistoryScreen (
                 .padding(2.dp)
         )
 
-        if (advertisementViewModel.getRemoveAllAds())
-            return@Column
-
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(1f),
+            supressAd = advertisementViewModel.getRemoveAllAds(),
             tutorialInformation = tutorialInformation
         )
     }

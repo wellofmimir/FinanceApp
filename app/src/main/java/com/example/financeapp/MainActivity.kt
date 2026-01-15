@@ -198,7 +198,7 @@ class MainActivity : ComponentActivity() {
                     factory = object: ViewModelProvider.Factory {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
-                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val database = FinanceAppDatabase.getInstance(context)
                             val repository = GoalRepository.getInstance(database)
 
                             return AchievementsSectionViewModel(repository) as T
@@ -324,7 +324,7 @@ class MainActivity : ComponentActivity() {
                     factory = object: ViewModelProvider.Factory {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
-                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val database = FinanceAppDatabase.getInstance(context)
                             val goalRepository = GoalRepository.getInstance(database)
 
                             return PunchCardSectionViewModel(goalRepository) as T
@@ -626,12 +626,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
 
-                            AdSectionMiddleBanner(tutorialInformation = tutorialInformation)
+                            AdSectionMiddleBanner (
+                                supressAd = advertisementViewModel.getRemoveAllAds(),
+                                tutorialInformation = tutorialInformation
+                            )
                         }
 
                         if (sectionIdentifier == Screen.DAILY_TIPS)
                             DailyTipScreen (
-                                dailyTipScreenViewModel = dailyTipScreenViewModel
+                                dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                advertisementViewModel = advertisementViewModel
                             )
 
                         AnimatedVisibility (
@@ -1042,8 +1046,8 @@ fun scheduleDailyTipWorker(context: Context) {
     val now = Calendar.getInstance()
     val next22 = Calendar.getInstance().apply {
 
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 27)
+        set(Calendar.HOUR_OF_DAY, 1)
+        set(Calendar.MINUTE, 15)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
 

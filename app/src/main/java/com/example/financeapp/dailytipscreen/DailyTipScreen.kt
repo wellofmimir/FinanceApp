@@ -39,9 +39,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.financeapp.advertisement.AdvertisementViewModel
 
 @Composable
-fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
+fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, advertisementViewModel: AdvertisementViewModel, context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     val activity = context as? Activity
@@ -129,7 +130,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             )
     ) {
         if (newDailyTipAvailable) {
-            if (dailyTipScreenViewModel.newDailyTipCanBeShown) {
+            if (dailyTipScreenViewModel.newDailyTipCanBeShown || advertisementViewModel.getRemoveAllAds()) {
                 dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
                 DailyTipTile (

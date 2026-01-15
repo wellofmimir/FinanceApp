@@ -42,6 +42,9 @@ fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSe
             if (receiptSectionsViewModel.interstitialAdAfterReceiptSeen())
                 return@LaunchedEffect
 
+            if (advertisementViewModel.getRemoveAllAds())
+                return@LaunchedEffect
+
             InterstitialAdManager.instance.showInterstitial (
                 activity = it,
                 onAdClosed = {
@@ -108,12 +111,10 @@ fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSe
             tutorialInformation = tutorialInformation
         )
 
-        if (advertisementViewModel.getRemoveAllAds())
-            return@Column
-
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(1f),
+            supressAd = advertisementViewModel.getRemoveAllAds(),
             tutorialInformation = tutorialInformation
         )
     }

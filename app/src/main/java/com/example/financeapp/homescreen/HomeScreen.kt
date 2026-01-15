@@ -222,19 +222,20 @@ fun HomeScreen (
                     modifier = Modifier
                         .weight(0.5f),
                     goalsSectionViewModel = goalsSectionViewModel,
-                    tutorialInformation = tutorialInformation)
-
-                if (advertisementViewModel.getRemoveAllAds())
-                    return@Column
+                    tutorialInformation = tutorialInformation
+                )
 
                 Spacer (
                     modifier = Modifier
                         .height(4.dp)
                 )
 
+                val remobetheads = advertisementViewModel.getRemoveAllAds()
+
                 AdSectionMiddleBanner (
                     modifier = Modifier
                         .weight(0.3f),
+                    supressAd = advertisementViewModel.getRemoveAllAds(),
                     tutorialInformation = tutorialInformation
                 )
             }

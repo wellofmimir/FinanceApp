@@ -37,12 +37,10 @@ fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, advertisement
                 .height(4.dp)
         )
 
-        if (advertisementViewModel.getRemoveAllAds())
-            return@Column
-
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(0.16f),
+            supressAd = advertisementViewModel.getRemoveAllAds(),
             tutorialInformation = tutorialInformation
         )
     }

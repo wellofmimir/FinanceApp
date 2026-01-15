@@ -460,7 +460,8 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
 
             AdSectionSmallBanner (
                 modifier = Modifier
-                    .weight(0.2f)
+                    .weight(0.2f),
+                supressAd = advertisementViewModel.getRemoveAllAds()
             )
         }
     }
