@@ -90,6 +90,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
+import com.example.financeapp.missionscreen.AboutScreen
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -105,7 +106,7 @@ enum class Screen (id: Int) {
 
     SHOP (id = 8),
 
-    DAILY_TIPS(id = 9)
+    DAILY_TIPS(id = 9),
 }
 
 enum class TutorialStep (id: Int) {
@@ -653,6 +654,9 @@ class MainActivity : ComponentActivity() {
                                 true
                             )
                         }
+
+                        if (sectionIdentifier == Screen.ABOUT_US)
+                            AboutScreen ()
                     }
 
                     if (sectionIdentifier == Screen.HOME) {

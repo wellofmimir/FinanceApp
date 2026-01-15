@@ -56,7 +56,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
         2 -> "Goals Completed"
         3 -> "Goals Completed"
         5 -> "Saved Receipts"
-        4 -> "About Greeen"
+        6 -> "About"
         7 -> "Settings"
         8 -> "Shop"
         9 -> "Daily Tips"
@@ -154,6 +154,10 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
                     },
                     onSettingsClicked = {
                         onNewSectionIdentifier(Screen.USER_SETTINGS)
+                        expanded = false
+                    },
+                    onAboutClicked = {
+                        onNewSectionIdentifier(Screen.ABOUT_US)
                         expanded = false
                     }
                 )

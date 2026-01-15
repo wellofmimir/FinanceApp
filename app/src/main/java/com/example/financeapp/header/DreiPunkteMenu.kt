@@ -29,7 +29,8 @@ fun DreiPunkteMenu(expanded: Boolean,
                    onGoalHistoryClicked: () -> Unit,
                    onYourQuotesClicked: () -> Unit,
                    onReceiptsClicked: () -> Unit,
-                   onSettingsClicked: () -> Unit) {
+                   onSettingsClicked: () -> Unit,
+                   onAboutClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
 
@@ -180,6 +181,33 @@ fun DreiPunkteMenu(expanded: Boolean,
                 },
                 onClick = {
                     onSettingsClicked()
+                }
+            )
+
+            HorizontalDivider (
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            DropdownMenuItem (
+                text = {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text (
+                            text = "About",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
+                },
+                onClick = {
+                    onAboutClicked()
                 }
             )
         }
