@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +58,8 @@ fun DailyTipDialog (
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight(0.9f)
                 .background (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
@@ -126,13 +128,14 @@ fun DailyTipDialog (
 
             Row (
                 modifier = Modifier
-                    .weight(0.1f)
+                    .weight(0.05f)
                     .fillMaxWidth()
                     .clickable() {
                         onDismissRequest()
                     }
                     .padding(top = 4.dp),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box (
                     modifier = Modifier
@@ -187,11 +190,6 @@ fun DailyTipDialog (
                             .padding (horizontal = 4.dp)
                     )
                 }
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(8.dp)
-                )
             }
         }
     }

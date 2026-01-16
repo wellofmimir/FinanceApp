@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +54,10 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
     val dailyTip by dailyTipScreenViewModel.dailyTip.collectAsState()
     val likedTips by dailyTipScreenViewModel.likedTips.collectAsState()
     val currentlyLiked by dailyTipScreenViewModel.currentlyLiked.collectAsState()
+
+    val numberOfThingsLearned = dailyTipScreenViewModel.likedTips.collectAsState().value.size
+    val newBadgeAvailable by dailyTipScreenViewModel.newBadgeAvailable.collectAsState()
+    var showBadges by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         dailyTipScreenViewModel.fetchDailyTip()
@@ -92,8 +97,9 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable (
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
+                    .clickable(
                         indication = null,
                         interactionSource = dialogInteractionSource
                     ) {
@@ -102,6 +108,23 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                         if (temporaryTip != null)
                             showTip = true
                     }
+            )
+        }
+    }
+
+    if (showBadges) {
+        Dialog (
+            onDismissRequest = {
+                showBadges = false
+            },
+            properties = DialogProperties (
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            BadgesSection (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.8f)
             )
         }
     }
@@ -176,11 +199,22 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            NumberOfTipsSection (
-                modifier = modifier
-                    .weight(1f),
-                dailyTipScreenViewModel = dailyTipScreenViewModel
-            )
+            if (newBadgeAvailable) {
+                ViewBadgesSection (
+                    modifier = modifier
+                        .weight(1f)
+                        .clickable() {
+                            showBadges = true
+                        }
+                )
+            } else {
+                NumberOfTipsSection (
+                    modifier = modifier
+                        .weight(1f),
+                    numberOfThingsLearned = numberOfThingsLearned
+                )
+            }
+
 
             Spacer (
                 modifier = Modifier

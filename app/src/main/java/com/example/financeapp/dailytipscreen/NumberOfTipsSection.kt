@@ -26,11 +26,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 
 @Composable
-fun NumberOfTipsSection(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, context: Context = LocalContext.current) {
-
+fun NumberOfTipsSection (
+    modifier: Modifier = Modifier,
+    numberOfThingsLearned: Int
+) {
     val colors = LocalAppColors.current
-    val numberOfThingsLearned = dailyTipScreenViewModel.likedTips.collectAsState().value.size
-    dailyTipScreenViewModel.getLikedTips()
 
     Column (
         modifier = modifier

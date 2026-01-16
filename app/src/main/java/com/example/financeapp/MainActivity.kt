@@ -90,7 +90,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
-import com.example.financeapp.missionscreen.AboutScreen
+import com.example.financeapp.aboutscreen.AboutScreen
 
 enum class Screen (id: Int) {
     HOME(0),

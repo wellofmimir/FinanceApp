@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.focus.focusRequester
 
 @Composable
 fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, focusManager: FocusManager = LocalFocusManager.current) {
@@ -446,6 +447,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         .background (
                             color = colors.secondary
                         )
+                        .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
                                 isEditingTheName = false

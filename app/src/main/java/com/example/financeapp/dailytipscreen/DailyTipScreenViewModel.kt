@@ -62,6 +62,9 @@ class DailyTipScreenViewModel (
     private val internNewDailyTipAvailable = MutableStateFlow(getNewDailyTipAvailable())
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
+    private var internNewBadgeAvailable = MutableStateFlow(true)
+    val newBadgeAvailable = internNewBadgeAvailable.asStateFlow()
+
     init {
         viewModelScope.launch {
             DailyTipEvents.newDailyTipAvailable.collect() {

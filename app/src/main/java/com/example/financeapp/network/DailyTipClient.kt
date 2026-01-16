@@ -1,14 +1,7 @@
 package com.example.financeapp.network
 
-import android.os.Handler
-import android.os.Looper
 import okhttp3.OkHttpClient
-
 import okhttp3.Request
-
-interface DailyTipCallback {
-    fun result(response: String)
-}
 
 data class DailyTip (
     var title: String,
