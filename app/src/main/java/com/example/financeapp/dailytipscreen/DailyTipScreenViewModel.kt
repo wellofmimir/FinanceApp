@@ -36,7 +36,7 @@ class DailyTipScreenViewModel (
     private val repository: DailyTipRepository
 ): ViewModel() {
 
-    private var internDailyTip = MutableStateFlow<Tip>(Tip(id = 0, DailyTip("", "", "", "", "")))
+    private var internDailyTip = MutableStateFlow<Tip>(Tip(id = 0, DailyTip("Breathe in...", "", "Your article will be here shortly.", "", "")))
     var dailyTip = internDailyTip.asStateFlow()
 
     private var internLikedTips = MutableStateFlow<List<Tip>>(emptyList())
@@ -90,6 +90,9 @@ class DailyTipScreenViewModel (
 
     fun toggleDailyTipLiked(dailyTip: DailyTip) {
         viewModelScope.launch {
+            if (dailyTip.title == "Breathe in...")
+                return@launch
+
             if (isDailyTipLiked(dailyTip)) {
                 removeDailyTip(dailyTip)
                 internCurrentlyLiked.value = false

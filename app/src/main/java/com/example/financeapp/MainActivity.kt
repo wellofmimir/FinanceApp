@@ -1,4 +1,5 @@
 package com.example.financeapp
+
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.billingmanager.BillingManager
