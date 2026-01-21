@@ -2,27 +2,19 @@ package com.example.financeapp.badges
 
 import com.example.financeapp.repositories.BadgesRepository
 import com.example.financeapp.database.Badge
+import com.example.financeapp.commonutils.fixOrientation
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.Toast
-import androidx.compose.runtime.collectAsState
+
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContentProviderCompat.requireContext
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.financeapp.commonutils.fixOrientation
-import com.example.financeapp.network.DailyTip
+
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class BadgesViewModel (
