@@ -93,6 +93,7 @@ import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
 import com.example.financeapp.aboutscreen.AboutScreen
 import com.example.financeapp.badges.BadgesViewModel
+import com.example.financeapp.commonutils.GlobalToastHandler
 import com.example.financeapp.repositories.BadgesRepository
 
 enum class Screen (id: Int) {
@@ -348,6 +349,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 )
+
+                GlobalToastHandler(badgesViewModel)
 
                 LaunchedEffect(Unit) {
                     badgesViewModel.fetchWallpaperFirstQuote()

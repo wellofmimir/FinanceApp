@@ -59,16 +59,6 @@ fun QuoteSection (
         quoteViewModel.loadQuoteWithDelay()
     }
 
-    LaunchedEffect(badgesViewModel.toastForFirstQuote) {
-        badgesViewModel.toastForFirstQuote.collect {
-            if (it.first.isEmpty())
-                return@collect
-
-            Toast.makeText(context, it.first, Toast.LENGTH_LONG).show()
-        }
-    }
-
-
     Column (
         modifier = modifier
             .aspectRatio(1f)

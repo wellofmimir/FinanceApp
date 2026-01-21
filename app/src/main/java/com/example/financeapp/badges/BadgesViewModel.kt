@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -24,8 +26,12 @@ class BadgesViewModel (
     private val internUserBadges = MutableStateFlow<List<Badge>>(emptyList())
     val userBadges = internUserBadges.asStateFlow()
 
-    private val internToastForFirstQuote = MutableStateFlow<Pair<String, String>>("" to "")
-    val toastForFirstQuote = internToastForFirstQuote.asStateFlow()
+    private val internToastEvent = MutableSharedFlow<String>()
+    val toastEvent = internToastEvent.asSharedFlow()
+
+    suspend fun showToast(message: String) {
+        internToastEvent.emit(message)
+    }
 
     private val internFirstQuoteWallpaper = MutableStateFlow<Bitmap?>(null)
     private val internFirstReceiptWallpaper = MutableStateFlow<Bitmap?>(null)
@@ -84,11 +90,11 @@ class BadgesViewModel (
                 badge = BadgeCatalog.getBadge(badgeIdentifier)
                 badge.isGranted = true
                 repository.insertUserBadge(badge)
-                internToastForFirstQuote.value = Pair(badge.title, badge.text)
+                showToast(badge.title)
             } else {
                 if (!badge.isGranted) {
                     repository.setBadgeGranted(badge.identifier, true)
-                    internToastForFirstQuote.value = Pair(badge.title, badge.text)
+                    showToast(badge.title)
                 }
             }
         }

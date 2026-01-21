@@ -1,11 +1,13 @@
 package com.example.financeapp.dailytipscreen
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,9 +57,36 @@ fun BadgesSection (
         badgesViewModel.loadUserBadges()
     }
 
-    if (showMenu && temporaryBadge != null) {
-
-
+    DropdownMenu (
+        modifier = Modifier
+            .border (
+                width = 1.dp,
+                color = colors.secondary
+            )
+            .background (
+                color = colors.primary
+            ),
+        expanded = showMenu,
+        onDismissRequest = {
+            showMenu = false
+        }
+    ) {
+        DropdownMenuItem (
+            modifier = Modifier
+                .background (
+                    color = colors.primary,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            text = {
+                Text (
+                    text = "Delete",
+                    color = colors.secondary
+                )
+            },
+            onClick = {
+                showMenu = false
+            }
+        )
     }
 
     if (showWallpaper && temporaryBadge != null) {
