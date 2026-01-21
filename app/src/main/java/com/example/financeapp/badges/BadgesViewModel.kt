@@ -35,15 +35,7 @@ class BadgesViewModel (
     val toastForFirstQuote = internToastForFirstQuote.asStateFlow()
 
     private val internFirstQuoteWallpaper = MutableStateFlow<Bitmap?>(null)
-    val firstQuoteWallpaper: StateFlow<ImageBitmap?> = internFirstQuoteWallpaper
-        .map {
-            it?.asImageBitmap()
-        }
-        .stateIn (
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = null
-        )
+
 
     fun getImageBitmapFromBadge(badge: Badge): ImageBitmap {
         val imageBitmap = BitmapFactory
