@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
+import com.example.financeapp.badges.BadgeIdentifier
 
 @Composable
 fun QuoteSection (
@@ -133,7 +134,7 @@ fun QuoteSection (
                             quoteViewModel.toggleQuote(quote)
 
                             if (!quoteLiked)
-                                badgesViewModel.checkFirstQuoteBadge()
+                                badgesViewModel.checkBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
                         }
                 )
             }

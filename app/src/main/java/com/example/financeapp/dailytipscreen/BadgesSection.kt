@@ -1,11 +1,13 @@
 package com.example.financeapp.dailytipscreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +35,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.financeapp.database.Badge
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BadgesSection (
     modifier: Modifier = Modifier,
@@ -42,13 +45,19 @@ fun BadgesSection (
     val scrollState = rememberScrollState()
     val userBadges by badgesViewModel.userBadges.collectAsState()
     var showWallpaper by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) }
     var temporaryBadge by remember { mutableStateOf<Badge?>(null) }
 
     LaunchedEffect(Unit) {
         badgesViewModel.loadUserBadges()
     }
 
-    if (showWallpaper) {
+    if (showMenu && temporaryBadge != null) {
+
+
+    }
+
+    if (showWallpaper && temporaryBadge != null) {
         Dialog (
             onDismissRequest = {
                 showWallpaper = false
@@ -67,10 +76,14 @@ fun BadgesSection (
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
-                    .clickable (
-                    ) {
-                        showWallpaper = false
-                    }
+                    .combinedClickable (
+                        onClick = {
+                            showWallpaper = false
+                        },
+                        onLongClick = {
+
+                        }
+                    )
             )
         }
     }

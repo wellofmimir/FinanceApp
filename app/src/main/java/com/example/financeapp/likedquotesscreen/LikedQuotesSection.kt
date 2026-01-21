@@ -38,8 +38,12 @@ import com.example.financeapp.homescreen.QuoteViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LikedQuotesSection(quoteViewModel: QuoteViewModel, advertisementViewModel: AdvertisementViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
+fun LikedQuotesSection (
+    quoteViewModel: QuoteViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    tutorialInformation: TutorialInformation,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
     val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
     var menuOpen by remember { mutableStateOf(false) }

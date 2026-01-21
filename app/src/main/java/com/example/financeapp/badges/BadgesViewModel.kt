@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 class BadgesViewModel (
     private val repository: BadgesRepository,
 ): ViewModel() {
+
     private val internUserBadges = MutableStateFlow<List<Badge>>(emptyList())
     val userBadges = internUserBadges.asStateFlow()
 
@@ -27,6 +28,7 @@ class BadgesViewModel (
     val toastForFirstQuote = internToastForFirstQuote.asStateFlow()
 
     private val internFirstQuoteWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internFirstReceiptWallpaper = MutableStateFlow<Bitmap?>(null)
 
 
     fun getImageBitmapFromBadge(badge: Badge): ImageBitmap {
@@ -40,7 +42,7 @@ class BadgesViewModel (
 
     fun fetchWallpaperFirstQuote() {
         viewModelScope.launch {
-            repository.fetchWallpaperFirstQuote()
+            repository.fetchWallpaper(BadgeIdentifier.FIRST_QUOTE_LIKED)
 
             val badge = internUserBadges.value.firstOrNull {
                 it.identifier == BadgeIdentifier.FIRST_QUOTE_LIKED.ordinal
@@ -54,16 +56,32 @@ class BadgesViewModel (
         }
     }
 
-    fun checkFirstQuoteBadge() {
+    fun fetchWallpaperFirstReceipt() {
+        viewModelScope.launch {
+            repository.fetchWallpaper(BadgeIdentifier.FIRST_RECEIPT)
+
+            val badge = internUserBadges.value.firstOrNull {
+                it.identifier == BadgeIdentifier.FIRST_RECEIPT.ordinal
+            }
+
+            if (badge != null) {
+                internFirstReceiptWallpaper.value = BitmapFactory
+                    .decodeFile(badge.pathToImage)
+                    .fixOrientation(badge.pathToImage)
+            }
+        }
+    }
+
+    fun checkBadge(badgeIdentifier: BadgeIdentifier) {
         viewModelScope.launch {
             loadUserBadges()
 
-            var badge = internUserBadges.value.firstOrNull {
-                it.identifier == BadgeIdentifier.FIRST_QUOTE_LIKED.ordinal
+            var badge = internUserBadges.value.firstOrNull() {
+                it.identifier == badgeIdentifier.ordinal
             }
 
             if (badge == null) {
-                badge = BadgeCatalog.getBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
+                badge = BadgeCatalog.getBadge(badgeIdentifier)
                 badge.isGranted = true
                 repository.insertUserBadge(badge)
                 internToastForFirstQuote.value = Pair(badge.title, badge.text)

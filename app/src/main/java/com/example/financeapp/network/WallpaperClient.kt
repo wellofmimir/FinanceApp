@@ -1,5 +1,6 @@
 package com.example.financeapp.network
 
+import com.example.financeapp.badges.BadgeIdentifier
 import okhttp3.OkHttpClient
 import okhttp3.Request
 class WallpaperClient private constructor() {
@@ -18,44 +19,16 @@ class WallpaperClient private constructor() {
     private val client = OkHttpClient()
     var hasError = false
 
-    suspend fun fetchWallpaperFirstQuote(): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+    suspend fun fetchWallpaper(badgeIdentifier: BadgeIdentifier): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
-        val request = Request.Builder()
-            .get()
-            .url(url = "https://shortlyfi.me/api/badges/image/wallpaperFirstQuote.png")
-            .build()
-
-        try {
-            client.newCall(request).execute().use { response ->
-                response.body?.bytes()
-            }
-        } catch (e: Exception) {
-            hasError = true
-            null
+        val endpoint = when (badgeIdentifier) {
+            BadgeIdentifier.FIRST_QUOTE_LIKED -> "wallpaperFirstQuote.png"
+            BadgeIdentifier.FIRST_RECEIPT -> "wallpaperFirstReceipt.png"
         }
-    }
-    suspend fun fetchWallpaperWelcome(): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
         val request = Request.Builder()
             .get()
-            .url(url = "https://shortlyfi.me/api/badges/image/wallpaperWelcome")
-            .build()
-
-        try {
-            client.newCall(request).execute().use { response ->
-                response.body?.bytes()
-            }
-        } catch (e: Exception) {
-            hasError = true
-            null
-        }
-    }
-
-    suspend fun fetchWallpaperSevenDaysStreak(): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-
-        val request = Request.Builder()
-            .get()
-            .url(url = "https://shortlyfi.me/api/badges/image/sevenDaysStreak")
+            .url(url = "https://shortlyfi.me/api/badges/image/$endpoint")
             .build()
 
         try {

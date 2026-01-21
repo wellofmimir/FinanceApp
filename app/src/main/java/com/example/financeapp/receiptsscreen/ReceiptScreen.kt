@@ -23,10 +23,19 @@ import com.example.financeapp.TutorialInformation
 import com.example.financeapp.advertisement.AdSectionLargeBanner
 import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.advertisement.InterstitialAdManager
+import com.example.financeapp.badges.BadgeIdentifier
+import com.example.financeapp.badges.BadgesViewModel
 
 @Composable
-fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, mainActivityViewModel: MainActivityViewModel, advertisementViewModel: AdvertisementViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
+fun ReceiptScreen (
+    onReceiptAdded:() -> Unit,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    mainActivityViewModel: MainActivityViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    badgesViewModel: BadgesViewModel,
+    tutorialInformation: TutorialInformation,
+    context: Context = LocalContext.current
+) {
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
     var receiptAdded by remember { mutableStateOf(false) }
@@ -84,6 +93,7 @@ fun ReceiptScreen(onReceiptAdded:() -> Unit, receiptSectionsViewModel: ReceiptSe
                 receiptAdded = {
                     receiptAdded = true
                     onReceiptAdded()
+                    badgesViewModel.checkBadge(BadgeIdentifier.FIRST_RECEIPT)
                 },
                 onDismissRequest = {
 

@@ -5,7 +5,6 @@ import com.example.financeapp.badges.BadgeIdentifier
 import com.example.financeapp.database.Badge
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.WallpaperClient
-
 import com.example.financeapp.commonutils.FileProvider
 
 class BadgesRepository private constructor (private val database: FinanceAppDatabase, private val fileProvider: FileProvider) {
@@ -23,51 +22,20 @@ class BadgesRepository private constructor (private val database: FinanceAppData
 
     val wallpaperClient = WallpaperClient.getInstance()
 
-    suspend fun fetchWallpaperWelcome() {
-        val result = wallpaperClient.fetchWallpaperWelcome()
+    suspend fun fetchWallpaper(badgeIdentifier: BadgeIdentifier) {
+        val result = wallpaperClient.fetchWallpaper(badgeIdentifier)
 
         if (result == null)
             return
 
-        val welcomeWallpaperFile = fileProvider.getWallpaper("welcome.png")
+        var badge = BadgeCatalog.getBadge(badgeIdentifier)
+        val wallpaper = fileProvider.getWallpaper(badge.pathToImage)
 
-        welcomeWallpaperFile.outputStream().use {
+        wallpaper.outputStream().use {
             it.write(result)
         }
 
-        //database.insertBadge(badge)
-    }
-
-    suspend fun fetchWallpaperSevenDaysStreak() {
-        val result = wallpaperClient.fetchWallpaperSevenDaysStreak()
-
-        if (result == null)
-            return
-
-        val sevenDaysStreakWallpaperFile = fileProvider.getWallpaper("sevenDaysStreak.png")
-
-        sevenDaysStreakWallpaperFile.outputStream().use {
-            it.write(result)
-        }
-
-
-    }
-
-    suspend fun fetchWallpaperFirstQuote() {
-        val result = wallpaperClient.fetchWallpaperFirstQuote()
-
-        if (result == null)
-            return
-
-        val wallpaperFirstQuoteFile = fileProvider.getWallpaper("wallpaperFirstQuote.png")
-
-        wallpaperFirstQuoteFile.outputStream().use {
-            it.write(result)
-        }
-
-        val badge = BadgeCatalog.getBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
-        badge.pathToImage = wallpaperFirstQuoteFile.absolutePath
-
+        badge.pathToImage = wallpaper.absolutePath
         database.insertBadge(badge)
     }
 

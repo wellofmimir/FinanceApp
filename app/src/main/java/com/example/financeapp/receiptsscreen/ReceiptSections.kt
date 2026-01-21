@@ -849,7 +849,8 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -859,8 +860,7 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
-                        .weight(5f)
+                        .weight(4f)
                         .clip(RoundedCornerShape(12.dp))
                         .clickable (
                             indication = null,
@@ -872,11 +872,15 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                         }
                 )
 
+                Spacer (
+                    modifier = Modifier
+                        .padding(4.dp)
+                )
+
                 Box (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
-                        .weight(1f)
+                        .weight(0.9f)
                         .border (
                             width = 1.dp,
                             shape = RoundedCornerShape(12.dp),

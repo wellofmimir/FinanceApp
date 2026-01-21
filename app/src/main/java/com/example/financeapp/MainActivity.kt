@@ -351,6 +351,7 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(Unit) {
                     badgesViewModel.fetchWallpaperFirstQuote()
+                    badgesViewModel.fetchWallpaperFirstReceipt()
                 }
 
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
@@ -599,6 +600,7 @@ class MainActivity : ComponentActivity() {
                                 receiptSectionsViewModel = receiptSectionsViewModel,
                                 mainActivityViewModel = mainActivityViewModel,
                                 advertisementViewModel = advertisementViewModel,
+                                badgesViewModel = badgesViewModel,
                                 tutorialInformation = tutorialInformation
                             )
                         }
