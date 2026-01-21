@@ -181,7 +181,6 @@ fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSe
                 onClick = {
                     menuOpen = false
                     goalsSectionViewModel.deleteGoal(goalIdToDelete)
-                    Toast.makeText(context, "Goal deleted.", Toast.LENGTH_SHORT).show()
                 }
             )
         }

@@ -350,7 +350,12 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
-                GlobalToastHandler(badgesViewModel)
+                GlobalToastHandler (
+                    badgesViewModel = badgesViewModel,
+                    goalsSectionViewModel = goalSectionViewModel,
+                    receiptSectionsViewModel = receiptSectionsViewModel,
+                    quoteViewModel = quoteViewModel
+                )
 
                 LaunchedEffect(Unit) {
                     badgesViewModel.fetchWallpaperFirstQuote()

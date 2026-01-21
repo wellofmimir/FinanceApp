@@ -94,6 +94,7 @@ class BadgesViewModel (
             } else {
                 if (!badge.isGranted) {
                     repository.setBadgeGranted(badge.identifier, true)
+                    setBadgeAvailable()
                     showToast(badge.title)
                 }
             }
@@ -102,5 +103,17 @@ class BadgesViewModel (
 
     fun loadUserBadges() {
         internUserBadges.value = repository.loadUserBadges()
+    }
+
+    fun setBadgeAvailable() {
+        repository.setBadgeAvailable()
+    }
+
+    fun resetBadgeAvailable() {
+        repository.resetBadgeAvailable()
+    }
+
+    fun badgeAvailable(): Boolean {
+        return repository.badgeAvailable()
     }
 }

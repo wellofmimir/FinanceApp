@@ -7,8 +7,10 @@ import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.WallpaperClient
 import com.example.financeapp.commonutils.FileProvider
 
-class BadgesRepository private constructor (private val database: FinanceAppDatabase, private val fileProvider: FileProvider) {
-
+class BadgesRepository private constructor (
+    private val database: FinanceAppDatabase,
+    private val fileProvider: FileProvider
+) {
     companion object {
         private var instance: BadgesRepository? = null
 
@@ -49,5 +51,17 @@ class BadgesRepository private constructor (private val database: FinanceAppData
 
     fun loadUserBadges(): List<Badge> {
         return database.loadBadges()
+    }
+
+    fun setBadgeAvailable() {
+        database.setBadgeAvailable()
+    }
+
+    fun resetBadgeAvailable() {
+        database.resetBadgeAvailable()
+    }
+
+    fun badgeAvailable(): Boolean {
+        return database.badgeAvailable()
     }
 }

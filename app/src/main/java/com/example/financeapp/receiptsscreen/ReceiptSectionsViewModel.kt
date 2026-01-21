@@ -43,6 +43,15 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     private var internCurrency = MutableStateFlow("")
     var currency = internCurrency.asStateFlow()
 
+    private val internToastEvent = MutableSharedFlow<String>()
+    val toastEvent = internToastEvent.asSharedFlow()
+
+    fun showToast(message: String) {
+        viewModelScope.launch {
+            internToastEvent.emit(message)
+        }
+    }
+
     fun insertReceipt(receipt: Receipt, remindMeDate: String = "") {
 
         val result = repository.insertReceipt(receipt)
@@ -62,6 +71,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
 
     fun deleteReceipt(receipt: Receipt) {
         repository.deleteReceipt(receipt)
+        showToast("Receipt deleted.")
         getReceipts()
     }
 

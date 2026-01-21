@@ -1,14 +1,27 @@
 package com.example.financeapp.homescreen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.financeapp.database.Goal
 import com.example.financeapp.repositories.GoalRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel() {
     private val internGoals = MutableStateFlow<List<Goal>>(emptyList())
     val goals = internGoals.asStateFlow()
+
+    private val internToastEvent = MutableSharedFlow<String>()
+    val toastEvent = internToastEvent.asSharedFlow()
+
+    fun showToast(message: String) {
+        viewModelScope.launch {
+            internToastEvent.emit(message)
+        }
+    }
 
     private val internCompletedGoals = MutableStateFlow<List<Goal>>(emptyList())
     val completedGoals = internCompletedGoals.asStateFlow()
@@ -83,6 +96,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun deleteGoal(id: Int) {
         repository.deleteGoal(id)
+        showToast("Goal deleted.")
         reloadGoals()
         getCurrentGoal()
     }
@@ -93,6 +107,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
     fun updateImageToGoal(idGoal: Int, pathToImage: String) {
         repository.updateImageToGoal(idGoal, pathToImage)
+        showToast("Picture of treat saved.")
     }
 
     fun addToTotalTokensEarned(amount: Int) {

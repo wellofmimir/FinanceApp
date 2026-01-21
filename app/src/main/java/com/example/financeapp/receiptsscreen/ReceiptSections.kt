@@ -107,8 +107,13 @@ enum class Timespan (id: Int) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSaved:() -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, context: Context = LocalContext.current) {
-
+fun AddReceiptMenu (
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onReceiptSaved:() -> Unit,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
 
     var amountText by remember { mutableStateOf("") }
@@ -180,7 +185,7 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
                     remindMeDate = selectedDate
                 )
 
-                Toast.makeText(context, "Receipt saved: ${it.absolutePath}", Toast.LENGTH_LONG).show()
+                receiptSectionsViewModel.showToast("Receipt saved.")
                 resetAndDismiss()
             }
         }
@@ -199,17 +204,16 @@ fun AddReceiptMenu(expanded: Boolean, onDismissRequest: () -> Unit, onReceiptSav
             takePictureLauncher.launch(photoUri)
 
         } else {
-            Toast.makeText(context, "Permission for camera needed", Toast.LENGTH_SHORT).show()
+            receiptSectionsViewModel.showToast("Permission for Camera needed.")
         }
     }
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult (
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) {
-            Toast.makeText(context, "Notification permission granted!", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "We can't remind you without permission :(", Toast.LENGTH_SHORT).show()
+
+        if (!granted) {
+            receiptSectionsViewModel.showToast("We can't remind you without permission. :(")
         }
 
         permissionLauncher.launch(Manifest.permission.CAMERA)
@@ -804,8 +808,13 @@ fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, r
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
+fun ReceiptLogSection (
+    modifier: Modifier = Modifier,
+    timespan: Timespan,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    tutorialInformation: TutorialInformation,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
 
     when (timespan) {
@@ -1075,7 +1084,6 @@ fun ReceiptLogSection(modifier: Modifier = Modifier, timespan: Timespan, receipt
                         onClick = {
                             menuOpen = false
                             receiptSectionsViewModel.deleteReceipt(receipt)
-                            Toast.makeText(context, "Receipt deleted.", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }

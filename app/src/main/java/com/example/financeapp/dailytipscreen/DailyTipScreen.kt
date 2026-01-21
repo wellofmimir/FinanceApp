@@ -205,12 +205,13 @@ fun DailyTipScreen (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (newBadgeAvailable) {
+            if (badgesViewModel.badgeAvailable()) {
                 ViewBadgesSection (
                     modifier = modifier
                         .weight(1f)
                         .clickable() {
                             showBadges = true
+                            badgesViewModel.resetBadgeAvailable()
                         }
                 )
             } else {

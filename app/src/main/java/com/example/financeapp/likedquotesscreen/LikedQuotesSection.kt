@@ -104,7 +104,7 @@ fun LikedQuotesSection (
                         onClick = {
                             menuOpen = false
                             quoteViewModel.toggleQuote(quote)
-                            Toast.makeText(context, "Quote deleted.", Toast.LENGTH_SHORT).show()
+                            quoteViewModel.showToast("Quote deleted.")
                         }
                     )
                 }

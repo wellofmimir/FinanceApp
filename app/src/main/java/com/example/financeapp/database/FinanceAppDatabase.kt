@@ -152,6 +152,22 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
+    fun setBadgeAvailable() {
+        securePreferences.edit {
+            putBoolean("BadgeAvailable", true)
+        }
+    }
+
+    fun resetBadgeAvailable() {
+        securePreferences.edit {
+            putBoolean("BadgeAvailable", false)
+        }
+    }
+
+    fun badgeAvailable(): Boolean {
+        return securePreferences.getBoolean("BadgeAvailable", false)
+    }
+
     fun setAppliedTheme(theme: String) {
         securePreferences.edit {
             putString("AppliedTheme", theme)

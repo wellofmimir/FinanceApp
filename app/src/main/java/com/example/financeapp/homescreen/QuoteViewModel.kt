@@ -11,7 +11,9 @@ import com.example.financeapp.database.Goal
 import com.example.financeapp.database.Quote
 import com.example.financeapp.repositories.QuoteRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -20,6 +22,15 @@ class QuoteViewModel(private val repository: QuoteRepository) : ViewModel() {
 
     private var internQuote = MutableStateFlow<Quote>(Quote(0, "Thinking of a quote...", "The Greeen Team", ""))
     val quote = internQuote.asStateFlow()
+
+    private val internToastEvent = MutableSharedFlow<String>()
+    val toastEvent = internToastEvent.asSharedFlow()
+
+    fun showToast(message: String) {
+        viewModelScope.launch {
+            internToastEvent.emit(message)
+        }
+    }
 
     private val internIsLoading = MutableStateFlow(false)
     val isLoading = internIsLoading.asStateFlow()

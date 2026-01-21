@@ -127,7 +127,13 @@ fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsSectionViewModel, idGoal: Int, punchCardFilled: Boolean, onFinished: () -> Unit, context: Context = LocalContext.current) {
+fun WellDoneSection (
+    modifier: Modifier = Modifier,
+    goalsSectionViewModel: GoalsSectionViewModel,
+    idGoal: Int,
+    punchCardFilled: Boolean,
+    onFinished: () -> Unit,
+    context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     var showDialog by remember { mutableStateOf(false) }
@@ -138,9 +144,7 @@ fun WellDoneSection(modifier: Modifier = Modifier, goalsSectionViewModel: GoalsS
     ) { success ->
         if (success) {
             photos.lastOrNull()?.let { pathToImage ->
-
                 goalsSectionViewModel.updateImageToGoal(idGoal, pathToImage.absolutePath)
-                Toast.makeText(context, "Picture of treat saved: ${pathToImage.absolutePath}", Toast.LENGTH_LONG).show()
                 onFinished()
             }
         }
