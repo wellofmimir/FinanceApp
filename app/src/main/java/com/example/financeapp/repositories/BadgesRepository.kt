@@ -68,7 +68,7 @@ class BadgesRepository private constructor (private val database: FinanceAppData
         val badge = BadgeCatalog.getBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
         badge.pathToImage = wallpaperFirstQuoteFile.absolutePath
 
-        database.updateBadge(badge)
+        database.insertBadge(badge)
     }
 
     fun insertUserBadge(badge: Badge) {
