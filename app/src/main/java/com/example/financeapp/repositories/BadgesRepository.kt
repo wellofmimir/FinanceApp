@@ -1,5 +1,7 @@
 package com.example.financeapp.repositories
 
+import com.example.financeapp.badges.BadgeCatalog
+import com.example.financeapp.badges.BadgeIdentifier
 import com.example.financeapp.database.Badge
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.WallpaperClient
@@ -33,14 +35,7 @@ class BadgesRepository private constructor (private val database: FinanceAppData
             it.write(result)
         }
 
-        val badge = Badge (
-            title = "Welcome",
-            text = "Welcome to Green!",
-            theme = "",
-            pathToImage = welcomeWallpaperFile.absolutePath
-        )
-
-        database.insertBadge(badge)
+        //database.insertBadge(badge)
     }
 
     suspend fun fetchWallpaperSevenDaysStreak() {
@@ -55,21 +50,36 @@ class BadgesRepository private constructor (private val database: FinanceAppData
             it.write(result)
         }
 
-        val badge = Badge (
-            title = "Seven days at it!",
-            text = "You start to build a habit. Keep it going!",
-            theme = "",
-            pathToImage = sevenDaysStreakWallpaperFile.absolutePath
-        )
 
-        database.insertBadge(badge)
+    }
+
+    suspend fun fetchWallpaperFirstQuote() {
+        val result = wallpaperClient.fetchWallpaperFirstQuote()
+
+        if (result == null)
+            return
+
+        val wallpaperFirstQuoteFile = fileProvider.getWallpaper("wallpaperFirstQuote.png")
+
+        wallpaperFirstQuoteFile.outputStream().use {
+            it.write(result)
+        }
+
+        val badge = BadgeCatalog.getBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
+        badge.pathToImage = wallpaperFirstQuoteFile.absolutePath
+
+        database.updateBadge(badge)
     }
 
     fun insertUserBadge(badge: Badge) {
         database.insertBadge(badge)
     }
 
+    fun setBadgeGranted(badgeIdentifier: Int, isGranted: Boolean) {
+        database.setBadgeGranted(badgeIdentifier, isGranted)
+    }
+
     fun loadUserBadges(): List<Badge> {
-        return database.loadUserBadges()
+        return database.loadBadges()
     }
 }

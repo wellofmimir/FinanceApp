@@ -18,6 +18,22 @@ class WallpaperClient private constructor() {
     private val client = OkHttpClient()
     var hasError = false
 
+    suspend fun fetchWallpaperFirstQuote(): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+
+        val request = Request.Builder()
+            .get()
+            .url(url = "https://shortlyfi.me/api/badges/image/wallpaperFirstQuote.png")
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                response.body?.bytes()
+            }
+        } catch (e: Exception) {
+            hasError = true
+            null
+        }
+    }
     suspend fun fetchWallpaperWelcome(): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
         val request = Request.Builder()

@@ -92,6 +92,8 @@ import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
 import com.example.financeapp.aboutscreen.AboutScreen
+import com.example.financeapp.badges.BadgesViewModel
+import com.example.financeapp.repositories.BadgesRepository
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -334,6 +336,23 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
+                val badgesViewModel: BadgesViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val fileProvider = FileProvider(context)
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val badgesRepository = BadgesRepository.getInstance(database, fileProvider)
+
+                            return BadgesViewModel(badgesRepository) as T
+                        }
+                    }
+                )
+
+                LaunchedEffect(Unit) {
+                    badgesViewModel.fetchWallpaperFirstQuote()
+                }
+
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
                 mainActivityViewModel.loadUser()
@@ -524,6 +543,7 @@ class MainActivity : ComponentActivity() {
                                 goalsSectionViewModel = goalSectionViewModel,
                                 quoteViewModel = quoteViewModel,
                                 advertisementViewModel = advertisementViewModel,
+                                badgesViewModel = badgesViewModel,
                                 onGoalAchieved = {
                                     goalAchieved = true
                                 },
@@ -637,7 +657,8 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.DAILY_TIPS)
                             DailyTipScreen (
                                 dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                advertisementViewModel = advertisementViewModel
+                                advertisementViewModel = advertisementViewModel,
+                                badgesViewModel = badgesViewModel
                             )
 
                         AnimatedVisibility (

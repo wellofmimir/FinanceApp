@@ -83,7 +83,9 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
         val inProgressStatus = database.getIDGoalStatus("InProgress")
             ?: return emptyList()
 
-        return database.getGoals().filter{it.idStatus == inProgressStatus.id}
+        return database.getGoals().filter {
+            it.idStatus == inProgressStatus.id
+        }
     }
 
     fun getCompletedGoals(): List<Goal> {

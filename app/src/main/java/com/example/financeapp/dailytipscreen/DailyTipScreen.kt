@@ -2,6 +2,8 @@ package com.example.financeapp.dailytipscreen
 
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.network.DailyTip
+import com.example.financeapp.advertisement.AdvertisementViewModel
+import com.example.financeapp.badges.BadgesViewModel
 
 import android.content.Context
 import android.app.Activity
@@ -18,7 +20,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,10 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.financeapp.advertisement.AdvertisementViewModel
 
 @Composable
-fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: DailyTipScreenViewModel, advertisementViewModel: AdvertisementViewModel, context: Context = LocalContext.current) {
+fun DailyTipScreen (
+    modifier: Modifier = Modifier,
+    dailyTipScreenViewModel: DailyTipScreenViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    badgesViewModel: BadgesViewModel,
+    context: Context = LocalContext.current) {
 
     val colors = LocalAppColors.current
     val activity = context as? Activity
@@ -124,7 +129,8 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
             BadgesSection (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+                    .fillMaxHeight(0.8f),
+                badgesViewModel = badgesViewModel
             )
         }
     }
@@ -252,7 +258,7 @@ fun DailyTipScreen(modifier: Modifier = Modifier, dailyTipScreenViewModel: Daily
                             )
                     ) {
                         Text (
-                            text = "Your next tip is forming...\ncan you make it appear?",
+                            text = "Your next tip is forming...\nCan you make it appear?",
                             color = colors.secondary,
                             textAlign = TextAlign.Center,
                             modifier = Modifier

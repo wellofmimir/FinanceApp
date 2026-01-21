@@ -1,5 +1,7 @@
 package com.example.financeapp.database
 
+import com.example.financeapp.network.DailyTip
+
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
@@ -8,13 +10,15 @@ import androidx.core.content.edit
 
 import androidx.security.crypto.MasterKey
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.example.financeapp.network.DailyTip
+import com.example.financeapp.badges.BadgeIdentifier
 
 data class Badge (
+    val identifier: Int,
     val title: String,
     val text: String,
     val theme: String,
-    val pathToImage: String, //wallpaper
+    var pathToImage: String, //wallpaper
+    var isGranted: Boolean
 )
 
 data class Tip (
@@ -94,8 +98,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id) ON DELETE CASCADE)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL, short TEXT NOT NULL, category TEXT NOT NULL, pathToImage TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS badges (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, theme TEXT NOT NULL, pathToImage TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS userBadges (id INTEGER PRIMARY KEY NOT NULL, idBadge INTEGER, FOREIGN KEY (idBadge) REFERENCES badges(id))".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS badges (id INTEGER PRIMARY KEY NOT NULL, identifier INTEGER NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, theme TEXT NOT NULL, pathToImage TEXT NOT NULL, isGranted INT NOT NULL DEFAULT 0)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -371,12 +374,14 @@ class FinanceAppDatabase private constructor(context: Context) {
 
         while (cursor.moveToNext()) {
 
+            val identifier = cursor.getInt(cursor.getColumnIndexOrThrow("identifier"))
             val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
             val text = cursor.getString(cursor.getColumnIndexOrThrow("text"))
             val theme = cursor.getString(cursor.getColumnIndexOrThrow("theme"))
             val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathToImage"))
+            val isGranted = cursor.getInt(cursor.getColumnIndexOrThrow("isGranted"))
 
-            val entry = Badge(title, text, theme, pathToImage)
+            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1)
             userBadges.add(entry)
         }
 
@@ -384,21 +389,80 @@ class FinanceAppDatabase private constructor(context: Context) {
         return userBadges
     }
 
-    fun insertBadge(badge: Badge) {
+    fun setBadgeGranted(badgeIdentifier: Int, isGranted: Boolean) {
 
-        val cursor = database.rawQuery("SELECT * FROM badges WHERE title = ?", arrayOf(badge.title))
+        val cursor = database.rawQuery("SELECT * FROM badges WHERE identifier = ?", arrayOf(badgeIdentifier.toString()))
         val exists = cursor.moveToFirst()
         cursor.close()
 
         val values = ContentValues().apply {
+            put("isGranted", if (isGranted) 1 else 0)
+        }
+
+        if (exists)
+            database.update("badges", values, "identifier = ?", arrayOf(badgeIdentifier.toString()))
+    }
+
+    fun loadBadges(): List<Badge> {
+
+        val cursor = database.rawQuery("SELECT * FROM badges", null)
+        val badges = mutableListOf<Badge>()
+
+        while (cursor.moveToNext()) {
+
+            val identifier = cursor.getInt(cursor.getColumnIndexOrThrow("identifier"))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+            val text = cursor.getString(cursor.getColumnIndexOrThrow("text"))
+            val theme = cursor.getString(cursor.getColumnIndexOrThrow("theme"))
+            val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathToImage"))
+            val isGranted = cursor.getInt(cursor.getColumnIndexOrThrow("isGranted"))
+
+            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1)
+            badges.add(entry)
+        }
+
+        cursor.close()
+        return badges
+    }
+
+    fun updateBadge(badge: Badge) {
+
+        val cursor = database.rawQuery("SELECT * FROM badges WHERE identifier = ?", arrayOf(badge.identifier.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("identifier",  badge.identifier)
             put("title",       badge.title)
             put("text",        badge.text)
             put("theme",       badge.theme)
             put("pathToImage", badge.pathToImage)
+            //isGranted wird nicht geupdated, das wird separat getan!
         }
 
         if (exists)
-            return
+            database.update("badges", values, "identifier = ?", arrayOf(badge.identifier.toString()))
+        else
+            insertBadge(badge)
+    }
+
+    fun insertBadge(badge: Badge) {
+
+        val cursor = database.rawQuery("SELECT * FROM badges WHERE identifier = ?", arrayOf(badge.identifier.toString()))
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        val values = ContentValues().apply {
+            put("identifier",  badge.identifier)
+            put("title",       badge.title)
+            put("text",        badge.text)
+            put("theme",       badge.theme)
+            put("pathToImage", badge.pathToImage)
+            put("isGranted",   if (badge.isGranted) 1 else 0)
+        }
+
+        if (exists)
+            updateBadge(badge)
         else
             database.insert("badges", null, values)
     }

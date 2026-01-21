@@ -54,6 +54,7 @@ fun BadgeTile (
             )
             .clickable (
             ) {
+                onSeeGift()
             }
     ) {
         Row (

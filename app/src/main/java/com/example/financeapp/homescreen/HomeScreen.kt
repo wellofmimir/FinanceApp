@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.advertisement.AdvertisementViewModel
+import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
@@ -41,6 +42,7 @@ fun HomeScreen (
     dailyTipScreenViewModel: DailyTipScreenViewModel,
     quoteViewModel: QuoteViewModel,
     advertisementViewModel: AdvertisementViewModel,
+    badgesViewModel: BadgesViewModel,
     onGoalAchieved: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit,
     shopSectionClicked: () -> Unit,
@@ -97,6 +99,7 @@ fun HomeScreen (
                     modifier = Modifier
                         .weight(1f),
                     quoteViewModel = quoteViewModel,
+                    badgesViewModel = badgesViewModel,
                     tutorialInformation = tutorialInformation
                 )
             }
