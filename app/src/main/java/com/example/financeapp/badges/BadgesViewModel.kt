@@ -20,8 +20,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BadgesViewModel (
-    private val repository: BadgesRepository,
+    private val repository: BadgesRepository
 ): ViewModel() {
+
+    private val internBadgeAvailable = MutableStateFlow(false)
+    val isBadgeAvailable = internBadgeAvailable.asStateFlow()
 
     private val internUserBadges = MutableStateFlow<List<Badge>>(emptyList())
     val userBadges = internUserBadges.asStateFlow()
@@ -90,6 +93,7 @@ class BadgesViewModel (
                 badge = BadgeCatalog.getBadge(badgeIdentifier)
                 badge.isGranted = true
                 repository.insertUserBadge(badge)
+                setBadgeAvailable()
                 showToast(badge.title)
             } else {
                 if (!badge.isGranted) {
@@ -107,13 +111,11 @@ class BadgesViewModel (
 
     fun setBadgeAvailable() {
         repository.setBadgeAvailable()
+        internBadgeAvailable.value = true
     }
 
     fun resetBadgeAvailable() {
         repository.resetBadgeAvailable()
-    }
-
-    fun badgeAvailable(): Boolean {
-        return repository.badgeAvailable()
+        internBadgeAvailable.value = false
     }
 }

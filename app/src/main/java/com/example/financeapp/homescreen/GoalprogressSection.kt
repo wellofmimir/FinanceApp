@@ -35,11 +35,19 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.financeapp.R
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
+import com.example.financeapp.badges.BadgeIdentifier
+import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: Int) -> Unit, goalsSectionViewModel: GoalsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
+fun GoalprogressSection (
+    modifier: Modifier = Modifier,
+    onGoalAchieved: (idGoal: Int) -> Unit,
+    goalsSectionViewModel: GoalsSectionViewModel,
+    badgesViewModel: BadgesViewModel,
+    tutorialInformation: TutorialInformation,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
     val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
@@ -125,6 +133,8 @@ fun GoalprogressSection(modifier: Modifier = Modifier, onGoalAchieved: (idGoal: 
                             goalsSectionViewModel.setGoalCompleted(updatedCurrentGoal)
                             goalsSectionViewModel.addToTotalTokensEarned(updatedCurrentGoal.tokenCount)
                             onGoalAchieved(updatedCurrentGoal.id)
+
+                            badgesViewModel.checkBadge(BadgeIdentifier.FIRST_GOAL)
                         }
                     },
                     currentGoalText

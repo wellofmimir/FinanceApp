@@ -109,7 +109,7 @@ fun BadgeTile (
 
         Spacer (
             modifier = Modifier
-                .padding(4.dp)
+                .padding(2.dp)
         )
 
         Text (

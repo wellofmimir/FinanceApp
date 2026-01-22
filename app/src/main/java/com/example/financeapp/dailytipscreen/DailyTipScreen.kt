@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.financeapp.badges.BadgeIdentifier
 
 @Composable
 fun DailyTipScreen (
@@ -50,9 +51,10 @@ fun DailyTipScreen (
     badgesViewModel: BadgesViewModel,
     context: Context = LocalContext.current
 ) {
-
     val colors = LocalAppColors.current
     val activity = context as? Activity
+
+    val isBadgeAvailable by badgesViewModel.isBadgeAvailable.collectAsState()
 
     val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
     val imageToDailyTip by dailyTipScreenViewModel.imageToDailyTip.collectAsState()
@@ -61,7 +63,7 @@ fun DailyTipScreen (
     val likedTips by dailyTipScreenViewModel.likedTips.collectAsState()
     val currentlyLiked by dailyTipScreenViewModel.currentlyLiked.collectAsState()
 
-    val numberOfThingsLearned = dailyTipScreenViewModel.likedTips.collectAsState().value.size
+    val numberOfThingsLearned = likedTips.size
     var showBadges by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -171,6 +173,29 @@ fun DailyTipScreen (
                     dailyTip = dailyTip.dailyTip,
                     onLiked = {
                         dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
+
+                        if (!currentlyLiked) {
+                            if (numberOfThingsLearned == 0)
+                                badgesViewModel.checkBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
+
+                            if (numberOfThingsLearned == 6)
+                                badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED)
+
+                            if (numberOfThingsLearned == 29)
+                                badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
+
+                            if (numberOfThingsLearned == 59)
+                                badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
+
+                            if (numberOfThingsLearned == 89)
+                                badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
+
+                            if (numberOfThingsLearned == 179)
+                                badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
+
+                            if (numberOfThingsLearned == 359)
+                                badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
+                        }
                     },
                     onSeeMoreClicked = {
                         showTip = true
@@ -191,6 +216,29 @@ fun DailyTipScreen (
                 dailyTip = dailyTip.dailyTip,
                 onLiked = {
                     dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
+
+                    if (!currentlyLiked) {
+                        if (numberOfThingsLearned == 0)
+                            badgesViewModel.checkBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
+
+                        if (numberOfThingsLearned == 6)
+                            badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED)
+
+                        if (numberOfThingsLearned == 29)
+                            badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
+
+                        if (numberOfThingsLearned == 59)
+                            badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
+
+                        if (numberOfThingsLearned == 89)
+                            badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
+
+                        if (numberOfThingsLearned == 179)
+                            badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
+
+                        if (numberOfThingsLearned == 359)
+                            badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
+                    }
                 },
                 onSeeMoreClicked = {
                     showTip = true
@@ -208,7 +256,7 @@ fun DailyTipScreen (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (badgesViewModel.badgeAvailable()) {
+            if (isBadgeAvailable) {
                 ViewBadgesSection (
                     modifier = modifier
                         .weight(1f)

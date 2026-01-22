@@ -92,6 +92,7 @@ fun HomeScreen (
                         idGoalAchieved = idGoal
                     },
                     goalsSectionViewModel = goalsSectionViewModel,
+                    badgesViewModel = badgesViewModel,
                     tutorialInformation = tutorialInformation
                 )
 
