@@ -5,7 +5,6 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.RequiresPermission
-import androidx.compose.ui.platform.LocalContext
 
 @RequiresPermission(Manifest.permission.SET_WALLPAPER)
 fun setWallpaper (

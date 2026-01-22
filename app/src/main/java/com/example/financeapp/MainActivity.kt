@@ -1,5 +1,7 @@
 package com.example.financeapp
 
+import com.google.android.gms.ads.MobileAds
+
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.billingmanager.BillingManager
@@ -43,51 +45,6 @@ import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.ui.theme.PeachAppColors
 import com.example.financeapp.advertisement.AdSectionMiddleBanner
 import com.example.financeapp.advertisement.AdvertisementViewModel
-
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.Color
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.ads.MobileAds
-import kotlinx.coroutines.delay
-import androidx.compose.material3.Text
-import androidx.compose.animation.core.tween
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import android.content.Context
-import android.icu.util.Calendar
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.core.view.WindowInsetsControllerCompat
-import java.util.concurrent.TimeUnit
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.FileProvider
 import com.example.financeapp.goalhistoryscreen.PunchCardSectionViewModel
@@ -95,6 +52,61 @@ import com.example.financeapp.aboutscreen.AboutScreen
 import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.commonutils.GlobalToastHandler
 import com.example.financeapp.repositories.BadgesRepository
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+
+import android.os.Bundle
+import android.content.Context
+import android.icu.util.Calendar
+
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
+
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+
+import androidx.compose.material3.Text
+import androidx.compose.animation.core.tween
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import kotlinx.coroutines.delay
+
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+
+import java.util.concurrent.TimeUnit
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -149,8 +161,6 @@ data class TutorialInformation (
     var isActive: Boolean,
     var tutorialStep: TutorialStep
 )
-
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

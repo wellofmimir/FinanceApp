@@ -56,8 +56,13 @@ import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun AddNewGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, onFinished: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
-
+fun AddNewGoalMenu (
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onFinished: () -> Unit,
+    goalsSectionViewModel: GoalsSectionViewModel,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
