@@ -1,10 +1,13 @@
 package com.example.financeapp.dailytipscreen
 
-import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
+import com.example.financeapp.database.Badge
+import com.example.financeapp.commonutils.setWallpaper
+
+import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,59 +37,32 @@ import androidx.compose.runtime.setValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.financeapp.database.Badge
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BadgesSection (
     modifier: Modifier = Modifier,
-    badgesViewModel: BadgesViewModel
+    badgesViewModel: BadgesViewModel,
+    onDismissRequest: () -> Unit,
+    context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
     val scrollState = rememberScrollState()
     val userBadges by badgesViewModel.userBadges.collectAsState()
+
     var showWallpaper by remember { mutableStateOf(false) }
     var showMenu by remember { mutableStateOf(false) }
     var temporaryBadge by remember { mutableStateOf<Badge?>(null) }
 
     LaunchedEffect(Unit) {
         badgesViewModel.loadUserBadges()
-    }
-
-    DropdownMenu (
-        modifier = Modifier
-            .border (
-                width = 1.dp,
-                color = colors.secondary
-            )
-            .background (
-                color = colors.primary
-            ),
-        expanded = showMenu,
-        onDismissRequest = {
-            showMenu = false
-        }
-    ) {
-        DropdownMenuItem (
-            modifier = Modifier
-                .background (
-                    color = colors.primary,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            text = {
-                Text (
-                    text = "Delete",
-                    color = colors.secondary
-                )
-            },
-            onClick = {
-                showMenu = false
-            }
-        )
     }
 
     if (showWallpaper && temporaryBadge != null) {
@@ -101,6 +77,39 @@ fun BadgesSection (
         ) {
             val imageBitmapFromTemporaryBadge = badgesViewModel.getImageBitmapFromBadge(temporaryBadge!!)
 
+            DropdownMenu (
+                modifier = Modifier
+                    .border (
+                        width = 1.dp,
+                        color = colors.secondary
+                    )
+                    .background (
+                        color = colors.primary
+                    ),
+                expanded = showMenu,
+                onDismissRequest = {
+                    showMenu = false
+                }
+            ) {
+                DropdownMenuItem (
+                    modifier = Modifier
+                        .background (
+                            color = colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    text = {
+                        Text (
+                            text = "Set As Wallpaper",
+                            color = colors.secondary
+                        )
+                    },
+                    onClick = {
+                        showMenu = false
+                        setWallpaper(context, temporaryBadge!!.pathToImage.toUri())
+                    }
+                )
+            }
+
             Image (
                 bitmap = imageBitmapFromTemporaryBadge,
                 contentDescription = null,
@@ -113,7 +122,7 @@ fun BadgesSection (
                             showWallpaper = false
                         },
                         onLongClick = {
-
+                            showMenu = true
                         }
                     )
             )
@@ -128,6 +137,9 @@ fun BadgesSection (
                 color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             )
+            .clickable() {
+                onDismissRequest()
+            }
             .padding(12.dp)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.Top,

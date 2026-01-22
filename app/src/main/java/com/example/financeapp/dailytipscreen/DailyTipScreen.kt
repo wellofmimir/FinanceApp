@@ -48,7 +48,8 @@ fun DailyTipScreen (
     dailyTipScreenViewModel: DailyTipScreenViewModel,
     advertisementViewModel: AdvertisementViewModel,
     badgesViewModel: BadgesViewModel,
-    context: Context = LocalContext.current) {
+    context: Context = LocalContext.current
+) {
 
     val colors = LocalAppColors.current
     val activity = context as? Activity
@@ -61,7 +62,6 @@ fun DailyTipScreen (
     val currentlyLiked by dailyTipScreenViewModel.currentlyLiked.collectAsState()
 
     val numberOfThingsLearned = dailyTipScreenViewModel.likedTips.collectAsState().value.size
-    val newBadgeAvailable by dailyTipScreenViewModel.newBadgeAvailable.collectAsState()
     var showBadges by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -130,7 +130,10 @@ fun DailyTipScreen (
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f),
-                badgesViewModel = badgesViewModel
+                badgesViewModel = badgesViewModel,
+                onDismissRequest = {
+                    showBadges = false
+                }
             )
         }
     }
@@ -217,7 +220,10 @@ fun DailyTipScreen (
             } else {
                 NumberOfTipsSection (
                     modifier = modifier
-                        .weight(1f),
+                        .weight(1f)
+                        .clickable() {
+                            showBadges = true
+                        },
                     numberOfThingsLearned = numberOfThingsLearned
                 )
             }
