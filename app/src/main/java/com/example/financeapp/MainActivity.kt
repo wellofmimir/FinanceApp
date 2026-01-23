@@ -106,6 +106,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.financeapp.notifications.DailyTipScheduler
+import com.example.financeapp.notifications.QuoteScheduler
+import com.example.financeapp.notifications.RemindMeScheduler
 
 import java.util.concurrent.TimeUnit
 
@@ -187,9 +189,9 @@ class MainActivity : ComponentActivity() {
                     InterstitialAdManager.instance.initialize(context)
                     InterstitialAdManager.instance.loadInterstitial(context)
 
-                    scheduleDailyQuoteWorker(context)
-                    scheduleDailyReminderMeWorker(context)
-                    DailyTipScheduler.scheduleDaily(context)
+                    RemindMeScheduler.schedule(context)
+                    QuoteScheduler.schedule(context)
+                    DailyTipScheduler.schedule(context)
                 }
 
                 val manager = getSystemService(NotificationManager::class.java)
@@ -1034,56 +1036,4 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun scheduleDailyReminderMeWorker(context: Context) {
 
-    val now = Calendar.getInstance()
-    val nextReminder = Calendar.getInstance().apply {
-
-        set(Calendar.HOUR_OF_DAY, 9)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-
-        if (before(now))
-            add(Calendar.DAY_OF_MONTH, 1)
-    }
-
-    val initialDelay = nextReminder.timeInMillis - now.timeInMillis
-
-    val workRequest = PeriodicWorkRequestBuilder<ReceiptReminderPollingWorker>(1, TimeUnit.DAYS)
-        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-        .build()
-
-    WorkManager.getInstance(context).enqueueUniquePeriodicWork (
-        "dailyReminderWorker",
-        ExistingPeriodicWorkPolicy.REPLACE,
-        workRequest
-    )
-}
-
-fun scheduleDailyQuoteWorker(context: Context) {
-
-    val now = Calendar.getInstance()
-    val next22 = Calendar.getInstance().apply {
-
-        set(Calendar.HOUR_OF_DAY, 23)
-        set(Calendar.MINUTE, 4)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-
-        if (before(now))
-            add(Calendar.DAY_OF_MONTH, 1)
-    }
-
-    val initialDelay = next22.timeInMillis - now.timeInMillis
-
-    val workRequest = PeriodicWorkRequestBuilder<QuotePollingWorker>(1, TimeUnit.DAYS)
-        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-        .build()
-
-    WorkManager.getInstance(context).enqueueUniquePeriodicWork (
-        "dailyQuoteWorker",
-        ExistingPeriodicWorkPolicy.REPLACE,
-        workRequest
-    )
-}

@@ -9,14 +9,14 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-object DailyTipScheduler {
+object QuoteScheduler {
 
     fun schedule(context: Context) {
 
         val now = Calendar.getInstance()
         val next22 = Calendar.getInstance().apply {
 
-            set(Calendar.HOUR_OF_DAY, 9)
+            set(Calendar.HOUR_OF_DAY, 19)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
@@ -27,12 +27,12 @@ object DailyTipScheduler {
 
         val initialDelay = next22.timeInMillis - now.timeInMillis
 
-        val workRequest = PeriodicWorkRequestBuilder<DailyTipWorker>(1, TimeUnit.DAYS)
+        val workRequest = PeriodicWorkRequestBuilder<QuotePollingWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork (
-            "dailyTipWorker",
+            "dailyQuoteWorker",
             ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
@@ -45,7 +45,7 @@ object DailyTipScheduler {
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork (
-            "dailyTipRetry",
+            "dailyQuoteRetry",
             ExistingWorkPolicy.REPLACE,
             retryWork
         )

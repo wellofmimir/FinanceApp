@@ -26,6 +26,8 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
 
         if (newQuote.quote != currentQuote.first)
             notifier.sendQuoteNotification()
+        else
+            QuoteScheduler.scheduleRetry(applicationContext)
 
         return Result.success()
     }
