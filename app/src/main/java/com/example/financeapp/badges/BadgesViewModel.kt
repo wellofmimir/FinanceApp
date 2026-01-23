@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 class BadgesViewModel (
     private val repository: BadgesRepository
@@ -40,7 +41,13 @@ class BadgesViewModel (
     private val internFirstReceiptWallpaper = MutableStateFlow<Bitmap?>(null)
 
 
-    fun getImageBitmapFromBadge(badge: Badge): ImageBitmap {
+    fun getImageBitmapFromBadge(badge: Badge): ImageBitmap? {
+
+        val file = File(badge.pathToImage)
+
+        if (!file.exists())
+            return null
+
         val imageBitmap = BitmapFactory
             .decodeFile(badge.pathToImage)
             .fixOrientation(badge.pathToImage)
