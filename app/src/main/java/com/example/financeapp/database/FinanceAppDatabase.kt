@@ -188,8 +188,25 @@ class FinanceAppDatabase private constructor(context: Context) {
         return securePreferences.getBoolean("RemoveAllAds", false)
     }
 
+
+    fun getDailyTipTryCounter(): Int {
+        return securePreferences.getInt("DailyTipTryCounter", 0)
+    }
+
+    fun incrementDailyTipTryCounter() {
+        securePreferences.edit {
+            putInt("DailyTipTryCounter", getDailyTipTryCounter() + 1)
+        }
+    }
+
+    fun resetDailyTipTryCounter() {
+        securePreferences.edit {
+            putInt("DailyTipTryCounter", 0)
+        }
+    }
+
     fun newDailyTipAvailable(): Boolean {
-        return securePreferences.getBoolean("newDailyTipAvailable", true)
+        return securePreferences.getBoolean("newDailyTipAvailable", false)
     }
 
     fun resetNewDailyTipAvailable() {

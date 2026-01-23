@@ -22,15 +22,19 @@ class DailyTipWorker (
 
     override suspend fun doWork(): Result {
 
+        if (database.getDailyTipTryCounter() >= 16)
+            return Result.success()
+
         val oldDailyTip = database.getDailyTip()
-        database.setDailyTip("", "", "", "", "")
-        database.resetInterstitialAdAfterDailyTip()
         val newDailyTip = dailyTipRepository.fetchDailyTipFromServer()
 
         if (newDailyTip.tip.isNotEmpty() && newDailyTip.title.isNotEmpty() && newDailyTip.title.hashCode() != oldDailyTip.title.hashCode()) {
+            database.resetInterstitialAdAfterDailyTip()
+            database.resetDailyTipTryCounter()
             notifier.sendNewDailyTipAvailableNotification(dailyTipRepository.getDailyTip())
             DailyTipEvents.newDailyTip(true)
         } else {
+            database.incrementDailyTipTryCounter()
             DailyTipScheduler.scheduleRetry(applicationContext)
         }
 

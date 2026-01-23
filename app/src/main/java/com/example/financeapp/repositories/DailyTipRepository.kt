@@ -62,15 +62,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     suspend fun fetchDailyTipFromServer(): DailyTip {
 
-        //Ich will den Server nicht hardcore penetrieren,
-        //da jede Abfrage mich bares Geld kostet.
-        //Deswegen wird der Server nur einmal täglich abgefragt,
-        //und das Ergebnis dann in den Shared Preferences gespeichert und davon bei Abfrage zurückgegeben.
-
-        if (database.getDailyTip().tip.isNotEmpty()) {
-            return DailyTip("", "", "", "", "")
-        }
-
         val result = client.fetchDailyTip()
 
         if (isValidJson(result) == false)

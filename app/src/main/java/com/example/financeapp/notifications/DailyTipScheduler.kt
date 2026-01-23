@@ -10,7 +10,6 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
 object DailyTipScheduler {
-
     fun schedule(context: Context) {
 
         val now = Calendar.getInstance()

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -105,7 +106,10 @@ class DailyTipScreenViewModel (
 
     fun fetchDailyTip() {
         viewModelScope.launch {
-            repository.fetchDailyTipFromServer()
+            if (repository.getDailyTip().tip.isEmpty()) {
+                repository.fetchDailyTipFromServer()
+                DailyTipEvents.newDailyTip(true)
+            }
 
             internDailyTip.value = internDailyTip.value.copy (
                 dailyTip = repository.getDailyTip()
