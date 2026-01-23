@@ -5,9 +5,9 @@ import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.badges.BadgesViewModel
+import com.example.financeapp.badges.BadgeIdentifier
 
 import android.content.Context
-import android.widget.Toast
 
 import androidx.compose.material3.Text
 
@@ -39,7 +39,27 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
-import com.example.financeapp.badges.BadgeIdentifier
+
+private fun checkIfBadgeIsAvailable (
+    currentlyLiked: Boolean,
+    numberOfQuotesLiked: Int,
+    badgesViewModel: BadgesViewModel
+) {
+    if (currentlyLiked)
+        return
+
+    when (numberOfQuotesLiked) {
+        0 -> badgesViewModel.checkBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
+        1 -> badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_QUOTES_LIKED)
+        13 -> badgesViewModel.checkBadge(BadgeIdentifier.FOURTEEN_QUOTES_LIKED)
+        39 -> badgesViewModel.checkBadge(BadgeIdentifier.FORTY_QUOTES_LIKED)
+        69 -> badgesViewModel.checkBadge(BadgeIdentifier.SEVENTY_QUOTES_LIKED)
+        99 -> badgesViewModel.checkBadge(BadgeIdentifier.HUNDRED_QUOTES_LIKED)
+        129 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_THIRTY_QUOTES_LIKED)
+        189 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_NINETY_QUOTES_LIKED)
+        359 -> badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_QUOTES_LIKED)
+    }
+}
 
 @Composable
 fun QuoteSection (
@@ -54,6 +74,8 @@ fun QuoteSection (
     val quote by quoteViewModel.quote.collectAsState()
     val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
     val isLoading by quoteViewModel.isLoading.collectAsState()
+    val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
+    val numberOfQuotesLiked = likedQuotes.size
 
     LaunchedEffect(Unit) {
         quoteViewModel.loadQuoteWithDelay()
@@ -123,8 +145,11 @@ fun QuoteSection (
 
                             quoteViewModel.toggleQuote(quote)
 
-                            if (!quoteLiked)
-                                badgesViewModel.checkBadge(BadgeIdentifier.FIRST_QUOTE_LIKED)
+                            checkIfBadgeIsAvailable (
+                                currentlyLiked = quoteLiked,
+                                numberOfQuotesLiked = numberOfQuotesLiked,
+                                badgesViewModel = badgesViewModel
+                            )
                         }
                 )
             }

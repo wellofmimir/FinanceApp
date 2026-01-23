@@ -43,6 +43,25 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.financeapp.badges.BadgeIdentifier
 
+private fun checkIfBadgeIsAvailable (
+    currentlyLiked: Boolean,
+    numberOfThingsLearned: Int,
+    badgesViewModel: BadgesViewModel
+) {
+    if (currentlyLiked)
+        return
+
+    when (numberOfThingsLearned) {
+        0   -> badgesViewModel.checkBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
+        6   -> badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED)
+        29  -> badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
+        59  -> badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
+        89  -> badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
+        179 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
+        359 -> badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
+    }
+}
+
 @Composable
 fun DailyTipScreen (
     modifier: Modifier = Modifier,
@@ -174,28 +193,11 @@ fun DailyTipScreen (
                     onLiked = {
                         dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
 
-                        if (!currentlyLiked) {
-                            if (numberOfThingsLearned == 0)
-                                badgesViewModel.checkBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
-
-                            if (numberOfThingsLearned == 6)
-                                badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED)
-
-                            if (numberOfThingsLearned == 29)
-                                badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
-
-                            if (numberOfThingsLearned == 59)
-                                badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
-
-                            if (numberOfThingsLearned == 89)
-                                badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
-
-                            if (numberOfThingsLearned == 179)
-                                badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
-
-                            if (numberOfThingsLearned == 359)
-                                badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
-                        }
+                        checkIfBadgeIsAvailable (
+                            currentlyLiked = currentlyLiked,
+                            numberOfThingsLearned = numberOfThingsLearned,
+                            badgesViewModel = badgesViewModel,
+                        )
                     },
                     onSeeMoreClicked = {
                         showTip = true
@@ -217,28 +219,11 @@ fun DailyTipScreen (
                 onLiked = {
                     dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
 
-                    if (!currentlyLiked) {
-                        if (numberOfThingsLearned == 0)
-                            badgesViewModel.checkBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
-
-                        if (numberOfThingsLearned == 6)
-                            badgesViewModel.checkBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED)
-
-                        if (numberOfThingsLearned == 29)
-                            badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
-
-                        if (numberOfThingsLearned == 59)
-                            badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
-
-                        if (numberOfThingsLearned == 89)
-                            badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
-
-                        if (numberOfThingsLearned == 179)
-                            badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
-
-                        if (numberOfThingsLearned == 359)
-                            badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
-                    }
+                    checkIfBadgeIsAvailable (
+                        currentlyLiked = currentlyLiked,
+                        numberOfThingsLearned = numberOfThingsLearned,
+                        badgesViewModel = badgesViewModel,
+                    )
                 },
                 onSeeMoreClicked = {
                     showTip = true
