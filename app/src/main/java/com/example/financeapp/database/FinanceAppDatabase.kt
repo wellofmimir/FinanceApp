@@ -10,7 +10,6 @@ import androidx.core.content.edit
 
 import androidx.security.crypto.MasterKey
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.example.financeapp.badges.BadgeIdentifier
 
 data class Badge (
     val identifier: Int,

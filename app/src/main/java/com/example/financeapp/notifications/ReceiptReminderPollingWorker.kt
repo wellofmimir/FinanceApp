@@ -11,8 +11,13 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class ReceiptReminderPollingWorker(context: Context, parameters: WorkerParameters) : CoroutineWorker(context, parameters) {
-
+class ReceiptReminderPollingWorker (
+    context: Context,
+    parameters: WorkerParameters
+): CoroutineWorker (
+    appContext = context,
+    params = parameters
+) {
     private val database = FinanceAppDatabase.getInstance(applicationContext)
     private val notifier = Notifier(applicationContext)
 
