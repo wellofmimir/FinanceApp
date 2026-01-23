@@ -17,19 +17,27 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
         //Hier kann auch direkt das Feedback zurückgesetzt werden
         //Erstmal ist dafür kein eigener Worker notwendig
 
+        if (database.getQuoteTryCounter() >= 16) {
+            database.resetQuoteTryCounter()
+            return Result.success()
+        }
+
         database.resetDailyQuoteFetched()
         database.resetFeedbackSent()
         database.resetInterstitialAdAfterReceiptSeen()
 
+        val oldQuote = database.dailyQuote()
         val newQuote = quoteRepository.fetchQuoteFromServer()
-        val currentQuote = database.dailyQuote()
 
-        if (newQuote.quote != currentQuote.first)
+        if (newQuote.quote != oldQuote.first) {
+            database.resetQuoteTryCounter()
             notifier.sendQuoteNotification()
-        else
+        }
+        else {
+            database.incrementQuoteTryCounter()
             QuoteScheduler.scheduleRetry(applicationContext)
+        }
 
         return Result.success()
     }
-
 }

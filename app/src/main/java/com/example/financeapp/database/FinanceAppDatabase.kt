@@ -188,6 +188,21 @@ class FinanceAppDatabase private constructor(context: Context) {
         return securePreferences.getBoolean("RemoveAllAds", false)
     }
 
+    fun getQuoteTryCounter(): Int {
+        return securePreferences.getInt("QuoteTryCounter", 0)
+    }
+
+    fun incrementQuoteTryCounter() {
+        securePreferences.edit {
+            putInt("QuoteTryCounter", getQuoteTryCounter() + 1)
+        }
+    }
+
+    fun resetQuoteTryCounter() {
+        securePreferences.edit {
+            putInt("QuoteTryCounter", 0)
+        }
+    }
 
     fun getDailyTipTryCounter(): Int {
         return securePreferences.getInt("DailyTipTryCounter", 0)

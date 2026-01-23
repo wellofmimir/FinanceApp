@@ -22,8 +22,10 @@ class DailyTipWorker (
 
     override suspend fun doWork(): Result {
 
-        if (database.getDailyTipTryCounter() >= 16)
+        if (database.getDailyTipTryCounter() >= 16) {
+            database.resetDailyTipTryCounter()
             return Result.success()
+        }
 
         val oldDailyTip = database.getDailyTip()
         val newDailyTip = dailyTipRepository.fetchDailyTipFromServer()
@@ -31,7 +33,7 @@ class DailyTipWorker (
         if (newDailyTip.tip.isNotEmpty() && newDailyTip.title.isNotEmpty() && newDailyTip.title.hashCode() != oldDailyTip.title.hashCode()) {
             database.resetInterstitialAdAfterDailyTip()
             database.resetDailyTipTryCounter()
-            notifier.sendNewDailyTipAvailableNotification(dailyTipRepository.getDailyTip())
+            notifier.sendNewDailyTipAvailableNotification(newDailyTip)
             DailyTipEvents.newDailyTip(true)
         } else {
             database.incrementDailyTipTryCounter()
