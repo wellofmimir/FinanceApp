@@ -71,6 +71,19 @@ fun GoalsSection (
     var menuOpen by remember { mutableStateOf(false) }
     var goalIdToDelete by remember { mutableStateOf(0) }
 
+    AddNewGoalMenu (
+        expanded = expanded,
+        onDismissRequest = {
+            expanded = false
+        },
+        onFinished = {
+            expanded = false
+            newGoalEntered = true
+            goalsSectionViewModel.reloadGoals()
+        },
+        goalsSectionViewModel = goalsSectionViewModel
+    )
+
     Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOALS) 0.1f else 1.0f)
@@ -142,25 +155,6 @@ fun GoalsSection (
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center,
                     colorFilter = ColorFilter.tint(colors.surface)
-                )
-            }
-
-            this@Row.AnimatedVisibility (
-                visible = visible,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                AddNewGoalMenu (
-                    expanded,
-                    onDismissRequest = {
-                        expanded = false
-                    },
-                    onFinished = {
-                        expanded = false
-                        newGoalEntered = true
-                        goalsSectionViewModel.reloadGoals()
-                    },
-                    goalsSectionViewModel = goalsSectionViewModel
                 )
             }
         }

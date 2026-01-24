@@ -234,8 +234,6 @@ fun HomeScreen (
                         .height(4.dp)
                 )
 
-                val remobetheads = advertisementViewModel.getRemoveAllAds()
-
                 AdSectionMiddleBanner (
                     modifier = Modifier
                         .weight(0.3f),

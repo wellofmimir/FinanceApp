@@ -397,6 +397,12 @@ fun EditGoalMenu (
                     onClick = {
                         if (hasChanged) {
 
+                            if (savedAmountText.isEmpty())
+                                return@Button
+
+                            if (amountText.isEmpty())
+                                return@Button
+
                             isEditingSavedAmount = false
                             isEditingInitialAmount = false
 
