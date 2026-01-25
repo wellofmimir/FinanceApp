@@ -655,7 +655,8 @@ fun SinceWhenSection (
 @Composable
 fun AverageSpentSection (
     modifier: Modifier = Modifier,
-    timespan: Timespan, receiptAdded: () -> Unit,
+    timespan: Timespan,
+    receiptAdded: () -> Unit,
     onDismissRequest: () -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     tutorialInformation: TutorialInformation
@@ -694,18 +695,6 @@ fun AverageSpentSection (
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End
     ) {
-        AddReceiptMenu (
-            expanded,
-            onDismissRequest = {
-                expanded = false
-                receiptSectionsViewModel.getReceipts()
-            },
-            onReceiptSaved = {
-                receiptAdded()
-            },
-            receiptSectionsViewModel
-        )
-
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
@@ -720,7 +709,7 @@ fun AverageSpentSection (
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 2.dp),
-            text = "Average spent per transaction",
+            text = "Average Spent Per Transaction",
             color = colors.textPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal
@@ -730,40 +719,6 @@ fun AverageSpentSection (
             modifier = Modifier
                 .weight(1f)
         )
-
-        Box (
-            modifier = Modifier
-                .padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
-                .size(64.dp)
-                .clip(CircleShape)
-                .background (
-                    color = colors.background,
-                    shape = CircleShape
-                )
-                .border (
-                    width = 1.dp,
-                    color = colors.background,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Image (
-                painter = painterResource(R.drawable.kamera_foreground),
-                contentDescription = "Kamerasymbol",
-                modifier = Modifier
-                    .size(48.dp)
-                    .padding(bottom = 2.dp)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        expanded = true
-                    },
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                colorFilter = ColorFilter.tint(colors.surface)
-            )
-        }
     }
 }
 
@@ -786,10 +741,10 @@ fun ExpensesOverviewSection (
     }
 
     val timeRangeText = when (timespan) {
-        Timespan.THIS_MONTH -> "This month"
-        Timespan.LAST_TWO_MONTHS -> "Last two months"
-        Timespan.LAST_SIX_MONTHS -> "Last six months"
-        Timespan.WHOLE_YEAR -> "Last year"
+        Timespan.THIS_MONTH -> "This Month"
+        Timespan.LAST_TWO_MONTHS -> "Last Two Months"
+        Timespan.LAST_SIX_MONTHS -> "Last Six Months"
+        Timespan.WHOLE_YEAR -> "Last Year"
         Timespan.NONE -> ""
         Timespan.ALL -> "All"
     }
@@ -857,7 +812,7 @@ fun ExpensesOverviewSection (
             contentAlignment = Alignment.BottomEnd
         ) {
             Text (
-                text = "Purchases recorded",
+                text = "Purchases Recorded",
                 color = colors.textPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal

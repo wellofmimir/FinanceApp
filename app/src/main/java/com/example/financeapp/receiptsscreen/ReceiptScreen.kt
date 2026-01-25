@@ -41,6 +41,7 @@ fun ReceiptScreen (
     val activity = context as? Activity
     var receiptAdded by remember { mutableStateOf(false) }
     var showMetricsScreen by remember { mutableStateOf(false) }
+    var addReceiptMenuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(receiptAdded) {
         activity?.let {
@@ -85,14 +86,40 @@ fun ReceiptScreen (
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        SinceWhenSection (
-            onCurrentMonth = {
-                timespan = it
+        AddReceiptMenu (
+            addReceiptMenuExpanded,
+            onDismissRequest = {
+                addReceiptMenuExpanded = false
+                receiptSectionsViewModel.getReceipts()
             },
-            receiptSectionsViewModel = receiptSectionsViewModel,
-            tutorialInformation = tutorialInformation
+            onReceiptSaved = {
+                onReceiptAdded()
+            },
+            receiptSectionsViewModel
         )
+
+        Row (
+            modifier = Modifier,
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            LogReceiptSection (
+                modifier = Modifier
+                    .weight(1f),
+                onLogReceiptButtonClicked = {
+                    addReceiptMenuExpanded = true
+                }
+            )
+
+            SeeYourMetricsSection (
+                modifier = Modifier
+                    .weight(1f),
+                onSeeYourMetricsSectionButtonClicked = {
+                    showMetricsScreen = true
+                    addReceiptMenuExpanded = false
+                }
+            )
+        }
 
         Row (
             modifier = Modifier,
@@ -125,6 +152,14 @@ fun ReceiptScreen (
                 tutorialInformation = tutorialInformation
             )
         }
+
+        SinceWhenSection (
+            onCurrentMonth = {
+                timespan = it
+            },
+            receiptSectionsViewModel = receiptSectionsViewModel,
+            tutorialInformation = tutorialInformation
+        )
 
         ReceiptLogSection (
             modifier = Modifier

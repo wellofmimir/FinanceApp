@@ -80,7 +80,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\applogo_transparent.png" />
+                                                <entry key="imagePath" value="C:\Users\pmlec\Desktop\Bilderinos\metricsLogo.svg" />
                                                 <entry key="scalingPercent" value="66" />
                                               </map>
                                             </option>
@@ -114,7 +114,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="legacyIconShape" value="NONE" />
-                                      <entry key="outputName" value="applogo_transparent" />
+                                      <entry key="outputName" value="metricslogo" />
                                       <entry key="previewDensity" value="hdpi" />
                                     </map>
                                   </option>
