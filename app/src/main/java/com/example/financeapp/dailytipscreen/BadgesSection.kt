@@ -84,7 +84,6 @@ fun BadgesSection (
             val imageBitmapFromTemporaryBadge = badgesViewModel.getImageBitmapFromBadge(temporaryBadge!!)
 
             if (imageBitmapFromTemporaryBadge == null) {
-
                 AlertDialog (
                     modifier = Modifier
                         .background (

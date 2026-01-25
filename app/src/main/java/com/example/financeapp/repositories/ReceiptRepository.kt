@@ -21,7 +21,7 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     fun insertReceipt(receipt: Receipt): Result<Long> {
 
         val currentDate = LocalDate.now()
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
         val formattedDate = currentDate.format(formatter)
 
         return database.insertReceipt(receipt, formattedDate)

@@ -25,6 +25,7 @@ import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.badges.BadgeIdentifier
 import com.example.financeapp.badges.BadgesViewModel
+import com.example.financeapp.metrics.MetricsScreen
 
 @Composable
 fun ReceiptScreen (
@@ -39,6 +40,7 @@ fun ReceiptScreen (
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
     var receiptAdded by remember { mutableStateOf(false) }
+    var showMetricsScreen by remember { mutableStateOf(false) }
 
     LaunchedEffect(receiptAdded) {
         activity?.let {
@@ -66,12 +68,24 @@ fun ReceiptScreen (
         }
     }
 
+    if (showMetricsScreen) {
+        MetricsScreen (
+            modifier = Modifier
+                .fillMaxSize(0.5f),
+            receiptSectionsViewModel = receiptSectionsViewModel,
+            tutorialInformation = tutorialInformation
+        )
+
+        return
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         SinceWhenSection (
             onCurrentMonth = {
                 timespan = it

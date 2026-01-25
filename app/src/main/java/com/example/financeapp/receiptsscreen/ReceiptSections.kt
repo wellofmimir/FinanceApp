@@ -94,6 +94,7 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
+import androidx.compose.foundation.lazy.LazyRow
 
 enum class Timespan (id: Int) {
 
@@ -115,6 +116,9 @@ fun AddReceiptMenu (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+
+    val expenses by receiptSectionsViewModel.expenses.collectAsState()
+    var expenseCategory by remember { mutableStateOf("") }
 
     var amountText by remember { mutableStateOf("") }
     var nameOfReceipt by remember { mutableStateOf("") }
@@ -180,7 +184,9 @@ fun AddReceiptMenu (
                         nameOfReceipt,
                         amountText.toFloat(),
                         it.absolutePath,
-                        ""
+                        "",
+                        "",
+                        expenseCategory
                     ),
                     remindMeDate = selectedDate
                 )
@@ -233,8 +239,8 @@ fun AddReceiptMenu (
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(450.dp)
-            .heightIn(min = 450.dp)
+            .height(525.dp)
+            .heightIn(min = 525.dp)
             .border (
                 width = 1.dp,
                 color = colors.secondary,
@@ -448,7 +454,44 @@ fun AddReceiptMenu (
 
             Spacer (
                 modifier = Modifier
-                    .height(48.dp)
+                    .height(24.dp)
+            )
+
+            LazyRow (
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .size(50.dp)
+                    .border (
+                        width = 1.dp,
+                        shape = RoundedCornerShape(12.dp),
+                        color = colors.secondary
+                    )
+            ) {
+                items(expenses) { expense ->
+                    Box (
+                        modifier = Modifier
+                            .background (
+                                color = if (expenseCategory == expense.category) colors.secondary else colors.primary,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .clickable (
+                            ) {
+                                expenseCategory = expense.category
+                            }
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                    ) {
+                        Text (
+                            text = expense.category,
+                            color = if (expenseCategory == expense.category) colors.primary else colors.secondary,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
+            }
+
+            Spacer (
+                modifier = Modifier
+                    .height(36.dp)
             )
 
             Row (
@@ -472,6 +515,10 @@ fun AddReceiptMenu (
                             if (amountText.isEmpty()) {
                                 errorMessage = "Photo can not be taken yet - insert the amount on the receipt."
                                 return@Button
+                            }
+
+                            if (expenseCategory.isEmpty()) {
+                                errorMessage = "Photo can not be taken yet - choose a category for your expense."
                             }
 
                             photoCanBeTaken = true
@@ -528,8 +575,12 @@ fun AddReceiptMenu (
 }
 
 @Composable
-fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanIndex: Timespan) -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
-
+fun SinceWhenSection (
+    modifier: Modifier = Modifier,
+    onCurrentMonth: (timeSpanIndex: Timespan) -> Unit,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
     var clickedEntry by remember { mutableIntStateOf(0) }
@@ -602,8 +653,13 @@ fun SinceWhenSection(modifier: Modifier = Modifier, onCurrentMonth: (timeSpanInd
 }
 
 @Composable
-fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, receiptAdded: () -> Unit, onDismissRequest: () -> Unit, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
-
+fun AverageSpentSection (
+    modifier: Modifier = Modifier,
+    timespan: Timespan, receiptAdded: () -> Unit,
+    onDismissRequest: () -> Unit,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
 
     when (timespan) {
@@ -712,8 +768,12 @@ fun AverageSpentSection(modifier: Modifier = Modifier, timespan: Timespan, recei
 }
 
 @Composable
-fun ExpensesOverviewSection(modifier: Modifier = Modifier, timespan: Timespan, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
-
+fun ExpensesOverviewSection (
+    modifier: Modifier = Modifier,
+    timespan: Timespan,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
 
     when (timespan) {
@@ -889,7 +949,7 @@ fun ReceiptLogSection (
                 Box (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(0.9f)
+                        .weight(1f)
                         .border (
                             width = 1.dp,
                             shape = RoundedCornerShape(12.dp),
@@ -921,6 +981,11 @@ fun ReceiptLogSection (
 
                             Text (
                                 text = if (currency.length == 1) currency + " " + currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
+                                color = colors.secondary
+                            )
+
+                            Text (
+                                text = currentReceipt.category,
                                 color = colors.secondary
                             )
 
@@ -1018,6 +1083,7 @@ fun ReceiptLogSection (
                                 if (file.exists()) {
                                     bitmap = BitmapFactory.decodeFile(file.absolutePath)
                                         .fixOrientation(file.absolutePath)
+
                                     showDialog = true
                                     currentReceipt = receipt
                                 }

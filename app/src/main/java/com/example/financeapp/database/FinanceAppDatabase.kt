@@ -11,6 +11,12 @@ import androidx.core.content.edit
 import androidx.security.crypto.MasterKey
 import androidx.security.crypto.EncryptedSharedPreferences
 
+data class Expense (
+    val category: String,
+    val short: String,
+    var amount: Float
+)
+
 data class Badge (
     val identifier: Int,
     val title: String,
@@ -54,7 +60,8 @@ data class Receipt (
     val amount: Float,
     val pathToImage: String,
     val date: String = "",
-    val remindMeDate: String = ""
+    val remindMeDate: String = "",
+    val category: String
 )
 
 data class RemindMeEntry (
@@ -93,7 +100,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, quote TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS currentQuote (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, quote TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS punchcard (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokensofar INTEGER NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS receipts (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, amount NUMERIC NOT NULL, pathtoimage TEXT NOT NULL, date TEXT NOT NULL, category TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id) ON DELETE CASCADE)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL, short TEXT NOT NULL, category TEXT NOT NULL, pathToImage TEXT NOT NULL)".trimIndent())
@@ -664,6 +671,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             put("amount",      receipt.amount)
             put("pathtoimage", receipt.pathToImage)
             put("date",        date)
+            put("category",    receipt.category)
         }
 
         val id = database.insert("receipts", null, values)
@@ -687,7 +695,7 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     fun getReceipts(startMonth: String, endMonth: String): Result<List<Receipt>>  {
 
-        val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, "date DESC")
+        val cursor = database.query("receipts", arrayOf("id", "description", "amount", "pathtoimage", "date", "category"), "date BETWEEN ? AND ?", arrayOf(startMonth, endMonth), null, null, "date DESC")
         val receipts = mutableListOf<Receipt>()
 
         try {
@@ -698,8 +706,9 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
                 val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+                val category = cursor.getString(cursor.getColumnIndexOrThrow("category"))
 
-                receipts.add(Receipt(id, description, amount, pathToImage, date))
+                receipts.add(Receipt(id, description, amount, pathToImage, date, "", category))
             }
         } catch (e: Exception) {
             return Result.failure(Exception("Error in getReceipts()"))
@@ -722,10 +731,11 @@ class FinanceAppDatabase private constructor(context: Context) {
             val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
             val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
             val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+            val category = cursor.getString(cursor.getColumnIndexOrThrow("category"))
 
-            Receipt(id, description, amount, pathToImage, date)
+            Receipt(id, description, amount, pathToImage, date, "", category)
         } else {
-            Receipt(-1, "", 0.0f, "", "")
+            Receipt(-1, "", 0.0f, "", "", "", "")
         }
 
         cursor.close()
@@ -745,8 +755,9 @@ class FinanceAppDatabase private constructor(context: Context) {
                 val amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"))
                 val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathtoimage"))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
+                val category = cursor.getString(cursor.getColumnIndexOrThrow("category"))
 
-                receipts.add(Receipt(id, description, amount, pathToImage, date))
+                receipts.add(Receipt(id, description, amount, pathToImage, date, "", category))
             }
         } catch (e: Exception) {
             return Result.failure(Exception("Error in getReceipts()"))

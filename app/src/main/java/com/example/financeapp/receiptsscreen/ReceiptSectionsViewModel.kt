@@ -1,17 +1,25 @@
 package com.example.financeapp.receiptsscreen
 
+import android.net.Uri
+import androidx.core.net.toUri
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+
 import com.example.financeapp.database.Receipt
 import com.example.financeapp.repositories.AdRepository
 import com.example.financeapp.repositories.ReceiptRepository
+import com.example.financeapp.database.Expense
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import android.net.Uri
-import androidx.core.net.toUri
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
+
+
 
 sealed interface ShareEvent {
     data class SharedReceipt (val imageUri: Uri, val text: String): ShareEvent
@@ -28,6 +36,29 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
             internShareEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
         }
     }
+
+    private val internExpenses = MutableStateFlow(listOf (
+            Expense("Housing", "Hou.", 0f),
+            Expense("Food", "Food",0f),
+            Expense("Transportation", "Trans.",0f),
+            Expense("Utilities", "Util.",0f),
+            Expense("Subscriptions", "Subs.",0f),
+            Expense("Health", "Hlth.",0f),
+            Expense("Shopping", "Shop.", 0f),
+            Expense("Entertainment", "Entr.",0f),
+            Expense("Travel", "Trvl.",0f),
+            Expense("Education", "Edu.", 0f),
+            Expense("Personal", "Prs.",0f),
+            Expense("Family", "Fam.", 0f),
+            Expense("Saving", "Sav.", 0f),
+            Expense("Other", "Oth.", 0f)
+        )
+    )
+
+    val expenses = internExpenses.asStateFlow()
+
+    private val internExpense = MutableStateFlow(Expense("", "", 0f))
+    val expense = internExpense.asStateFlow()
 
     private val internInsertState = MutableStateFlow<Boolean>(false)
     val insertState = internInsertState.asStateFlow()
@@ -80,12 +111,14 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     }
 
     fun getReceipts() {
+        resetReceipts()
         val result = repository.getReceipts()
 
         result.fold (
             onSuccess = {
                 internReceipts.value = it
                 calculateSum()
+                calculateExpenses()
             },
             onFailure = {
                 internReceipts.value = emptyList()
@@ -93,8 +126,11 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
         )
     }
 
-    fun getReceiptsForACertainTimespan(startDate: String, endDate: String) {
-
+    fun getReceiptsForACertainTimespan (
+        startDate: String,
+        endDate: String
+    ) {
+        resetReceipts()
         val result = repository.getReceiptsForACertainTimespan(startDate, endDate)
         currentTimespan.value = startDate to endDate
 
@@ -102,11 +138,42 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
             onSuccess = {
                 internReceipts.value = it
                 calculateSum()
+                calculateExpenses()
             },
             onFailure = {
                 internReceipts.value = emptyList()
             }
         )
+    }
+
+    private fun resetReceipts() {
+        internReceipts.value = emptyList()
+    }
+
+    fun getExpense (
+        category: String
+    ) {
+        internExpense.value =  internExpenses.value.firstOrNull { expense ->
+            expense.category == category
+        } ?: Expense("", "", 0f)
+    }
+
+    fun calculateExpenses() {
+
+        val newExpenses = internExpenses.value.map { expense ->
+            val sum = internReceipts.value
+                .filter { receipt ->
+                    receipt.category == expense.category
+                }
+                .sumOf { receipt ->
+                    receipt.amount.toDouble()
+                }
+                .toFloat()
+
+            expense.copy(amount = sum)
+        }
+
+        internExpenses.value = newExpenses
     }
 
     fun calculateAverage() {
@@ -125,7 +192,7 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
         internReceiptsAverage.value = average
     }
 
-    fun calculateSum() {
+    private fun calculateSum() {
 
         val receipts = internReceipts.value
 
