@@ -158,6 +158,21 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
+    fun setRewardedAdAfterDailyTrendSeen() {
+        securePreferences.edit {
+            putBoolean("DailyTrendSeen", true)
+        }
+    }
+
+    fun resetRewardedAdAfterDailyTrendSeen() {
+        securePreferences.edit {
+            putBoolean("DailyTrendSeen", false)
+        }
+    }
+
+    fun rewardedAdAfterDailyTrendSeen(): Boolean {
+        return securePreferences.getBoolean("DailyTrendSeen", false)
+    }
     fun setBadgeAvailable() {
         securePreferences.edit {
             putBoolean("BadgeAvailable", true)

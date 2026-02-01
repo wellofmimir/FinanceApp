@@ -7,7 +7,7 @@ import com.example.financeapp.database.Tip
 import com.example.financeapp.advertisement.RewardedAdManager
 import com.example.financeapp.commonutils.fixOrientation
 import com.example.financeapp.network.DailyTip
-import com.example.financeapp.notifications.DailyTipEvents
+import com.example.financeapp.notifications.DailyEvents
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -63,10 +63,9 @@ class DailyTipScreenViewModel (
     private val internNewDailyTipAvailable = MutableStateFlow(getNewDailyTipAvailable())
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
-
     init {
         viewModelScope.launch {
-            DailyTipEvents.newDailyTipAvailable.collect() {
+            DailyEvents.newDailyTipAvailable.collect() {
                 internNewDailyTipAvailable.value = true
             }
         }
@@ -108,7 +107,7 @@ class DailyTipScreenViewModel (
         viewModelScope.launch {
             if (repository.getDailyTip().tip.isEmpty()) {
                 repository.fetchDailyTipFromServer()
-                DailyTipEvents.newDailyTip(true)
+                DailyEvents.newDailyTip(true)
             }
 
             internDailyTip.value = internDailyTip.value.copy (

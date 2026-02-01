@@ -34,7 +34,7 @@ class DailyTipWorker (
             database.resetInterstitialAdAfterDailyTip()
             database.resetDailyTipTryCounter()
             notifier.sendNewDailyTipAvailableNotification(newDailyTip)
-            DailyTipEvents.newDailyTip(true)
+            DailyEvents.newDailyTip(true)
         } else {
             database.incrementDailyTipTryCounter()
             DailyTipScheduler.scheduleRetry(applicationContext)

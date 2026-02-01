@@ -32,14 +32,14 @@ class MetricsRepository private constructor (
     }
 
     fun setRewardedAdAfterDailyTrendSeen() {
-
+        database.setRewardedAdAfterDailyTrendSeen()
     }
 
     fun resetRewardedAdAfterDailyTrendSeen() {
-
+        database.resetRewardedAdAfterDailyTrendSeen()
     }
 
     fun rewardedAdAfterDailyTrendSeen(): Boolean {
-        return true
+        return database.rewardedAdAfterDailyTrendSeen()
     }
 }

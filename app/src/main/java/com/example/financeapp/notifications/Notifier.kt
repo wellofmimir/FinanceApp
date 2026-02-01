@@ -19,7 +19,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
 
-
 class Notifier(private val context: Context) {
     fun sendQuoteNotification() {
 
@@ -131,8 +130,8 @@ class Notifier(private val context: Context) {
 
         val notification = NotificationCompat.Builder(context, "receipts")
             .setSmallIcon(R.mipmap.applogo_round)
-            .setContentTitle("Track your receipt")
-            .setContentText("Any expenses today? Track the receipt!")
+            .setContentTitle("Track your receipts")
+            .setContentText("Any expenses today? Track your receipts!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         NotificationManagerCompat.from(context).notify(1, notification.build())
