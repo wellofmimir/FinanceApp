@@ -6,6 +6,7 @@ import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.DailyTip
 import com.example.financeapp.network.DailyTipClient
 import com.example.financeapp.commonutils.FileProvider
+import com.example.financeapp.network.SharedHttpClient
 
 import org.json.JSONObject
 
@@ -23,7 +24,7 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         }
     }
 
-    private val client = DailyTipClient.getInstance()
+    private val client = DailyTipClient(SharedHttpClient.sharedClient)
 
     fun resetNewDailyTipAvailable() {
         database.resetNewDailyTipAvailable()

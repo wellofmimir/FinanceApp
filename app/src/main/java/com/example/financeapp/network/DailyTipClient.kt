@@ -11,19 +11,9 @@ data class DailyTip (
     var pathToImage: String
 )
 
-class DailyTipClient private constructor() {
-    companion object {
-        private var instance: DailyTipClient? = null
-
-        fun getInstance(): DailyTipClient {
-            if (instance == null)
-                instance = DailyTipClient()
-
-            return instance!!
-        }
-    }
-    private val client = OkHttpClient()
-    var hasError = false
+class DailyTipClient (
+    private val client: OkHttpClient
+) {
 
     suspend fun fetchDailyTip(): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
@@ -37,7 +27,6 @@ class DailyTipClient private constructor() {
                 response.body?.string() ?: ""
             }
         } catch (e: Exception) {
-            hasError = true
             ""
         }
     }
@@ -54,7 +43,6 @@ class DailyTipClient private constructor() {
                 response.body?.bytes()
             }
         } catch (e: Exception) {
-            hasError = true
             null
         }
     }

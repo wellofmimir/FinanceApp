@@ -4,6 +4,7 @@ import com.example.financeapp.network.QuoteClient
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.database.Quote
 import com.example.financeapp.commonutils.isValidJson
+import com.example.financeapp.network.SharedHttpClient
 
 import org.json.JSONObject
 import java.time.LocalDate
@@ -24,7 +25,7 @@ class QuoteRepository private constructor (val database: FinanceAppDatabase) {
     }
 
 
-    private val client = QuoteClient.getInstance()
+    private val client = QuoteClient(SharedHttpClient.sharedClient)
 
     fun hasError(): Boolean {
         return client.hasError

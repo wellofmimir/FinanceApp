@@ -1,4 +1,4 @@
-package com.example.financeapp.metrics
+package com.example.financeapp.metricsscreen
 
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.database.Expense
@@ -9,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.layout.Box
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -34,31 +32,27 @@ fun BarChart (
 
     Canvas (
         modifier = modifier
-            .border (
-                width = 1.dp,
-                shape = RoundedCornerShape(12.dp),
-                color = colors.secondary
-            )
+            .border(1.dp, colors.secondary, RoundedCornerShape(topStart = 0.dp, topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp))
             .background (
-                shape = RoundedCornerShape(12.dp),
-                color = colors.secondary
+                color = colors.secondary,
+                shape = RoundedCornerShape(topStart = 0.dp, topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
             )
             .pointerInput(expenses) {
                 detectTapGestures { offset ->
-                    val barWidth = size.width / (expenses.size * 2f)
-
                     var maxAmount = expenses.maxOf { it.amount }
 
                     if (maxAmount == 0f)
                         maxAmount = 1f
 
-                    expenses.forEachIndexed { index, expense ->
-                        val x = index * barWidth * 2 + barWidth / 2
-                        val barHeight = (expense.amount / maxAmount) * (size.height * 0.9f)
-                        val y = size.height - barHeight
+                    val barHeight = size.height / (expenses.size * 1f)
 
-                        if (offset.x in x..(x + barWidth) && offset.y in y..size.height.toFloat())
+                    expenses.forEachIndexed { index, expense ->
+                        val barWidth = (expense.amount / maxAmount) * (size.width * 1.5f)
+                        val y = index * barHeight * 1f
+
+                        if (offset.x in 0f..barWidth && offset.y in y..(y + barHeight)) {
                             onSeeExpenseAmount(expense)
+                        }
                     }
                 }
             }
@@ -68,19 +62,31 @@ fun BarChart (
         if (maxAmount == 0f)
             maxAmount = 1f
 
-        val barWidth = size.width / (expenses.size * 2f)
+        val barHeight = size.height / (expenses.size * 1f)
 
         expenses.forEachIndexed { index, expense ->
-            val barHeight = (expense.amount / maxAmount) * (size.height * 0.9f)
+            var barWidth = (expense.amount / maxAmount) * (size.width * 0.9f)
 
-            val x = index * barWidth * 2 + barWidth / 2
-            val y = (size.height) - barHeight
+            if (barWidth > 0f && barWidth < 15f)
+                barWidth = 15f
+
+            val y = index * barHeight * 1f
+
+            drawRect (
+                color = colors.secondary,
+                topLeft = Offset(0f, y),
+                size = Size(barWidth, barHeight)
+            )
 
             drawRect (
                 color = colors.primary,
-                topLeft = Offset(x, y),
-                size = Size(barWidth, barHeight)
+                topLeft = Offset(1f, y + 1),
+                size = Size (
+                    barWidth - 1 * 2,
+                    barHeight - 1 * 2
+                )
             )
         }
     }
+
 }

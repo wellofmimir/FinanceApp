@@ -2,22 +2,7 @@ package com.example.financeapp.receiptsscreen
 
 import android.app.Activity
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+
 import com.example.financeapp.MainActivityViewModel
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.advertisement.AdSectionLargeBanner
@@ -25,7 +10,27 @@ import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.badges.BadgeIdentifier
 import com.example.financeapp.badges.BadgesViewModel
-import com.example.financeapp.metrics.MetricsScreen
+import com.example.financeapp.metricsscreen.MetricsScreen
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.financeapp.metricsscreen.MetricsScreenViewModel
 
 @Composable
 fun ReceiptScreen (
@@ -33,6 +38,7 @@ fun ReceiptScreen (
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     mainActivityViewModel: MainActivityViewModel,
     advertisementViewModel: AdvertisementViewModel,
+    metricsScreenViewModel: MetricsScreenViewModel,
     badgesViewModel: BadgesViewModel,
     tutorialInformation: TutorialInformation,
     context: Context = LocalContext.current
@@ -69,11 +75,29 @@ fun ReceiptScreen (
         }
     }
 
+    if (addReceiptMenuExpanded) {
+        AddReceiptMenu (
+            onDismissRequest = {
+                addReceiptMenuExpanded = false
+                receiptSectionsViewModel.getReceipts()
+            },
+            onReceiptSaved = {
+                receiptAdded = true
+                badgesViewModel.checkBadge(BadgeIdentifier.FIRST_RECEIPT)
+                onReceiptAdded()
+            },
+            receiptSectionsViewModel
+        )
+
+        return
+    }
+
     if (showMetricsScreen) {
         MetricsScreen (
             modifier = Modifier
                 .fillMaxSize(0.5f),
             receiptSectionsViewModel = receiptSectionsViewModel,
+            metricsScreenViewModel = metricsScreenViewModel,
             tutorialInformation = tutorialInformation
         )
 
@@ -86,18 +110,6 @@ fun ReceiptScreen (
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AddReceiptMenu (
-            addReceiptMenuExpanded,
-            onDismissRequest = {
-                addReceiptMenuExpanded = false
-                receiptSectionsViewModel.getReceipts()
-            },
-            onReceiptSaved = {
-                onReceiptAdded()
-            },
-            receiptSectionsViewModel
-        )
-
         Row (
             modifier = Modifier,
             verticalAlignment = Alignment.Top,
@@ -131,14 +143,6 @@ fun ReceiptScreen (
                     .weight(1f)
                     .aspectRatio(1f),
                 timespan = timespan,
-                receiptAdded = {
-                    receiptAdded = true
-                    onReceiptAdded()
-                    badgesViewModel.checkBadge(BadgeIdentifier.FIRST_RECEIPT)
-                },
-                onDismissRequest = {
-
-                },
                 receiptSectionsViewModel = receiptSectionsViewModel,
                 tutorialInformation = tutorialInformation
             )

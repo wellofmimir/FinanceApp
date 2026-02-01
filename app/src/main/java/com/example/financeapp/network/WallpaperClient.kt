@@ -1,26 +1,12 @@
 package com.example.financeapp.network
 
-import androidx.compose.material3.Badge
 import com.example.financeapp.badges.BadgeCatalog
 import com.example.financeapp.badges.BadgeIdentifier
 import okhttp3.OkHttpClient
 import okhttp3.Request
-class WallpaperClient private constructor() {
-
-    companion object {
-        private var instance: WallpaperClient? = null
-
-        fun getInstance(): WallpaperClient {
-            if (instance == null)
-                instance = WallpaperClient()
-
-            return instance!!
-        }
-    }
-
-    private val client = OkHttpClient()
-    var hasError = false
-
+class WallpaperClient (
+    private val client: OkHttpClient
+) {
     suspend fun fetchWallpaper (
         badgeIdentifier: BadgeIdentifier
     ): ByteArray? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
@@ -51,7 +37,6 @@ class WallpaperClient private constructor() {
             BadgeIdentifier.THIRTY_GOALS -> BadgeCatalog.getBadge(BadgeIdentifier.THIRTY_GOALS).pathToImage
             BadgeIdentifier.FIFTY_GOALS -> BadgeCatalog.getBadge(BadgeIdentifier.FIFTY_GOALS).pathToImage
 
-            BadgeIdentifier.FIRST_GOAL -> BadgeCatalog.getBadge(BadgeIdentifier.FIRST_GOAL).pathToImage
             BadgeIdentifier.FIRST_DAILY_TIP_LIKED -> BadgeCatalog.getBadge(BadgeIdentifier.FIRST_DAILY_TIP_LIKED).pathToImage
             BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED -> BadgeCatalog.getBadge(BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED).pathToImage
             BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED -> BadgeCatalog.getBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED).pathToImage
@@ -71,7 +56,6 @@ class WallpaperClient private constructor() {
                 response.body?.bytes()
             }
         } catch (e: Exception) {
-            hasError = true
             null
         }
     }

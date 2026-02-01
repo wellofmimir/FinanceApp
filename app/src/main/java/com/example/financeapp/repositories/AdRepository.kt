@@ -2,7 +2,9 @@ package com.example.financeapp.repositories
 
 import com.example.financeapp.database.FinanceAppDatabase
 
-class AdRepository private constructor (private val database: FinanceAppDatabase) {
+class AdRepository private constructor (
+    private val database: FinanceAppDatabase
+) {
     companion object {
         private var instance: AdRepository? = null
 

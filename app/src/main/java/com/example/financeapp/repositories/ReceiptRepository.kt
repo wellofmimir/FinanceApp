@@ -19,7 +19,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun insertReceipt(receipt: Receipt): Result<Long> {
-
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
         val formattedDate = currentDate.format(formatter)
@@ -43,8 +42,23 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
         return database.getReceipts(startDate, endDate)
     }
 
-    fun getCurrentMonth(): String {
+    fun getReceiptsForACertainTimespanAndCategory(startDate: String, endDate: String, category: String): List<Receipt> {
+        val allEntries = database.getReceipts(startDate, endDate)
 
+        return allEntries.fold (
+            onSuccess = { allReceipts ->
+                allReceipts.filter { receipt ->
+                    receipt.category == category
+                }
+            },
+            onFailure = {
+                emptyList()
+            }
+        )
+    }
+
+
+    fun getCurrentMonth(): String {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
         val formattedDate = currentDate.format(formatter)
@@ -53,7 +67,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun getFirstDayOfCurrentMonth(): String {
-
         val today = LocalDate.now()
         val firstDayOfMonth = today.withDayOfMonth(1)
 
@@ -62,7 +75,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun getLastDayOfCurrentMonth(): String {
-
         val today = LocalDate.now()
         val lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth())
 
@@ -71,7 +83,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun getFirstDayOfTwoMonthsAgo(): String {
-
         val today = LocalDate.now().minusMonths(2)
         val firstDayOfTwoMonthsAgo = today.withDayOfMonth(1)
 
@@ -80,7 +91,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun getFirstDayOfSixMonthsAgo(): String {
-
         val today = LocalDate.now().minusMonths(6)
         val firstDayOfSixMonthsAgo = today.withDayOfMonth(1)
 
@@ -89,7 +99,6 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     }
 
     fun getFirstDayOfAYearAgo(): String {
-
         val today = LocalDate.now()
         val firstDayOfAYearAgo = today.minusYears(1)
 

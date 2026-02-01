@@ -2,6 +2,7 @@ package com.example.financeapp.repositories
 
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.FeedbackClient
+import com.example.financeapp.network.SharedHttpClient
 import org.json.JSONObject
 
 class FeedbackRepository private constructor (private val database: FinanceAppDatabase) {
@@ -16,7 +17,7 @@ class FeedbackRepository private constructor (private val database: FinanceAppDa
         }
     }
 
-    private val client = FeedbackClient.getInstance()
+    private val client = FeedbackClient(SharedHttpClient.sharedClient)
 
     fun feedbackAlreadySent(): Boolean {
         return database.feedbackAlreadySent()

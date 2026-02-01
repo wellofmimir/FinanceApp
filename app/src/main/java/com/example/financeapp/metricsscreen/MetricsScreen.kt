@@ -1,4 +1,4 @@
-package com.example.financeapp.metrics
+package com.example.financeapp.metricsscreen
 
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.TutorialInformation
@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.draw.rotate
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -42,13 +42,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import com.example.financeapp.dailytipscreen.AdTeaserSection
 import java.math.RoundingMode
-import kotlin.math.exp
 
 @Composable
 fun MetricsScreen (
     modifier: Modifier = Modifier,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
+    metricsScreenViewModel: MetricsScreenViewModel,
     tutorialInformation: TutorialInformation,
     context: Context = LocalContext.current
 ) {
@@ -56,11 +57,18 @@ fun MetricsScreen (
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val expenses by receiptSectionsViewModel.expenses.collectAsState()
     val expense by receiptSectionsViewModel.expense.collectAsState()
+    val receipts by receiptSectionsViewModel.receipts.collectAsState()
     val currency by receiptSectionsViewModel.currency.collectAsState()
     var showExpense by remember { mutableStateOf(false) }
+    var showTrendAnalysis by remember { mutableStateOf(false) }
+    val waitingForDailyTrend by metricsScreenViewModel.waitingForDailyTrend.collectAsState()
+    val dailyTrendText by metricsScreenViewModel.dailyTrend.collectAsState()
+    val trendRequest by receiptSectionsViewModel.trendRequest.collectAsState()
+    val waitingText by metricsScreenViewModel.waitingText.collectAsState()
 
     LaunchedEffect(Unit) {
         receiptSectionsViewModel.getCurrency()
+        receiptSectionsViewModel.getRandomSeriesOfValuesForTrendAnalysis()
     }
 
     LaunchedEffect(timespan) {
@@ -140,11 +148,11 @@ fun MetricsScreen (
             )
         }
 
-        if (expenses.isEmpty()) {
+        if (receipts.isEmpty()) {
             Box (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.4f)
+                    .aspectRatio(1f)
                     .border (
                         width = 1.dp,
                         shape = RoundedCornerShape(12.dp),
@@ -163,45 +171,82 @@ fun MetricsScreen (
                 )
             }
         } else {
-            BarChart (
-                expenses,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.4f),
-                onSeeExpenseAmount = { expense ->
-                    receiptSectionsViewModel.getExpense(expense.category)
-                    showExpense = true
-                },
-                context
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(12.dp)
-            )
-
             Row (
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .aspectRatio(1f),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                expenses.forEach {
-                    Text (
-                        text = it.short,
-                        color = colors.secondary,
-                        modifier = Modifier
-                            .weight(1f)
-                            .rotate(-60f)
-                            .clickable () {
-                                receiptSectionsViewModel.getExpense(it.category)
-                                showExpense = true
-                            },
-                        fontSize = 10.sp,
-                        textAlign = TextAlign.Justify,
-                        softWrap = false
+                Column (
+                    modifier = Modifier
+                        .weight(2f)
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    expenses.forEach {
+                        Text (
+                            text = if (it.amount == 0f) "" else it.category,
+                            color = colors.secondary,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable () {
+                                    receiptSectionsViewModel.getExpense(it.category)
+                                    showExpense = true
+                                },
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                }
+
+                BarChart (
+                    expenses,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(5f),
+                    onSeeExpenseAmount = { expense ->
+                        receiptSectionsViewModel.getExpense(expense.category)
+                        showExpense = true
+                    },
+                    context
+                )
+            }
+        }
+
+        Spacer (
+            modifier = Modifier
+                .padding(2.dp)
+        )
+
+        Box (
+            modifier = Modifier
+                .fillMaxHeight()
+                .background (
+                    color = colors.secondary,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (showTrendAnalysis) {
+                if (waitingForDailyTrend) {
+                    TrendSection (
+                        trend = waitingText
+                    )
+                } else {
+                    TrendSection (
+                        trend = dailyTrendText
                     )
                 }
+            }
+            else {
+                AdTeaserSection (
+                    teaserText = "Your trend analysis will be shown here after watching a quick ad.",
+                    onConfirmButtonClicked = {
+                        showTrendAnalysis = true
+                        metricsScreenViewModel.getDailyTrend(trendRequest)
+                    }
+                )
             }
         }
     }

@@ -70,7 +70,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
@@ -84,17 +83,17 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 import java.math.RoundingMode
 import kotlin.toBigDecimal
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.draw.rotate
 
 enum class Timespan (id: Int) {
 
@@ -109,7 +108,6 @@ enum class Timespan (id: Int) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddReceiptMenu (
-    expanded: Boolean,
     onDismissRequest: () -> Unit,
     onReceiptSaved:() -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
@@ -122,11 +120,13 @@ fun AddReceiptMenu (
 
     var amountText by remember { mutableStateOf("") }
     var nameOfReceipt by remember { mutableStateOf("") }
+
+    var errorTitle by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
+
     var photoCanBeTaken by remember { mutableStateOf(false) }
 
     var takePhotoButtonText by remember { mutableStateOf("Take a photo") }
-    var insertSuccessful = receiptSectionsViewModel.insertState.collectAsState()
 
     var remindMeCheckboxChecked by remember { mutableStateOf(true) }
     var showDatepickerDialog by remember { mutableStateOf(false) }
@@ -153,20 +153,55 @@ fun AddReceiptMenu (
         selectedDate = ""
     }
 
-    LaunchedEffect(errorMessage) {
-
-        if (!errorMessage.isEmpty()) {
-            delay(1000)
-            errorMessage = ""
-        }
-    }
-
-    LaunchedEffect(insertSuccessful.value) {
-
-        if (expanded) {
-            delay(1000)
-            resetAndDismiss()
-        }
+    if (errorMessage.isNotEmpty()) {
+        AlertDialog (
+            modifier = Modifier
+                .background (
+                    color = colors.primary,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .height(225.dp),
+            onDismissRequest = {
+                errorMessage = ""
+                errorTitle = ""
+            },
+            title = {
+                Text (
+                    text = errorTitle,
+                    color = colors.secondary
+                )
+            },
+            text = {
+                Text (
+                    text = errorMessage,
+                    color = colors.secondary
+                )
+            },
+            confirmButton = {
+                TextButton (
+                    modifier = Modifier
+                        .border (
+                            width = 1.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = colors.secondary,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    onClick = {
+                        errorMessage = ""
+                        errorTitle = ""
+                    }
+                ) {
+                    Text (
+                        text = "Okay",
+                        color = colors.primary
+                    )
+                }
+            },
+            containerColor = colors.primary
+        )
     }
 
     val photos = remember { mutableStateListOf<File>() }
@@ -232,344 +267,342 @@ fun AddReceiptMenu (
         }
     }
 
-    DropdownMenu (
-        expanded,
-        onDismissRequest = {
-            onDismissRequest()
-        },
+    Column (
         modifier = Modifier
-            .fillMaxWidth()
-            .height(525.dp)
-            .heightIn(min = 525.dp)
+            .fillMaxSize()
             .border (
                 width = 1.dp,
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .background (
-                color = colors.primary,
-                shape = RoundedCornerShape(12.dp)
-            )
+            ),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column (
+        Spacer (
             modifier = Modifier
-                .fillMaxSize(),
+                .height(16.dp)
+        )
+
+        Text (
+            text = "Add a receipt",
+            color = colors.textSecondary,
+            fontSize = 24.sp
+        )
+
+        Spacer (
+            modifier = Modifier
+                .height(8.dp)
+        )
+
+        HorizontalDivider (
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally),
+            thickness = 1.dp,
+            color = colors.secondary
+        )
+
+        Spacer (
+            modifier = Modifier
+                .height(24.dp)
+        )
+
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+
+        ) {
+            Text (
+                text = "Name",
+                color = colors.textSecondary,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .padding(start = 2.dp)
+            )
+
+            TextField (
+                value = nameOfReceipt,
+                onValueChange = { newText ->
+                    nameOfReceipt = newText
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.colors (
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    unfocusedIndicatorColor = colors.textSecondary,
+                    focusedIndicatorColor = colors.textSecondary,
+                    cursorColor = colors.textSecondary,
+                    focusedTextColor = colors.textSecondary,
+                    unfocusedTextColor = colors.textSecondary
+                )
+            )
+        }
+
+        Spacer (
+            modifier = Modifier
+                .height(24.dp)
+        )
+
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text (
+                text = "Amount",
+                textAlign = TextAlign.Justify,
+                color = colors.textSecondary,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .padding(start = 2.dp)
+            )
+
+            TextField (
+                value = amountText,
+                onValueChange = { newText ->
+
+                    val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
+
+                    if (moneyRegex.matches(newText)) {
+                        amountText = newText
+                    }
+
+                    if (newText.isEmpty())
+                        amountText = ""
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.colors (
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    unfocusedIndicatorColor = colors.textSecondary,
+                    focusedIndicatorColor = colors.textSecondary,
+                    cursorColor = colors.textSecondary,
+                    focusedTextColor = colors.textSecondary,
+                    unfocusedTextColor = colors.textSecondary
+                ),
+                keyboardOptions = KeyboardOptions (
+                    keyboardType = KeyboardType.Number
+                )
+            )
+        }
+
+        Spacer (
+            modifier = Modifier
+                .height(24.dp)
+        )
+
+        Row (
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text (
+                text = "Remind me",
+                textAlign = TextAlign.Justify,
+                color = colors.textSecondary,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .weight(1f)
+            )
+
+            Checkbox (
+                checked = remindMeCheckboxChecked,
+                onCheckedChange = {
+
+                    if (!remindMeCheckboxChecked)
+                        showDatepickerDialog = true
+
+                    remindMeCheckboxChecked = it
+                },
+                modifier = Modifier
+                    .weight(2f)
+            )
+
+            if (showDatepickerDialog) {
+
+                DatePickerDialog (
+                    modifier = Modifier
+                        .height(400.dp),
+                    onDismissRequest = {
+                        showDatepickerDialog = false
+                    },
+                    confirmButton = {
+                        TextButton (
+                            onClick = {
+                                val dateMillis = datePickerState.selectedDateMillis
+
+                                if (dateMillis != null) {
+                                    val localDate = Instant.ofEpochMilli(dateMillis)
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
+
+                                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+                                    selectedDate = formatter.format(localDate)
+                                }
+
+                                showDatepickerDialog = false
+                            }
+                        ) {
+                            Text (
+                                text = "Ok"
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton (
+                            onClick = {
+                                showDatepickerDialog = false
+                            }
+                        ) {
+                            Text (
+                                text = "Cancel"
+                            )
+                        }
+                    }
+                ) {
+                    DatePicker (
+                        state = datePickerState
+                    )
+                }
+            }
+
+        }
+
+        Spacer (
+            modifier = Modifier
+                .height(24.dp)
+        )
+
+        LazyRow (
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .size(50.dp)
+                .border (
+                    width = 1.dp,
+                    shape = RoundedCornerShape(12.dp),
+                    color = colors.secondary
+                )
+        ) {
+            items(expenses) { expense ->
+                Box (
+                    modifier = Modifier
+                        .background (
+                            color = if (expenseCategory == expense.category) colors.secondary else colors.primary,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable (
+                        ) {
+                            expenseCategory = expense.category
+                        }
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                ) {
+                    Text (
+                        text = expense.category,
+                        color = if (expenseCategory == expense.category) colors.primary else colors.secondary,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+        }
+
+        Spacer (
+            modifier = Modifier
+                .height(36.dp)
+        )
+
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button (
+                onClick = {
+                    if (!photoCanBeTaken) {
+
+                        if (nameOfReceipt.isEmpty()) {
+                            errorTitle = "Give it a name!"
+                            errorMessage = "Photo can not be taken yet - give your receipt a name."
+                            return@Button
+                        }
+
+                        if (nameOfReceipt.length > 40) {
+                            errorTitle = "A bit shorter."
+                            errorMessage = "Choose a name a bit shorter."
+                            return@Button
+                        }
+
+                        if (amountText.isEmpty()) {
+                            errorTitle = "How much?"
+                            errorMessage = "Photo can not be taken yet - insert the amount on the receipt."
+                            return@Button
+                        }
+
+                        if (expenseCategory.isEmpty()) {
+                            errorTitle = "What category?"
+                            errorMessage = "Photo can not be taken yet - choose a category for your expense."
+                        }
+
+                        photoCanBeTaken = true
+                    }
+
+                    if (remindMeCheckboxChecked) {
+                        if (selectedDate.isEmpty()) {
+                            showDatepickerDialog = true
+                            return@Button
+                        }
+                    }
+
+                    if (Build.VERSION.SDK_INT >= 33)
+                        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                },
+                colors = ButtonDefaults.buttonColors (
+                    containerColor = colors.surface,
+                    contentColor = colors.background
+                ),
+                border = BorderStroke (
+                    width = 1.dp,
+                    color = colors.textSecondary
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+            ) {
+                Text (
+                    text = takePhotoButtonText,
+                    textAlign = TextAlign.Center,
+                    color = colors.background,
+                    fontSize = 18.sp
+                )
+            }
+        }
+
+        Column (
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer (
                 modifier = Modifier
-                    .height(16.dp)
-            )
-
-            Text (
-                text = "Add a receipt",
-                color = colors.textSecondary,
-                fontSize = 24.sp
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(8.dp)
-            )
-
-            HorizontalDivider (
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.CenterHorizontally),
-                thickness = 1.dp,
-                color = colors.secondary
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(24.dp)
-            )
-
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-
-            ) {
-                Text (
-                    text = "Name",
-                    color = colors.textSecondary,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .padding(start = 2.dp)
-                )
-
-                TextField (
-                    value = nameOfReceipt,
-                    onValueChange = { newText ->
-                        nameOfReceipt = newText
-                    },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors (
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = colors.textSecondary,
-                        focusedIndicatorColor = colors.textSecondary,
-                        cursorColor = colors.textSecondary,
-                        focusedTextColor = colors.textSecondary,
-                        unfocusedTextColor = colors.textSecondary
-                    )
-                )
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .height(24.dp)
-            )
-
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text (
-                    text = "Amount",
-                    textAlign = TextAlign.Justify,
-                    color = colors.textSecondary,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .padding(start = 2.dp)
-                )
-
-                TextField (
-                    value = amountText,
-                    onValueChange = { newText ->
-
-                        val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
-
-                        if (moneyRegex.matches(newText)) {
-                            amountText = newText
-                        }
-
-                        if (newText.isEmpty())
-                            amountText = ""
-                    },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors (
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = colors.textSecondary,
-                        focusedIndicatorColor = colors.textSecondary,
-                        cursorColor = colors.textSecondary,
-                        focusedTextColor = colors.textSecondary,
-                        unfocusedTextColor = colors.textSecondary
-                    ),
-                    keyboardOptions = KeyboardOptions (
-                        keyboardType = KeyboardType.Number
-                    )
-                )
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .height(24.dp)
-            )
-
-            Row (
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text (
-                    text = "Remind me",
-                    textAlign = TextAlign.Justify,
-                    color = colors.textSecondary,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .weight(1f)
-                )
-
-                Checkbox (
-                    checked = remindMeCheckboxChecked,
-                    onCheckedChange = {
-
-                        if (!remindMeCheckboxChecked)
-                            showDatepickerDialog = true
-
-                        remindMeCheckboxChecked = it
-                    },
-                    modifier = Modifier
-                        .weight(2f)
-                )
-
-                if (showDatepickerDialog) {
-
-                    DatePickerDialog (
-                        modifier = Modifier
-                            .height(400.dp),
-                        onDismissRequest = {
-                            showDatepickerDialog = false
-                        },
-                        confirmButton = {
-                            TextButton (
-                                onClick = {
-                                    val dateMillis = datePickerState.selectedDateMillis
-
-                                    if (dateMillis != null) {
-                                        val localDate = Instant.ofEpochMilli(dateMillis)
-                                            .atZone(ZoneId.systemDefault())
-                                            .toLocalDate()
-
-                                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
-                                        selectedDate = formatter.format(localDate)
-                                    }
-
-                                    showDatepickerDialog = false
-                                }
-                            ) {
-                                Text (
-                                    text = "Ok"
-                                )
-                            }
-                        },
-                        dismissButton = {
-                            TextButton (
-                                onClick = {
-                                    showDatepickerDialog = false
-                                }
-                            ) {
-                                Text (
-                                    text = "Cancel"
-                                )
-                            }
-                        }
-                    ) {
-                        DatePicker (
-                            state = datePickerState
-                        )
-                    }
-                }
-
-            }
-
-            Spacer (
-                modifier = Modifier
-                    .height(24.dp)
-            )
-
-            LazyRow (
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .size(50.dp)
-                    .border (
-                        width = 1.dp,
-                        shape = RoundedCornerShape(12.dp),
-                        color = colors.secondary
-                    )
-            ) {
-                items(expenses) { expense ->
-                    Box (
-                        modifier = Modifier
-                            .background (
-                                color = if (expenseCategory == expense.category) colors.secondary else colors.primary,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable (
-                            ) {
-                                expenseCategory = expense.category
-                            }
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
-                    ) {
-                        Text (
-                            text = expense.category,
-                            color = if (expenseCategory == expense.category) colors.primary else colors.secondary,
-                            fontSize = 15.sp
-                        )
-                    }
-                }
-            }
-
-            Spacer (
-                modifier = Modifier
                     .height(36.dp)
             )
 
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button (
-                    onClick = {
-                        if (!photoCanBeTaken) {
-
-                            if (nameOfReceipt.isEmpty()) {
-                                errorMessage = "Photo can not be taken yet - give your receipt a name."
-                                return@Button
-                            }
-
-                            if (nameOfReceipt.length > 30) {
-                                errorMessage = "Choose a name a bit shorter."
-                                return@Button
-                            }
-
-                            if (amountText.isEmpty()) {
-                                errorMessage = "Photo can not be taken yet - insert the amount on the receipt."
-                                return@Button
-                            }
-
-                            if (expenseCategory.isEmpty()) {
-                                errorMessage = "Photo can not be taken yet - choose a category for your expense."
-                            }
-
-                            photoCanBeTaken = true
-                        }
-
-                        if (remindMeCheckboxChecked) {
-                            if (selectedDate.isEmpty()) {
-                                showDatepickerDialog = true
-                                return@Button
-                            }
-                        }
-
-                        if (Build.VERSION.SDK_INT >= 33)
-                            notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                    },
-                    colors = ButtonDefaults.buttonColors (
-                        containerColor = colors.surface,
-                        contentColor = colors.background
-                    ),
-                    border = BorderStroke (
-                        width = 1.dp,
-                        color = colors.textSecondary
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                ) {
-                    Text (
-                        text = takePhotoButtonText,
-                        textAlign = TextAlign.Center,
-                        color = colors.background,
-                        fontSize = 18.sp
-                    )
-                }
-            }
-
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (!errorMessage.isEmpty()) {
-                    Text (
-                        text = errorMessage,
-                        color = Color.Red,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    )
-                }
-            }
+            Image (
+                painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+                contentDescription = "PfeilNachRechts",
+                colorFilter = ColorFilter.tint(colors.secondary),
+                modifier = Modifier
+                    .rotate(-180f)
+                    .size(64.dp)
+                    .weight(1f)
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onDismissRequest()
+                    }
+            )
         }
     }
 }
@@ -656,8 +689,6 @@ fun SinceWhenSection (
 fun AverageSpentSection (
     modifier: Modifier = Modifier,
     timespan: Timespan,
-    receiptAdded: () -> Unit,
-    onDismissRequest: () -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     tutorialInformation: TutorialInformation
 ) {
@@ -678,7 +709,6 @@ fun AverageSpentSection (
         receiptSectionsViewModel.calculateAverage()
     }
 
-    var expanded by remember { mutableStateOf(false) }
     receiptSectionsViewModel.calculateAverage()
     val averageAmount by receiptSectionsViewModel.receiptsAverage.collectAsState()
 

@@ -22,14 +22,14 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
             return Result.success()
         }
 
-        database.resetDailyQuoteFetched()
-        database.resetFeedbackSent()
         database.resetInterstitialAdAfterReceiptSeen()
 
         val oldQuote = database.dailyQuote()
         val newQuote = quoteRepository.fetchQuoteFromServer()
 
         if (newQuote.quote != oldQuote.first) {
+            database.resetDailyQuoteFetched()
+            database.resetFeedbackSent()
             database.resetQuoteTryCounter()
             notifier.sendQuoteNotification()
         }

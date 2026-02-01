@@ -3,18 +3,9 @@ package com.example.financeapp.network
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class QuoteClient private constructor(){
-    companion object {
-        private var instance: QuoteClient? = null
-
-        fun getInstance(): QuoteClient {
-            if (instance == null)
-                instance = QuoteClient()
-
-            return instance!!
-        }
-    }
-    private val client = OkHttpClient()
+class QuoteClient (
+    private val client: OkHttpClient
+) {
     var hasError: Boolean = false
 
     suspend fun fetchQuote(): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {

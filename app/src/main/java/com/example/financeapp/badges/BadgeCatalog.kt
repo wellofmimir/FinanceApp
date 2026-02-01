@@ -242,7 +242,7 @@ object BadgeCatalog {
                 title = "Investing in Knowledge",
                 text = "You liked your first tip — a small action that pays dividends over time. Smart financial journeys start with learning.",
                 theme = "",
-                pathToImage = "wallpaperFirstTip.png",
+                pathToImage = "",
                 isGranted = false
             )
 

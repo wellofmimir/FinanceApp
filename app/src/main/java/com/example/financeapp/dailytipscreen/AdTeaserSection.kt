@@ -1,18 +1,15 @@
 package com.example.financeapp.dailytipscreen
+
 import com.example.financeapp.R
 import com.example.financeapp.ui.theme.LocalAppColors
 
-
-import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.remember
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,7 +21,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.Image
+
+import androidx.compose.material3.Text
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,10 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Modifier
 
 @Composable
-fun AdTeaserSection(modifier: Modifier = Modifier, onConfirmButtonClicked: () -> Unit) {
-
+fun AdTeaserSection (
+    modifier: Modifier = Modifier,
+    teaserText: String,
+    onConfirmButtonClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
 
     Row (
@@ -58,7 +62,7 @@ fun AdTeaserSection(modifier: Modifier = Modifier, onConfirmButtonClicked: () ->
                 .fillMaxWidth(0.75f)
         ) {
             Text (
-                text = "Your daily tip will be shown here after watching a quick ad.",
+                text = teaserText,
                 color = colors.primary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold

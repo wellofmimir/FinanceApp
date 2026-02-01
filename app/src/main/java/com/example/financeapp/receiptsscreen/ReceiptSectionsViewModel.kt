@@ -1,6 +1,7 @@
 package com.example.financeapp.receiptsscreen
 
 import android.net.Uri
+import androidx.compose.runtime.collectAsState
 import androidx.core.net.toUri
 
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.example.financeapp.database.Receipt
 import com.example.financeapp.repositories.AdRepository
 import com.example.financeapp.repositories.ReceiptRepository
 import com.example.financeapp.database.Expense
+import com.example.financeapp.network.TrendRequest
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,22 +62,47 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     private val internExpense = MutableStateFlow(Expense("", "", 0f))
     val expense = internExpense.asStateFlow()
 
-    private val internInsertState = MutableStateFlow<Boolean>(false)
+    private val internInsertState = MutableStateFlow(false)
     val insertState = internInsertState.asStateFlow()
     private val internReceipts = MutableStateFlow<List<Receipt>>(emptyList())
     val receipts = internReceipts.asStateFlow()
-    private val internReceiptsAverage = MutableStateFlow<Float>(0.0f)
+    private val internReceiptsAverage = MutableStateFlow(0.0f)
     val receiptsAverage = internReceiptsAverage.asStateFlow()
-    private val internReceiptsSum = MutableStateFlow<Float>(0.0f)
+    private val internReceiptsSum = MutableStateFlow(0.0f)
     val receiptsSum = internReceiptsSum.asStateFlow()
-    private val internCurrentMonth = MutableStateFlow<String>("")
+    private val internCurrentMonth = MutableStateFlow("")
     val currentMonth = internCurrentMonth.asStateFlow()
     private var currentTimespan = MutableStateFlow("" to "")
     private var internCurrency = MutableStateFlow("")
     var currency = internCurrency.asStateFlow()
-
     private val internToastEvent = MutableSharedFlow<String>()
     val toastEvent = internToastEvent.asSharedFlow()
+
+    private var internTrendRequest = MutableStateFlow(TrendRequest("", "", emptyList()))
+    val trendRequest = internTrendRequest.asStateFlow()
+
+    fun getRandomSeriesOfValuesForTrendAnalysis() {
+        val randomEntry = internExpenses.value.random()
+        val randomNumber = (1..5).random()
+
+        val result = when (randomNumber) {
+            1 -> repository.getReceiptsForACertainTimespanAndCategory(getFirstDayOfCurrentMonth(), getLastDayOfCurrentMonth(), randomEntry.category)
+            else -> repository.getReceiptsForACertainTimespanAndCategory(getFirstDayOfCurrentMonth(), getLastDayOfCurrentMonth(), randomEntry.category)
+        }
+
+        val timeUnit = when (randomNumber) {
+            1 -> "days"
+            2 -> "months"
+            3 -> "years"
+            else -> ""
+        }
+
+        val valuesList: List<Float> = result.map { receipt ->
+            receipt.amount
+        }
+
+        internTrendRequest.value = TrendRequest(randomEntry.category, timeUnit, valuesList)
+    }
 
     fun showToast(message: String) {
         viewModelScope.launch {
@@ -84,7 +111,6 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     }
 
     fun insertReceipt(receipt: Receipt, remindMeDate: String = "") {
-
         val result = repository.insertReceipt(receipt)
 
         result.fold (
@@ -159,7 +185,6 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     }
 
     fun calculateExpenses() {
-
         val newExpenses = internExpenses.value.map { expense ->
             val sum = internReceipts.value
                 .filter { receipt ->
@@ -173,11 +198,10 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
             expense.copy(amount = sum)
         }
 
-        internExpenses.value = newExpenses
+        internExpenses.value = newExpenses.sortedByDescending { it.amount }
     }
 
     fun calculateAverage() {
-
         val receipts = internReceipts.value
 
         if (receipts.isEmpty()) {
@@ -193,7 +217,6 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
     }
 
     private fun calculateSum() {
-
         val receipts = internReceipts.value
 
         if (receipts.isEmpty()) {
@@ -201,11 +224,11 @@ class ReceiptSectionsViewModel(private val repository: ReceiptRepository, privat
             return
         }
 
-        val average = receipts.map { receipt ->
+        val sum = receipts.map { receipt ->
             receipt.amount
         }.sum()
 
-        internReceiptsSum.value = average
+        internReceiptsSum.value = sum
     }
 
     fun getCurrentMonth() {

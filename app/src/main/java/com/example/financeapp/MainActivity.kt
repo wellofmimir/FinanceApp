@@ -2,6 +2,9 @@ package com.example.financeapp
 
 import com.google.android.gms.ads.MobileAds
 
+import com.example.financeapp.notifications.DailyTipScheduler
+import com.example.financeapp.notifications.QuoteScheduler
+import com.example.financeapp.notifications.RemindMeScheduler
 import com.example.financeapp.advertisement.InterstitialAdManager
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.billingmanager.BillingManager
@@ -12,8 +15,6 @@ import com.example.financeapp.header.HeaderSection
 import com.example.financeapp.header.HeaderSectionViewModel
 import com.example.financeapp.homescreen.GoalsSectionViewModel
 import com.example.financeapp.likedquotesscreen.LikedQuotesSection
-import com.example.financeapp.notifications.QuotePollingWorker
-import com.example.financeapp.notifications.ReceiptReminderPollingWorker
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.repositories.GoalRepository
 import com.example.financeapp.repositories.ReceiptRepository
@@ -27,7 +28,6 @@ import com.example.financeapp.goalhistoryscreen.GoalHistoryScreen
 import com.example.financeapp.homescreen.AchievementsSectionViewModel
 import com.example.financeapp.homescreen.HomeScreen
 import com.example.financeapp.homescreen.QuoteViewModel
-import com.example.financeapp.notifications.DailyTipWorker
 import com.example.financeapp.receiptsscreen.ReceiptScreen
 import com.example.financeapp.repositories.CurrencyRepository
 import com.example.financeapp.repositories.DailyTipRepository
@@ -57,8 +57,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 
 import android.os.Bundle
-import android.content.Context
-import android.icu.util.Calendar
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -98,18 +96,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 import kotlinx.coroutines.delay
 
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.financeapp.notifications.DailyTipScheduler
-import com.example.financeapp.notifications.QuoteScheduler
-import com.example.financeapp.notifications.RemindMeScheduler
+import com.example.financeapp.metricsscreen.MetricsScreenViewModel
+import com.example.financeapp.repositories.MetricsRepository
 
-import java.util.concurrent.TimeUnit
 
 enum class Screen (id: Int) {
     HOME(0),
@@ -359,6 +351,21 @@ class MainActivity : ComponentActivity() {
                             val badgesRepository = BadgesRepository.getInstance(database, fileProvider)
 
                             return BadgesViewModel(badgesRepository) as T
+                        }
+                    }
+                )
+
+                val metricsScreenViewModel: MetricsScreenViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val rewardedAdManager = RewardedAdManager(context)
+                            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+
+                            val database = FinanceAppDatabase.getInstance(context)
+                            val metricsRepository = MetricsRepository.getInstance(database)
+
+                            return MetricsScreenViewModel(rewardedAdManager, metricsRepository) as T
                         }
                     }
                 )
@@ -621,6 +628,7 @@ class MainActivity : ComponentActivity() {
                                 receiptSectionsViewModel = receiptSectionsViewModel,
                                 mainActivityViewModel = mainActivityViewModel,
                                 advertisementViewModel = advertisementViewModel,
+                                metricsScreenViewModel = metricsScreenViewModel,
                                 badgesViewModel = badgesViewModel,
                                 tutorialInformation = tutorialInformation
                             )

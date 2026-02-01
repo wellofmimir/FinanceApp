@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 android {
@@ -41,7 +43,8 @@ android {
 }
 
 dependencies {
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.0.0")
     implementation("androidx.activity:activity-compose:1.9.3") // Lifecycle-aware Compose Activity
     implementation("androidx.compose.ui:ui:1.7.4")            // Compose UI Core
     implementation("androidx.compose.material3:material3:1.3.0") // Material Design 3

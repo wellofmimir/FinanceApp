@@ -6,6 +6,7 @@ import com.example.financeapp.database.Badge
 import com.example.financeapp.database.FinanceAppDatabase
 import com.example.financeapp.network.WallpaperClient
 import com.example.financeapp.commonutils.FileProvider
+import com.example.financeapp.network.SharedHttpClient
 
 class BadgesRepository private constructor (
     private val database: FinanceAppDatabase,
@@ -22,7 +23,7 @@ class BadgesRepository private constructor (
         }
     }
 
-    val wallpaperClient = WallpaperClient.getInstance()
+    val wallpaperClient = WallpaperClient(SharedHttpClient.sharedClient)
 
     suspend fun fetchWallpaper(badgeIdentifier: BadgeIdentifier) {
         val result = wallpaperClient.fetchWallpaper(badgeIdentifier)

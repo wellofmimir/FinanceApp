@@ -170,7 +170,7 @@ fun BadgesSection (
             }
 
             Image (
-                bitmap = imageBitmapFromTemporaryBadge!!,
+                bitmap = imageBitmapFromTemporaryBadge,
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
@@ -212,9 +212,12 @@ fun BadgesSection (
                 title = badge.title,
                 text = badge.text,
                 onSeeGift = {
-                    showWallpaper = true
+                    if (badge.pathToImage.isNotEmpty())
+                        showWallpaper = true
+
                     temporaryBadge = badge
-                }
+                },
+                showGiftText = badge.pathToImage.isNotEmpty()
             )
 
             Spacer (

@@ -7,20 +7,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-class FeedbackClient private constructor() {
-    companion object {
-        private var instance: FeedbackClient? = null
+class FeedbackClient (
+    private val client: OkHttpClient
+) {
 
-        fun getInstance(): FeedbackClient {
-            if (instance == null)
-                instance = FeedbackClient()
-
-            return instance!!
-        }
-    }
-
-    private val client = OkHttpClient()
-    var hasError = false
 
     suspend fun sendFeedback(name: String, text: String): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
 
@@ -42,7 +32,6 @@ class FeedbackClient private constructor() {
                 response.body?.string() ?: ""
             }
         } catch (e: Exception) {
-            hasError = true
             ""
         }
     }

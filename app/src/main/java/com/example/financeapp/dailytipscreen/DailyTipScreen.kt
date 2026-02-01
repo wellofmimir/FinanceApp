@@ -206,6 +206,7 @@ fun DailyTipScreen (
                 )
             } else {
                 AdTeaserSection (
+                    teaserText = "Your daily tip will be shown here after watching a quick ad.",
                     onConfirmButtonClicked = {
                         rewardedAdCanBeShown = true
                     }
