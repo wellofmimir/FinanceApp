@@ -1,7 +1,6 @@
 package com.example.financeapp.receiptsscreen
 
 import android.net.Uri
-import androidx.compose.runtime.collectAsState
 import androidx.core.net.toUri
 
 import androidx.lifecycle.ViewModel
@@ -17,8 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 
@@ -27,15 +24,37 @@ sealed interface ShareEvent {
     data class SharedReceipt (val imageUri: Uri, val text: String): ShareEvent
 }
 
-class ReceiptSectionsViewModel(private val repository: ReceiptRepository, private val adRepository: AdRepository): ViewModel() {
+class ReceiptSectionsViewModel (
+    private val repository: ReceiptRepository,
+    private val adRepository: AdRepository
+): ViewModel() {
+    private val internShareForWhatsAppEvent = MutableSharedFlow<ShareEvent>()
+    val shareEventForWhatsApp = internShareForWhatsAppEvent.asSharedFlow()
 
-    private val internShareEvent = MutableSharedFlow<ShareEvent>()
-    val shareEvent = internShareEvent.asSharedFlow()
+    private val internShareForFacebookMessengerEvent = MutableSharedFlow<ShareEvent>()
+    val shareEventForFacebookMessenger = internShareForFacebookMessengerEvent.asSharedFlow()
 
-    fun shareReceipt(receipt: Receipt) {
+    private val internShareForFacebookEvent = MutableSharedFlow<ShareEvent>()
+    val shareEventForFacebook = internShareForFacebookEvent.asSharedFlow()
+
+    fun shareReceiptOnWhatsApp(receipt: Receipt) {
         viewModelScope.launch {
             getCurrency()
-            internShareEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+            internShareForWhatsAppEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+        }
+    }
+
+    fun shareReceiptOnFacebookMessenger(receipt: Receipt) {
+        viewModelScope.launch {
+            getCurrency()
+            internShareForFacebookMessengerEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+        }
+    }
+
+    fun shareReceiptOnFacebook(receipt: Receipt) {
+        viewModelScope.launch {
+            getCurrency()
+            internShareForFacebookEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
         }
     }
 

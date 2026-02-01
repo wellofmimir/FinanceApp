@@ -94,6 +94,9 @@ import kotlin.toBigDecimal
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.ui.draw.rotate
+import com.example.financeapp.commonutils.shareToFacebook
+import com.example.financeapp.commonutils.shareToFacebookMessenger
+import com.example.financeapp.homescreen.ShareAchievementEvent
 
 enum class Timespan (id: Int) {
 
@@ -880,12 +883,41 @@ fun ReceiptLogSection (
 
     var currentReceipt by remember { mutableStateOf<Receipt?>(null) }
 
-    LaunchedEffect(Unit) {
-        receiptSectionsViewModel.shareEvent.collect { event ->
+    var whatsAppClicked by remember { mutableStateOf(false) }
+    var facebookClicked by remember { mutableStateOf(false) }
+    var facebookMessengerClicked by remember {mutableStateOf(false)}
+
+    LaunchedEffect(whatsAppClicked) {
+        receiptSectionsViewModel.shareEventForWhatsApp.collect { event ->
             when (event) {
                 is ShareEvent.SharedReceipt -> {
                     val uri = getShareableImageUri(context, event.imageUri.toString())
                     shareToWhatsapp(context, uri, event.text)
+                    whatsAppClicked = false
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(facebookClicked) {
+        receiptSectionsViewModel.shareEventForFacebook.collect { event ->
+            when (event) {
+                is ShareEvent.SharedReceipt -> {
+                    val uri = getShareableImageUri(context, event.imageUri.toString())
+                    shareToFacebook(context, uri)
+                    facebookClicked = false
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(facebookMessengerClicked) {
+        receiptSectionsViewModel.shareEventForFacebookMessenger.collect { event ->
+            when (event) {
+                is ShareEvent.SharedReceipt -> {
+                    val uri = getShareableImageUri(context, event.imageUri.toString())
+                    shareToFacebookMessenger(context, uri)
+                    facebookMessengerClicked = false
                 }
             }
         }
@@ -981,29 +1013,90 @@ fun ReceiptLogSection (
                                 )
                             }
 
-                            Text (
-                                text = "Share",
-                                color = colors.secondary
-                            )
-
                             Spacer (
                                 modifier = Modifier
                                     .height(6.dp)
                             )
 
-                            Image (
-                                painter = painterResource(R.drawable.whatsapplogo_foreground),
-                                contentDescription = "Whatsapp-Logo",
-                                colorFilter = ColorFilter.tint(colors.secondary),
+                            Row (
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier
-                                    .size(26.dp)
-                                    .clickable (
-                                        indication = null,
-                                        interactionSource = remember { MutableInteractionSource() }
-                                    ) {
-                                        receiptSectionsViewModel.shareReceipt(currentReceipt)
-                                    }
-                            )
+                                    .fillMaxWidth(0.5f)
+                                    .size(200.dp)
+                            ) {
+                                Box (
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image (
+                                        painter = painterResource(R.drawable.whatsapp_foreground),
+                                        contentDescription = "Whatsapp-Logo",
+                                        colorFilter = ColorFilter.tint(colors.secondary),
+                                        modifier = Modifier
+                                            .clickable (
+                                                indication = null,
+                                                interactionSource = remember { MutableInteractionSource() }
+                                            ) {
+                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                    return@clickable
+
+                                                receiptSectionsViewModel.shareReceiptOnWhatsApp(currentReceipt)
+                                                whatsAppClicked = true
+                                            }
+                                    )
+                                }
+
+                                Box (
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image (
+                                        painter = painterResource(R.drawable.facebook_foreground),
+                                        contentDescription = "Facebook-Logo",
+                                        colorFilter = ColorFilter.tint(colors.secondary),
+                                        modifier = Modifier
+                                            .clickable (
+                                                indication = null,
+                                                interactionSource = remember { MutableInteractionSource() }
+                                            ) {
+                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                    return@clickable
+
+                                                receiptSectionsViewModel.shareReceiptOnFacebook(currentReceipt)
+                                                facebookClicked = true
+                                            }
+                                    )
+                                }
+
+                                Box (
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image (
+                                        painter = painterResource(R.drawable.facebookmessenger_foreground),
+                                        contentDescription = "Facebook-Messenger",
+                                        colorFilter = ColorFilter.tint(colors.secondary),
+                                        modifier = Modifier
+                                            .clickable (
+                                                indication = null,
+                                                interactionSource = remember { MutableInteractionSource() }
+                                            ) {
+                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                                    return@clickable
+
+                                                receiptSectionsViewModel.shareReceiptOnFacebookMessenger(currentReceipt)
+                                                facebookMessengerClicked = true
+                                            }
+                                    )
+                                }
+                            }
                         }
                     }
                 }

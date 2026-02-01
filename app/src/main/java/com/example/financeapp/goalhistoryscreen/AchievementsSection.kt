@@ -122,7 +122,8 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -132,8 +133,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
-                        .weight(5f)
+                        .weight(4f)
                         .clip(RoundedCornerShape(12.dp))
                         .clickable (
                             indication = null,
@@ -145,10 +145,14 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
                         }
                 )
 
+                Spacer (
+                    modifier = Modifier
+                        .padding(4.dp)
+                )
+
                 Box (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
                         .weight(1f)
                         .border (
                             width = 1.dp,
@@ -176,7 +180,7 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
 
                         Spacer (
                             modifier = Modifier
-                                .height(12.dp)
+                                .padding(4.dp)
                         )
 
                         Text (
@@ -184,11 +188,17 @@ fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewMo
                             color = colors.secondary
                         )
 
+                        Spacer (
+                            modifier = Modifier
+                                .height(6.dp)
+                        )
+
                         Row (
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxWidth(0.5f)
+                                .size(200.dp)
                         ) {
                             Box (
                                 modifier = Modifier
