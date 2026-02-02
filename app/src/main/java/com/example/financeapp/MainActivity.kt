@@ -118,6 +118,8 @@ enum class Screen (id: Int) {
     SHOP (id = 8),
 
     DAILY_TIPS(id = 9),
+
+    NONE (id = 10)
 }
 
 enum class TutorialStep (id: Int) {
@@ -197,7 +199,7 @@ class MainActivity : ComponentActivity() {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                             val database = FinanceAppDatabase.getInstance(context)
-                            val repository = UserRepository.getIntance(database)
+                            val repository = UserRepository.getInstance(database)
 
                             return MainActivityViewModel(repository) as T
                         }
@@ -380,6 +382,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     badgesViewModel.fetchWallpaperFirstQuote()
                     badgesViewModel.fetchWallpaperFirstReceipt()
+                    settingsViewModel.getCurrency()
                 }
 
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
@@ -391,7 +394,6 @@ class MainActivity : ComponentActivity() {
                 var goalAchieved by remember { mutableStateOf(false) }
 
                 LaunchedEffect(user) {
-
                     if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
                         delay(2000)
 
@@ -573,6 +575,7 @@ class MainActivity : ComponentActivity() {
                                 quoteViewModel = quoteViewModel,
                                 advertisementViewModel = advertisementViewModel,
                                 badgesViewModel = badgesViewModel,
+                                settingsViewModel = settingsViewModel,
                                 onGoalAchieved = {
                                     goalAchieved = true
                                 },

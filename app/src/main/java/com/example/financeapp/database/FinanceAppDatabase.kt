@@ -158,15 +158,21 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
-    fun setRewardedAdAfterDailyTrendSeen() {
+    fun getDailyTrend(): String {
+        return securePreferences.getString("DailyTrend", "") ?: ""
+    }
+
+    fun setRewardedAdAfterDailyTrendSeen(trendText: String) {
         securePreferences.edit {
             putBoolean("DailyTrendSeen", true)
+            putString("DailyTrend", trendText)
         }
     }
 
     fun resetRewardedAdAfterDailyTrendSeen() {
         securePreferences.edit {
             putBoolean("DailyTrendSeen", false)
+            putString("DailyTrend", "")
         }
     }
 

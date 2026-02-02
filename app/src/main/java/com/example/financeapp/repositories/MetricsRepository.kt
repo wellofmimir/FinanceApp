@@ -31,12 +31,12 @@ class MetricsRepository private constructor (
         return result.text
     }
 
-    fun setRewardedAdAfterDailyTrendSeen() {
-        database.setRewardedAdAfterDailyTrendSeen()
+    fun getOldDailyTrend(): String {
+        return database.getDailyTrend()
     }
 
-    fun resetRewardedAdAfterDailyTrendSeen() {
-        database.resetRewardedAdAfterDailyTrendSeen()
+    fun setRewardedAdAfterDailyTrendSeen(trendText: String) {
+        database.setRewardedAdAfterDailyTrendSeen(trendText)
     }
 
     fun rewardedAdAfterDailyTrendSeen(): Boolean {

@@ -47,6 +47,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import java.math.RoundingMode
 
 @Composable
 
@@ -56,7 +57,8 @@ fun EditGoalMenu (
     onDismissRequest: () -> Unit,
     onNewAmount: (String) -> Unit,
     onSaved: (String) -> Unit,
-    currentGoalText: String
+    currentGoalText: String,
+    currency: String
 ) {
     val colors = LocalAppColors.current
 
@@ -79,7 +81,6 @@ fun EditGoalMenu (
 
     LaunchedEffect(expanded) {
         goal?.let {
-
             amountText = goal.amount.toString()
             originalAmountText = amountText
 
@@ -90,7 +91,6 @@ fun EditGoalMenu (
 
     LaunchedEffect(goal) {
         goal?.let {
-
             amountText = goal.amount.toString()
             originalAmountText = amountText
 
@@ -102,7 +102,6 @@ fun EditGoalMenu (
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = {
-
             isEditingSavedAmount = false
             isEditingInitialAmount = false
 
@@ -204,7 +203,7 @@ fun EditGoalMenu (
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text (
-                    text = "Amount: ",
+                    text = "Amount: $currency ",
                     color = colors.secondary,
                     fontSize = 24.sp
                 )
@@ -297,7 +296,7 @@ fun EditGoalMenu (
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text (
-                    text = "Already saved: ",
+                    text = "Already saved: $currency ",
                     color = colors.secondary,
                     fontSize = 24.sp,
                 )

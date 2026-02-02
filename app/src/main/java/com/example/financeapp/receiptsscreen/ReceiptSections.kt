@@ -718,6 +718,16 @@ fun AverageSpentSection (
     val currency by receiptSectionsViewModel.currency.collectAsState()
     receiptSectionsViewModel.getCurrency()
 
+    val textSize = when (averageAmount) {
+        in 0f..9f -> 26.sp
+        in 10f..99f -> 26.sp
+        in 100f..999f -> 26.sp
+        in 1000f..9999f -> 26.sp
+        in 10000f..99999f -> 26.sp
+        in 100000f..999999f -> 26.sp
+        else -> if (currency.length == 1) 26.sp else 24.sp
+    }
+
     Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_TAKE_PICTURE) 0.1f else 1.0f)
@@ -734,7 +744,7 @@ fun AverageSpentSection (
                 .padding(start = 12.dp, top = 18.dp),
             text = if (currency.length == 1) currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
             color = colors.textPrimary,
-            fontSize = 32.sp,
+            fontSize = textSize,
             fontWeight = FontWeight.Bold
         )
 
@@ -787,6 +797,16 @@ fun ExpensesOverviewSection (
     val currency by receiptSectionsViewModel.currency.collectAsState()
     receiptSectionsViewModel.getCurrency()
 
+    val textSize = when (sumOfExpenses) {
+        in 0f..9f -> 26.sp
+        in 10f..99f -> 26.sp
+        in 100f..999f -> 26.sp
+        in 1000f..9999f -> 26.sp
+        in 10000f..99999f -> 26.sp
+        in 100000f..999999f -> 26.sp
+        else -> if (currency.length == 1) 26.sp else 24.sp
+    }
+
     Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_SUM_SECTION) 0.1f else 1.0f)
@@ -815,7 +835,7 @@ fun ExpensesOverviewSection (
                 .padding(start = 12.dp, top = 9.dp),
             text = if (currency.length == 1) currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
             color = colors.textPrimary,
-            fontSize = 32.sp,
+            fontSize = textSize,
             fontWeight = FontWeight.Bold
         )
 
@@ -924,7 +944,6 @@ fun ReceiptLogSection (
     }
 
     if (showDialog && bitmap != null) {
-
         Dialog (
             onDismissRequest = {
                 showDialog = false

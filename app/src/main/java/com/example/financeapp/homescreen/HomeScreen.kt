@@ -31,6 +31,7 @@ import com.example.financeapp.advertisement.AdvertisementViewModel
 import com.example.financeapp.badges.BadgesViewModel
 import com.example.financeapp.dailytipscreen.DailyTipScreenViewModel
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
+import com.example.financeapp.settingsscreen.SettingsViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 import com.example.financeapp.welldone.WellDoneSection
 
@@ -43,6 +44,7 @@ fun HomeScreen (
     quoteViewModel: QuoteViewModel,
     advertisementViewModel: AdvertisementViewModel,
     badgesViewModel: BadgesViewModel,
+    settingsViewModel: SettingsViewModel,
     onGoalAchieved: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit,
     shopSectionClicked: () -> Unit,
@@ -84,7 +86,7 @@ fun HomeScreen (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                GoalprogressSection (
+                GoalProgressSection (
                     modifier = Modifier
                         .weight(1f),
                     onGoalAchieved = { idGoal ->
@@ -93,6 +95,7 @@ fun HomeScreen (
                     },
                     goalsSectionViewModel = goalsSectionViewModel,
                     badgesViewModel = badgesViewModel,
+                    settingsViewModel = settingsViewModel,
                     tutorialInformation = tutorialInformation
                 )
 

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,12 @@ fun GoalHistoryScreen (
     onWellDoneSectionDismissed: () -> Unit) {
 
     var punchCardFilled by remember { mutableStateOf(false) }
+    var switchSections by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        totalGoalsAchievedSectionViewModel.getCompletedGoals()
+        totalGoalsAchievedSectionViewModel.getTotalTokensEarned()
+    }
 
     if (punchCardFilled) {
 
@@ -88,18 +95,15 @@ fun GoalHistoryScreen (
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var randomBoolean by remember { mutableStateOf( kotlin.random.Random.nextBoolean()) }
-
-            if (randomBoolean)
+            if (switchSections)
                 TotalGoalsAchievedSection (
                     modifier = Modifier
                         .weight(1f)
                         .clickable() {
-
                             if (tutorialInformation.isActive)
                                 return@clickable
 
-                            randomBoolean = !randomBoolean
+                            switchSections = !switchSections
                         },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                     tutorialInformation = tutorialInformation
@@ -109,11 +113,10 @@ fun GoalHistoryScreen (
                     modifier = Modifier
                         .weight(1f)
                         .clickable() {
-                            
                             if (tutorialInformation.isActive)
                                 return@clickable
 
-                            randomBoolean = !randomBoolean
+                            switchSections = !switchSections
                         },
                     totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                     tutorialInformation = tutorialInformation

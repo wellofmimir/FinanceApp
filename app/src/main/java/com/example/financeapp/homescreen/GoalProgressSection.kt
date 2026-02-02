@@ -37,14 +37,16 @@ import com.example.financeapp.TutorialInformation
 import com.example.financeapp.TutorialStep
 import com.example.financeapp.badges.BadgeIdentifier
 import com.example.financeapp.badges.BadgesViewModel
+import com.example.financeapp.settingsscreen.SettingsViewModel
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun GoalprogressSection (
+fun GoalProgressSection (
     modifier: Modifier = Modifier,
     onGoalAchieved: (idGoal: Int) -> Unit,
     goalsSectionViewModel: GoalsSectionViewModel,
     badgesViewModel: BadgesViewModel,
+    settingsViewModel: SettingsViewModel,
     tutorialInformation: TutorialInformation,
     context: Context = LocalContext.current
 ) {
@@ -137,7 +139,8 @@ fun GoalprogressSection (
                             badgesViewModel.checkBadge(BadgeIdentifier.FIRST_GOAL)
                         }
                     },
-                    currentGoalText
+                    currentGoalText,
+                    currency = settingsViewModel.currency.collectAsState().value
                 )
 
                 Column (

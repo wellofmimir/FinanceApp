@@ -24,6 +24,7 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
 
         database.resetInterstitialAdAfterReceiptSeen()
         database.resetDailyQuoteFetched()
+        database.resetRewardedAdAfterDailyTrendSeen()
 
         val oldQuote = database.dailyQuote()
         val newQuote = quoteRepository.fetchQuoteFromServer()

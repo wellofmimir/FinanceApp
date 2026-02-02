@@ -1,5 +1,6 @@
 package com.example.financeapp.metricsscreen
 
+import android.app.Activity
 import com.example.financeapp.receiptsscreen.ReceiptSectionsViewModel
 import com.example.financeapp.TutorialInformation
 import com.example.financeapp.receiptsscreen.SinceWhenSection
@@ -7,9 +8,11 @@ import com.example.financeapp.receiptsscreen.Timespan
 import com.example.financeapp.ui.theme.LocalAppColors
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
@@ -27,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 
@@ -41,8 +45,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import com.example.financeapp.R
+import com.example.financeapp.advertisement.AdSectionSmallBanner
 import com.example.financeapp.dailytipscreen.AdTeaserSection
+import kotlinx.coroutines.delay
 import java.math.RoundingMode
 
 @Composable
@@ -51,20 +61,37 @@ fun MetricsScreen (
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     metricsScreenViewModel: MetricsScreenViewModel,
     tutorialInformation: TutorialInformation,
+    onReturn: () -> Unit,
     context: Context = LocalContext.current
 ) {
+    val activity = context as? Activity
+
     val colors = LocalAppColors.current
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
+
     val expenses by receiptSectionsViewModel.expenses.collectAsState()
     val expense by receiptSectionsViewModel.expense.collectAsState()
+
     val receipts by receiptSectionsViewModel.receipts.collectAsState()
     val currency by receiptSectionsViewModel.currency.collectAsState()
+
     var showExpense by remember { mutableStateOf(false) }
-    var showTrendAnalysis by remember { mutableStateOf(false) }
+
     val waitingForDailyTrend by metricsScreenViewModel.waitingForDailyTrend.collectAsState()
+
     val dailyTrendText by metricsScreenViewModel.dailyTrend.collectAsState()
     val trendRequest by receiptSectionsViewModel.trendRequest.collectAsState()
+
     val waitingText by metricsScreenViewModel.waitingText.collectAsState()
+    var trendCanBeShown by remember { mutableStateOf(false) }
+
+    LaunchedEffect(metricsScreenViewModel.trendCanBeShown) {
+        if (!metricsScreenViewModel.trendCanBeShown)
+            return@LaunchedEffect
+
+        metricsScreenViewModel.getDailyTrend(trendRequest)
+        trendCanBeShown = true
+    }
 
     LaunchedEffect(Unit) {
         receiptSectionsViewModel.getCurrency()
@@ -221,14 +248,14 @@ fun MetricsScreen (
 
         Box (
             modifier = Modifier
-                .fillMaxHeight()
+                .weight(4f)
                 .background (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 ),
             contentAlignment = Alignment.Center
         ) {
-            if (showTrendAnalysis) {
+            if (trendCanBeShown || metricsScreenViewModel.rewardedAdAfterDailyTrendSeen()) {
                 if (waitingForDailyTrend) {
                     TrendSection (
                         trend = waitingText
@@ -243,11 +270,46 @@ fun MetricsScreen (
                 AdTeaserSection (
                     teaserText = "Your trend analysis will be shown here after watching a quick ad.",
                     onConfirmButtonClicked = {
-                        showTrendAnalysis = true
-                        metricsScreenViewModel.getDailyTrend(trendRequest)
+                        activity?.let {
+                            metricsScreenViewModel.onWatchAd(activity)
+                        }
                     }
                 )
             }
+        }
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background (
+                    color = colors.primary,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image (
+                painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+                contentDescription = "PfeilNachRechts",
+                colorFilter = ColorFilter.tint(colors.secondary),
+                modifier = Modifier
+                    .weight(1f)
+                    .rotate(-180f)
+                    .size(64.dp)
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onReturn()
+                    }
+            )
+
+            AdSectionSmallBanner (
+                modifier = Modifier
+                    .weight(4f),
+                false
+            )
         }
     }
 }

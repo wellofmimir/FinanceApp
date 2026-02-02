@@ -35,8 +35,11 @@ import com.example.financeapp.TutorialStep
 import com.example.financeapp.ui.theme.LocalAppColors
 
 @Composable
-fun SavedReceiptsSection(modifier: Modifier = Modifier, receiptSectionsViewModel: ReceiptSectionsViewModel, tutorialInformation: TutorialInformation) {
-
+fun SavedReceiptsSection (
+    modifier: Modifier = Modifier,
+    receiptSectionsViewModel: ReceiptSectionsViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
     val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
 

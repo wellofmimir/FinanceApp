@@ -6,7 +6,7 @@ class UserRepository private constructor (private val database: FinanceAppDataba
     companion object {
         private var instance: UserRepository? = null
 
-        fun getIntance(database: FinanceAppDatabase): UserRepository {
+        fun getInstance(database: FinanceAppDatabase): UserRepository {
             if (instance == null)
                 instance = UserRepository(database)
 

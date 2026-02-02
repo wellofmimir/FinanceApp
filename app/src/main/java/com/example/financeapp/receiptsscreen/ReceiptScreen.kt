@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,8 +47,8 @@ fun ReceiptScreen (
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
     var receiptAdded by remember { mutableStateOf(false) }
-    var showMetricsScreen by remember { mutableStateOf(false) }
     var addReceiptMenuExpanded by remember { mutableStateOf(false) }
+    val metricsScreenIsShown by metricsScreenViewModel.metricsScreenIsShown.collectAsState()
 
     LaunchedEffect(receiptAdded) {
         activity?.let {
@@ -92,15 +93,19 @@ fun ReceiptScreen (
         return
     }
 
-    if (showMetricsScreen) {
+    if (metricsScreenIsShown) {
         MetricsScreen (
             modifier = Modifier
                 .fillMaxSize(0.5f),
             receiptSectionsViewModel = receiptSectionsViewModel,
             metricsScreenViewModel = metricsScreenViewModel,
-            tutorialInformation = tutorialInformation
+            tutorialInformation = tutorialInformation,
+            onReturn = {
+                metricsScreenViewModel.resetMetricsScreenIsShown()
+            }
         )
 
+        metricsScreenViewModel.setMetricsScreenIsShown()
         return
     }
 
@@ -127,7 +132,7 @@ fun ReceiptScreen (
                 modifier = Modifier
                     .weight(1f),
                 onSeeYourMetricsSectionButtonClicked = {
-                    showMetricsScreen = true
+                    metricsScreenViewModel.setMetricsScreenIsShown()
                     addReceiptMenuExpanded = false
                 }
             )
