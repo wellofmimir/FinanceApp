@@ -1,4 +1,4 @@
-package com.example.financeapp
+package studio.lemniscate.greeen
 
 import org.junit.Test
 

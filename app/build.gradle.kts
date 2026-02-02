@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.financeapp"
+    namespace = "studio.lemniscate.greeen"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.financeapp"
+        applicationId = "studio.lemniscate.greeen"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
