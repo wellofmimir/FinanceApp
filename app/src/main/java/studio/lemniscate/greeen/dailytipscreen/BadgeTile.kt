@@ -101,7 +101,7 @@ fun BadgeTile (
                 Image (
                     painter = painterResource(R.drawable.herzzumliken_foreground),
                     contentDescription = "Herz",
-                    colorFilter = ColorFilter.tint(Color.Black)
+                    colorFilter = ColorFilter.tint(Color.Red)
                 )
             }
         }

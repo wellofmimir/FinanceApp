@@ -857,7 +857,6 @@ class MainActivity : ComponentActivity() {
                                     .clickable(
                                     ) {
                                         tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
-                                        mainActivityViewModel.setHomeScreenTutorialDone()
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -886,7 +885,6 @@ class MainActivity : ComponentActivity() {
                                     .clickable(
                                     ) {
                                         tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
-                                        mainActivityViewModel.setHomeScreenTutorialDone()
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
@@ -952,6 +950,7 @@ class MainActivity : ComponentActivity() {
                             Box (
                                 modifier = Modifier
                                     .fillMaxSize()
+                                    .offset(y = (-30).dp)
                                     .clickable(
                                     ) {
                                         tutorialInformation = tutorialInformation.endReceiptsScreenTutorial()
@@ -1009,16 +1008,18 @@ class MainActivity : ComponentActivity() {
                     } else if (sectionIdentifier == Screen.GOALHISTORY) {
 
                         if (!mainActivityViewModel.getGoalHistoryTutorialDone() && !tutorialInformation.isActive) {
-                            tutorialInformation = tutorialInformation.copy (
-                                isActive = true,
-                                tutorialStep = TutorialStep.GOALS_START
-                            )
+                            tutorialInformation = tutorialInformation.restartGoalHistoryScreenTutorial()
                         }
 
                         if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_START) {
                             Box (
                                 modifier = Modifier
-                                    .fillMaxSize(),
+                                    .offset(y = (-30).dp)
+                                    .fillMaxSize()
+                                    .clickable(
+                                    ) {
+                                        tutorialInformation = tutorialInformation.advanceGoalHistoryScreenTutorial()
+                                    },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column (
@@ -1026,7 +1027,7 @@ class MainActivity : ComponentActivity() {
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text (
-                                        text = "Welcome to your goal overview space!",
+                                        text = "Begin creating and managing your goals here.",
                                         fontSize = 24.sp,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
@@ -1036,7 +1037,12 @@ class MainActivity : ComponentActivity() {
                         } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_PUNCHCARD) {
                             Box (
                                 modifier = Modifier
-                                    .fillMaxSize(),
+                                    .fillMaxSize()
+                                    .offset(y = (+30).dp)
+                                    .clickable(
+                                    ) {
+                                        tutorialInformation = tutorialInformation.advanceGoalHistoryScreenTutorial()
+                                    },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column (
@@ -1059,7 +1065,13 @@ class MainActivity : ComponentActivity() {
                         } else if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.GOALS_ACHIEVEMENTS) {
                             Box (
                                 modifier = Modifier
-                                    .fillMaxSize(),
+                                    .offset(y = (-30).dp)
+                                    .fillMaxSize()
+                                    .clickable(
+                                    ) {
+                                        tutorialInformation = tutorialInformation.endGoalHistoryScreenTutorial()
+                                        mainActivityViewModel.setGoalHistoryTutorialDone()
+                                    },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column (

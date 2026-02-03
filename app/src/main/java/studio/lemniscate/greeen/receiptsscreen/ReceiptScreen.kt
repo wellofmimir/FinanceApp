@@ -96,8 +96,7 @@ fun ReceiptScreen (
                 badgesViewModel.checkBadge(BadgeIdentifier.FIRST_RECEIPT)
                 onReceiptAdded()
             },
-            receiptSectionsViewModel = receiptSectionsViewModel,
-            tutorialInformation = tutorialInformation
+            receiptSectionsViewModel = receiptSectionsViewModel
         )
 
         return

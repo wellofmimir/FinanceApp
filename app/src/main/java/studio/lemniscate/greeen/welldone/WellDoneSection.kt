@@ -155,7 +155,10 @@ fun WellDoneSection (
     ) { granted ->
         if (granted) {
 
-            val photoFile = File(context.cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+            val fileProvider = studio.lemniscate.greeen.commonutils.FileProvider(context)
+            val photoFile = fileProvider.getPhoto()
+
+            //Dieser FileProvider ist ein anderes als meiner
             val photoUri = FileProvider.getUriForFile(context, "studio.lemniscate.greeen.provider", photoFile)
             photos.add(photoFile)
 

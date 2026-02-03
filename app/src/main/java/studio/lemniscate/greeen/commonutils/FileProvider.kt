@@ -18,4 +18,13 @@ class FileProvider (
 
         return File(context.filesDir, name.ifEmpty { "image_${System.currentTimeMillis()}.png" })
     }
+
+    fun getPhoto(name: String = ""): File {
+        val photosDirectory = File(context.filesDir, "greeenphotos")
+
+        if (!photosDirectory.exists())
+            photosDirectory.mkdirs()
+
+        return File(context.filesDir, name.ifEmpty { "photo_${System.currentTimeMillis()}.png" })
+    }
 }

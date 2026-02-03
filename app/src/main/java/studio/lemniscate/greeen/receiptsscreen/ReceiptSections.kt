@@ -5,14 +5,61 @@ import studio.lemniscate.greeen.database.Receipt
 import studio.lemniscate.greeen.commonutils.fixOrientation
 import studio.lemniscate.greeen.commonutils.shareToWhatsapp
 import studio.lemniscate.greeen.commonutils.getShareableImageUri
+import studio.lemniscate.greeen.commonutils.shareToFacebook
+import studio.lemniscate.greeen.commonutils.shareToFacebookMessenger
+import studio.lemniscate.greeen.homescreen.TutorialInformation
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.commonutils.FileProvider.*
+
+import java.time.format.DateTimeFormatter
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Locale
+import java.io.File
+import java.math.RoundingMode
+
+import kotlin.toBigDecimal
+
+import android.os.Build
+import androidx.core.content.FileProvider
+import android.Manifest
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.LaunchedEffect
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.rotate
+
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,25 +70,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.compose.rememberLauncherForActivityResult
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.border
+import androidx.compose.foundation.lazy.LazyRow
+
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.rememberLauncherForActivityResult
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -51,53 +96,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.Checkbox
-import androidx.compose.ui.text.input.KeyboardType
-import java.io.File
-import androidx.core.content.FileProvider
-import android.Manifest
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.window.Dialog
-import kotlinx.coroutines.delay
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.foundation.border
+import androidx.compose.material3.Text
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
-import java.time.format.DateTimeFormatter
-import java.time.Instant
-import java.time.ZoneId
-import java.util.Locale
-import android.os.Build
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.ColorFilter
-import studio.lemniscate.greeen.homescreen.TutorialInformation
-
-import studio.lemniscate.greeen.TutorialStep
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import java.math.RoundingMode
-import kotlin.toBigDecimal
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.AlertDialog
-import androidx.compose.ui.draw.rotate
-import studio.lemniscate.greeen.commonutils.shareToFacebook
-import studio.lemniscate.greeen.commonutils.shareToFacebookMessenger
-import studio.lemniscate.greeen.homescreen.ShareAchievementEvent
 
 enum class Timespan (id: Int) {
 
@@ -115,7 +120,6 @@ fun AddReceiptMenu (
     onDismissRequest: () -> Unit,
     onReceiptSaved:() -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
-    tutorialInformation: TutorialInformation,
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
@@ -243,7 +247,10 @@ fun AddReceiptMenu (
     ) { granted ->
         if (granted) {
 
-            val photoFile = File(context.cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+            val fileProvider = studio.lemniscate.greeen.commonutils.FileProvider(context)
+            val photoFile = fileProvider.getPhoto()
+
+            //Dieser FileProvider kommt von Android und nicht von mir
             val photoUri = FileProvider.getUriForFile(context, "studio.lemniscate.greeen.provider", photoFile)
             photos.add(photoFile)
 

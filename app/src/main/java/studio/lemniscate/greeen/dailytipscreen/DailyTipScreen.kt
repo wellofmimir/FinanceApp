@@ -191,6 +191,9 @@ fun DailyTipScreen (
                     currentlyLiked = currentlyLiked,
                     dailyTip = dailyTip.dailyTip,
                     onLiked = {
+                        if (dailyTip.dailyTip.title.contains("Breathe in..."))
+                            return@DailyTipTile
+
                         dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
 
                         checkIfBadgeIsAvailable (
@@ -218,6 +221,9 @@ fun DailyTipScreen (
                 currentlyLiked = currentlyLiked,
                 dailyTip = dailyTip.dailyTip,
                 onLiked = {
+                    if (dailyTip.dailyTip.title.contains("Breathe in..."))
+                        return@DailyTipTile
+
                     dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
 
                     checkIfBadgeIsAvailable (

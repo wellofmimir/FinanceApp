@@ -11,7 +11,7 @@ fun bitmapToCachePNGFile (
     name: String
 ): File {
 
-    val file = File(context.cacheDir, "$name.png")
+    val file = File(context.filesDir, "$name.png")
 
     FileOutputStream(file).use {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)

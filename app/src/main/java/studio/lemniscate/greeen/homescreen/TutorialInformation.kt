@@ -8,13 +8,13 @@ data class TutorialInformation (
     var tutorialStep: TutorialStep
 )
 
-public fun TutorialInformation.restartHomeScreenTutorial(): TutorialInformation =
+fun TutorialInformation.restartHomeScreenTutorial(): TutorialInformation =
     copy (
         isActive = true,
         tutorialStep = TutorialStep.HOMESCREEN_START
     )
 
-public fun TutorialInformation.advanceHomeScreenTutorial(): TutorialInformation =
+fun TutorialInformation.advanceHomeScreenTutorial(): TutorialInformation =
     copy (
         isActive = true,
         tutorialStep = when (tutorialStep) {
@@ -29,19 +29,19 @@ public fun TutorialInformation.advanceHomeScreenTutorial(): TutorialInformation 
         }
     )
 
-public fun TutorialInformation.endHomeScreenTutorial(): TutorialInformation =
+fun TutorialInformation.endHomeScreenTutorial(): TutorialInformation =
     copy (
         isActive = false,
         tutorialStep = TutorialStep.RECEIPTS_START
     )
 
-public fun TutorialInformation.restartReceiptScreenTutorial(): TutorialInformation =
+fun TutorialInformation.restartReceiptScreenTutorial(): TutorialInformation =
     copy (
         isActive = true,
         tutorialStep = TutorialStep.RECEIPTS_START
     )
 
-public fun TutorialInformation.advanceReceiptScreenTutorial(): TutorialInformation =
+fun TutorialInformation.advanceReceiptScreenTutorial(): TutorialInformation =
     copy (
         isActive = true,
         tutorialStep = when (tutorialStep) {
@@ -54,13 +54,19 @@ public fun TutorialInformation.advanceReceiptScreenTutorial(): TutorialInformati
         }
     )
 
-public fun TutorialInformation.endReceiptsScreenTutorial(): TutorialInformation =
+fun TutorialInformation.endReceiptsScreenTutorial(): TutorialInformation =
     copy (
         isActive = false,
         tutorialStep = TutorialStep.GOALS_START
     )
 
-public fun TutorialInformation.advanceGoalHistoryScreenTutorial(): TutorialInformation =
+fun TutorialInformation.restartGoalHistoryScreenTutorial(): TutorialInformation =
+    copy (
+        isActive = true,
+        tutorialStep = TutorialStep.GOALS_START
+    )
+
+fun TutorialInformation.advanceGoalHistoryScreenTutorial(): TutorialInformation =
     copy (
         isActive = true,
         tutorialStep = when (tutorialStep) {
@@ -71,7 +77,7 @@ public fun TutorialInformation.advanceGoalHistoryScreenTutorial(): TutorialInfor
         }
     )
 
-public fun TutorialInformation.endGoalHistoryScreenTutorial(): TutorialInformation =
+fun TutorialInformation.endGoalHistoryScreenTutorial(): TutorialInformation =
     copy (
         isActive = false,
         tutorialStep = TutorialStep.GOALS_START
