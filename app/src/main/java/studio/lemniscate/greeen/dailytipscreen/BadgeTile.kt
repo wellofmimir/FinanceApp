@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.runtime.Composable
@@ -17,11 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 
 import androidx.compose.material3.Text
 
@@ -33,6 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -46,21 +48,14 @@ fun BadgeTile (
     val colors = LocalAppColors.current
 
     Column (
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top,
         modifier = modifier
-            .height (
-                height = 150.dp
-            )
+            .height(150.dp)
             .fillMaxWidth()
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding (
-                start = 12.dp,
-                top = 8.dp
-            )
+            .padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 8.dp)
             .clickable (
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -69,13 +64,9 @@ fun BadgeTile (
             }
     ) {
         Row (
-            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding (
-                    end = 12.dp
-                )
                 .weight(1f)
         ) {
             Text (
@@ -83,50 +74,52 @@ fun BadgeTile (
                 fontWeight = FontWeight.Bold,
                 color = colors.primary,
                 fontSize = 18.sp,
-                modifier = Modifier
-                    .weight(0.8f)
+                modifier = Modifier.weight(5f)
             )
 
-            Box (
+            Image (
+                painter = painterResource(R.drawable.herzzumliken_foreground),
+                contentDescription = "Herz",
+                colorFilter = ColorFilter.tint(Color.Red),
                 modifier = Modifier
-                    .size(43.dp)
-                    .fillMaxWidth(0.2f)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Image (
-                    painter = painterResource(R.drawable.herzzumliken_foreground),
-                    contentDescription = "Herz",
-                    colorFilter = ColorFilter.tint(Color.Red)
-                )
-            }
+                    .size(44.dp)
+                    .aspectRatio(1f)
+            )
         }
-
-        Text (
-            text = text,
-            color = colors.primary,
-            fontSize = 16.sp,
-            modifier = Modifier
-                .weight(2f)
-        )
 
         Spacer (
             modifier = Modifier
-                .padding(2.dp)
+                .height(8.dp)
         )
 
-        if (showGiftText)
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(3f),
+            contentAlignment = Alignment.TopStart
+        ) {
             Text (
-                text = "Tap to see your gift.",
+                text = text,
                 color = colors.primary,
-                fontSize = 12.sp,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = 8.dp)
+                fontSize = 16.sp,
+                textAlign = TextAlign.Left
             )
+        }
+
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.BottomStart
+        ) {
+            if (showGiftText) {
+                Text (
+                    text = "Tap to see your gift.",
+                    color = colors.primary,
+                    fontSize = 12.sp,
+                    maxLines = 1
+                )
+            }
+        }
     }
 }

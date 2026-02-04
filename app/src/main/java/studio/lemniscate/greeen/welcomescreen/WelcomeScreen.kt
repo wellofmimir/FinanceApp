@@ -636,7 +636,11 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
 }
 
 @Composable
-fun FirstTokenMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (tokenCount: Int) -> Unit) {
+fun FirstTokenMenu (
+    expanded: Boolean,
+    onDismissRequested: () -> Unit,
+    onFinished: (tokenCount: Int) -> Unit
+) {
 
     DropdownMenu (
         expanded = expanded,
