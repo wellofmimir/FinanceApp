@@ -103,7 +103,7 @@ import kotlinx.coroutines.delay
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-
+import studio.lemniscate.greeen.ui.theme.BordeauxAppColors
 
 
 enum class Screen (id: Int) {
@@ -419,8 +419,8 @@ class MainActivity : ComponentActivity() {
                         ElectricAppColors
                     else if (currentTheme == "azuretheme")
                         AzureAppColors
-                    else if (currentTheme == "peachtheme")
-                        PeachAppColors
+                    else if (currentTheme == "eleganttheme")
+                        BordeauxAppColors
                     else if (currentTheme == "Greeen")
                         GreenAppColors
                     else
@@ -592,8 +592,8 @@ class MainActivity : ComponentActivity() {
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
-                                    else if (theme == "peachtheme")
-                                        PeachAppColors
+                                    else if (theme == "eleganttheme")
+                                        BordeauxAppColors
                                     else if (theme == "Greeen")
                                         GreenAppColors
                                     else
@@ -609,8 +609,8 @@ class MainActivity : ComponentActivity() {
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
-                                    else if (theme == "peachtheme")
-                                        PeachAppColors
+                                    else if (theme == "eleganttheme")
+                                        BordeauxAppColors
                                     else if (theme == "Greeen")
                                         GreenAppColors
                                     else

@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.runtime.remember
+import studio.lemniscate.greeen.ui.theme.Bordeaux
 
 
 @Composable
@@ -374,7 +375,7 @@ fun ThemeShopSection (
         ) {
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
             val isAzureApplied = appliedTheme.value == "azuretheme"
-            val isPeachApplied = appliedTheme.value == "peachtheme"
+            val isElegantTheme = appliedTheme.value == "eleganttheme"
 
             if (isAzureApplied) {
                 ThemeShopEntry (
@@ -419,7 +420,7 @@ fun ThemeShopSection (
                     .width (4.dp)
             )
 
-            if (isPeachApplied) {
+            if (isElegantTheme) {
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
@@ -440,20 +441,20 @@ fun ThemeShopSection (
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("peachtheme"),
-                    title = "Peach",
+                    alreadyBought = themeShopViewModel.getThemePurchased("eleganttheme"),
+                    title = "Elegant",
                     price = "$1.99",
-                    color = Peach,
+                    color = Bordeaux,
                     previewRequested = {
-                        previewRequested("peachtheme")
+                        previewRequested("eleganttheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("peachtheme")
-                        themeShopViewModel.setAppliedTheme("peachtheme")
+                        applyThemeRequested("eleganttheme")
+                        themeShopViewModel.setAppliedTheme("eleganttheme")
                     },
                     purchaseRequested = {
                         val activity = context as Activity
-                        themeShopViewModel.purchaseTheme(activity, "peachtheme")
+                        themeShopViewModel.purchaseTheme(activity, "eleganttheme")
                     }
                 )
             }

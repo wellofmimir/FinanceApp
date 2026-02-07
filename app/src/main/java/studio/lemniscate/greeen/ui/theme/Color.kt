@@ -33,6 +33,10 @@ val CalmBlue = Color(0xFF517CA1)
 val Steel = Color(0xFFB9BEC3)
 
 
+val Bordeaux = Color(0xFF6D1F2B)
+val DustyRose = Color(0xFFC48A9a)
+val Salbei = Color(0xFF9DAF9B)
+val Ivory = Color(0xFFF5F1E8)
 
 
 

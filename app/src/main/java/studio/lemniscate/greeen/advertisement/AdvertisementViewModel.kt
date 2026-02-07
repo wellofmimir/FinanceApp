@@ -10,7 +10,6 @@ class AdvertisementViewModel(private val repository: AdRepository): ViewModel() 
     }
 
     fun getRemoveAllAds(): Boolean {
-        return true
         return repository.getRemoveAllAds()
     }
 

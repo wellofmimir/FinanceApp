@@ -59,3 +59,12 @@ val CharcoalAppColors = AppColors (
     textPrimary = CharcoalGreen,
     textSecondary = Steel
 )
+
+val BordeauxAppColors = AppColors (
+    primary = Bordeaux,
+    secondary = Ivory,
+    background = Bordeaux,
+    surface = Ivory,
+    textPrimary = Bordeaux,
+    textSecondary = Ivory
+)
