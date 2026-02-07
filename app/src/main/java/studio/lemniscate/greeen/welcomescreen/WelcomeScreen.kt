@@ -45,8 +45,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModel
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.Alignment
 import android.content.res.Resources
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,6 +55,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.KeyboardType
 
 import studio.lemniscate.greeen.database.FinanceAppDatabase
@@ -62,9 +63,14 @@ import studio.lemniscate.greeen.database.Goal
 import studio.lemniscate.greeen.repositories.GoalRepository
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.repositories.UserRepository
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import java.math.RoundingMode
 
 @Composable
-fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit) {
+fun FirstGoalMenu (
+    expanded: Boolean,
+    onDismissRequested: (errorMessage: Pair<String, String>) -> Unit,
+    onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit) {
 
     var username by remember { mutableStateOf("") }
     var goal by remember {mutableStateOf("")}
@@ -84,7 +90,17 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
             amountText = ""
             amount = 0.0f
 
-            onDismissRequested()
+            var errorMessage: Pair<String, String> = "" to ""
+
+            if (username.isEmpty()) {
+                errorMessage = "Almost there..." to "Please enter your name to continue."
+            } else if (goal.isEmpty()) {
+                errorMessage = "No goal set..." to "Please add a goal to continue."
+            } else if (amount == 0.0f) {
+                errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
+            }
+
+            onDismissRequested(errorMessage)
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -611,18 +627,38 @@ fun FirstGoalMenu(expanded: Boolean, onDismissRequested: () -> Unit, onFinished:
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
+                                    var errorMessage: Pair<String, String> = "" to ""
+
+                                    if (username.isEmpty()) {
+                                        errorMessage = "Almost there..." to "Please enter your name to continue."
+                                    } else if (goal.isEmpty()) {
+                                        errorMessage = "No goal set..." to "Please add a goal to continue."
+                                    } else if (amountText.isEmpty()) {
+                                        errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
+                                    }
+
+                                    if (errorMessage.first.isNotEmpty() && errorMessage.second.isNotEmpty()) {
+                                        onDismissRequested(errorMessage)
+                                        return@clickable
+                                    }
+
                                     val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
                                     if (moneyRegex.matches(amountText)) {
                                         amount = amountText.toFloatOrNull() ?: 0f
                                         onFinished(username, goal, amount, chosenCurrency)
                                     } else {
-                                        username = ""
-                                        amount = 0.0f
-                                        goal = ""
 
-                                        onDismissRequested()
-                                        //TODO("FEHLERMELDUNG")
+                                        if (amount == 0.0f) {
+                                            errorMessage = "Just one more thing..." to "Please enter a valid amount to your goal."
+                                        } else if (amount < 0.0f) {
+                                            errorMessage = "Please be positive..." to "Please enter an amount above 0. :)"
+                                        }
+
+                                        if (errorMessage.first.isNotEmpty() && errorMessage.second.isNotEmpty()) {
+                                            onDismissRequested(errorMessage)
+                                            return@clickable
+                                        }
                                     }
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
@@ -1022,7 +1058,12 @@ fun FirstTokenMenu (
 }
 
 @Composable
-fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context = LocalContext.current) {
+fun WelcomeScreen (
+    onFinished: () -> Unit,
+    splashMode: Boolean,
+    context: Context = LocalContext.current
+) {
+    val colors = LocalAppColors.current
 
     val welcomeScreenViewModel: WelcomeScreenViewModel = viewModel (
         factory = object: ViewModelProvider.Factory {
@@ -1050,6 +1091,57 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
     var firstTokenMenuExpanded by remember { mutableStateOf(false) }
 
     var chosenCurrency by remember { mutableStateOf("$")}
+    var showErrorMessage by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("" to "") }
+
+    if (showErrorMessage) {
+        AlertDialog (
+            modifier = Modifier
+                .background (
+                    color = colors.primary,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .height(185.dp),
+            onDismissRequest = {
+                showErrorMessage = false
+            },
+            title = {
+                Text (
+                    text = errorMessage.first,
+                    color = colors.secondary
+                )
+            },
+            text = {
+                Text (
+                    text = errorMessage.second,
+                    color = colors.secondary
+                )
+            },
+            confirmButton = {
+                TextButton (
+                    modifier = Modifier
+                        .border (
+                            width = 1.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background (
+                            color = colors.secondary,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    onClick = {
+                        showErrorMessage = false
+                    }
+                ) {
+                    Text (
+                        text = "Okay",
+                        color = colors.primary
+                    )
+                }
+            },
+            containerColor = colors.primary
+        )
+    }
 
     Box (
         modifier = Modifier
@@ -1071,11 +1163,13 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                     firstTokenMenuExpanded = false
                 },
                 onFinished = { tokenCount ->
-
                     firstTokenMenuExpanded = false
 
                     if (username.isEmpty() || username == "DUMMY") {
-                        //TODO: Fehlermeldung anzeigen
+
+                        errorMessage = "Almost there..." to "Please enter your name to continue."
+                        showErrorMessage = true
+
                     } else {
                         welcomeScreenViewModel.updateUser(username)
                         welcomeScreenViewModel.insertGoal (
@@ -1372,7 +1466,9 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                 FirstGoalMenu (
                     expanded = firstGoalMenuExpanded,
                     onDismissRequested = {
-                        firstGoalMenuExpanded = false
+
+                        errorMessage = it
+                        showErrorMessage = true
                     },
                     onFinished = { newUsername, firstGoal, savingAmount, currency  ->
 
@@ -1383,8 +1479,23 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                         firstTokenMenuExpanded = true
                         chosenCurrency = currency
 
-                        if (goal.isEmpty() || amount == 0.0f)
-                            TODO("Fehlermeldung einbauen")
+                        if (username.isEmpty()) {
+                            errorMessage = "Almost there..." to "Please enter your name to continue."
+                            showErrorMessage = true
+                            return@FirstGoalMenu
+                        }
+
+                        if (goal.isEmpty()) {
+                            errorMessage = "No goal set..." to "Please add a goal to continue."
+                            showErrorMessage = true
+                            return@FirstGoalMenu
+                        }
+
+                        if (amount == 0.0f) {
+                            errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
+                            showErrorMessage = true
+                            return@FirstGoalMenu
+                        }
                     }
                 )
             }
@@ -1428,9 +1539,11 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                 }
 
                 Column (
-                    modifier = Modifier
-                        .offset(x = (LocalConfiguration.current.screenWidthDp * 0.34).dp),
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .fillMaxWidth()
                 ) {
                     Spacer (
                         modifier = Modifier
@@ -1449,7 +1562,8 @@ fun WelcomeScreen(onFinished: () -> Unit, splashMode: Boolean, context: Context 
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 firstGoalMenuExpanded = true
-                            }
+                            },
+                        contentAlignment = Alignment.CenterEnd
                     ) {
                         Row (
                             horizontalArrangement = Arrangement.SpaceEvenly,

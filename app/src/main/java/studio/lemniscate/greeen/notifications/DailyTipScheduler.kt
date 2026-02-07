@@ -15,7 +15,7 @@ object DailyTipScheduler {
         val now = Calendar.getInstance()
         val next22 = Calendar.getInstance().apply {
 
-            set(Calendar.HOUR_OF_DAY, 9)
+            set(Calendar.HOUR_OF_DAY, 13)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)

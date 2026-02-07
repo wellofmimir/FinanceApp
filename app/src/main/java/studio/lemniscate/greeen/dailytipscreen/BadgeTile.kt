@@ -82,7 +82,7 @@ fun BadgeTile (
                 contentDescription = "Herz",
                 colorFilter = ColorFilter.tint(Color.Red),
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(36.dp)
                     .aspectRatio(1f)
             )
         }

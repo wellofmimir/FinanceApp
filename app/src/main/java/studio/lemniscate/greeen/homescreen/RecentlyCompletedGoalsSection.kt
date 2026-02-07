@@ -47,16 +47,16 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text (
             text = "Recently Completed:",
-            color = colors.textPrimary,
+            color = colors.primary,
             fontSize = 18.sp,
             fontStyle = FontStyle.Italic,
             modifier = Modifier
-                .padding(start = 14.dp, top = 18.dp)
+                .padding(top = 16.dp)
         )
 
         Spacer (
@@ -75,7 +75,7 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                         ),
                         color = Color.Transparent
                     )
-                    .padding(start = 24.dp),
+                    .padding(start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image (
@@ -85,17 +85,17 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                         .background (
                             color = colors.surface
                         )
-                        .size(24.dp),
+                        .size(16.dp),
                     colorFilter = ColorFilter.tint(colors.background)
                 )
 
                 Spacer (
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .width(16.dp)
                 )
 
                 Text (
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     text = item.goal,
                     color = colors.textPrimary
                 )

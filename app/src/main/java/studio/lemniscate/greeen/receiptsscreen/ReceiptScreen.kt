@@ -2,9 +2,6 @@ package studio.lemniscate.greeen.receiptsscreen
 
 import android.app.Activity
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 
 import studio.lemniscate.greeen.MainActivityViewModel
 import studio.lemniscate.greeen.homescreen.TutorialInformation
@@ -22,8 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,9 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import studio.lemniscate.greeen.Screen
 import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
-import studio.lemniscate.greeen.welcomescreen.WelcomeScreen
 
 @Composable
 fun ReceiptScreen (
@@ -108,6 +101,7 @@ fun ReceiptScreen (
                 .fillMaxSize(0.5f),
             receiptSectionsViewModel = receiptSectionsViewModel,
             metricsScreenViewModel = metricsScreenViewModel,
+            advertisementViewModel = advertisementViewModel,
             tutorialInformation = tutorialInformation,
             onReturn = {
                 metricsScreenViewModel.resetMetricsScreenIsShown()
@@ -194,7 +188,7 @@ fun ReceiptScreen (
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(1f),
-            supressAd = advertisementViewModel.getRemoveAllAds(),
+            suppressAd = advertisementViewModel.getRemoveAllAds(),
             tutorialInformation = tutorialInformation
         )
     }

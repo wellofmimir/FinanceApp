@@ -19,6 +19,8 @@ import java.util.Locale
 import java.io.File
 import java.math.RoundingMode
 
+import kotlin.math.roundToInt
+import kotlin.math.pow
 import kotlin.toBigDecimal
 
 import android.os.Build
@@ -54,10 +56,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.SpanStyle
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
@@ -103,6 +107,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.Alignment
 
 enum class Timespan (id: Int) {
 
@@ -113,6 +118,7 @@ enum class Timespan (id: Int) {
     WHOLE_YEAR (3),
     ALL (4)
 }
+
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -729,14 +735,30 @@ fun AverageSpentSection (
     val currency by receiptSectionsViewModel.currency.collectAsState()
     receiptSectionsViewModel.getCurrency()
 
-    val textSize = when (averageAmount) {
-        in 0f..9f -> 26.sp
-        in 10f..99f -> 26.sp
-        in 100f..999f -> 26.sp
-        in 1000f..9999f -> 26.sp
-        in 10000f..99999f -> 26.sp
-        in 100000f..999999f -> 26.sp
-        else -> if (currency.length == 1) 26.sp else 24.sp
+    val shortenedAverageAmount = when {
+        averageAmount < 10_000f -> averageAmount.toInt().toString() // 0–9.999
+        averageAmount < 1_000_000f -> { // 10.000–999.999
+            val shortened = (averageAmount / 1_000f * 10).toInt() / 10f
+            "${shortened}k"
+        }
+        else -> { // ≥ 1.000.000
+            val shortened = (averageAmount / 1_000_000f * 10).toInt() / 10f
+            "${shortened}M"
+        }
+    }
+
+    val averageAmountText = if (shortenedAverageAmount.contains("k")) {
+        if (currency.length == 1)
+            "$currency $shortenedAverageAmount"
+        else
+            "$shortenedAverageAmount $currency"
+    } else if (shortenedAverageAmount.contains("M")) {
+        shortenedAverageAmount
+    } else {
+        if (currency.length == 1)
+            currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString()
+        else
+            averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency
     }
 
     Column (
@@ -753,9 +775,9 @@ fun AverageSpentSection (
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 12.dp, top = 18.dp),
-            text = if (currency.length == 1) currency + " " + averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else averageAmount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
+            text = averageAmountText,
             color = colors.textPrimary,
-            fontSize = textSize,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
 
@@ -808,18 +830,35 @@ fun ExpensesOverviewSection (
     val currency by receiptSectionsViewModel.currency.collectAsState()
     receiptSectionsViewModel.getCurrency()
 
-    val textSize = when (sumOfExpenses) {
-        in 0f..9f -> 26.sp
-        in 10f..99f -> 26.sp
-        in 100f..999f -> 26.sp
-        in 1000f..9999f -> 26.sp
-        in 10000f..99999f -> 26.sp
-        in 100000f..999999f -> 26.sp
-        else -> if (currency.length == 1) 26.sp else 24.sp
+    val shortenedSumOfExpenses = when {
+        sumOfExpenses < 10_000f -> sumOfExpenses.toInt().toString() // 0–9.999
+        sumOfExpenses < 1_000_000f -> { // 10.000–999.999
+            val shortened = (sumOfExpenses / 1_000f * 10).toInt() / 10f
+            "${shortened}k"
+        }
+        else -> { // ≥ 1.000.000
+            val shortened = (sumOfExpenses / 1_000_000f * 10).toInt() / 10f
+            "${shortened}M"
+        }
+    }
+
+    val sumOfExpensesText = if (shortenedSumOfExpenses.contains("k")) {
+        if (currency.length == 1)
+            "$currency $shortenedSumOfExpenses"
+        else
+            "$shortenedSumOfExpenses $currency"
+    } else if (shortenedSumOfExpenses.contains("M")) {
+        shortenedSumOfExpenses
+    } else {
+        if (currency.length == 1)
+            currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString()
+        else
+            sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency
     }
 
     Column (
         modifier = modifier
+            .fillMaxHeight()
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_SUM_SECTION) 0.1f else 1.0f)
             .background (
                 color = colors.surface,
@@ -831,57 +870,70 @@ fun ExpensesOverviewSection (
         Text (
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 12.dp, top = 18.dp),
-            text = "$timeRangeText:",
+                .padding(start = 12.dp, top = 16.dp),
+            text = buildAnnotatedString {
+                append("$timeRangeText:\n")
+
+                withStyle (
+                    style = SpanStyle (
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal,
+                        fontSize = 24.sp
+                    )
+                ) {
+                    append(sumOfExpensesText)
+                }
+            },
             color = colors.textPrimary,
             textAlign = TextAlign.Start,
-            fontSize = 22.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Italic
         )
 
-        Text (
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(start = 12.dp, top = 9.dp),
-            text = if (currency.length == 1) currency + " " + sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else sumOfExpenses.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-            color = colors.textPrimary,
-            fontSize = textSize,
-            fontWeight = FontWeight.Bold
-        )
-
         Spacer (
             modifier = Modifier
-                .height(5.dp)
+                .height(10.dp)
         )
 
-        Box (
+        Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 20.dp),
-            contentAlignment = Alignment.BottomEnd
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End
         ) {
+            val fontSize = when (receipts.size) {
+                in 1..9 -> 72.sp
+                in 9 .. 99 -> 64.sp
+                in 100 .. 999 -> 60.sp
+                in 1000 .. 9999 -> 56.sp
+                in 10000 .. 99999 -> 52.sp
+                in 100000 .. 999999 -> 44.sp
+                else -> 36.sp
+            }
+
             Text (
                 text = receipts.size.toString(),
                 color = colors.textPrimary,
-                fontSize = 64.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = fontSize,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(end = 16.dp)
             )
-        }
 
-        Box (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 15.dp, bottom = 10.dp),
-            contentAlignment = Alignment.BottomEnd
-        ) {
             Text (
                 text = "Purchases Recorded",
                 color = colors.textPrimary,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Normal
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
             )
         }
+
+
     }
 }
 
@@ -1203,31 +1255,60 @@ fun ReceiptLogSection (
                             }
                     ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text (
                         text = receipt.description,
                         color = colors.textPrimary,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
                             .weight(1.5f)
-                            .padding(start = 36.dp)
+                            .padding(start = 28.dp)
                     )
 
                     Text (
                         text = receipt.date,
                         color = colors.textPrimary,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
                             .weight(1f)
                     )
 
+                    val shortenedReceiptAmout = when {
+                        receipt.amount < 10_000f -> receipt.amount.toInt().toString() // 0–9.999
+                        receipt.amount < 1_000_000f -> { // 10.000–999.999
+                            val shortened = (receipt.amount / 1_000f * 10).toInt() / 10f
+                            "${shortened}k"
+                        }
+                        else -> { // ≥ 1.000.000
+                            val shortened = (receipt.amount / 1_000_000f * 10).toInt() / 10f
+                            "${shortened}M"
+                        }
+                    }
+
+                    val receiptAmountText = if (shortenedReceiptAmout.contains("k")) {
+                        if (currency.length == 1)
+                            "$currency $shortenedReceiptAmout"
+                        else
+                            "$shortenedReceiptAmout $currency"
+                    } else if (shortenedReceiptAmout.contains("M")) {
+                        if (currency.length == 1)
+                            "$currency $shortenedReceiptAmout"
+                        else
+                            "$shortenedReceiptAmout $currency"
+                    } else {
+                        if (currency.length == 1)
+                            currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString()
+                        else
+                            receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency
+                    }
+
                     Text (
-                        text = if (currency.length == 1) currency + " " + receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else receipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
+                        text = receiptAmountText,
                         color = colors.textPrimary,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .weight(1f)

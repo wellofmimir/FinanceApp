@@ -56,21 +56,22 @@ fun SavedReceiptsSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Text (
                 text = "This Month:",
                 fontSize = 18.sp,
                 fontStyle = FontStyle.Italic,
-                color = colors.textPrimary,
+                color = colors.primary,
                 modifier = Modifier
-                    .padding(start = 14.dp, top = 18.dp)
-                    .weight(2f)
+                    .padding(start = 8.dp, top = 16.dp)
             )
 
             Box (
@@ -107,14 +108,24 @@ fun SavedReceiptsSection (
         }
 
         Column (
+            verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier
-                .padding(start = 14.dp)
+                .weight(2f)
         ) {
+            val fontSize = when (receiptsThisMonth.value.size) {
+                in 0..9 -> 72.sp
+                in 9 .. 99 -> 72.sp
+                in 100 .. 999 -> 72.sp
+                in 1000 .. 9999 -> 60.sp
+                in 10000 .. 99999 -> 52.sp
+                in 100000 .. 999999 -> 44.sp
+                else -> 36.sp
+            }
+
             Text (
                 text = receiptsThisMonth.value.size.toString(),
-                fontSize = 84.sp,
+                fontSize = fontSize,
                 color = colors.textPrimary,
                 fontWeight = FontWeight.Bold
             )

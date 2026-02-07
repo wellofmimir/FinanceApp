@@ -54,6 +54,8 @@ import studio.lemniscate.greeen.aboutscreen.AboutScreen
 import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.commonutils.GlobalToastHandler
 import studio.lemniscate.greeen.repositories.BadgesRepository
+import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
+import studio.lemniscate.greeen.repositories.MetricsRepository
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -71,15 +73,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.Alignment
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -91,6 +92,7 @@ import androidx.compose.runtime.mutableStateOf
 
 import androidx.compose.material3.Text
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -101,11 +103,7 @@ import kotlinx.coroutines.delay
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import studio.lemniscate.greeen.badges.BadgeIdentifier
-import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
-import studio.lemniscate.greeen.receiptsscreen.AddReceiptMenu
-import studio.lemniscate.greeen.repositories.MetricsRepository
-import studio.lemniscate.greeen.ui.theme.GreeenAppTheme
+
 
 
 enum class Screen (id: Int) {
@@ -414,14 +412,14 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     val currentTheme = mainActivityViewModel.getCurrentTheme()
 
-                    appColorsState.value = if (currentTheme == "Charcoal") {
+                    appColorsState.value = if (currentTheme == "charcoaltheme") {
                         CharcoalAppColors
                     }
-                    else if (currentTheme == "Electric")
+                    else if (currentTheme == "electrictheme")
                         ElectricAppColors
-                    else if (currentTheme == "Azure")
+                    else if (currentTheme == "azuretheme")
                         AzureAppColors
-                    else if (currentTheme == "Peach")
+                    else if (currentTheme == "peachtheme")
                         PeachAppColors
                     else if (currentTheme == "Greeen")
                         GreenAppColors
@@ -587,30 +585,34 @@ class MainActivity : ComponentActivity() {
                                 advertisementViewModel = advertisementViewModel,
                                 previewRequested = { theme ->
 
-                                    previewColors = if (theme == "Charcoal") {
+                                    previewColors = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "Electric")
+                                    else if (theme == "electrictheme")
                                         ElectricAppColors
-                                    else if (theme == "Azure")
+                                    else if (theme == "azuretheme")
                                         AzureAppColors
-                                    else if (theme == "Peach")
+                                    else if (theme == "peachtheme")
                                         PeachAppColors
+                                    else if (theme == "Greeen")
+                                        GreenAppColors
                                     else
                                         GreenAppColors
                                 },
                                 applyThemeRequested = { theme ->
                                     previewColors = null
 
-                                    appColorsState.value = if (theme == "Charcoal") {
+                                    appColorsState.value = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "Electric")
+                                    else if (theme == "electrictheme")
                                         ElectricAppColors
-                                    else if (theme == "Azure")
+                                    else if (theme == "azuretheme")
                                         AzureAppColors
-                                    else if (theme == "Peach")
+                                    else if (theme == "peachtheme")
                                         PeachAppColors
+                                    else if (theme == "Greeen")
+                                        GreenAppColors
                                     else
                                         GreenAppColors
 
@@ -619,7 +621,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                             AdSectionMiddleBanner (
-                                supressAd = advertisementViewModel.getRemoveAllAds(),
+                                suppressAd = advertisementViewModel.getRemoveAllAds(),
                                 tutorialInformation = tutorialInformation
                             )
                         }
@@ -676,7 +678,9 @@ class MainActivity : ComponentActivity() {
                                                 "Here’s a quick guide to help you explore the main features.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -700,7 +704,9 @@ class MainActivity : ComponentActivity() {
                                                 "Progress adds up faster than you think.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -724,7 +730,9 @@ class MainActivity : ComponentActivity() {
                                                 "Focus on what matters most right now.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -747,7 +755,9 @@ class MainActivity : ComponentActivity() {
                                         text = "This is the goal you’re working on at the moment.\n\nTap the percentage to update your progress.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -770,7 +780,9 @@ class MainActivity : ComponentActivity() {
                                         text = "A small quote to encourage you as you work on your goals.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -793,7 +805,9 @@ class MainActivity : ComponentActivity() {
                                         text = "A daily financial insight to help you stay on track with your goals.\n\nMake sure to check it out!",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -816,7 +830,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Green is not for everyone - we get it.\n\nOur shop offers different themes to color up your experience.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -840,7 +856,9 @@ class MainActivity : ComponentActivity() {
                                         text = "You now know the basics — the rest is up to you.\n\nLet’s get started.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -850,7 +868,7 @@ class MainActivity : ComponentActivity() {
                             tutorialInformation = tutorialInformation.restartReceiptScreenTutorial()
 
                         if (tutorialInformation.isActive && tutorialInformation.tutorialStep == TutorialStep.RECEIPTS_START) {
-                            Box(
+                            Box (
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .offset(y = (-30).dp)
@@ -860,20 +878,22 @@ class MainActivity : ComponentActivity() {
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Column(
+                                Column (
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Spacer(
+                                    Spacer (
                                         modifier = Modifier
                                             .height(75.dp)
                                     )
 
-                                    Text(
+                                    Text (
                                         text = "Welcome!\nThis section helps you log purchases and stay on top of your finances.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -888,11 +908,11 @@ class MainActivity : ComponentActivity() {
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Column(
+                                Column (
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Spacer(
+                                    Spacer (
                                         modifier = Modifier
                                             .height(75.dp)
                                     )
@@ -901,7 +921,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Here you can explore your receipt metrics and get insights into your finances.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -940,7 +962,26 @@ class MainActivity : ComponentActivity() {
                                             text = tutorialText,
                                             fontSize = 24.sp,
                                             color = Color.White,
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp)
+                                        )
+
+                                        Spacer (
+                                            modifier = Modifier
+                                                .height(100.dp)
+                                        )
+
+                                        Text (
+                                            text = "Skip",
+                                            fontSize = 12.sp,
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                            textDecoration = TextDecoration.Underline,
+                                            modifier = Modifier
+                                                .clickable() {
+                                                    tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
+                                                }
                                         )
                                     }
                                 }
@@ -971,7 +1012,9 @@ class MainActivity : ComponentActivity() {
                                         text = "This sections helps you to keep an eye on your expenses.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -1000,7 +1043,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Just scroll down when you need to revisit one of your receipts.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -1030,7 +1075,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Begin creating and managing your goals here.",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -1058,7 +1105,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Fill the punch card and treat your self BIG when done.\n\nA holiday, a present to yourself - \nthe world is your oyster!",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }
@@ -1082,7 +1131,9 @@ class MainActivity : ComponentActivity() {
                                         text = "Remind yourself from time to time about your achievements and successes!",
                                         fontSize = 24.sp,
                                         color = Color.White,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp)
                                     )
                                 }
                             }

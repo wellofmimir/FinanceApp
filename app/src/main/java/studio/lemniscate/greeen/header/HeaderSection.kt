@@ -101,10 +101,18 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
                 modifier = Modifier
                     .weight(0.9f)
             ) {
+                val fontSize = when (username.value.length) {
+                    in 1..7 -> 30.sp
+                    in 8 .. 12 -> 28.sp
+                    in 13 .. 18 -> 26.sp
+                    in 19 .. 23 -> 24.sp
+                    else -> 18.sp
+                }
+
                 Text (
                     text = headerText,
                     color = colors.primary,
-                    fontSize = 32.sp,
+                    fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )
             }

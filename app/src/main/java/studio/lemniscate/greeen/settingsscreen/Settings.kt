@@ -120,7 +120,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "Name:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 32.sp
+                    fontSize = 26.sp
                 )
             }
 
@@ -149,7 +149,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = user,
                         color = colors.primary,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 32.sp,
+                        fontSize = 26.sp,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .clickable (
@@ -220,7 +220,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "Currency:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 32.sp
+                    fontSize = 26.sp
                 )
             }
 
@@ -257,7 +257,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = currency,
                         color = colors.primary,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 32.sp,
+                        fontSize = 26.sp,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .clickable(
@@ -332,7 +332,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "Version Info:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 32.sp
+                    fontSize = 26.sp
                 )
             }
 
@@ -346,7 +346,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "1.0.0.0",
                     color = colors.primary,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 32.sp
+                    fontSize = 26.sp
                 )
             }
         }
@@ -425,7 +425,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = "Feedback",
                         color = colors.primary,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 32.sp
+                        fontSize = 26.sp
                     )
                 }
 
@@ -554,7 +554,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text (
                     text = textAfterFeedbackButtonClicked,
-                    fontSize = 32.sp,
+                    fontSize = 26.sp,
                     color = colors.primary,
                     textAlign = TextAlign.Center
                 )

@@ -86,24 +86,26 @@ fun GoalProgressSection (
 
     Column (
         modifier = modifier
+            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOAL) 0.1f else 1.0f)
             .aspectRatio(1f)
-            .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_CURRENT_GOAL) 0.1f else 1.0f),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Top
+            .fillMaxSize()
+            .background (
+                shape = RoundedCornerShape(12.dp),
+                color = colors.secondary
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f)
-                .background (
-                    shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-                    color = colors.secondary
-                )
-                .padding(top = 8.dp, end = 8.dp)
+                .padding(top = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box (
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(2f)
                     .background (
                         shape = RoundedCornerShape(12.dp),
                         color = colors.surface
@@ -147,10 +149,9 @@ fun GoalProgressSection (
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text (
-                        text = "Current goal:",
+                        text = "Your goal:",
                         color = colors.textPrimary,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
@@ -218,27 +219,21 @@ fun GoalProgressSection (
             )
         }
 
-        Row (
+        Box (
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
                 .weight(1f)
-                .background (
-                    color = colors.surface,
-                    shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
-                ),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(end = 8.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
             if (currentGoal != null) {
                 Text (
                     text = "$currentGoalPercentage%",
                     fontSize = 64.sp,
-                    textAlign = TextAlign.Right,
+                    textAlign = TextAlign.End,
                     fontWeight = FontWeight.Bold,
-                    color = colors.textPrimary,
+                    color = colors.primary,
                     modifier = modifier
-                        .padding(end = 8.dp, bottom = 2.dp)
+                        .fillMaxWidth()
                         .clickable (
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
@@ -251,5 +246,6 @@ fun GoalProgressSection (
                 )
             }
         }
+
     }
 }

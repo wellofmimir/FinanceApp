@@ -30,7 +30,7 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         })
 
         billingManager.start()
-        billingManager.buyTestProduct(activity)
+        billingManager.buyTestProduct(activity, theme)
     }
 
     fun purchaseRemoveAllAds(activity: Activity) {
@@ -43,7 +43,7 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         })
 
         billingManager.start()
-        billingManager.buyTestProduct(activity)
+        billingManager.buyTestProduct(activity, "adRemover")
     }
 
     fun setRemoveAllAdsAsPurchased() {

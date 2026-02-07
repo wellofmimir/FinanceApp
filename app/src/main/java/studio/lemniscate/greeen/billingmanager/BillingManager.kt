@@ -67,7 +67,7 @@ class BillingManager(context: Context) {
         }
     }
 
-    fun buyTestProduct(activity: Activity) {
+    fun buyTestProduct(activity: Activity, productId: String) {
 
         if (!isReady)
             return
@@ -79,7 +79,7 @@ class BillingManager(context: Context) {
                     QueryProductDetailsParams
                         .Product
                         .newBuilder()
-                        .setProductId("android.test.purchased")
+                        .setProductId(productId)
                         .setProductType(BillingClient.ProductType.INAPP)
                         .build()
                 )
@@ -122,6 +122,7 @@ class BillingManager(context: Context) {
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        billingClient.acknowledgePurchase(parameters) {}
+        if (!purchase.isAcknowledged)
+            billingClient.acknowledgePurchase(parameters) {}
     }
 }

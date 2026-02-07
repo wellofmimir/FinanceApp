@@ -3,7 +3,6 @@ package studio.lemniscate.greeen.settingsscreen
 import androidx.compose.foundation.layout.Arrangement
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 
-import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.header.HeaderSectionViewModel
 
@@ -41,7 +40,7 @@ fun SettingsScreen(headerSectionViewModel: HeaderSectionViewModel, advertisement
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(0.16f),
-            supressAd = advertisementViewModel.getRemoveAllAds(),
+            suppressAd = advertisementViewModel.getRemoveAllAds(),
             tutorialInformation = tutorialInformation
         )
     }

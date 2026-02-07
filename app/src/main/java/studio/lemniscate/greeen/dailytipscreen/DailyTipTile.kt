@@ -109,6 +109,21 @@ fun DailyTipTile (
             fontSize = 16.sp,
             modifier = Modifier
                 .weight(2f)
+                .padding(end = 12.dp)
         )
+
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.BottomStart
+        ) {
+            Text (
+                text = "Tap to read the article.",
+                color = colors.primary,
+                fontSize = 12.sp,
+                maxLines = 1
+            )
+        }
     }
 }

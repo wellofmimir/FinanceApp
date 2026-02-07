@@ -87,7 +87,5 @@ fun AboutScreen (
             color = colors.secondary
         )
     }
-
-
 }
 

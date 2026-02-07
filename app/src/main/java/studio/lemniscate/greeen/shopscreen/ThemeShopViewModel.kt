@@ -12,8 +12,10 @@ import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ThemeShopViewModel(private val billingManager: BillingManager, private val shopRepository: ShopRepository): ViewModel() {
-
+class ThemeShopViewModel (
+    private val billingManager: BillingManager,
+    private val shopRepository: ShopRepository
+): ViewModel() {
     init {
         billingManager.setListener(object: BillingManager.Listener {
             override fun onPurchaseSuccess(idProduct: String) {
@@ -45,6 +47,7 @@ class ThemeShopViewModel(private val billingManager: BillingManager, private val
     fun purchaseTheme(activity: Activity, theme: String) {
         shopRepository.purchaseTheme(activity, theme)
         getThemePurchased(theme)
+        getAppliedTheme()
     }
 
     private val internAppliedTheme = MutableStateFlow(shopRepository.getAppliedTheme())

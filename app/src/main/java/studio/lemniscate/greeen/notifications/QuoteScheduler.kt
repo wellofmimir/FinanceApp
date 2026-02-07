@@ -16,8 +16,8 @@ object QuoteScheduler {
         val now = Calendar.getInstance()
         val next22 = Calendar.getInstance().apply {
 
-            set(Calendar.HOUR_OF_DAY, 22)
-            set(Calendar.MINUTE, 50)
+            set(Calendar.HOUR_OF_DAY, 19)
+            set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
 

@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import studio.lemniscate.greeen.homescreen.TutorialInformation
 
 import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
@@ -241,7 +240,7 @@ fun HomeScreen (
                 AdSectionMiddleBanner (
                     modifier = Modifier
                         .weight(0.3f),
-                    supressAd = advertisementViewModel.getRemoveAllAds(),
+                    suppressAd = advertisementViewModel.getRemoveAllAds(),
                     tutorialInformation = tutorialInformation
                 )
             }

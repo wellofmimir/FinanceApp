@@ -54,6 +54,7 @@ import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 import studio.lemniscate.greeen.dailytipscreen.AdTeaserSection
 import kotlinx.coroutines.delay
+import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import java.math.RoundingMode
 
 @Composable
@@ -61,6 +62,7 @@ fun MetricsScreen (
     modifier: Modifier = Modifier,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     metricsScreenViewModel: MetricsScreenViewModel,
+    advertisementViewModel: AdvertisementViewModel,
     tutorialInformation: TutorialInformation,
     onReturn: () -> Unit,
     context: Context = LocalContext.current
@@ -309,7 +311,7 @@ fun MetricsScreen (
             AdSectionSmallBanner (
                 modifier = Modifier
                     .weight(4f),
-                false
+                suppressAd = advertisementViewModel.getRemoveAllAds()
             )
         }
     }

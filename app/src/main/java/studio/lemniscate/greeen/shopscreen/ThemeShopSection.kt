@@ -81,8 +81,17 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
     }
 }
 @Composable
-fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, alreadyBought: Boolean, title: String, price: String, color: Color, previewRequested: () -> Unit, applyThemeRequested: () -> Unit, purchaseRequested: () -> Unit) {
-
+fun ThemeShopEntry (
+    modifier: Modifier = Modifier,
+    colors: AppColors = LocalAppColors.current,
+    alreadyBought: Boolean,
+    title: String,
+    price: String,
+    color: Color,
+    previewRequested: () -> Unit,
+    applyThemeRequested: () -> Unit,
+    purchaseRequested: () -> Unit
+) {
     Column (
         modifier = modifier
             .fillMaxSize()
@@ -236,7 +245,15 @@ fun ThemeShopEntry(modifier: Modifier = Modifier, colors: AppColors = LocalAppCo
 }
 
 @Composable
-fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, themeShopViewModel: ThemeShopViewModel, advertisementViewModel: AdvertisementViewModel, context: Context = LocalContext.current, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
+fun ThemeShopSection (
+    modifier: Modifier = Modifier,
+    colors: AppColors = LocalAppColors.current,
+    themeShopViewModel: ThemeShopViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    context: Context = LocalContext.current,
+    previewRequested: (theme: String) -> Unit,
+    applyThemeRequested: (theme: String) -> Unit
+) {
 
     Column (
         modifier = modifier
@@ -256,8 +273,8 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             horizontalArrangement = Arrangement.Center
         ) {
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
-            val isCharcoalApplied = appliedTheme.value == "Charcoal"
-            val isElectricApplied = appliedTheme.value == "Electric"
+            val isCharcoalApplied = appliedTheme.value == "charcoaltheme"
+            val isElectricApplied = appliedTheme.value == "electrictheme"
 
             if (isCharcoalApplied) {
                 ThemeShopEntry (
@@ -280,19 +297,19 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("Charcoal"),
+                    alreadyBought = themeShopViewModel.getThemePurchased("charcoaltheme"),
                     title = "Charcoal",
                     price = "$1.99",
                     color = CharcoalGreen,
                     previewRequested = {
-                        previewRequested("Charcoal")
+                        previewRequested("charcoaltheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("Charcoal")
-                        themeShopViewModel.setAppliedTheme("Charcoal")
+                        themeShopViewModel.setAppliedTheme("charcoaltheme")
+                        applyThemeRequested("charcoaltheme")
                     },
                     purchaseRequested = {
-                        themeShopViewModel.purchaseTheme(context as Activity,"Charcoal")
+                        themeShopViewModel.purchaseTheme(context as Activity,"charcoaltheme")
                     }
                 )
             }
@@ -325,19 +342,19 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
                 ThemeShopEntry(
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("Electric"),
+                    alreadyBought = themeShopViewModel.getThemePurchased("electrictheme"),
                     title = "Electric",
                     price = "$1.99",
                     color = ElectricPurple,
                     previewRequested = {
-                        previewRequested("Electric")
+                        previewRequested("electrictheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("Electric")
-                        themeShopViewModel.setAppliedTheme("Electric")
+                        applyThemeRequested("electrictheme")
+                        themeShopViewModel.setAppliedTheme("electrictheme")
                     },
                     purchaseRequested = {
-                        themeShopViewModel.purchaseTheme(context as Activity, "Electric")
+                        themeShopViewModel.purchaseTheme(context as Activity, "electrictheme")
                     }
                 )
             }
@@ -356,8 +373,8 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             horizontalArrangement = Arrangement.Center
         ) {
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
-            val isAzureApplied = appliedTheme.value == "Azure"
-            val isPeachApplied = appliedTheme.value == "Peach"
+            val isAzureApplied = appliedTheme.value == "azuretheme"
+            val isPeachApplied = appliedTheme.value == "peachtheme"
 
             if (isAzureApplied) {
                 ThemeShopEntry (
@@ -380,19 +397,19 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("Azure"),
+                    alreadyBought = themeShopViewModel.getThemePurchased("azuretheme"),
                     title = "Azure",
                     price = "$1.99",
                     color = AzureBlue,
                     previewRequested = {
-                        previewRequested("Azure")
+                        previewRequested("azuretheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("Azure")
-                        themeShopViewModel.setAppliedTheme("Azure")
+                        applyThemeRequested("azuretheme")
+                        themeShopViewModel.setAppliedTheme("azuretheme")
                     },
                     purchaseRequested = {
-                        themeShopViewModel.purchaseTheme(context as Activity,"Azure")
+                        themeShopViewModel.purchaseTheme(context as Activity,"azuretheme")
                     }
                 )
             }
@@ -423,20 +440,20 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("Peach"),
+                    alreadyBought = themeShopViewModel.getThemePurchased("peachtheme"),
                     title = "Peach",
                     price = "$1.99",
                     color = Peach,
                     previewRequested = {
-                        previewRequested("Peach")
+                        previewRequested("peachtheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("Peach")
-                        themeShopViewModel.setAppliedTheme("Peach")
+                        applyThemeRequested("peachtheme")
+                        themeShopViewModel.setAppliedTheme("peachtheme")
                     },
                     purchaseRequested = {
                         val activity = context as Activity
-                        themeShopViewModel.purchaseTheme(activity, "Peach")
+                        themeShopViewModel.purchaseTheme(activity, "peachtheme")
                     }
                 )
             }
@@ -461,7 +478,7 @@ fun ThemeShopSection(modifier: Modifier = Modifier, colors: AppColors = LocalApp
             AdSectionSmallBanner (
                 modifier = Modifier
                     .weight(0.2f),
-                supressAd = advertisementViewModel.getRemoveAllAds()
+                suppressAd = advertisementViewModel.getRemoveAllAds()
             )
         }
     }

@@ -1,6 +1,5 @@
 package studio.lemniscate.greeen.likedquotesscreen
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import studio.lemniscate.greeen.advertisement.AdSectionLargeBanner
 import studio.lemniscate.greeen.homescreen.TutorialInformation
@@ -113,7 +112,7 @@ fun LikedQuotesSection (
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
 
                     AdSectionLargeBanner (
-                        supressAd = advertisementViewModel.getRemoveAllAds(),
+                        suppressAd = advertisementViewModel.getRemoveAllAds(),
                         tutorialInformation = tutorialInformation
                     )
 
@@ -217,7 +216,7 @@ fun LikedQuotesSection (
                         )
 
                         AdSectionLargeBanner (
-                            supressAd = advertisementViewModel.getRemoveAllAds(),
+                            suppressAd = advertisementViewModel.getRemoveAllAds(),
                             tutorialInformation = tutorialInformation
                         )
                     }

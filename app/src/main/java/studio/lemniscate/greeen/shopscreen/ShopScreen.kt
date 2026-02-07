@@ -15,8 +15,12 @@ import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 @Composable
-fun ShopScreen(themeShopViewModel: ThemeShopViewModel, advertisementViewModel: AdvertisementViewModel, previewRequested: (theme: String) -> Unit, applyThemeRequested: (theme: String) -> Unit) {
-
+fun ShopScreen (
+    themeShopViewModel: ThemeShopViewModel,
+    advertisementViewModel: AdvertisementViewModel,
+    previewRequested: (theme: String) -> Unit,
+    applyThemeRequested: (theme: String) -> Unit
+) {
     val colors = LocalAppColors.current
 
     Column (

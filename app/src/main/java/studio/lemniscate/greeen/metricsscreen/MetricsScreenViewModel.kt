@@ -91,8 +91,8 @@ class MetricsScreenViewModel (
     ) {
         rewardGranted = false
 
-        if (rewardedAdManager.isReady())
-            rewardedAdManager.show (
+        if (rewardedAdManager.isReady()) {
+            rewardedAdManager.show(
                 activity,
                 onReward = {
                     rewardGranted = true
@@ -105,5 +105,8 @@ class MetricsScreenViewModel (
                     rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
                 }
             )
+        } else {
+            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+        }
     }
 }
