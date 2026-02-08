@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import studio.lemniscate.greeen.badges.BadgeIdentifier
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 private fun checkIfBadgeIsAvailable (
     currentlyLiked: Boolean,
@@ -66,7 +67,7 @@ private fun checkIfBadgeIsAvailable (
 fun DailyTipScreen (
     modifier: Modifier = Modifier,
     dailyTipScreenViewModel: DailyTipScreenViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     badgesViewModel: BadgesViewModel,
     context: Context = LocalContext.current
 ) {
@@ -84,6 +85,8 @@ fun DailyTipScreen (
 
     val numberOfThingsLearned = likedTips.size
     var showBadges by remember { mutableStateOf(false) }
+
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(Unit) {
         dailyTipScreenViewModel.fetchDailyTip()
@@ -183,7 +186,7 @@ fun DailyTipScreen (
             )
     ) {
         if (newDailyTipAvailable) {
-            if (dailyTipScreenViewModel.newDailyTipCanBeShown || advertisementViewModel.getRemoveAllAds()) {
+            if (dailyTipScreenViewModel.newDailyTipCanBeShown || adremoverActive) {
                 dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
                 DailyTipTile (
@@ -275,7 +278,7 @@ fun DailyTipScreen (
             )
 
             if (newDailyTipAvailable) {
-                if (dailyTipScreenViewModel.newDailyTipCanBeShown) {
+                if (dailyTipScreenViewModel.newDailyTipCanBeShown || adremoverActive) {
                     dailyTipScreenViewModel.resetNewDailyTipAvailable()
 
                     ImageSection (

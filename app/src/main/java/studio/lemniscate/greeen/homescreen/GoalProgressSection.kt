@@ -227,7 +227,7 @@ fun GoalProgressSection (
         ) {
             if (currentGoal != null) {
                 Text (
-                    text = "$currentGoalPercentage%",
+                    text = "${currentGoalPercentage.toInt()}%",
                     fontSize = 64.sp,
                     textAlign = TextAlign.End,
                     fontWeight = FontWeight.Bold,

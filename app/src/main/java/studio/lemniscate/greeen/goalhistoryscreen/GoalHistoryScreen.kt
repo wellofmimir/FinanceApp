@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 @Composable
 fun GoalHistoryScreen (
@@ -35,13 +37,14 @@ fun GoalHistoryScreen (
     totalGoalsAchievedSectionViewModel: TotalGoalsAchievedSectionViewModel,
     punchCardSectionViewModel: PunchCardSectionViewModel,
     achievementsSectionViewModel: AchievementsSectionViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     tutorialInformation: TutorialInformation,
     onPunchCardFilled: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit) {
 
     var punchCardFilled by remember { mutableStateOf(false) }
     var switchSections by remember { mutableStateOf(true) }
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(Unit) {
         totalGoalsAchievedSectionViewModel.getCompletedGoals()
@@ -163,7 +166,7 @@ fun GoalHistoryScreen (
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(1f),
-            suppressAd = advertisementViewModel.getRemoveAllAds(),
+            suppressAd = adremoverActive,
             tutorialInformation = tutorialInformation
         )
     }

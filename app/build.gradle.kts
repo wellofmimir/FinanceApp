@@ -14,8 +14,8 @@ android {
         applicationId = "studio.lemniscate.greeen"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.8"
+        versionCode = 27
+        versionName = "1.27"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

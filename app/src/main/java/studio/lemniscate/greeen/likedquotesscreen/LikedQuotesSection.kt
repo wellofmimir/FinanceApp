@@ -35,18 +35,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.homescreen.QuoteViewModel
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedQuotesSection (
     quoteViewModel: QuoteViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     tutorialInformation: TutorialInformation,
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
     val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
     var menuOpen by remember { mutableStateOf(false) }
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(Unit) {
         quoteViewModel.getLikedQuotes()
@@ -112,7 +114,7 @@ fun LikedQuotesSection (
                 if (index == 3 || index % 4 == 0 && index != 0 && index != 4) { // am Anfang ist die vierte Kachel eine Werbung(index = 3) -> deswegen wird Index=4 ausgeschlossen!! -> danach soll jede Dritte Kachel soll eine Werbung sein
 
                     AdSectionLargeBanner (
-                        suppressAd = advertisementViewModel.getRemoveAllAds(),
+                        suppressAd = adremoverActive,
                         tutorialInformation = tutorialInformation
                     )
 
@@ -216,7 +218,7 @@ fun LikedQuotesSection (
                         )
 
                         AdSectionLargeBanner (
-                            suppressAd = advertisementViewModel.getRemoveAllAds(),
+                            suppressAd = adremoverActive,
                             tutorialInformation = tutorialInformation
                         )
                     }

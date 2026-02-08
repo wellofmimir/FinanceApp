@@ -26,7 +26,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     private val internCompletedGoals = MutableStateFlow<List<Goal>>(emptyList())
     val completedGoals = internCompletedGoals.asStateFlow()
 
-    private val internPercentageOfCurrentGoal = MutableStateFlow<Int>(0)
+    private val internPercentageOfCurrentGoal = MutableStateFlow<Float>(0f)
     val percentageOfCurrentGoal = internPercentageOfCurrentGoal.asStateFlow()
 
     private val internCurrentGoal = MutableStateFlow<Goal?>(null)
@@ -35,7 +35,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     fun getExampleGoals() {
         val exampleGoals = listOf (
             Goal(1, "my awesome goal", 1100.0f, 0f, 2, "January 01, 2022", 5, ""),
-            Goal(1, "example goal #2", 1100.0f, 0f, 2, "October 29, 2024", 2, ""),
+            Goal(1, "Save $500 for a guitar", 1100.0f, 0f, 2, "October 29, 2024", 2, ""),
             Goal(1, "pay the Loch Ness Monster", 1101.0f, 0f, 2, "June 05, 2020", 4, "")
         )
 
@@ -45,7 +45,7 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
         internCompletedGoals.value = repository.getCompletedGoals()
     }
     fun getCurrentGoalPercentage(): Int {
-        return internPercentageOfCurrentGoal.value
+        return internPercentageOfCurrentGoal.value.toInt()
     }
     fun calculateCurrentGoalPercentage() {
         val goal = internCurrentGoal.value
@@ -54,18 +54,16 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
 
             val zaehler = goal.saved
             val nenner = goal.amount
-            val result = ((zaehler / nenner) * 100).toInt()
+            val result = ((zaehler / nenner) * 100)
 
             internPercentageOfCurrentGoal.value = when {
-                result >= 100 -> 100
-                result <= 0 -> 0
+                result >= 100.0f -> 100.0f
+                result <= 0.0f -> 0.0f
                 else -> result
             }
 
-            when (internPercentageOfCurrentGoal.value) {
-                100 -> {
-                    setGoalCompleted(goal)
-                }
+            if (internPercentageOfCurrentGoal.value >= 100.0f) {
+                setGoalCompleted(goal)
             }
         }
     }
@@ -87,11 +85,6 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     }
     fun updateGoal(goal: Goal) {
         repository.updateGoal(goal)
-    }
-
-    fun deleteGoal(goal: Goal) {
-        repository.deleteGoal(goal)
-        reloadGoals()
     }
 
     fun deleteGoal(id: Int) {

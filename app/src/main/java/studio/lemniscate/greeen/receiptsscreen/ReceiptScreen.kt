@@ -33,13 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 @Composable
 fun ReceiptScreen (
     onReceiptAdded:() -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     mainActivityViewModel: MainActivityViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     metricsScreenViewModel: MetricsScreenViewModel,
     badgesViewModel: BadgesViewModel,
     tutorialInformation: TutorialInformation,
@@ -50,6 +51,7 @@ fun ReceiptScreen (
     var receiptAdded by remember { mutableStateOf(false) }
     var addReceiptMenuExpanded by remember { mutableStateOf(false) }
     val metricsScreenIsShown by metricsScreenViewModel.metricsScreenIsShown.collectAsState()
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(receiptAdded) {
         activity?.let {
@@ -62,7 +64,7 @@ fun ReceiptScreen (
             if (receiptSectionsViewModel.interstitialAdAfterReceiptSeen())
                 return@LaunchedEffect
 
-            if (advertisementViewModel.getRemoveAllAds())
+            if (adremoverActive)
                 return@LaunchedEffect
 
             InterstitialAdManager.instance.showInterstitial (
@@ -101,7 +103,7 @@ fun ReceiptScreen (
                 .fillMaxSize(0.5f),
             receiptSectionsViewModel = receiptSectionsViewModel,
             metricsScreenViewModel = metricsScreenViewModel,
-            advertisementViewModel = advertisementViewModel,
+            shopViewModel = shopViewModel,
             tutorialInformation = tutorialInformation,
             onReturn = {
                 metricsScreenViewModel.resetMetricsScreenIsShown()
@@ -188,7 +190,7 @@ fun ReceiptScreen (
         AdSectionLargeBanner (
             modifier = Modifier
                 .weight(1f),
-            suppressAd = advertisementViewModel.getRemoveAllAds(),
+            suppressAd = adremoverActive,
             tutorialInformation = tutorialInformation
         )
     }

@@ -8,13 +8,11 @@ import com.google.android.gms.ads.AdView
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -24,39 +22,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.Box
-
-@Composable
-fun AdSectionFullBanner (
-    modifier: Modifier = Modifier,
-    supressAd: Boolean,
-    tutorialInformation: TutorialInformation
-) {
-    if (supressAd)
-        return
-
-    Box (
-        modifier = modifier
-            .padding (
-                WindowInsets.systemBars
-                    .only(WindowInsetsSides.Bottom)
-                    .asPaddingValues()
-            )
-    ) {
-        AndroidView (
-            modifier = modifier
-                .alpha(if (tutorialInformation.isActive) 0.1f else 1.0f)
-                .fillMaxWidth()
-                .height(50.dp),
-            factory = { context ->
-                AdView(context).apply {
-                    setAdSize(AdSize.FULL_BANNER)
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
-                    loadAd(AdRequest.Builder().build())
-                }
-            }
-        )
-    }
-}
 
 @Composable
 fun AdSectionLargeBanner (

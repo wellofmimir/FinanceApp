@@ -1,4 +1,5 @@
 package studio.lemniscate.greeen.shopscreen
+
 import android.app.Activity
 import studio.lemniscate.greeen.ui.theme.Pistachio
 import studio.lemniscate.greeen.ui.theme.Emerald
@@ -6,17 +7,28 @@ import studio.lemniscate.greeen.ui.theme.AzureBlue
 import studio.lemniscate.greeen.ui.theme.CharcoalGreen
 import studio.lemniscate.greeen.ui.theme.ElectricPurple
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import studio.lemniscate.greeen.ui.theme.Peach
 import studio.lemniscate.greeen.ui.theme.AppColors
+import studio.lemniscate.greeen.ui.theme.Bordeaux
+
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+
 import android.content.Context
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,15 +45,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.Alignment
-import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.runtime.remember
-import studio.lemniscate.greeen.ui.theme.Bordeaux
 
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, context: Context = LocalContext.current) {
@@ -250,11 +256,12 @@ fun ThemeShopSection (
     modifier: Modifier = Modifier,
     colors: AppColors = LocalAppColors.current,
     themeShopViewModel: ThemeShopViewModel,
-    advertisementViewModel: AdvertisementViewModel,
     context: Context = LocalContext.current,
     previewRequested: (theme: String) -> Unit,
     applyThemeRequested: (theme: String) -> Unit
 ) {
+    val purchasedThemes by themeShopViewModel.purchasedThemes.collectAsState()
+    val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
 
     Column (
         modifier = modifier
@@ -274,8 +281,9 @@ fun ThemeShopSection (
             horizontalArrangement = Arrangement.Center
         ) {
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
+
             val isCharcoalApplied = appliedTheme.value == "charcoaltheme"
-            val isElectricApplied = appliedTheme.value == "electrictheme"
+            val isElectricApplied = appliedTheme.value == "electricttheme"
 
             if (isCharcoalApplied) {
                 ThemeShopEntry (
@@ -298,7 +306,7 @@ fun ThemeShopSection (
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("charcoaltheme"),
+                    alreadyBought = purchasedThemes.contains("charcoaltheme"),
                     title = "Charcoal",
                     price = "$1.99",
                     color = CharcoalGreen,
@@ -340,22 +348,22 @@ fun ThemeShopSection (
                     }
                 )
             } else {
-                ThemeShopEntry(
+                ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("electrictheme"),
+                    alreadyBought = purchasedThemes.contains("electricttheme"),
                     title = "Electric",
                     price = "$1.99",
                     color = ElectricPurple,
                     previewRequested = {
-                        previewRequested("electrictheme")
+                        previewRequested("electricttheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("electrictheme")
-                        themeShopViewModel.setAppliedTheme("electrictheme")
+                        applyThemeRequested("electricttheme")
+                        themeShopViewModel.setAppliedTheme("electricttheme")
                     },
                     purchaseRequested = {
-                        themeShopViewModel.purchaseTheme(context as Activity, "electrictheme")
+                        themeShopViewModel.purchaseTheme(context as Activity, "electricttheme")
                     }
                 )
             }
@@ -374,6 +382,7 @@ fun ThemeShopSection (
             horizontalArrangement = Arrangement.Center
         ) {
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
+
             val isAzureApplied = appliedTheme.value == "azuretheme"
             val isElegantTheme = appliedTheme.value == "eleganttheme"
 
@@ -398,7 +407,7 @@ fun ThemeShopSection (
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("azuretheme"),
+                    alreadyBought = purchasedThemes.contains("azuretheme"),
                     title = "Azure",
                     price = "$1.99",
                     color = AzureBlue,
@@ -441,7 +450,7 @@ fun ThemeShopSection (
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = themeShopViewModel.getThemePurchased("eleganttheme"),
+                    alreadyBought = purchasedThemes.contains("eleganttheme"),
                     title = "Elegant",
                     price = "$1.99",
                     color = Bordeaux,
@@ -460,14 +469,14 @@ fun ThemeShopSection (
             }
         }
 
-        if (!advertisementViewModel.getRemoveAllAds()) {
+        if (!adremoverActive) {
 
             Spacer (
                 modifier = Modifier
                     .height(4.dp)
             )
 
-            RemoveAdsSection(
+            RemoveAdsSection (
                 modifier = Modifier
                     .weight(0.35f),
                 purchaseRequested = {
@@ -479,7 +488,7 @@ fun ThemeShopSection (
             AdSectionSmallBanner (
                 modifier = Modifier
                     .weight(0.2f),
-                suppressAd = advertisementViewModel.getRemoveAllAds()
+                suppressAd = adremoverActive
             )
         }
     }

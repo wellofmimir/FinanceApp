@@ -44,7 +44,6 @@ import studio.lemniscate.greeen.ui.theme.ElectricAppColors
 import studio.lemniscate.greeen.ui.theme.GreeenAppTheme
 import studio.lemniscate.greeen.ui.theme.GreenAppColors
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import studio.lemniscate.greeen.ui.theme.PeachAppColors
 import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.advertisement.RewardedAdManager
@@ -321,18 +320,6 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
-                val advertisementViewModel: AdvertisementViewModel = viewModel (
-                    factory = object: ViewModelProvider.Factory {
-                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                            val database = FinanceAppDatabase.getInstance(context)
-                            val repository = AdRepository.getInstance(database)
-
-                            return AdvertisementViewModel(repository) as T
-                        }
-                    }
-                )
-
                 val punchCardSectionViewModel: PunchCardSectionViewModel = viewModel (
                     factory = object: ViewModelProvider.Factory {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
@@ -395,6 +382,8 @@ class MainActivity : ComponentActivity() {
                 var goalAchieved by remember { mutableStateOf(false) }
                 val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
 
+                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
+                val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
 
                 LaunchedEffect(user) {
                     if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
@@ -415,7 +404,7 @@ class MainActivity : ComponentActivity() {
                     appColorsState.value = if (currentTheme == "charcoaltheme") {
                         CharcoalAppColors
                     }
-                    else if (currentTheme == "electrictheme")
+                    else if (currentTheme == "electricttheme")
                         ElectricAppColors
                     else if (currentTheme == "azuretheme")
                         AzureAppColors
@@ -427,6 +416,23 @@ class MainActivity : ComponentActivity() {
                         GreenAppColors
 
                     themeShopViewModel.setAppliedTheme(currentTheme)
+                }
+
+                LaunchedEffect(appliedTheme) {
+
+                    appColorsState.value = if (appliedTheme == "charcoaltheme") {
+                        CharcoalAppColors
+                    }
+                    else if (appliedTheme == "electricttheme")
+                        ElectricAppColors
+                    else if (appliedTheme == "azuretheme")
+                        AzureAppColors
+                    else if (appliedTheme == "eleganttheme")
+                        BordeauxAppColors
+                    else if (appliedTheme == "Greeen")
+                        GreenAppColors
+                    else
+                        GreenAppColors
                 }
 
                 CompositionLocalProvider (
@@ -506,7 +512,7 @@ class MainActivity : ComponentActivity() {
                                 dailyTipScreenViewModel = dailyTipScreenViewModel,
                                 goalsSectionViewModel = goalSectionViewModel,
                                 quoteViewModel = quoteViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 badgesViewModel = badgesViewModel,
                                 settingsViewModel = settingsViewModel,
                                 onGoalAchieved = {
@@ -533,7 +539,7 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.LIKEDQUOTES)
                             LikedQuotesSection (
                                 quoteViewModel = quoteViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
@@ -542,7 +548,7 @@ class MainActivity : ComponentActivity() {
                                 goalsSectionViewModel = goalSectionViewModel,
                                 totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
                                 achievementsSectionViewModel = achievementsSectionViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 punchCardSectionViewModel = punchCardSectionViewModel,
                                 tutorialInformation = tutorialInformation,
                                 onPunchCardFilled = {
@@ -564,7 +570,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 receiptSectionsViewModel = receiptSectionsViewModel,
                                 mainActivityViewModel = mainActivityViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 metricsScreenViewModel = metricsScreenViewModel,
                                 badgesViewModel = badgesViewModel,
                                 tutorialInformation = tutorialInformation
@@ -575,20 +581,19 @@ class MainActivity : ComponentActivity() {
                             SettingsScreen (
                                 headerSectionViewModel = headerSectionViewModel,
                                 settingsViewModel = settingsViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 tutorialInformation = tutorialInformation
                             )
 
                         if (sectionIdentifier == Screen.SHOP) {
                             ShopScreen (
                                 themeShopViewModel = themeShopViewModel,
-                                advertisementViewModel = advertisementViewModel,
                                 previewRequested = { theme ->
 
                                     previewColors = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "electrictheme")
+                                    else if (theme == "electricttheme")
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
@@ -605,7 +610,7 @@ class MainActivity : ComponentActivity() {
                                     appColorsState.value = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "electrictheme")
+                                    else if (theme == "electricttheme")
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
@@ -621,7 +626,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                             AdSectionMiddleBanner (
-                                suppressAd = advertisementViewModel.getRemoveAllAds(),
+                                suppressAd = adremoverActive,
                                 tutorialInformation = tutorialInformation
                             )
                         }
@@ -629,7 +634,7 @@ class MainActivity : ComponentActivity() {
                         if (sectionIdentifier == Screen.DAILY_TIPS)
                             DailyTipScreen (
                                 dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                advertisementViewModel = advertisementViewModel,
+                                shopViewModel = themeShopViewModel,
                                 badgesViewModel = badgesViewModel
                             )
 

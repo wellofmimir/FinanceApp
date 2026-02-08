@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
 import studio.lemniscate.greeen.receiptsscreen.ReceiptSectionsViewModel
 import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.welldone.WellDoneSection
 
@@ -42,7 +44,7 @@ fun HomeScreen (
     goalsSectionViewModel: GoalsSectionViewModel,
     dailyTipScreenViewModel: DailyTipScreenViewModel,
     quoteViewModel: QuoteViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     badgesViewModel: BadgesViewModel,
     settingsViewModel: SettingsViewModel,
     onGoalAchieved: () -> Unit,
@@ -56,6 +58,8 @@ fun HomeScreen (
 
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
+
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     Column (
         modifier = Modifier
@@ -240,7 +244,7 @@ fun HomeScreen (
                 AdSectionMiddleBanner (
                     modifier = Modifier
                         .weight(0.3f),
-                    suppressAd = advertisementViewModel.getRemoveAllAds(),
+                    suppressAd = adremoverActive,
                     tutorialInformation = tutorialInformation
                 )
             }

@@ -17,7 +17,6 @@ import studio.lemniscate.greeen.ui.theme.LocalAppColors
 @Composable
 fun ShopScreen (
     themeShopViewModel: ThemeShopViewModel,
-    advertisementViewModel: AdvertisementViewModel,
     previewRequested: (theme: String) -> Unit,
     applyThemeRequested: (theme: String) -> Unit
 ) {
@@ -54,8 +53,7 @@ fun ShopScreen (
             },
             applyThemeRequested = { theme ->
                 applyThemeRequested(theme)
-            },
-            advertisementViewModel = advertisementViewModel
+            }
         )
     }
 }

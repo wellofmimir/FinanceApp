@@ -40,21 +40,21 @@ class ReceiptSectionsViewModel (
     fun shareReceiptOnWhatsApp(receipt: Receipt) {
         viewModelScope.launch {
             getCurrency()
-            internShareForWhatsAppEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+            internShareForWhatsAppEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "${receipt.description}\n${currency.value + " " + receipt.amount}\n\nCheckout the Greeen-App to track your receipts easy and 100% free."))
         }
     }
 
     fun shareReceiptOnFacebookMessenger(receipt: Receipt) {
         viewModelScope.launch {
             getCurrency()
-            internShareForFacebookMessengerEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+            internShareForFacebookMessengerEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "${receipt.description}\n${currency.value + " " + receipt.amount}\n\nCheckout the Greeen-App to track your receipts easy and 100% free."))
         }
     }
 
     fun shareReceiptOnFacebook(receipt: Receipt) {
         viewModelScope.launch {
             getCurrency()
-            internShareForFacebookEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "Checkout the Greeen-App to track your receipts easy and 100% free.\n\n${receipt.description}\n${currency.value + " " + receipt.amount}"))
+            internShareForFacebookEvent.emit(ShareEvent.SharedReceipt(imageUri = receipt.pathToImage.toUri(), text = "${receipt.description}\n${currency.value + " " + receipt.amount}\n\nCheckout the Greeen-App to track your receipts easy and 100% free."))
         }
     }
 

@@ -185,6 +185,11 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 if (isEditingTheName) {
+                                    if (newUsername.isEmpty()) {
+
+                                        return@clickable
+                                    }
+
                                     isEditingTheName = false
                                     headerSectionViewModel.updateUser(newUsername)
                                     headerSectionViewModel.getUser()

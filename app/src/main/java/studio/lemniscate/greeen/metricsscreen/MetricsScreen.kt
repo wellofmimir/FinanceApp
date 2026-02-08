@@ -55,6 +55,7 @@ import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 import studio.lemniscate.greeen.dailytipscreen.AdTeaserSection
 import kotlinx.coroutines.delay
 import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 import java.math.RoundingMode
 
 @Composable
@@ -62,7 +63,7 @@ fun MetricsScreen (
     modifier: Modifier = Modifier,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     metricsScreenViewModel: MetricsScreenViewModel,
-    advertisementViewModel: AdvertisementViewModel,
+    shopViewModel: ThemeShopViewModel,
     tutorialInformation: TutorialInformation,
     onReturn: () -> Unit,
     context: Context = LocalContext.current
@@ -88,6 +89,8 @@ fun MetricsScreen (
     val waitingText by metricsScreenViewModel.waitingText.collectAsState()
     var trendCanBeShown by remember { mutableStateOf(false) }
 
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
+
     LaunchedEffect(metricsScreenViewModel.trendCanBeShown) {
         if (!metricsScreenViewModel.trendCanBeShown)
             return@LaunchedEffect
@@ -99,6 +102,11 @@ fun MetricsScreen (
     LaunchedEffect(Unit) {
         receiptSectionsViewModel.getCurrency()
         receiptSectionsViewModel.getRandomSeriesOfValuesForTrendAnalysis()
+
+        if (adremoverActive) {
+            metricsScreenViewModel.getDailyTrend(trendRequest)
+            trendCanBeShown = true
+        }
     }
 
     LaunchedEffect(timespan) {
@@ -258,7 +266,7 @@ fun MetricsScreen (
                 ),
             contentAlignment = Alignment.Center
         ) {
-            if (trendCanBeShown || metricsScreenViewModel.rewardedAdAfterDailyTrendSeen()) {
+            if (trendCanBeShown || metricsScreenViewModel.rewardedAdAfterDailyTrendSeen() || adremoverActive) {
                 if (waitingForDailyTrend) {
                     TrendSection (
                         trend = waitingText
@@ -311,7 +319,7 @@ fun MetricsScreen (
             AdSectionSmallBanner (
                 modifier = Modifier
                     .weight(4f),
-                suppressAd = advertisementViewModel.getRemoveAllAds()
+                suppressAd = adremoverActive
             )
         }
     }

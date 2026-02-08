@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.app.Activity
-import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import studio.lemniscate.greeen.notifications.DailyEvents
 
 class ThemeShopViewModel (
     private val billingManager: BillingManager,
@@ -19,10 +22,15 @@ class ThemeShopViewModel (
     init {
         billingManager.setListener(object: BillingManager.Listener {
             override fun onPurchaseSuccess(idProduct: String) {
-                purchasedThemes[idProduct] = true
-
-                if (idProduct == "RemoveAllAds")
-                    shopRepository.setRemoveAllAdsAsPurchased()
+                if (idProduct == "adremover") {
+                    internAdRemoverPurchased.update { currentState ->
+                        true
+                    }
+                } else {
+                    internPurchasedThemes.update { current ->
+                        current + (idProduct to true)
+                    }
+                }
             }
         })
 
@@ -35,19 +43,29 @@ class ThemeShopViewModel (
 
             billingManager.restorePurchases()
         }
+
+        viewModelScope.launch {
+            ShopEvents.newThemePurchased.collect() { theme ->
+                internAppliedTheme.value = theme
+                internPurchasedThemes.update { current ->
+                    current + (theme to true)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            ShopEvents.adRemoverPurchased.collect() {
+                internAdRemoverPurchased.value = true
+            }
+        }
     }
 
-    private val purchasedThemes = mutableStateMapOf<String, Boolean>()
 
-    fun getThemePurchased(theme: String): Boolean {
-        val alreadyPurchased = purchasedThemes[theme] ?: shopRepository.getThemePurchased(theme)
-        purchasedThemes[theme] = alreadyPurchased
-        return alreadyPurchased
-    }
+    private var internPurchasedThemes = MutableStateFlow<Map<String, Boolean> >(emptyMap())
+    val purchasedThemes = internPurchasedThemes.asStateFlow()
+
     fun purchaseTheme(activity: Activity, theme: String) {
         shopRepository.purchaseTheme(activity, theme)
-        getThemePurchased(theme)
-        getAppliedTheme()
     }
 
     private val internAppliedTheme = MutableStateFlow(shopRepository.getAppliedTheme())
@@ -57,6 +75,10 @@ class ThemeShopViewModel (
         shopRepository.setAppliedTheme(theme)
         internAppliedTheme.value = theme
     }
+
+    private var internAdRemoverPurchased = MutableStateFlow(shopRepository.getRemoveAllAds())
+    val adRemoverPurchased = internAdRemoverPurchased.asStateFlow()
+
 
     fun getAppliedTheme() {
         internAppliedTheme.value = shopRepository.getAppliedTheme()

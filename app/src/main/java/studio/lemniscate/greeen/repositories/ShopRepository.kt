@@ -2,6 +2,7 @@ package studio.lemniscate.greeen.repositories
 import studio.lemniscate.greeen.billingmanager.BillingManager
 import studio.lemniscate.greeen.database.FinanceAppDatabase
 import android.app.Activity
+import studio.lemniscate.greeen.shopscreen.ShopEvents
 
 class ShopRepository private constructor (private val database: FinanceAppDatabase, private val billingManager: BillingManager) {
 
@@ -26,6 +27,8 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         billingManager.setListener(object: BillingManager.Listener {
             override fun onPurchaseSuccess(idProduct: String) {
                 database.setThemePurchased(idProduct)
+                setAppliedTheme(idProduct)
+                ShopEvents.themeSuccessfullyPurchased(idProduct)
             }
         })
 
@@ -39,15 +42,15 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
         billingManager.setListener(object: BillingManager.Listener {
             override fun onPurchaseSuccess(idProduct: String) {
                 database.setRemoveAllAds()
+                ShopEvents.adRemoverSuccessfullyPurchased()
             }
         })
 
-        billingManager.start()
-        billingManager.buyTestProduct(activity, "adRemover")
-    }
+        ShopEvents.adRemoverSuccessfullyPurchased()
+        return
 
-    fun setRemoveAllAdsAsPurchased() {
-        database.setRemoveAllAds()
+        billingManager.start()
+        billingManager.buyTestProduct(activity, "adremover")
     }
 
     fun setAppliedTheme(theme: String) {
@@ -55,6 +58,12 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
     }
 
     fun getAppliedTheme(): String {
-        return database.getAppliedTheme()
+        val appliedTheme = database.getAppliedTheme()
+        return appliedTheme
+    }
+
+    fun getRemoveAllAds(): Boolean {
+        val adremoverActive = database.getRemoveAllAds()
+        return adremoverActive
     }
 }
