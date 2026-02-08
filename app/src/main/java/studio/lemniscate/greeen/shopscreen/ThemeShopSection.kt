@@ -283,7 +283,7 @@ fun ThemeShopSection (
             val appliedTheme = themeShopViewModel.appliedTheme.collectAsState()
 
             val isCharcoalApplied = appliedTheme.value == "charcoaltheme"
-            val isElectricApplied = appliedTheme.value == "electricttheme"
+            val isElectricApplied = appliedTheme.value == "electrictheme"
 
             if (isCharcoalApplied) {
                 ThemeShopEntry (
@@ -351,19 +351,19 @@ fun ThemeShopSection (
                 ThemeShopEntry (
                     modifier = Modifier
                         .weight(1f),
-                    alreadyBought = purchasedThemes.contains("electricttheme"),
+                    alreadyBought = purchasedThemes.contains("electrictheme"),
                     title = "Electric",
                     price = "$1.99",
                     color = ElectricPurple,
                     previewRequested = {
-                        previewRequested("electricttheme")
+                        previewRequested("electrictheme")
                     },
                     applyThemeRequested = {
-                        applyThemeRequested("electricttheme")
-                        themeShopViewModel.setAppliedTheme("electricttheme")
+                        applyThemeRequested("electrictheme")
+                        themeShopViewModel.setAppliedTheme("electrictheme")
                     },
                     purchaseRequested = {
-                        themeShopViewModel.purchaseTheme(context as Activity, "electricttheme")
+                        themeShopViewModel.purchaseTheme(context as Activity, "electrictheme")
                     }
                 )
             }

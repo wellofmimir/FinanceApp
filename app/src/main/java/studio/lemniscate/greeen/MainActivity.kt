@@ -404,7 +404,7 @@ class MainActivity : ComponentActivity() {
                     appColorsState.value = if (currentTheme == "charcoaltheme") {
                         CharcoalAppColors
                     }
-                    else if (currentTheme == "electricttheme")
+                    else if (currentTheme == "electrictheme")
                         ElectricAppColors
                     else if (currentTheme == "azuretheme")
                         AzureAppColors
@@ -423,7 +423,7 @@ class MainActivity : ComponentActivity() {
                     appColorsState.value = if (appliedTheme == "charcoaltheme") {
                         CharcoalAppColors
                     }
-                    else if (appliedTheme == "electricttheme")
+                    else if (appliedTheme == "electrictheme")
                         ElectricAppColors
                     else if (appliedTheme == "azuretheme")
                         AzureAppColors
@@ -593,7 +593,7 @@ class MainActivity : ComponentActivity() {
                                     previewColors = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "electricttheme")
+                                    else if (theme == "electrictheme")
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
@@ -610,7 +610,7 @@ class MainActivity : ComponentActivity() {
                                     appColorsState.value = if (theme == "charcoaltheme") {
                                         CharcoalAppColors
                                     }
-                                    else if (theme == "electricttheme")
+                                    else if (theme == "electrictheme")
                                         ElectricAppColors
                                     else if (theme == "azuretheme")
                                         AzureAppColors
