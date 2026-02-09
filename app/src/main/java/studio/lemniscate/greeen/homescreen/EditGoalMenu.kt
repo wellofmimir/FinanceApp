@@ -263,9 +263,7 @@ fun EditGoalMenu (
                             ) {
                             }
                     )
-
                 } else {
-
                     Text (
                         text = amountText,
                         color = colors.secondary,
@@ -400,6 +398,12 @@ fun EditGoalMenu (
                                 return@Button
 
                             if (amountText.isEmpty())
+                                return@Button
+
+                            if (savedAmountText.toFloat() <= 0.0f)
+                                return@Button
+
+                            if (amountText.toFloat() <= 0.0f)
                                 return@Button
 
                             isEditingSavedAmount = false

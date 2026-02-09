@@ -46,9 +46,6 @@ class ShopRepository private constructor (private val database: FinanceAppDataba
             }
         })
 
-        ShopEvents.adRemoverSuccessfullyPurchased()
-        return
-
         billingManager.start()
         billingManager.buyTestProduct(activity, "adremover")
     }
