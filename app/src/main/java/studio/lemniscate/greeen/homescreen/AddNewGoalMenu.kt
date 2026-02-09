@@ -374,6 +374,11 @@ fun AddNewGoalMenu (
 
                                 errorInInput = true
 
+                            } else if (amountText.toFloat() <= 0.0f) {
+                                errorMessage = "Please choose an amount greater than zero."
+                                amount = 0.0f
+
+                                errorInInput = true
                             } else if (nameOfGoalText.length > 30) {
                                 errorMessage = "Goal name too long (max. 30 characters)."
                                 errorInInput = true

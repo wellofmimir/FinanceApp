@@ -55,6 +55,7 @@ import studio.lemniscate.greeen.commonutils.GlobalToastHandler
 import studio.lemniscate.greeen.repositories.BadgesRepository
 import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
 import studio.lemniscate.greeen.repositories.MetricsRepository
+import studio.lemniscate.greeen.ui.theme.BordeauxAppColors
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -102,7 +103,6 @@ import kotlinx.coroutines.delay
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import studio.lemniscate.greeen.ui.theme.BordeauxAppColors
 
 
 enum class Screen (id: Int) {
