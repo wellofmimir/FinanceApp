@@ -31,7 +31,7 @@ class TrendClient (
 
         val request = Request.Builder()
             .addHeader("Content-Type", "application/json")
-            .url("https://shortlyfi.me/api/llm/trends/expenses")
+            .url("https://greeen-app.com/api/llm/trends/expenses")
             .post(jsonBody.toRequestBody(mediaType))
             .build()
 

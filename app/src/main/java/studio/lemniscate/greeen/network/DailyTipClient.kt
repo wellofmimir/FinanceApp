@@ -19,7 +19,7 @@ class DailyTipClient (
 
         val request = Request.Builder()
             .get()
-            .url("https://shortlyfi.me/api/tip")
+            .url("https://greeen-app.com/api/tip")
             .build()
 
         try {
@@ -35,7 +35,7 @@ class DailyTipClient (
 
         val request = Request.Builder()
             .get()
-            .url(url = "https://shortlyfi.me/api/tip/image/newestImage")
+            .url(url = "https://greeen-app.com/api/tip/image/newestImage")
             .build()
 
         try {

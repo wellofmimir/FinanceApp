@@ -48,7 +48,7 @@ class WallpaperClient (
 
         val request = Request.Builder()
             .get()
-            .url(url = "https://shortlyfi.me/api/badges/image/$endpoint")
+            .url(url = "https://greeen-app.com/api/badges/image/$endpoint")
             .build()
 
         try {

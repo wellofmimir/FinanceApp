@@ -12,7 +12,7 @@ class QuoteClient (
 
         val request = Request.Builder()
             .get()
-            .url("https://shortlyfi.me/api/quote")
+            .url("https://greeen-app.com/api/quote")
             .build()
 
         try {

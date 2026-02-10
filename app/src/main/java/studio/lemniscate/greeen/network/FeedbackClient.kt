@@ -22,7 +22,7 @@ class FeedbackClient (
         }.toString().toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("https://shortlyfi.me/api/feedback")
+            .url("https://greeen-app.com/api/feedback")
             .addHeader("Content-Type", "application/json")
             .post(jsonRequestBody)
             .build()
