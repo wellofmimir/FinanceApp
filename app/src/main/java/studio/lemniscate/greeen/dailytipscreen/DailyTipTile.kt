@@ -72,7 +72,7 @@ fun DailyTipTile (
                 .padding (
                     end = 12.dp
                 )
-                .weight(1f)
+                .weight(1.5f)
         ) {
             Text (
                 text = dailyTip.title,
