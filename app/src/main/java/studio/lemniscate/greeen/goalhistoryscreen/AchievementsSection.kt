@@ -60,8 +60,12 @@ import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import java.io.File
 
 @Composable
-fun AchievementsSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation, context: Context = LocalContext.current) {
-
+fun AchievementsSection (
+    modifier: Modifier = Modifier,
+    achievementsSectionViewModel: AchievementsSectionViewModel,
+    tutorialInformation: TutorialInformation,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
     val goals by achievementsSectionViewModel.goals.collectAsState()
     achievementsSectionViewModel.getCompletedGoals(tutorialInformation.isActive)

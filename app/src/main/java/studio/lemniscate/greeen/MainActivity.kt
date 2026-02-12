@@ -45,7 +45,6 @@ import studio.lemniscate.greeen.ui.theme.GreeenAppTheme
 import studio.lemniscate.greeen.ui.theme.GreenAppColors
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.advertisement.RewardedAdManager
 import studio.lemniscate.greeen.commonutils.FileProvider
 import studio.lemniscate.greeen.goalhistoryscreen.PunchCardSectionViewModel
@@ -73,6 +72,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.pager.rememberPagerState
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -92,6 +92,7 @@ import androidx.compose.runtime.mutableStateOf
 
 import androidx.compose.material3.Text
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.lifecycle.ViewModel
@@ -385,9 +386,42 @@ class MainActivity : ComponentActivity() {
                 val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
 
+                val pagerState = rememberPagerState (
+                    initialPage = 1,
+                    pageCount = { 4 }
+                )
+
+                LaunchedEffect(pagerState.currentPage) {
+
+                    if (sectionIdentifier == Screen.WELCOME || sectionIdentifier == Screen.SPLASH)
+                        delay(2000)
+
+                    sectionIdentifier = when (pagerState.currentPage) {
+                        0 -> {
+                            Screen.GOALHISTORY
+                        }
+                        1 -> {
+                            Screen.HOME
+                        }
+                        2 -> {
+                            Screen.RECEIPTS
+                        }
+                        3 -> {
+                            Screen.DAILY_TIPS
+                        }
+                        4 -> {
+                            Screen.LIKEDQUOTES
+                        }
+                        else -> {
+                            Screen.HOME
+                        }
+                    }
+                }
+
+
                 LaunchedEffect(user) {
                     if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
-                        delay(2000)
+                        delay(2500)
 
                     sectionIdentifier = when (user) {
                         "DUMMY" -> Screen.WELCOME
@@ -460,7 +494,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                     ) {
-                        // Header nur, wenn nicht Welcome
                         if (listOf(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP, Screen.DAILY_TIPS).contains(sectionIdentifier)) {
 
                             if (!goalAchieved && !addReceiptMenuOpen) {
@@ -482,180 +515,226 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        AnimatedVisibility (
-                            visible = sectionIdentifier == Screen.WELCOME,
-                            enter = fadeIn (
-                                animationSpec = tween (
-                                    durationMillis = 1000
-                                )
-                            )
-                        ) {
-                            WelcomeScreen (
-                                onFinished = {
-                                    mainActivityViewModel.loadUser()
-                                },
-                                false
-                            )
-                        }
-
-                        AnimatedVisibility (
-                            visible = sectionIdentifier == Screen.HOME,
-                            enter = fadeIn (
-                                animationSpec = tween (
-                                    durationMillis = 1000
-                                )
-                            )
-                        ) {
-                            HomeScreen (
-                                tutorialInformation = tutorialInformation,
-                                receiptSectionsViewModel = receiptSectionsViewModel,
-                                dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                goalsSectionViewModel = goalSectionViewModel,
-                                quoteViewModel = quoteViewModel,
-                                shopViewModel = themeShopViewModel,
-                                badgesViewModel = badgesViewModel,
-                                settingsViewModel = settingsViewModel,
-                                onGoalAchieved = {
-                                    goalAchieved = true
-                                },
-                                onWellDoneSectionDismissed = {
-                                    goalAchieved = false
-                                },
-                                shopSectionClicked = {
-                                    sectionIdentifier = Screen.SHOP
-                                },
-                                receiptsSectionClicked = {
-                                    sectionIdentifier = Screen.RECEIPTS
-                                },
-                                recentlyCompletedGoalsSectionClicked = {
-                                    sectionIdentifier = Screen.GOALHISTORY
-                                },
-                                dailyTipsSectionClicked = {
-                                    sectionIdentifier = Screen.DAILY_TIPS
-                                }
-                            )
-                        }
-
-                        if (sectionIdentifier == Screen.LIKEDQUOTES)
-                            LikedQuotesSection (
-                                quoteViewModel = quoteViewModel,
-                                shopViewModel = themeShopViewModel,
-                                tutorialInformation = tutorialInformation
-                            )
-
-                        if (sectionIdentifier == Screen.GOALHISTORY)
-                            GoalHistoryScreen (
-                                goalsSectionViewModel = goalSectionViewModel,
-                                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                                achievementsSectionViewModel = achievementsSectionViewModel,
-                                shopViewModel = themeShopViewModel,
-                                punchCardSectionViewModel = punchCardSectionViewModel,
-                                tutorialInformation = tutorialInformation,
-                                onPunchCardFilled = {
-                                    goalAchieved = true
-                                },
-                                onWellDoneSectionDismissed = {
-                                    goalAchieved = false
-                                }
-                            )
-
-                        if (sectionIdentifier == Screen.RECEIPTS || sectionIdentifier == Screen.ADD_NEW_RECEIPT) {
-                            ReceiptScreen (
-                                onReceiptAdded = {
-                                    if (tutorialInformation.isActive) {
-                                        tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
-                                        mainActivityViewModel.setHomeScreenTutorialDone()
-                                        receiptSectionsViewModel.closeAddReceiptSection()
+                        HorizontalPager (
+                            state = pagerState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) { page ->
+                            when (page) {
+                                0 -> {
+                                    if (sectionIdentifier == Screen.GOALHISTORY) {
+                                        AnimatedVisibility (
+                                            visible = sectionIdentifier == Screen.GOALHISTORY,
+                                            enter = fadeIn(
+                                                animationSpec = tween (
+                                                    durationMillis = 1000
+                                                )
+                                            )
+                                        ) {
+                                            GoalHistoryScreen (
+                                                goalsSectionViewModel = goalSectionViewModel,
+                                                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                                                achievementsSectionViewModel = achievementsSectionViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                punchCardSectionViewModel = punchCardSectionViewModel,
+                                                tutorialInformation = tutorialInformation,
+                                                onPunchCardFilled = {
+                                                    goalAchieved = true
+                                                },
+                                                onWellDoneSectionDismissed = {
+                                                    goalAchieved = false
+                                                }
+                                            )
+                                        }
                                     }
-                                },
-                                receiptSectionsViewModel = receiptSectionsViewModel,
-                                mainActivityViewModel = mainActivityViewModel,
-                                shopViewModel = themeShopViewModel,
-                                metricsScreenViewModel = metricsScreenViewModel,
-                                badgesViewModel = badgesViewModel,
-                                tutorialInformation = tutorialInformation
-                            )
-                        }
-
-                        if (sectionIdentifier == Screen.USER_SETTINGS)
-                            SettingsScreen (
-                                headerSectionViewModel = headerSectionViewModel,
-                                settingsViewModel = settingsViewModel,
-                                shopViewModel = themeShopViewModel,
-                                tutorialInformation = tutorialInformation
-                            )
-
-                        if (sectionIdentifier == Screen.SHOP) {
-                            ShopScreen (
-                                themeShopViewModel = themeShopViewModel,
-                                previewRequested = { theme ->
-
-                                    previewColors = if (theme == "charcoaltheme") {
-                                        CharcoalAppColors
-                                    }
-                                    else if (theme == "electrictheme")
-                                        ElectricAppColors
-                                    else if (theme == "azuretheme")
-                                        AzureAppColors
-                                    else if (theme == "eleganttheme")
-                                        BordeauxAppColors
-                                    else if (theme == "Greeen")
-                                        GreenAppColors
-                                    else
-                                        GreenAppColors
-                                },
-                                applyThemeRequested = { theme ->
-                                    previewColors = null
-
-                                    appColorsState.value = if (theme == "charcoaltheme") {
-                                        CharcoalAppColors
-                                    }
-                                    else if (theme == "electrictheme")
-                                        ElectricAppColors
-                                    else if (theme == "azuretheme")
-                                        AzureAppColors
-                                    else if (theme == "eleganttheme")
-                                        BordeauxAppColors
-                                    else if (theme == "Greeen")
-                                        GreenAppColors
-                                    else
-                                        GreenAppColors
-
-                                    mainActivityViewModel.setCurrentTheme(theme)
                                 }
-                            )
 
-                            AdSectionMiddleBanner (
-                                suppressAd = adremoverActive,
-                                tutorialInformation = tutorialInformation
-                            )
+                                else -> {
+
+                                    if (sectionIdentifier == Screen.HOME) {
+                                        AnimatedVisibility (
+                                            visible = sectionIdentifier == Screen.HOME,
+                                            enter = fadeIn(
+                                                animationSpec = tween (
+                                                    durationMillis = 1000
+                                                )
+                                            )
+                                        ) {
+                                            HomeScreen (
+                                                tutorialInformation = tutorialInformation,
+                                                receiptSectionsViewModel = receiptSectionsViewModel,
+                                                dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                                goalsSectionViewModel = goalSectionViewModel,
+                                                quoteViewModel = quoteViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                badgesViewModel = badgesViewModel,
+                                                settingsViewModel = settingsViewModel,
+                                                onGoalAchieved = {
+                                                    goalAchieved = true
+                                                },
+                                                onWellDoneSectionDismissed = {
+                                                    goalAchieved = false
+                                                },
+                                                shopSectionClicked = {
+                                                    sectionIdentifier = Screen.SHOP
+                                                },
+                                                receiptsSectionClicked = {
+                                                    sectionIdentifier = Screen.RECEIPTS
+                                                },
+                                                recentlyCompletedGoalsSectionClicked = {
+                                                    sectionIdentifier = Screen.GOALHISTORY
+                                                },
+                                                dailyTipsSectionClicked = {
+                                                    sectionIdentifier = Screen.DAILY_TIPS
+                                                }
+                                            )
+                                        }
+                                    }
+
+
+                                    if (sectionIdentifier == Screen.LIKEDQUOTES) {
+                                        AnimatedVisibility (
+                                            visible = sectionIdentifier == Screen.WELCOME,
+                                            enter = fadeIn (
+                                                animationSpec = tween (
+                                                    durationMillis = 1000
+                                                )
+                                            )
+                                        ) {
+                                            LikedQuotesSection (
+                                                quoteViewModel = quoteViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                tutorialInformation = tutorialInformation
+                                            )
+                                        }
+                                    }
+
+                                    if (sectionIdentifier == Screen.GOALHISTORY) {
+                                        AnimatedVisibility (
+                                            visible = sectionIdentifier == Screen.GOALHISTORY,
+                                            enter = fadeIn (
+                                                animationSpec = tween (
+                                                    durationMillis = 1000
+                                                )
+                                            )
+                                        ) {
+                                            GoalHistoryScreen (
+                                                goalsSectionViewModel = goalSectionViewModel,
+                                                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                                                achievementsSectionViewModel = achievementsSectionViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                punchCardSectionViewModel = punchCardSectionViewModel,
+                                                tutorialInformation = tutorialInformation,
+                                                onPunchCardFilled = {
+                                                    goalAchieved = true
+                                                },
+                                                onWellDoneSectionDismissed = {
+                                                    goalAchieved = false
+                                                }
+                                            )
+                                        }
+                                    }
+
+                                    if (sectionIdentifier == Screen.RECEIPTS || sectionIdentifier == Screen.ADD_NEW_RECEIPT) {
+                                        ReceiptScreen (
+                                            onReceiptAdded = {
+                                                if (tutorialInformation.isActive) {
+                                                    tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
+                                                    mainActivityViewModel.setHomeScreenTutorialDone()
+                                                    receiptSectionsViewModel.closeAddReceiptSection()
+                                                }
+                                            },
+                                            receiptSectionsViewModel = receiptSectionsViewModel,
+                                            mainActivityViewModel = mainActivityViewModel,
+                                            shopViewModel = themeShopViewModel,
+                                            metricsScreenViewModel = metricsScreenViewModel,
+                                            badgesViewModel = badgesViewModel,
+                                            tutorialInformation = tutorialInformation
+                                        )
+                                    }
+
+                                    if (sectionIdentifier == Screen.USER_SETTINGS)
+                                        SettingsScreen (
+                                            headerSectionViewModel = headerSectionViewModel,
+                                            settingsViewModel = settingsViewModel,
+                                            shopViewModel = themeShopViewModel,
+                                            tutorialInformation = tutorialInformation
+                                        )
+
+                                    if (sectionIdentifier == Screen.SHOP) {
+                                        ShopScreen (
+                                            themeShopViewModel = themeShopViewModel,
+                                            previewRequested = { theme ->
+
+                                                previewColors = if (theme == "charcoaltheme") {
+                                                    CharcoalAppColors
+                                                }
+                                                else if (theme == "electrictheme")
+                                                    ElectricAppColors
+                                                else if (theme == "azuretheme")
+                                                    AzureAppColors
+                                                else if (theme == "eleganttheme")
+                                                    BordeauxAppColors
+                                                else if (theme == "Greeen")
+                                                    GreenAppColors
+                                                else
+                                                    GreenAppColors
+                                            },
+                                            applyThemeRequested = { theme ->
+                                                previewColors = null
+
+                                                appColorsState.value = if (theme == "charcoaltheme") {
+                                                    CharcoalAppColors
+                                                }
+                                                else if (theme == "electrictheme")
+                                                    ElectricAppColors
+                                                else if (theme == "azuretheme")
+                                                    AzureAppColors
+                                                else if (theme == "eleganttheme")
+                                                    BordeauxAppColors
+                                                else if (theme == "Greeen")
+                                                    GreenAppColors
+                                                else
+                                                    GreenAppColors
+
+                                                mainActivityViewModel.setCurrentTheme(theme)
+                                            }
+                                        )
+
+                                        AdSectionMiddleBanner (
+                                            suppressAd = adremoverActive,
+                                            tutorialInformation = tutorialInformation
+                                        )
+                                    }
+
+                                    if (sectionIdentifier == Screen.DAILY_TIPS)
+                                        DailyTipScreen (
+                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                            shopViewModel = themeShopViewModel,
+                                            badgesViewModel = badgesViewModel
+                                        )
+
+                                    AnimatedVisibility (
+                                        visible = sectionIdentifier == Screen.SPLASH,
+                                        enter = fadeIn (
+                                            animationSpec = tween (
+                                                durationMillis = 1000
+                                            )
+                                        )
+                                    ) {
+                                        WelcomeScreen (
+                                            onFinished = {
+                                                mainActivityViewModel.loadUser()
+                                            },
+                                            true
+                                        )
+                                    }
+
+                                    if (sectionIdentifier == Screen.ABOUT_US)
+                                        AboutScreen ()
+                                }
+                            }
                         }
-
-                        if (sectionIdentifier == Screen.DAILY_TIPS)
-                            DailyTipScreen (
-                                dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                shopViewModel = themeShopViewModel,
-                                badgesViewModel = badgesViewModel
-                            )
-
-                        AnimatedVisibility (
-                            visible = sectionIdentifier == Screen.SPLASH,
-                            enter = fadeIn (
-                                animationSpec = tween (
-                                    durationMillis = 1000
-                                )
-                            )
-                        ) {
-                            WelcomeScreen (
-                                onFinished = {
-                                    mainActivityViewModel.loadUser()
-                                },
-                                true
-                            )
-                        }
-
-                        if (sectionIdentifier == Screen.ABOUT_US)
-                            AboutScreen ()
                     }
 
                     if (sectionIdentifier == Screen.HOME) {

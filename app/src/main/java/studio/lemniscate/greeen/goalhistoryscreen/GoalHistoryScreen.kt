@@ -74,81 +74,81 @@ fun GoalHistoryScreen (
         onPunchCardFilled()
     }
 
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.5f),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        PunchCardSection (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            tutorialInformation = tutorialInformation,
-            punchCardSectionViewModel = punchCardSectionViewModel,
-            onPunchCardFilled = {
-                punchCardFilled = true
-            }
-        )
-
-        Column (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (switchSections)
-                TotalGoalsAchievedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable() {
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
-                            switchSections = !switchSections
-                        },
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-            else
-                TotalTokensEarnedSection (
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable() {
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
-                            switchSections = !switchSections
-                        },
-                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-
-            Spacer (
-                modifier = Modifier
-                    .padding(2.dp)
-            )
-
-            RandomMemoryPictureSection (
-                modifier = Modifier
-                    .weight(1f),
-                tutorialInformation = tutorialInformation,
-                achievementsSectionViewModel = achievementsSectionViewModel
-            )
-        }
-    }
-
-    Spacer (
-        modifier = Modifier
-            .padding(2.dp)
-    )
-
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.5f),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            PunchCardSection (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                tutorialInformation = tutorialInformation,
+                punchCardSectionViewModel = punchCardSectionViewModel,
+                onPunchCardFilled = {
+                    punchCardFilled = true
+                }
+            )
+
+            Column (
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (switchSections)
+                    TotalGoalsAchievedSection (
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable() {
+                                if (tutorialInformation.isActive)
+                                    return@clickable
+
+                                switchSections = !switchSections
+                            },
+                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                        tutorialInformation = tutorialInformation
+                    )
+                else
+                    TotalTokensEarnedSection (
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable() {
+                                if (tutorialInformation.isActive)
+                                    return@clickable
+
+                                switchSections = !switchSections
+                            },
+                        totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                        tutorialInformation = tutorialInformation
+                    )
+
+                Spacer (
+                    modifier = Modifier
+                        .padding(2.dp)
+                )
+
+                RandomMemoryPictureSection (
+                    modifier = Modifier
+                        .weight(1f),
+                    tutorialInformation = tutorialInformation,
+                    achievementsSectionViewModel = achievementsSectionViewModel
+                )
+            }
+        }
+
+        Spacer (
+            modifier = Modifier
+                .padding(2.dp)
+        )
+
         AchievementsSection (
             modifier = Modifier
                 .fillMaxWidth()
@@ -170,4 +170,8 @@ fun GoalHistoryScreen (
             tutorialInformation = tutorialInformation
         )
     }
+
+
+
+
 }

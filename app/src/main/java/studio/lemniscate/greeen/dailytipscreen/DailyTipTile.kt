@@ -48,7 +48,7 @@ fun DailyTipTile (
         verticalArrangement = Arrangement.Top,
         modifier = modifier
             .height (
-                height = 150.dp
+                height = 175.dp
             )
             .fillMaxWidth()
             .background (
