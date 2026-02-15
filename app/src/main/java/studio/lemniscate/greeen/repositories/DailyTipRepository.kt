@@ -64,14 +64,13 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
     suspend fun fetchDailyTipFromServer(): DailyTip {
 
         val result = client.fetchDailyTip()
+        val imageToDailyTipResult = client.fetchImageToDailyTip()
 
         if (isValidJson(result) == false)
             return DailyTip("", "", "", "", "")
 
         if (!result.startsWith("{"))
             return DailyTip("", "", "", "", "")
-
-        val imageToDailyTipResult = client.fetchImageToDailyTip()
 
         if (imageToDailyTipResult == null)
             return DailyTip("", "", "", "", "")

@@ -23,7 +23,8 @@ data class Badge (
     val text: String,
     val theme: String,
     var pathToImage: String, //wallpaper
-    var isGranted: Boolean
+    var isGranted: Boolean,
+    var badgeSymbol: String
 )
 
 data class Tip (
@@ -400,11 +401,6 @@ class FinanceAppDatabase private constructor(context: Context) {
     fun resetDailyQuoteFetched() {
         securePreferences.edit {
             putBoolean("dailyQuoteFetched", false)
-        }
-
-        quotePreferences.edit {
-            putString("quote", "")
-            putString("quotedPerson", "")
         }
     }
 

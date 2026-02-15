@@ -45,7 +45,8 @@ object BadgeCatalog {
                 text = "More motivation is waiting for you!",
                 theme = "",
                 pathToImage = "wallpaperFirstQuote.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.SEVEN_QUOTES_LIKED -> Badge (
@@ -54,7 +55,8 @@ object BadgeCatalog {
                 text = "You connected with seven mindful thoughts. Steady minds make steady choices, especially with money.",
                 theme = "",
                 pathToImage = "wallpaperSevenQuotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FOURTEEN_QUOTES_LIKED -> Badge (
@@ -63,7 +65,8 @@ object BadgeCatalog {
                 text = "You kept coming back, without pressure. Calm attention creates progress that feels safe and sustainable.",
                 theme = "",
                 pathToImage = "wallpaperFourteenQuotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FORTY_QUOTES_LIKED -> Badge (
@@ -72,7 +75,8 @@ object BadgeCatalog {
                 text = "You didn’t slow down — you leveled up. This kind of consistency builds confidence, discipline, and real progress.",
                 theme = "",
                 pathToImage = "wallpaperFortyQuotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.SEVENTY_QUOTES_LIKED -> Badge (
@@ -81,7 +85,8 @@ object BadgeCatalog {
                 text = "Each reflection adds clarity and strengthens your mindful awareness.",
                 theme = "",
                 pathToImage = "wallpaperSeventyQuotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.HUNDRED_QUOTES_LIKED -> Badge (
@@ -90,7 +95,8 @@ object BadgeCatalog {
                 text = "You’ve marked one hundred ideas worth keeping. Every insight strengthens your understanding and awareness.",
                 theme = "",
                 pathToImage = "wallpaperSeventyQuotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.ONE_THIRTY_QUOTES_LIKED -> Badge (
@@ -99,7 +105,8 @@ object BadgeCatalog {
                 text = "You stayed present over time. This kind of consistency builds confidence you don’t have to prove.",
                 theme = "",
                 pathToImage = "wallpaper130Quotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.ONE_NINETY_QUOTES_LIKED -> Badge (
@@ -108,7 +115,8 @@ object BadgeCatalog {
                 text = "Consistency has taken root. Your approach is steady, thoughtful, and reliable.",
                 theme = "",
                 pathToImage = "wallpaper190Quotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THREE_SIXTY_QUOTES_LIKED -> Badge (
@@ -117,7 +125,8 @@ object BadgeCatalog {
                 text = "Nearly a full year of returning with intention. What once took effort now feels like part of who you are.",
                 theme = "",
                 pathToImage = "wallpaper360Quotes.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIRST_RECEIPT -> Badge (
@@ -126,7 +135,8 @@ object BadgeCatalog {
                 text = "The first step to responsible financials.",
                 theme = "",
                 pathToImage = "wallpaperFirstReceipt.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.TEN_RECEIPTS -> Badge (
@@ -135,7 +145,8 @@ object BadgeCatalog {
                 text = "You’ve scanned your first 10 receipts. Every little step counts — keep building the habit.",
                 theme = "",
                 pathToImage = "wallpaperTenReceipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THIRTY_RECEIPTS -> Badge (
@@ -144,7 +155,8 @@ object BadgeCatalog {
                 text = "Your routine is taking shape. Small, consistent steps are turning into real progress.",
                 theme = "",
                 pathToImage = "wallpaperThirtyReceipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIFTY_RECEIPTS -> Badge (
@@ -153,7 +165,8 @@ object BadgeCatalog {
                 text = "Consistency is paying off. You’re staying organized and making your effort visible.",
                 theme = "",
                 pathToImage = "wallpaperFiftyReceipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.HUNDRED_RECEIPTS -> Badge (
@@ -162,7 +175,8 @@ object BadgeCatalog {
                 text = "Logging receipts has become second nature. You’re mastering the system, step by step.",
                 theme = "",
                 pathToImage = "wallpaper100Receipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIVE_HUNDRED_RECEIPTS -> Badge (
@@ -171,7 +185,8 @@ object BadgeCatalog {
                 text = "Your discipline shows. You’re in control, thorough, and ahead of the game.",
                 theme = "",
                 pathToImage = "wallpaper500Receipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THOUSAND_RECEIPTS -> Badge (
@@ -180,7 +195,8 @@ object BadgeCatalog {
                 text = "You’ve built a massive record of effort and precision. This is a milestone to be proud of.",
                 theme = "",
                 pathToImage = "wallpaper1000Receipts.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIRST_GOAL -> Badge (
@@ -189,7 +205,8 @@ object BadgeCatalog {
                 text = "This is where progress turns into momentum. Keep going, one goal at a time.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.SECOND_GOAL -> Badge (
@@ -198,7 +215,8 @@ object BadgeCatalog {
                 text = "Two goals down. Each success builds your confidence and momentum.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIVE_GOALS -> Badge (
@@ -207,7 +225,8 @@ object BadgeCatalog {
                 text = "You’ve developed a flow. Steady progress is now part of your routine.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.TEN_GOALS -> Badge (
@@ -216,7 +235,8 @@ object BadgeCatalog {
                 text = "You’re finding your groove and following through. Consistency is becoming natural.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THIRTY_GOALS -> Badge (
@@ -225,7 +245,8 @@ object BadgeCatalog {
                 text = "Achieving goals has become a habit. You’re setting the pace and sticking to it.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIFTY_GOALS -> Badge (
@@ -234,7 +255,8 @@ object BadgeCatalog {
                 text = "You’ve proven that steady effort leads to real results.",
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.FIRST_DAILY_TIP_LIKED -> Badge (
@@ -243,7 +265,8 @@ object BadgeCatalog {
                 text = "You liked your first tip — a small action that pays dividends over time. Smart financial journeys start with learning.",
                 theme = "",
                 pathToImage = "",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED -> Badge (
@@ -252,7 +275,8 @@ object BadgeCatalog {
                 text = "Seven likes, one direction. Your financial awareness is growing with every valuable insight.",
                 theme = "",
                 pathToImage = "wallpaperSevenTips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED -> Badge (
@@ -261,7 +285,8 @@ object BadgeCatalog {
                 text = "Consistency beats intensity. You’ve built a learning streak that puts you ahead of the curve.",
                 theme = "",
                 pathToImage = "wallpaperThirtyTips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED -> Badge (
@@ -270,7 +295,8 @@ object BadgeCatalog {
                 text = "60 days of showing up. You’re proving that steady financial learning creates real, lasting progress.",
                 theme = "",
                 pathToImage = "wallpaper60Tips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.NINETY_DAILY_TIPS_LIKED -> Badge (
@@ -279,7 +305,8 @@ object BadgeCatalog {
                 text = "Three months of daily focus. Financial learning has shifted from effort to routine — and that’s where growth accelerates.",
                 theme = "",
                 pathToImage = "wallpaper90Tips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED -> Badge (
@@ -288,7 +315,8 @@ object BadgeCatalog {
                 text = "Six months of daily financial focus. You’re no longer chasing results — you’re building them.",
                 theme = "",
                 pathToImage = "wallpaper180Tips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
 
             BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED -> Badge (
@@ -297,7 +325,8 @@ object BadgeCatalog {
                 text = "Day after day, insight after insight. You’ve proven that long-term consistency creates exponential results.",
                 theme = "",
                 pathToImage = "wallpaper360Tips.png",
-                isGranted = false
+                isGranted = false,
+                badgeSymbol = "motivationBadge.png"
             )
         }
     }

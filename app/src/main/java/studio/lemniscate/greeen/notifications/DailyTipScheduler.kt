@@ -13,7 +13,7 @@ object DailyTipScheduler {
     fun schedule(context: Context) {
 
         val now = Calendar.getInstance()
-        val next22 = Calendar.getInstance().apply {
+        val next = Calendar.getInstance().apply {
 
             set(Calendar.HOUR_OF_DAY, 13)
             set(Calendar.MINUTE, 0)
@@ -24,15 +24,15 @@ object DailyTipScheduler {
                 add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        val initialDelay = next22.timeInMillis - now.timeInMillis
+        val initialDelay = next.timeInMillis - now.timeInMillis
 
-        val workRequest = PeriodicWorkRequestBuilder<DailyTipWorker>(1, TimeUnit.DAYS)
+        val workRequest = OneTimeWorkRequestBuilder<DailyTipWorker>()
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork (
+        WorkManager.getInstance(context).enqueueUniqueWork (
             "dailyTipWorker",
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingWorkPolicy.REPLACE,
             workRequest
         )
     }

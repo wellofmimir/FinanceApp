@@ -105,7 +105,7 @@ class DailyTipScreenViewModel (
 
     fun fetchDailyTip() {
         viewModelScope.launch {
-            if (repository.getDailyTip().tip.isEmpty()) {
+            if (repository.getDailyTip().tip.isEmpty() || internImageToDailyTip.value == null) {
                 repository.fetchDailyTipFromServer()
                 DailyEvents.newDailyTip(true)
             }
