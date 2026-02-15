@@ -1,7 +1,7 @@
 package studio.lemniscate.greeen.badges
 
 import studio.lemniscate.greeen.database.Badge
-
+import studio.lemniscate.greeen.R
 enum class BadgeIdentifier() {
     FIRST_QUOTE_LIKED,
     SEVEN_QUOTES_LIKED,
@@ -46,7 +46,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstQuote.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.SEVEN_QUOTES_LIKED -> Badge (
@@ -56,7 +56,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperSevenQuotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FOURTEEN_QUOTES_LIKED -> Badge (
@@ -66,7 +66,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFourteenQuotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FORTY_QUOTES_LIKED -> Badge (
@@ -76,7 +76,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFortyQuotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.SEVENTY_QUOTES_LIKED -> Badge (
@@ -86,7 +86,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperSeventyQuotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.HUNDRED_QUOTES_LIKED -> Badge (
@@ -96,7 +96,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperSeventyQuotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.ONE_THIRTY_QUOTES_LIKED -> Badge (
@@ -106,7 +106,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper130Quotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.ONE_NINETY_QUOTES_LIKED -> Badge (
@@ -116,7 +116,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper190Quotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THREE_SIXTY_QUOTES_LIKED -> Badge (
@@ -126,7 +126,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper360Quotes.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIRST_RECEIPT -> Badge (
@@ -136,7 +136,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstReceipt.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.TEN_RECEIPTS -> Badge (
@@ -146,7 +146,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperTenReceipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THIRTY_RECEIPTS -> Badge (
@@ -156,7 +156,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperThirtyReceipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIFTY_RECEIPTS -> Badge (
@@ -166,7 +166,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFiftyReceipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.HUNDRED_RECEIPTS -> Badge (
@@ -176,7 +176,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper100Receipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIVE_HUNDRED_RECEIPTS -> Badge (
@@ -186,7 +186,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper500Receipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THOUSAND_RECEIPTS -> Badge (
@@ -196,7 +196,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper1000Receipts.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIRST_GOAL -> Badge (
@@ -206,7 +206,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.SECOND_GOAL -> Badge (
@@ -216,7 +216,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIVE_GOALS -> Badge (
@@ -226,7 +226,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.TEN_GOALS -> Badge (
@@ -236,7 +236,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THIRTY_GOALS -> Badge (
@@ -246,7 +246,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIFTY_GOALS -> Badge (
@@ -256,7 +256,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperFirstGoal.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.FIRST_DAILY_TIP_LIKED -> Badge (
@@ -266,7 +266,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.SEVEN_DAILY_TIPS_LIKED -> Badge (
@@ -276,7 +276,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperSevenTips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED -> Badge (
@@ -286,7 +286,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaperThirtyTips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED -> Badge (
@@ -296,7 +296,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper60Tips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.NINETY_DAILY_TIPS_LIKED -> Badge (
@@ -306,7 +306,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper90Tips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED -> Badge (
@@ -316,7 +316,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper180Tips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
 
             BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED -> Badge (
@@ -326,7 +326,7 @@ object BadgeCatalog {
                 theme = "",
                 pathToImage = "wallpaper360Tips.png",
                 isGranted = false,
-                badgeSymbol = "motivationBadge.png"
+                badgeSymbol = R.drawable.goal_one
             )
         }
     }

@@ -24,7 +24,7 @@ data class Badge (
     val theme: String,
     var pathToImage: String, //wallpaper
     var isGranted: Boolean,
-    var badgeSymbol: String
+    var badgeSymbol: Int
 )
 
 data class Tip (
@@ -105,7 +105,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS receiptRemindDates (id INTEGER PRIMARY KEY AUTOINCREMENT, idReceipt INTERGER NOT NULL, date TEXT NOT NULL, FOREIGN KEY (idReceipt) REFERENCES receipts(id) ON DELETE CASCADE)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS totalTokens (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, tokens INTEGER NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL, short TEXT NOT NULL, category TEXT NOT NULL, pathToImage TEXT NOT NULL)".trimIndent())
-        database.execSQL("CREATE TABLE IF NOT EXISTS badges (id INTEGER PRIMARY KEY NOT NULL, identifier INTEGER NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, theme TEXT NOT NULL, pathToImage TEXT NOT NULL, isGranted INT NOT NULL DEFAULT 0)".trimIndent())
+        database.execSQL("CREATE TABLE IF NOT EXISTS badges (id INTEGER PRIMARY KEY NOT NULL, identifier INTEGER NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, theme TEXT NOT NULL, pathToImage TEXT NOT NULL, isGranted INT NOT NULL DEFAULT 0, badgeSymbol INT NOT NULL)".trimIndent())
 
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
@@ -461,8 +461,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val theme = cursor.getString(cursor.getColumnIndexOrThrow("theme"))
             val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathToImage"))
             val isGranted = cursor.getInt(cursor.getColumnIndexOrThrow("isGranted"))
+            val badgeSymbol = cursor.getInt(cursor.getColumnIndexOrThrow("badgeSymbol"))
 
-            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1)
+            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1, badgeSymbol)
             userBadges.add(entry)
         }
 
@@ -497,8 +498,9 @@ class FinanceAppDatabase private constructor(context: Context) {
             val theme = cursor.getString(cursor.getColumnIndexOrThrow("theme"))
             val pathToImage = cursor.getString(cursor.getColumnIndexOrThrow("pathToImage"))
             val isGranted = cursor.getInt(cursor.getColumnIndexOrThrow("isGranted"))
+            val badgeSymbol = cursor.getInt(cursor.getColumnIndexOrThrow("badgeSymbol"))
 
-            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1)
+            val entry = Badge(identifier, title, text, theme, pathToImage, isGranted == 1, badgeSymbol)
             badges.add(entry)
         }
 
@@ -519,6 +521,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             put("theme",       badge.theme)
             put("pathToImage", badge.pathToImage)
             //isGranted wird nicht geupdated, das wird separat getan!
+            put("badgeSymbol", badge.badgeSymbol)
         }
 
         if (exists)
@@ -540,6 +543,7 @@ class FinanceAppDatabase private constructor(context: Context) {
             put("theme",       badge.theme)
             put("pathToImage", badge.pathToImage)
             put("isGranted",   if (badge.isGranted) 1 else 0)
+            put("badgeSymbol", badge.badgeSymbol)
         }
 
         if (exists)

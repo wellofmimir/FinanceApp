@@ -1,6 +1,5 @@
 package studio.lemniscate.greeen.dailytipscreen
 
-import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -8,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.runtime.Composable
@@ -22,19 +22,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 
 import androidx.compose.material3.Text
 
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -42,14 +40,17 @@ fun BadgeTile (
     modifier: Modifier = Modifier,
     title: String,
     text: String,
+    badgeImageID: Int,
     onSeeGift: () -> Unit,
     showGiftText: Boolean
 ) {
     val colors = LocalAppColors.current
 
     Column (
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .height(150.dp)
+            .height(175.dp)
             .fillMaxWidth()
             .background (
                 color = colors.secondary,
@@ -64,53 +65,60 @@ fun BadgeTile (
             }
     ) {
         Row (
-            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+                .weight(4f)
         ) {
-            Text (
-                text = title,
-                fontWeight = FontWeight.Bold,
-                color = colors.primary,
-                fontSize = 18.sp,
-                modifier = Modifier.weight(5f)
-            )
-
-            Image (
-                painter = painterResource(R.drawable.herzzumliken_foreground),
-                contentDescription = "Herz",
-                colorFilter = ColorFilter.tint(Color.Red),
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .size(36.dp)
-                    .aspectRatio(1f)
-            )
-        }
+                    .fillMaxWidth()
+                    .weight(2f)
+            ) {
+                Text (
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    color = colors.primary,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .weight(1f)
+                )
 
-        Spacer (
-            modifier = Modifier
-                .height(8.dp)
-        )
+                Box (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(2f),
+                    contentAlignment = Alignment.TopStart
+                ) {
+                    Text (
+                        text = text,
+                        color = colors.primary,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            Box (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .weight(1f),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Image (
+                    painter = painterResource(badgeImageID),
+                    contentDescription = "Herz",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .aspectRatio(1f)
+                )
+            }
+        }
 
         Box (
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(3f),
-            contentAlignment = Alignment.TopStart
-        ) {
-            Text (
-                text = text,
-                color = colors.primary,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Left
-            )
-        }
-
-        Box (
-            modifier = Modifier
-                .fillMaxWidth()
                 .weight(1f),
-            contentAlignment = Alignment.BottomStart
+            contentAlignment = Alignment.BottomCenter
         ) {
             if (showGiftText) {
                 Text (

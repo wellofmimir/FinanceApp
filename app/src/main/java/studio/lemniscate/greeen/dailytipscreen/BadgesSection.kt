@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
+import studio.lemniscate.greeen.badges.BadgeCatalog
 import studio.lemniscate.greeen.commonutils.fixOrientation
 import studio.lemniscate.greeen.commonutils.setWallpaperWithChooser
 
@@ -211,6 +212,7 @@ fun BadgesSection (
             BadgeTile (
                 title = badge.title,
                 text = badge.text,
+                badgeImageID = badge.badgeSymbol,
                 onSeeGift = {
                     if (badge.pathToImage.isNotEmpty())
                         showWallpaper = true
