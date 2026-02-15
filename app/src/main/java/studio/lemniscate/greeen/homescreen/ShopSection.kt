@@ -34,8 +34,11 @@ import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 @Composable
-fun ShopSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, shopSectionClicked: () -> Unit) {
-
+fun ShopSection (
+    modifier: Modifier = Modifier,
+    tutorialInformation: TutorialInformation,
+    shopSectionClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
 
     Box (

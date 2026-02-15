@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.unit.TextUnit
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 private fun checkIfBadgeIsAvailable (
@@ -74,10 +75,10 @@ fun QuoteSection (
 ) {
     val colors = LocalAppColors.current
 
-    val quote by quoteViewModel.quote.collectAsState()
-    val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
-    val isLoading by quoteViewModel.isLoading.collectAsState()
-    val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
+    val quote by quoteViewModel.quote.collectAsStateWithLifecycle()
+    val quoteLiked by quoteViewModel.quoteLiked.collectAsStateWithLifecycle()
+    val isLoading by quoteViewModel.isLoading.collectAsStateWithLifecycle()
+    val likedQuotes by quoteViewModel.likedQuotes.collectAsStateWithLifecycle()
     val numberOfQuotesLiked = likedQuotes.size
 
     val maxFontSizeText: TextUnit = 20.sp

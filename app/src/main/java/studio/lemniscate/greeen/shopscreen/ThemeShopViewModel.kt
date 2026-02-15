@@ -84,6 +84,13 @@ class ThemeShopViewModel (
         internAppliedTheme.value = shopRepository.getAppliedTheme()
     }
 
+    fun hasThemeBeenPurchased(theme: String): Boolean {
+        if (theme == "charcoaltheme")
+            return true
+
+        return shopRepository.getThemePurchased(theme)
+    }
+
     fun purchaseRemoveAllAds(activity: Activity) {
         shopRepository.purchaseRemoveAllAds(activity)
     }

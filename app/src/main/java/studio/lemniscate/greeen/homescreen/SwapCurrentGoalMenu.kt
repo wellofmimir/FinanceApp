@@ -41,8 +41,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SwapCurrentGoalMenu(expanded: Boolean, onDismissRequest: () -> Unit, goalsSectionViewModel: GoalsSectionViewModel, context: Context = LocalContext.current) {
-
+fun SwapCurrentGoalMenu (
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    goalsSectionViewModel: GoalsSectionViewModel,
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
     val goals by goalsSectionViewModel.goals.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()

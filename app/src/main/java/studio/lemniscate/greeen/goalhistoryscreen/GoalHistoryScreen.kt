@@ -1,12 +1,11 @@
 package studio.lemniscate.greeen.goalhistoryscreen
 
 import studio.lemniscate.greeen.homescreen.TutorialInformation
-
 import studio.lemniscate.greeen.advertisement.AdSectionLargeBanner
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.homescreen.AchievementsSectionViewModel
 import studio.lemniscate.greeen.homescreen.GoalsSectionViewModel
 import studio.lemniscate.greeen.welldone.WellDoneSection
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,16 +19,17 @@ import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
+
 
 @Composable
 fun GoalHistoryScreen (
@@ -44,7 +44,7 @@ fun GoalHistoryScreen (
 
     var punchCardFilled by remember { mutableStateOf(false) }
     var switchSections by remember { mutableStateOf(true) }
-    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         totalGoalsAchievedSectionViewModel.getCompletedGoals()

@@ -1,5 +1,14 @@
 package studio.lemniscate.greeen.homescreen
 
+import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
+import studio.lemniscate.greeen.badges.BadgesViewModel
+import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
+import studio.lemniscate.greeen.receiptsscreen.ReceiptSectionsViewModel
+import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
+import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.welldone.WellDoneSection
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,27 +24,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
-import studio.lemniscate.greeen.badges.BadgesViewModel
-import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
-import studio.lemniscate.greeen.receiptsscreen.ReceiptSectionsViewModel
-import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
-import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import studio.lemniscate.greeen.welldone.WellDoneSection
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
+
 
 @Composable
 fun HomeScreen (
@@ -59,7 +63,7 @@ fun HomeScreen (
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
 
-    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
 
     Column (
         modifier = Modifier

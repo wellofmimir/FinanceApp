@@ -38,6 +38,8 @@ import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 @Composable
 fun ReceiptScreen (
     onReceiptAdded:() -> Unit,
+    onAddReceiptMenuOpened: () -> Unit,
+    onAddReceiptMenuClosed: () -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     mainActivityViewModel: MainActivityViewModel,
     shopViewModel: ThemeShopViewModel,
@@ -85,6 +87,7 @@ fun ReceiptScreen (
                 addReceiptMenuExpanded = false
                 receiptSectionsViewModel.getReceipts()
                 receiptSectionsViewModel.closeAddReceiptSection()
+                onAddReceiptMenuClosed()
             },
             onReceiptSaved = {
                 receiptAdded = true
@@ -94,6 +97,7 @@ fun ReceiptScreen (
             receiptSectionsViewModel = receiptSectionsViewModel
         )
 
+        onAddReceiptMenuOpened()
         return
     }
 

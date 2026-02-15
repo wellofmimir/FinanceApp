@@ -1,38 +1,39 @@
 package studio.lemniscate.greeen.homescreen
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import android.content.Context
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.LaunchedEffect
+
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import studio.lemniscate.greeen.homescreen.TutorialInformation
+import androidx.compose.ui.Modifier
 
-import studio.lemniscate.greeen.TutorialStep
-import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import androidx.compose.material3.Text
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun DailyTipSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, dailyTipScreenViewModel: DailyTipScreenViewModel, dailyTipSectionClicked: () -> Unit) {
-
+fun DailyTipSection (
+    modifier: Modifier = Modifier,
+    tutorialInformation: TutorialInformation,
+    dailyTipScreenViewModel: DailyTipScreenViewModel,
+    dailyTipSectionClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
-    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
+    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsStateWithLifecycle()
 
     val buttonText = if (newDailyTipAvailable)
         "Your daily finance tip is ready! Hooray!"

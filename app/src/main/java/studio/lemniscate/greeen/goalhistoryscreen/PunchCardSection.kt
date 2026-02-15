@@ -1,65 +1,53 @@
 package studio.lemniscate.greeen.goalhistoryscreen
 
-import studio.lemniscate.greeen.database.FinanceAppDatabase
-import studio.lemniscate.greeen.repositories.GoalRepository
-import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.homescreen.TutorialInformation
-
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
-import android.content.Context
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.height
-import androidx.compose.ui.res.painterResource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
-
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Modifier
+import androidx.compose.material3.Text
 
 @Composable
-fun PunchCardSection(modifier: Modifier = Modifier, onPunchCardFilled: () -> Unit, punchCardSectionViewModel: PunchCardSectionViewModel, tutorialInformation: TutorialInformation) {
-
+fun PunchCardSection (
+    modifier: Modifier = Modifier,
+    onPunchCardFilled: () -> Unit,
+    punchCardSectionViewModel: PunchCardSectionViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
 
     LaunchedEffect(Unit) {
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
     }
 
-    val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsState()
+    val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsStateWithLifecycle()
     val isPunchCardFull = tokenSoFar >= 15
 
     if (isPunchCardFull) { //15 token sind in der punchCardSection zu sehen

@@ -55,6 +55,7 @@ import studio.lemniscate.greeen.repositories.BadgesRepository
 import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
 import studio.lemniscate.greeen.repositories.MetricsRepository
 import studio.lemniscate.greeen.ui.theme.BordeauxAppColors
+import studio.lemniscate.greeen.welcomescreen.WelcomeScreenViewModel
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -65,7 +66,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -73,6 +77,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PagerDefaults
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -91,19 +96,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 
 import androidx.compose.material3.Text
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.HorizontalPager
+
 import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-import kotlinx.coroutines.delay
-
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.delay
 
 
 enum class Screen (id: Int) {
@@ -123,6 +127,30 @@ enum class Screen (id: Int) {
     DAILY_TIPS(id = 9),
     ADD_NEW_RECEIPT (id = 11),
     NONE (id = 10)
+}
+
+fun Screen.toPage(): Int = when (this) {
+    Screen.GOALHISTORY -> 1
+    Screen.HOME -> 2
+    Screen.RECEIPTS -> 3
+    Screen.DAILY_TIPS -> 4
+    Screen.SHOP -> 5
+    Screen.LIKEDQUOTES -> 6
+    Screen.USER_SETTINGS -> 7
+    Screen.ABOUT_US -> 8
+    else -> 2
+}
+
+fun Int.toScreen(): Screen = when (this) {
+    1 -> Screen.GOALHISTORY
+    2 -> Screen.HOME
+    3 -> Screen.RECEIPTS
+    4 -> Screen.DAILY_TIPS
+    5 -> Screen.SHOP
+    6 -> Screen.LIKEDQUOTES
+    7 -> Screen.USER_SETTINGS
+    8 -> Screen.ABOUT_US
+    else -> Screen.HOME
 }
 
 enum class TutorialStep (id: Int) {
@@ -203,6 +231,19 @@ class MainActivity : ComponentActivity() {
                             val repository = UserRepository.getInstance(database)
 
                             return MainActivityViewModel(repository) as T
+                        }
+                    }
+                )
+
+                val welcomeScreenViewModel: WelcomeScreenViewModel = viewModel (
+                    factory = object: ViewModelProvider.Factory {
+                        override fun<T: ViewModel> create(modelClass: Class<T>): T {
+
+                            val database = FinanceAppDatabase.Companion.getInstance(context)
+                            val userRepository = UserRepository.getInstance(database)
+                            val goalRepository = GoalRepository.getInstance(database)
+
+                            return WelcomeScreenViewModel(userRepository, goalRepository) as T
                         }
                     }
                 )
@@ -379,58 +420,54 @@ class MainActivity : ComponentActivity() {
                 mainActivityViewModel.loadUser()
                 val user by mainActivityViewModel.user.collectAsState()
 
-                var sectionIdentifier by remember { mutableStateOf(if (user == "DUMMY") Screen.WELCOME else Screen.SPLASH)}
+                var sectionIdentifier by remember { mutableStateOf(if (welcomeScreenViewModel.getFirstLaunchDone()) Screen.SPLASH else Screen.WELCOME)}
                 var goalAchieved by remember { mutableStateOf(false) }
-                val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
+                val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsStateWithLifecycle()
 
-                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
+                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
+                var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
+
+                var isPagerBlocked by remember { mutableStateOf(false) }
 
                 val pagerState = rememberPagerState (
-                    initialPage = 1,
-                    pageCount = { 4 }
+                    initialPage = 2,
+                    pageCount = { 9 }
                 )
 
-                LaunchedEffect(pagerState.currentPage) {
+                var startDestinationHandled by remember { mutableStateOf(false) }
 
-                    if (sectionIdentifier == Screen.WELCOME || sectionIdentifier == Screen.SPLASH)
-                        delay(2000)
+                LaunchedEffect(Unit) {
+                    if (startDestinationHandled)
+                        return@LaunchedEffect
 
-                    sectionIdentifier = when (pagerState.currentPage) {
-                        0 -> {
-                            Screen.GOALHISTORY
-                        }
-                        1 -> {
-                            Screen.HOME
-                        }
-                        2 -> {
-                            Screen.RECEIPTS
-                        }
-                        3 -> {
-                            Screen.DAILY_TIPS
-                        }
-                        4 -> {
-                            Screen.LIKEDQUOTES
-                        }
-                        else -> {
-                            Screen.HOME
-                        }
-                    }
-                }
-
-
-                LaunchedEffect(user) {
-                    if (sectionIdentifier == Screen.SPLASH && (!user.isEmpty() && user != "DUMMY"))
-                        delay(2500)
+                    startDestinationHandled = true
 
                     sectionIdentifier = when (user) {
-                        "DUMMY" -> Screen.WELCOME
-                        "" -> Screen.WELCOME
-                        else -> Screen.HOME
+                        "DUMMY", "" -> Screen.WELCOME
+                        else -> Screen.SPLASH
                     }
+
+                    delay(2000)
+
+                    if (sectionIdentifier == Screen.SPLASH)
+                        sectionIdentifier = Screen.HOME
                 }
 
-                var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
+                LaunchedEffect(pagerState.currentPage) {
+                    if (sectionIdentifier == Screen.SPLASH || sectionIdentifier == Screen.WELCOME)
+                        return@LaunchedEffect
+
+                    sectionIdentifier = pagerState.currentPage.toScreen()
+                    previewColors = null
+                }
+
+                LaunchedEffect(sectionIdentifier) {
+                    if (sectionIdentifier == Screen.SPLASH || sectionIdentifier == Screen.WELCOME)
+                        return@LaunchedEffect
+
+                    pagerState.scrollToPage(sectionIdentifier.toPage())
+                }
 
                 LaunchedEffect(Unit) {
                     val currentTheme = mainActivityViewModel.getCurrentTheme()
@@ -453,7 +490,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(appliedTheme) {
-
                     appColorsState.value = if (appliedTheme == "charcoaltheme") {
                         CharcoalAppColors
                     }
@@ -495,7 +531,6 @@ class MainActivity : ComponentActivity() {
                             }
                     ) {
                         if (listOf(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP, Screen.DAILY_TIPS).contains(sectionIdentifier)) {
-
                             if (!goalAchieved && !addReceiptMenuOpen) {
                                 HeaderSection (
                                     onNewSectionIdentifier = {
@@ -515,21 +550,33 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
+                        if (sectionIdentifier == Screen.SPLASH || sectionIdentifier == Screen.WELCOME) {
+                            WelcomeScreen (
+                                onFinished = {
+                                    mainActivityViewModel.loadUser()
+                                    sectionIdentifier = Screen.HOME
+                                },
+                                welcomeScreenViewModel = welcomeScreenViewModel,
+                                splashMode = sectionIdentifier != Screen.WELCOME
+                            )
+
+                            return@Column
+                        }
+
                         HorizontalPager (
                             state = pagerState,
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            userScrollEnabled = !isPagerBlocked
                         ) { page ->
+                            val isSelected = pagerState.currentPage == page && !pagerState.isScrollInProgress
+
                             when (page) {
-                                0 -> {
+                                1 -> {
                                     if (sectionIdentifier == Screen.GOALHISTORY) {
                                         AnimatedVisibility (
-                                            visible = sectionIdentifier == Screen.GOALHISTORY,
-                                            enter = fadeIn(
-                                                animationSpec = tween (
-                                                    durationMillis = 1000
-                                                )
-                                            )
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
                                         ) {
                                             GoalHistoryScreen (
                                                 goalsSectionViewModel = goalSectionViewModel,
@@ -549,93 +596,47 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
-                                else -> {
-
-                                    if (sectionIdentifier == Screen.HOME) {
-                                        AnimatedVisibility (
-                                            visible = sectionIdentifier == Screen.HOME,
-                                            enter = fadeIn(
-                                                animationSpec = tween (
-                                                    durationMillis = 1000
-                                                )
-                                            )
-                                        ) {
-                                            HomeScreen (
-                                                tutorialInformation = tutorialInformation,
-                                                receiptSectionsViewModel = receiptSectionsViewModel,
-                                                dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                                goalsSectionViewModel = goalSectionViewModel,
-                                                quoteViewModel = quoteViewModel,
-                                                shopViewModel = themeShopViewModel,
-                                                badgesViewModel = badgesViewModel,
-                                                settingsViewModel = settingsViewModel,
-                                                onGoalAchieved = {
-                                                    goalAchieved = true
-                                                },
-                                                onWellDoneSectionDismissed = {
-                                                    goalAchieved = false
-                                                },
-                                                shopSectionClicked = {
-                                                    sectionIdentifier = Screen.SHOP
-                                                },
-                                                receiptsSectionClicked = {
-                                                    sectionIdentifier = Screen.RECEIPTS
-                                                },
-                                                recentlyCompletedGoalsSectionClicked = {
-                                                    sectionIdentifier = Screen.GOALHISTORY
-                                                },
-                                                dailyTipsSectionClicked = {
-                                                    sectionIdentifier = Screen.DAILY_TIPS
-                                                }
-                                            )
-                                        }
+                                2 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
+                                    ) {
+                                        HomeScreen (
+                                            tutorialInformation = tutorialInformation,
+                                            receiptSectionsViewModel = receiptSectionsViewModel,
+                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                            goalsSectionViewModel = goalSectionViewModel,
+                                            quoteViewModel = quoteViewModel,
+                                            shopViewModel = themeShopViewModel,
+                                            badgesViewModel = badgesViewModel,
+                                            settingsViewModel = settingsViewModel,
+                                            onGoalAchieved = {
+                                                goalAchieved = true
+                                            },
+                                            onWellDoneSectionDismissed = {
+                                                goalAchieved = false
+                                            },
+                                            shopSectionClicked = {
+                                                sectionIdentifier = Screen.SHOP
+                                            },
+                                            receiptsSectionClicked = {
+                                                sectionIdentifier = Screen.RECEIPTS
+                                            },
+                                            recentlyCompletedGoalsSectionClicked = {
+                                                sectionIdentifier = Screen.GOALHISTORY
+                                            },
+                                            dailyTipsSectionClicked = {
+                                                sectionIdentifier = Screen.DAILY_TIPS
+                                            }
+                                        )
                                     }
+                                }
 
-
-                                    if (sectionIdentifier == Screen.LIKEDQUOTES) {
-                                        AnimatedVisibility (
-                                            visible = sectionIdentifier == Screen.WELCOME,
-                                            enter = fadeIn (
-                                                animationSpec = tween (
-                                                    durationMillis = 1000
-                                                )
-                                            )
-                                        ) {
-                                            LikedQuotesSection (
-                                                quoteViewModel = quoteViewModel,
-                                                shopViewModel = themeShopViewModel,
-                                                tutorialInformation = tutorialInformation
-                                            )
-                                        }
-                                    }
-
-                                    if (sectionIdentifier == Screen.GOALHISTORY) {
-                                        AnimatedVisibility (
-                                            visible = sectionIdentifier == Screen.GOALHISTORY,
-                                            enter = fadeIn (
-                                                animationSpec = tween (
-                                                    durationMillis = 1000
-                                                )
-                                            )
-                                        ) {
-                                            GoalHistoryScreen (
-                                                goalsSectionViewModel = goalSectionViewModel,
-                                                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                                                achievementsSectionViewModel = achievementsSectionViewModel,
-                                                shopViewModel = themeShopViewModel,
-                                                punchCardSectionViewModel = punchCardSectionViewModel,
-                                                tutorialInformation = tutorialInformation,
-                                                onPunchCardFilled = {
-                                                    goalAchieved = true
-                                                },
-                                                onWellDoneSectionDismissed = {
-                                                    goalAchieved = false
-                                                }
-                                            )
-                                        }
-                                    }
-
-                                    if (sectionIdentifier == Screen.RECEIPTS || sectionIdentifier == Screen.ADD_NEW_RECEIPT) {
+                                3 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
+                                    ) {
                                         ReceiptScreen (
                                             onReceiptAdded = {
                                                 if (tutorialInformation.isActive) {
@@ -643,6 +644,12 @@ class MainActivity : ComponentActivity() {
                                                     mainActivityViewModel.setHomeScreenTutorialDone()
                                                     receiptSectionsViewModel.closeAddReceiptSection()
                                                 }
+                                            },
+                                            onAddReceiptMenuOpened = {
+                                                isPagerBlocked = true
+                                            },
+                                            onAddReceiptMenuClosed = {
+                                                isPagerBlocked = false
                                             },
                                             receiptSectionsViewModel = receiptSectionsViewModel,
                                             mainActivityViewModel = mainActivityViewModel,
@@ -652,16 +659,26 @@ class MainActivity : ComponentActivity() {
                                             tutorialInformation = tutorialInformation
                                         )
                                     }
+                                }
 
-                                    if (sectionIdentifier == Screen.USER_SETTINGS)
-                                        SettingsScreen (
-                                            headerSectionViewModel = headerSectionViewModel,
-                                            settingsViewModel = settingsViewModel,
+                                4 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
+                                    ) {
+                                        DailyTipScreen (
+                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
                                             shopViewModel = themeShopViewModel,
-                                            tutorialInformation = tutorialInformation
+                                            badgesViewModel = badgesViewModel
                                         )
+                                    }
+                                }
 
-                                    if (sectionIdentifier == Screen.SHOP) {
+                                5 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
+                                    ) {
                                         ShopScreen (
                                             themeShopViewModel = themeShopViewModel,
                                             previewRequested = { theme ->
@@ -700,38 +717,47 @@ class MainActivity : ComponentActivity() {
                                                 mainActivityViewModel.setCurrentTheme(theme)
                                             }
                                         )
+                                    }
 
-                                        AdSectionMiddleBanner (
-                                            suppressAd = adremoverActive,
+                                    AdSectionMiddleBanner (
+                                        suppressAd = adremoverActive,
+                                        tutorialInformation = tutorialInformation
+                                    )
+                                }
+
+                                6 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
+                                    ) {
+                                        LikedQuotesSection (
+                                            quoteViewModel = quoteViewModel,
+                                            shopViewModel = themeShopViewModel,
                                             tutorialInformation = tutorialInformation
                                         )
                                     }
+                                }
 
-                                    if (sectionIdentifier == Screen.DAILY_TIPS)
-                                        DailyTipScreen (
-                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            badgesViewModel = badgesViewModel
-                                        )
-
+                                7 -> {
                                     AnimatedVisibility (
-                                        visible = sectionIdentifier == Screen.SPLASH,
-                                        enter = fadeIn (
-                                            animationSpec = tween (
-                                                durationMillis = 1000
-                                            )
-                                        )
+                                        visible = isSelected,
+                                        exit = ExitTransition.None
                                     ) {
-                                        WelcomeScreen (
-                                            onFinished = {
-                                                mainActivityViewModel.loadUser()
-                                            },
-                                            true
+                                        SettingsScreen (
+                                            headerSectionViewModel = headerSectionViewModel,
+                                            settingsViewModel = settingsViewModel,
+                                            shopViewModel = themeShopViewModel,
+                                            tutorialInformation = tutorialInformation
                                         )
                                     }
+                                }
 
-                                    if (sectionIdentifier == Screen.ABOUT_US)
+                                8 -> {
+                                    AnimatedVisibility (
+                                        visible = isSelected
+                                    ) {
                                         AboutScreen ()
+                                    }
                                 }
                             }
                         }

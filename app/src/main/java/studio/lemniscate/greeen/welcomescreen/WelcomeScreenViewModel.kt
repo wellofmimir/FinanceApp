@@ -8,8 +8,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class WelcomeScreenViewModel(private val userRepository: UserRepository, private val goalRepository: GoalRepository): ViewModel() {
-
+class WelcomeScreenViewModel (
+    private val userRepository: UserRepository,
+    private val goalRepository: GoalRepository
+): ViewModel() {
     fun insertGoal(goal: Goal) {
 
         val currentDate = LocalDate.now()
@@ -44,6 +46,14 @@ class WelcomeScreenViewModel(private val userRepository: UserRepository, private
 
     fun updateUser(user: String) {
         userRepository.updateUser(user)
+    }
+
+    fun setFirstLaunchDone() {
+        userRepository.setFirstLaunchDone()
+    }
+
+    fun getFirstLaunchDone(): Boolean {
+        return userRepository.getFirstLaunchDone()
     }
 
     fun setCurrency(currency: String) {

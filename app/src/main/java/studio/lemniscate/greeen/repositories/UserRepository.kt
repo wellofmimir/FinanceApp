@@ -61,4 +61,12 @@ class UserRepository private constructor (private val database: FinanceAppDataba
     fun resetGoalHistoryTutorialDone() {
         database.resetGoalHistoryTutorialDone()
     }
+
+    fun setFirstLaunchDone() {
+        database.setFirstLaunchDone()
+    }
+
+    fun getFirstLaunchDone(): Boolean {
+        return database.getFirstLaunchDone()
+    }
 }

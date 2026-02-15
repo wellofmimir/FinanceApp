@@ -101,7 +101,15 @@ class ReceiptSectionsViewModel (
     val trendRequest = internTrendRequest.asStateFlow()
 
     fun getRandomSeriesOfValuesForTrendAnalysis() {
-        val randomEntry = internExpenses.value.random()
+        val validEntries = internExpenses.value.filter {
+            it.amount > 0f
+        }
+
+        var randomEntry = validEntries.randomOrNull()
+
+        if (randomEntry == null)
+            randomEntry = internExpenses.value.random()
+
         val randomNumber = (1..5).random()
 
         val result = when (randomNumber) {

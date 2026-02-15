@@ -1061,22 +1061,10 @@ fun FirstTokenMenu (
 fun WelcomeScreen (
     onFinished: () -> Unit,
     splashMode: Boolean,
+    welcomeScreenViewModel: WelcomeScreenViewModel,
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
-
-    val welcomeScreenViewModel: WelcomeScreenViewModel = viewModel (
-        factory = object: ViewModelProvider.Factory {
-            override fun<T: ViewModel> create(modelClass: Class<T>): T {
-
-                val database = FinanceAppDatabase.Companion.getInstance(context)
-                val userRepository = UserRepository.getInstance(database)
-                val goalRepository = GoalRepository.getInstance(database)
-
-                return WelcomeScreenViewModel(userRepository, goalRepository) as T
-            }
-        }
-    )
 
     var username by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }

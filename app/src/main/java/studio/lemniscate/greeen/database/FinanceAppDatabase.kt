@@ -158,6 +158,16 @@ class FinanceAppDatabase private constructor(context: Context) {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
     }
 
+    fun setFirstLaunchDone() {
+        securePreferences.edit {
+            putBoolean("FirstLaunchDone", true)
+        }
+    }
+
+    fun getFirstLaunchDone(): Boolean {
+        return securePreferences.getBoolean("FirstLaunchDone", false)
+    }
+
     fun getDailyTrend(): String {
         return securePreferences.getString("DailyTrend", "") ?: ""
     }

@@ -1,30 +1,36 @@
 package studio.lemniscate.greeen.goalhistoryscreen
 
-import android.app.Dialog
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.commonutils.fixOrientation
+import studio.lemniscate.greeen.homescreen.AchievementsSectionViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.homescreen.TutorialInformation
+
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,19 +40,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import studio.lemniscate.greeen.homescreen.TutorialInformation
 
-import studio.lemniscate.greeen.TutorialStep
-import studio.lemniscate.greeen.commonutils.fixOrientation
-import studio.lemniscate.greeen.homescreen.AchievementsSectionViewModel
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import java.io.File
 
 @Composable
-fun RandomMemoryPictureSection(modifier: Modifier = Modifier, achievementsSectionViewModel: AchievementsSectionViewModel, tutorialInformation: TutorialInformation) {
-
+fun RandomMemoryPictureSection (
+    modifier: Modifier = Modifier,
+    achievementsSectionViewModel: AchievementsSectionViewModel,
+    tutorialInformation: TutorialInformation
+) {
     val colors = LocalAppColors.current
-    val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsState()
+    val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsStateWithLifecycle()
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 

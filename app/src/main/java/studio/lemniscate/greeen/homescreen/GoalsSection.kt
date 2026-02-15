@@ -54,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -65,10 +66,9 @@ fun GoalsSection (
 {
     val colors = LocalAppColors.current
 
-    val goals by goalsSectionViewModel.goals.collectAsState()
+    val goals by goalsSectionViewModel.goals.collectAsStateWithLifecycle()
     var newGoalEntered by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
-    var visible by remember { mutableStateOf(true) }
     var menuOpen by remember { mutableStateOf(false) }
     var goalIdToDelete by remember { mutableStateOf(0) }
 
