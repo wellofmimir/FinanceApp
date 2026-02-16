@@ -59,9 +59,6 @@ private fun checkIfBadgeIsAvailable (
         39 -> badgesViewModel.checkBadge(BadgeIdentifier.FORTY_QUOTES_LIKED)
         69 -> badgesViewModel.checkBadge(BadgeIdentifier.SEVENTY_QUOTES_LIKED)
         99 -> badgesViewModel.checkBadge(BadgeIdentifier.HUNDRED_QUOTES_LIKED)
-        129 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_THIRTY_QUOTES_LIKED)
-        189 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_NINETY_QUOTES_LIKED)
-        359 -> badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_QUOTES_LIKED)
     }
 }
 

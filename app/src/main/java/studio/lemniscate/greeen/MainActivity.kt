@@ -71,13 +71,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.pager.PagerDefaults
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -551,212 +552,221 @@ class MainActivity : ComponentActivity() {
                         }
 
                         if (sectionIdentifier == Screen.SPLASH || sectionIdentifier == Screen.WELCOME) {
-                            WelcomeScreen (
-                                onFinished = {
-                                    mainActivityViewModel.loadUser()
-                                    sectionIdentifier = Screen.HOME
-                                },
-                                welcomeScreenViewModel = welcomeScreenViewModel,
-                                splashMode = sectionIdentifier != Screen.WELCOME
-                            )
+                            AnimatedVisibility(
+                                visible = true,
+                                enter = fadeIn (
+                                    animationSpec = tween (
+                                        durationMillis = 2000
+                                    )
+                                )
+                            ) {
+                                WelcomeScreen (
+                                    onFinished = {
+                                        mainActivityViewModel.loadUser()
+                                        sectionIdentifier = Screen.HOME
+                                    },
+                                    welcomeScreenViewModel = welcomeScreenViewModel,
+                                    splashMode = sectionIdentifier != Screen.WELCOME
+                                )
+                            }
 
-                            return@Column
-                        }
 
-                        HorizontalPager (
-                            state = pagerState,
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            userScrollEnabled = !isPagerBlocked
-                        ) { page ->
-                            val isSelected = pagerState.currentPage == page && !pagerState.isScrollInProgress
+                        } else {
+                            HorizontalPager (
+                                state = pagerState,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                userScrollEnabled = !isPagerBlocked
+                            ) { page ->
+                                val isSelected = pagerState.currentPage == page && !pagerState.isScrollInProgress
 
-                            when (page) {
-                                1 -> {
-                                    if (sectionIdentifier == Screen.GOALHISTORY) {
+                                when (page) {
+                                    1 -> {
+                                        if (sectionIdentifier == Screen.GOALHISTORY) {
+                                            AnimatedVisibility (
+                                                visible = isSelected,
+                                                exit = ExitTransition.None
+                                            ) {
+                                                GoalHistoryScreen (
+                                                    goalsSectionViewModel = goalSectionViewModel,
+                                                    totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
+                                                    achievementsSectionViewModel = achievementsSectionViewModel,
+                                                    shopViewModel = themeShopViewModel,
+                                                    punchCardSectionViewModel = punchCardSectionViewModel,
+                                                    tutorialInformation = tutorialInformation,
+                                                    onPunchCardFilled = {
+                                                        goalAchieved = true
+                                                    },
+                                                    onWellDoneSectionDismissed = {
+                                                        goalAchieved = false
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    2 -> {
                                         AnimatedVisibility (
                                             visible = isSelected,
                                             exit = ExitTransition.None
                                         ) {
-                                            GoalHistoryScreen (
-                                                goalsSectionViewModel = goalSectionViewModel,
-                                                totalGoalsAchievedSectionViewModel = totalGoalsAchievedSectionViewModel,
-                                                achievementsSectionViewModel = achievementsSectionViewModel,
-                                                shopViewModel = themeShopViewModel,
-                                                punchCardSectionViewModel = punchCardSectionViewModel,
+                                            HomeScreen (
                                                 tutorialInformation = tutorialInformation,
-                                                onPunchCardFilled = {
+                                                receiptSectionsViewModel = receiptSectionsViewModel,
+                                                dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                                goalsSectionViewModel = goalSectionViewModel,
+                                                quoteViewModel = quoteViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                badgesViewModel = badgesViewModel,
+                                                settingsViewModel = settingsViewModel,
+                                                onGoalAchieved = {
                                                     goalAchieved = true
                                                 },
                                                 onWellDoneSectionDismissed = {
                                                     goalAchieved = false
+                                                },
+                                                shopSectionClicked = {
+                                                    sectionIdentifier = Screen.SHOP
+                                                },
+                                                receiptsSectionClicked = {
+                                                    sectionIdentifier = Screen.RECEIPTS
+                                                },
+                                                recentlyCompletedGoalsSectionClicked = {
+                                                    sectionIdentifier = Screen.GOALHISTORY
+                                                },
+                                                dailyTipsSectionClicked = {
+                                                    sectionIdentifier = Screen.DAILY_TIPS
                                                 }
                                             )
                                         }
                                     }
-                                }
 
-                                2 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        HomeScreen (
-                                            tutorialInformation = tutorialInformation,
-                                            receiptSectionsViewModel = receiptSectionsViewModel,
-                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                            goalsSectionViewModel = goalSectionViewModel,
-                                            quoteViewModel = quoteViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            badgesViewModel = badgesViewModel,
-                                            settingsViewModel = settingsViewModel,
-                                            onGoalAchieved = {
-                                                goalAchieved = true
-                                            },
-                                            onWellDoneSectionDismissed = {
-                                                goalAchieved = false
-                                            },
-                                            shopSectionClicked = {
-                                                sectionIdentifier = Screen.SHOP
-                                            },
-                                            receiptsSectionClicked = {
-                                                sectionIdentifier = Screen.RECEIPTS
-                                            },
-                                            recentlyCompletedGoalsSectionClicked = {
-                                                sectionIdentifier = Screen.GOALHISTORY
-                                            },
-                                            dailyTipsSectionClicked = {
-                                                sectionIdentifier = Screen.DAILY_TIPS
-                                            }
-                                        )
+                                    3 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
+                                        ) {
+                                            ReceiptScreen (
+                                                onReceiptAdded = {
+                                                    if (tutorialInformation.isActive) {
+                                                        tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
+                                                        mainActivityViewModel.setHomeScreenTutorialDone()
+                                                        receiptSectionsViewModel.closeAddReceiptSection()
+                                                    }
+                                                },
+                                                onAddReceiptMenuOpened = {
+                                                    isPagerBlocked = true
+                                                },
+                                                onAddReceiptMenuClosed = {
+                                                    isPagerBlocked = false
+                                                },
+                                                receiptSectionsViewModel = receiptSectionsViewModel,
+                                                mainActivityViewModel = mainActivityViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                metricsScreenViewModel = metricsScreenViewModel,
+                                                badgesViewModel = badgesViewModel,
+                                                tutorialInformation = tutorialInformation
+                                            )
+                                        }
                                     }
-                                }
 
-                                3 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        ReceiptScreen (
-                                            onReceiptAdded = {
-                                                if (tutorialInformation.isActive) {
-                                                    tutorialInformation = tutorialInformation.advanceReceiptScreenTutorial()
-                                                    mainActivityViewModel.setHomeScreenTutorialDone()
-                                                    receiptSectionsViewModel.closeAddReceiptSection()
+                                    4 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
+                                        ) {
+                                            DailyTipScreen (
+                                                dailyTipScreenViewModel = dailyTipScreenViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                badgesViewModel = badgesViewModel
+                                            )
+                                        }
+                                    }
+
+                                    5 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
+                                        ) {
+                                            ShopScreen (
+                                                themeShopViewModel = themeShopViewModel,
+                                                previewRequested = { theme ->
+
+                                                    previewColors = if (theme == "charcoaltheme") {
+                                                        CharcoalAppColors
+                                                    }
+                                                    else if (theme == "electrictheme")
+                                                        ElectricAppColors
+                                                    else if (theme == "azuretheme")
+                                                        AzureAppColors
+                                                    else if (theme == "eleganttheme")
+                                                        BordeauxAppColors
+                                                    else if (theme == "Greeen")
+                                                        GreenAppColors
+                                                    else
+                                                        GreenAppColors
+                                                },
+                                                applyThemeRequested = { theme ->
+                                                    previewColors = null
+
+                                                    appColorsState.value = if (theme == "charcoaltheme") {
+                                                        CharcoalAppColors
+                                                    }
+                                                    else if (theme == "electrictheme")
+                                                        ElectricAppColors
+                                                    else if (theme == "azuretheme")
+                                                        AzureAppColors
+                                                    else if (theme == "eleganttheme")
+                                                        BordeauxAppColors
+                                                    else if (theme == "Greeen")
+                                                        GreenAppColors
+                                                    else
+                                                        GreenAppColors
+
+                                                    mainActivityViewModel.setCurrentTheme(theme)
                                                 }
-                                            },
-                                            onAddReceiptMenuOpened = {
-                                                isPagerBlocked = true
-                                            },
-                                            onAddReceiptMenuClosed = {
-                                                isPagerBlocked = false
-                                            },
-                                            receiptSectionsViewModel = receiptSectionsViewModel,
-                                            mainActivityViewModel = mainActivityViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            metricsScreenViewModel = metricsScreenViewModel,
-                                            badgesViewModel = badgesViewModel,
+                                            )
+                                        }
+
+                                        AdSectionMiddleBanner (
+                                            suppressAd = adremoverActive,
                                             tutorialInformation = tutorialInformation
                                         )
                                     }
-                                }
 
-                                4 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        DailyTipScreen (
-                                            dailyTipScreenViewModel = dailyTipScreenViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            badgesViewModel = badgesViewModel
-                                        )
-                                    }
-                                }
-
-                                5 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        ShopScreen (
-                                            themeShopViewModel = themeShopViewModel,
-                                            previewRequested = { theme ->
-
-                                                previewColors = if (theme == "charcoaltheme") {
-                                                    CharcoalAppColors
-                                                }
-                                                else if (theme == "electrictheme")
-                                                    ElectricAppColors
-                                                else if (theme == "azuretheme")
-                                                    AzureAppColors
-                                                else if (theme == "eleganttheme")
-                                                    BordeauxAppColors
-                                                else if (theme == "Greeen")
-                                                    GreenAppColors
-                                                else
-                                                    GreenAppColors
-                                            },
-                                            applyThemeRequested = { theme ->
-                                                previewColors = null
-
-                                                appColorsState.value = if (theme == "charcoaltheme") {
-                                                    CharcoalAppColors
-                                                }
-                                                else if (theme == "electrictheme")
-                                                    ElectricAppColors
-                                                else if (theme == "azuretheme")
-                                                    AzureAppColors
-                                                else if (theme == "eleganttheme")
-                                                    BordeauxAppColors
-                                                else if (theme == "Greeen")
-                                                    GreenAppColors
-                                                else
-                                                    GreenAppColors
-
-                                                mainActivityViewModel.setCurrentTheme(theme)
-                                            }
-                                        )
+                                    6 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
+                                        ) {
+                                            LikedQuotesSection (
+                                                quoteViewModel = quoteViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                tutorialInformation = tutorialInformation
+                                            )
+                                        }
                                     }
 
-                                    AdSectionMiddleBanner (
-                                        suppressAd = adremoverActive,
-                                        tutorialInformation = tutorialInformation
-                                    )
-                                }
-
-                                6 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        LikedQuotesSection (
-                                            quoteViewModel = quoteViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            tutorialInformation = tutorialInformation
-                                        )
+                                    7 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected,
+                                            exit = ExitTransition.None
+                                        ) {
+                                            SettingsScreen (
+                                                headerSectionViewModel = headerSectionViewModel,
+                                                settingsViewModel = settingsViewModel,
+                                                shopViewModel = themeShopViewModel,
+                                                tutorialInformation = tutorialInformation
+                                            )
+                                        }
                                     }
-                                }
 
-                                7 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected,
-                                        exit = ExitTransition.None
-                                    ) {
-                                        SettingsScreen (
-                                            headerSectionViewModel = headerSectionViewModel,
-                                            settingsViewModel = settingsViewModel,
-                                            shopViewModel = themeShopViewModel,
-                                            tutorialInformation = tutorialInformation
-                                        )
-                                    }
-                                }
-
-                                8 -> {
-                                    AnimatedVisibility (
-                                        visible = isSelected
-                                    ) {
-                                        AboutScreen ()
+                                    8 -> {
+                                        AnimatedVisibility (
+                                            visible = isSelected
+                                        ) {
+                                            AboutScreen ()
+                                        }
                                     }
                                 }
                             }

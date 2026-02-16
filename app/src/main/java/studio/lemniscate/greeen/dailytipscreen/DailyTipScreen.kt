@@ -58,8 +58,6 @@ private fun checkIfBadgeIsAvailable (
         29  -> badgesViewModel.checkBadge(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
         59  -> badgesViewModel.checkBadge(BadgeIdentifier.SIXTY_DAILY_TIPS_LIKED)
         89  -> badgesViewModel.checkBadge(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
-        179 -> badgesViewModel.checkBadge(BadgeIdentifier.ONE_EIGHTY_DAILY_TIPS_LIKED)
-        359 -> badgesViewModel.checkBadge(BadgeIdentifier.THREE_SIXTY_DAILY_TIPS_LIKED)
     }
 }
 
