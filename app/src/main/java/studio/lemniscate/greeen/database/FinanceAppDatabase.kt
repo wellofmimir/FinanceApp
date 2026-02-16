@@ -73,8 +73,10 @@ data class RemindMeEntry (
 
 class FinanceAppDatabase private constructor(context: Context) {
 
-
     companion object {
+
+        private const val DATABASE_NAME = "userdatabase.sqlite"
+        private const val DATABASE_VERSION = 1
         private var instance: FinanceAppDatabase? = null
 
         fun getInstance(context: Context): FinanceAppDatabase {
@@ -86,7 +88,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
-
     private val database: SQLiteDatabase = context.openOrCreateDatabase("userdatabase.sqlite", Context.MODE_PRIVATE, null)
     private val databasePath = context.getDatabasePath("userdatabase.sqlite")
 
@@ -94,6 +95,7 @@ class FinanceAppDatabase private constructor(context: Context) {
         //in SQLite sind Foreign-Keys standardmäßig ausgestellt, also müssen wir diese anschalten
         database.execSQL("PRAGMA foreign_keys = ON;")
 
+        database.execSQL("CREATE TABLE IF NOT EXISTS databaseVersion (version INTEGER PRIMARY KEY)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS userinformation (id INTEGER PRIMARY KEY CHECK (id = 1) NOT NULL, name TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goalStatus (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, goal TEXT NOT NULL, amount NUMERIC NOT NULL, saved NUMERIC NOT NULL, idStatus INTEGER NOT NULL, finishdate TEXT NOT NULL, tokencount INTEGER NOT NULL, pathtoimage TEXT NOT NULL, FOREIGN KEY (idStatus) REFERENCES goalStatus(id))".trimIndent())
@@ -107,12 +109,26 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, tip TEXT NOT NULL, short TEXT NOT NULL, category TEXT NOT NULL, pathToImage TEXT NOT NULL)".trimIndent())
         database.execSQL("CREATE TABLE IF NOT EXISTS badges (id INTEGER PRIMARY KEY NOT NULL, identifier INTEGER NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, theme TEXT NOT NULL, pathToImage TEXT NOT NULL, isGranted INT NOT NULL DEFAULT 0, badgeSymbol INT NOT NULL)".trimIndent())
 
+        var cursor = database.rawQuery("SELECT version FROM databaseVersion LIMIT 1", null)
+        val oldVersion = if (cursor.moveToFirst()) cursor.getInt(0) else 1
+        cursor.close()
+
+        migrateDatabase(oldVersion, DATABASE_VERSION)
+
+        if (oldVersion < DATABASE_VERSION) {
+            val values = ContentValues().apply {
+                put("version", DATABASE_VERSION)
+            }
+
+            database.insert("databaseVersion", null, values)
+        }
+
         //Einfügen von Werten in currentGoal-Tabelle
         val values = ContentValues().apply {
             put("idGoal", 1)
         }
 
-        val cursor = database.rawQuery("SELECT * FROM currentGoal WHERE id = 1", null)
+        cursor = database.rawQuery("SELECT * FROM currentGoal WHERE id = 1", null)
         val exists = cursor.moveToFirst()
         cursor.close()
 
@@ -123,6 +139,12 @@ class FinanceAppDatabase private constructor(context: Context) {
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'InProgress' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'InProgress')")
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'Completed' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'Completed')")
         database.execSQL("INSERT INTO goalStatus (description) SELECT 'PunchCard' WHERE NOT EXISTS (SELECT 1 FROM goalStatus WHERE description = 'PunchCard')")
+    }
+
+    private fun migrateDatabase(oldVersion: Int, newVersion: Int) {
+        var version = oldVersion
+
+
     }
 
     //PREFERENCES - START
