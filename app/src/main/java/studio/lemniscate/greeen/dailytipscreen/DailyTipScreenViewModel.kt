@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.io.File
 
 
 class DailyTipScreenViewModel (
@@ -105,7 +106,9 @@ class DailyTipScreenViewModel (
 
     fun fetchDailyTip() {
         viewModelScope.launch {
-            if (repository.getDailyTip().tip.isEmpty() || internImageToDailyTip.value == null) {
+            val imageFile = File(repository.getDailyTip().pathToImage)
+
+            if (repository.getDailyTip().tip.isEmpty() || internImageToDailyTip.value == null || !imageFile.exists()) {
                 repository.fetchDailyTipFromServer()
                 DailyEvents.newDailyTip(true)
             }
@@ -114,9 +117,12 @@ class DailyTipScreenViewModel (
                 dailyTip = repository.getDailyTip()
             )
 
+            if (repository.getDailyTip().pathToImage.isEmpty())
+                return@launch
+
             internImageToDailyTip.value = BitmapFactory
-                .decodeFile(repository.getDailyTip().pathToImage)
-                .fixOrientation(repository.getDailyTip().pathToImage)
+                    .decodeFile(repository.getDailyTip().pathToImage)
+                    ?.fixOrientation(repository.getDailyTip().pathToImage)
 
             internCurrentlyLiked.value = isDailyTipLiked(internDailyTip.value.dailyTip)
         }

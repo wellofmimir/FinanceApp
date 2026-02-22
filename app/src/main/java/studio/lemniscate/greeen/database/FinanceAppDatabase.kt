@@ -264,22 +264,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
-    fun getDailyTipTryCounter(): Int {
-        return securePreferences.getInt("DailyTipTryCounter", 0)
-    }
-
-    fun incrementDailyTipTryCounter() {
-        securePreferences.edit {
-            putInt("DailyTipTryCounter", getDailyTipTryCounter() + 1)
-        }
-    }
-
-    fun resetDailyTipTryCounter() {
-        securePreferences.edit {
-            putInt("DailyTipTryCounter", 0)
-        }
-    }
-
     fun newDailyTipAvailable(): Boolean {
         return securePreferences.getBoolean("newDailyTipAvailable", false)
     }
@@ -450,22 +434,6 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     fun interstitialAdAfterReceiptSeen(): Boolean {
         return securePreferences.getBoolean("interstitialAdAfterReceiptSeen", true)
-    }
-
-    fun setInterstitialAdAfterDailyTipSeen() {
-        securePreferences.edit {
-            putBoolean("interstitialAdAfterDailyTipSeen", true)
-        }
-    }
-
-    fun resetInterstitialAdAfterDailyTip() {
-        securePreferences.edit {
-            putBoolean("interstitialAdAfterDailyTipSeen", false)
-        }
-    }
-
-    fun interstitialAdAfterDailyTipSeen(): Boolean {
-        return securePreferences.getBoolean("interstitialAdAfterDailyTipSeen", true)
     }
 
     //PREFERENCES - END

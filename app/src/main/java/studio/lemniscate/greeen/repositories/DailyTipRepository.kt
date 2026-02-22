@@ -49,14 +49,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
         database.removeDailyTip(dailyTip)
     }
 
-    fun interstitialAdAfterDailyTipSeen(): Boolean {
-        return database.interstitialAdAfterDailyTipSeen()
-    }
-
-    fun setInterstitialAdAfterDailyTipSeen() {
-        database.setInterstitialAdAfterDailyTipSeen()
-    }
-
     fun getDailyTip(): DailyTip {
         return database.getDailyTip()
     }
@@ -93,7 +85,7 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
         if (dailyTip.tip != database.getDailyTip().tip) {
             database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category, dailyTip.pathToImage)
-            database.setNewDailyTipAvailable()
+            return dailyTip
         }
 
         return dailyTip

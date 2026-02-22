@@ -14,9 +14,8 @@ object DailyTipScheduler {
 
         val now = Calendar.getInstance()
         val next = Calendar.getInstance().apply {
-
-            set(Calendar.HOUR_OF_DAY, 13)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 14)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
 
@@ -28,25 +27,17 @@ object DailyTipScheduler {
 
         val workRequest = OneTimeWorkRequestBuilder<DailyTipWorker>()
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .setBackoffCriteria (
+                androidx.work.BackoffPolicy.LINEAR,
+                2,
+                TimeUnit.MINUTES
+            )
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork (
             "dailyTipWorker",
             ExistingWorkPolicy.REPLACE,
             workRequest
-        )
-    }
-
-    fun scheduleRetry(context: Context) {
-
-        val retryWork = OneTimeWorkRequestBuilder<DailyTipWorker>()
-            .setInitialDelay(1, TimeUnit.HOURS)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork (
-            "dailyTipRetry",
-            ExistingWorkPolicy.REPLACE,
-            retryWork
         )
     }
 }
