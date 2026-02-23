@@ -109,6 +109,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.delay
+import studio.lemniscate.greeen.notifications.DailyEvents
 
 
 enum class Screen (id: Int) {
@@ -414,6 +415,13 @@ class MainActivity : ComponentActivity() {
                     badgesViewModel.fetchWallpaperFirstQuote()
                     badgesViewModel.fetchWallpaperFirstReceipt()
                     settingsViewModel.getCurrency()
+                }
+
+                val dailyTipNotificationClicked = intent.getBooleanExtra("dailyTipNotificationClicked", false)
+
+                if (dailyTipNotificationClicked) {
+                    intent.putExtra("dailyTipNotificationClicked", false)
+                    DailyEvents.newDailyTip(true)
                 }
 
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}

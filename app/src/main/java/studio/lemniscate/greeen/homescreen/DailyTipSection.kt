@@ -33,7 +33,7 @@ fun DailyTipSection (
     dailyTipSectionClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
-    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsStateWithLifecycle()
+    val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
 
     val buttonText = if (newDailyTipAvailable)
         "Your daily finance tip is ready! Hooray!"

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import studio.lemniscate.greeen.badges.BadgeIdentifier
+import studio.lemniscate.greeen.notifications.DailyEvents
 import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
 private fun checkIfBadgeIsAvailable (
@@ -185,7 +186,7 @@ fun DailyTipScreen (
     ) {
         if (newDailyTipAvailable) {
             if (dailyTipScreenViewModel.newDailyTipCanBeShown || adremoverActive) {
-                dailyTipScreenViewModel.resetNewDailyTipAvailable()
+                DailyEvents.newDailyTip(false)
 
                 DailyTipTile (
                     modifier = modifier,

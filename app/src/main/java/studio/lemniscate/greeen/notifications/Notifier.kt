@@ -96,6 +96,7 @@ class Notifier(private val context: Context) {
 
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("dailyTipNotificationClicked", true)
         }
 
         val pendingIntent = PendingIntent.getActivity (
@@ -104,7 +105,6 @@ class Notifier(private val context: Context) {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
 
         val notification = NotificationCompat.Builder(context, "tips")
             .setSmallIcon(R.mipmap.applogo_transparent_foreground)
