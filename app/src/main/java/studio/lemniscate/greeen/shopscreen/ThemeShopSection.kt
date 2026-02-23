@@ -10,7 +10,6 @@ import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.ui.theme.AppColors
 import studio.lemniscate.greeen.ui.theme.Bordeaux
 
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 
 import androidx.compose.runtime.Composable

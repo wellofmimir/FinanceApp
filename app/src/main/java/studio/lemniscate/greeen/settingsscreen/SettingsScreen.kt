@@ -3,7 +3,6 @@ package studio.lemniscate.greeen.settingsscreen
 import androidx.compose.foundation.layout.Arrangement
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.header.HeaderSectionViewModel
 import studio.lemniscate.greeen.advertisement.AdSectionLargeBanner
 import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel

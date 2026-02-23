@@ -414,6 +414,10 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     badgesViewModel.fetchWallpaperFirstQuote()
                     badgesViewModel.fetchWallpaperFirstReceipt()
+
+                    badgesViewModel.fetchWallpaperFirstGoal()
+                    badgesViewModel.fetchWallpaperTenGoals()
+
                     settingsViewModel.getCurrency()
                 }
 

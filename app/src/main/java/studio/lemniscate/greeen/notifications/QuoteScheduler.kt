@@ -1,12 +1,12 @@
 package studio.lemniscate.greeen.notifications
 
 import android.content.Context
-import android.icu.util.Calendar
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 object QuoteScheduler {
@@ -35,19 +35,6 @@ object QuoteScheduler {
             "dailyQuoteWorker",
             ExistingWorkPolicy.REPLACE,
             workRequest
-        )
-    }
-
-    fun scheduleRetry(context: Context) {
-
-        val retryWork = OneTimeWorkRequestBuilder<DailyTipWorker>()
-            .setInitialDelay(1, TimeUnit.HOURS)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork (
-            "dailyQuoteRetry",
-            ExistingWorkPolicy.REPLACE,
-            retryWork
         )
     }
 }

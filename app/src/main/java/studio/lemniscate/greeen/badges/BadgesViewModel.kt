@@ -39,6 +39,8 @@ class BadgesViewModel (
 
     private val internFirstQuoteWallpaper = MutableStateFlow<Bitmap?>(null)
     private val internFirstReceiptWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internFirstGoalWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internTenGoalsWallpaper = MutableStateFlow<Bitmap?>(null)
 
 
     fun getImageBitmapFromBadge(badge: Badge): ImageBitmap? {
@@ -54,6 +56,38 @@ class BadgesViewModel (
             .asImageBitmap()
 
         return imageBitmap
+    }
+
+    fun fetchWallpaperTenGoals() {
+        viewModelScope.launch {
+            repository.fetchWallpaper(BadgeIdentifier.TEN_GOALS)
+
+            val badge = internUserBadges.value.firstOrNull {
+                it.identifier == BadgeIdentifier.TEN_GOALS.ordinal
+            }
+
+            if (badge != null) {
+                internTenGoalsWallpaper.value = BitmapFactory
+                    .decodeFile(badge.pathToImage)
+                    .fixOrientation(badge.pathToImage)
+            }
+        }
+    }
+
+    fun fetchWallpaperFirstGoal() {
+        viewModelScope.launch {
+            repository.fetchWallpaper(BadgeIdentifier.FIRST_GOAL)
+
+            val badge = internUserBadges.value.firstOrNull {
+                it.identifier == BadgeIdentifier.FIRST_GOAL.ordinal
+            }
+
+            if (badge != null) {
+                internFirstGoalWallpaper.value = BitmapFactory
+                    .decodeFile(badge.pathToImage)
+                    .fixOrientation(badge.pathToImage)
+            }
+        }
     }
 
     fun fetchWallpaperFirstQuote() {
@@ -87,6 +121,8 @@ class BadgesViewModel (
             }
         }
     }
+
+
 
     fun checkBadge(badgeIdentifier: BadgeIdentifier) {
         viewModelScope.launch {

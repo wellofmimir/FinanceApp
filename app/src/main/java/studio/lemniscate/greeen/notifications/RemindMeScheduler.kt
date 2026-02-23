@@ -27,27 +27,19 @@ object RemindMeScheduler {
 
         val initialDelay = nextReminder.timeInMillis - now.timeInMillis
 
-        val workRequest = PeriodicWorkRequestBuilder<ReceiptReminderPollingWorker>(1, TimeUnit.DAYS)
+        val workRequest = OneTimeWorkRequestBuilder<ReceiptReminderPollingWorker>()
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork (
-            "dailyReminderWorker",
-            ExistingPeriodicWorkPolicy.REPLACE,
-            workRequest
-        )
-    }
-
-    fun scheduleRetry(context: Context) {
-
-        val retryWork = OneTimeWorkRequestBuilder<DailyTipWorker>()
-            .setInitialDelay(1, TimeUnit.HOURS)
+            .setBackoffCriteria (
+                androidx.work.BackoffPolicy.LINEAR,
+                1,
+                TimeUnit.HOURS
+            )
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork (
-            "dailyReminderRetry",
+            "dailyReminderWorker",
             ExistingWorkPolicy.REPLACE,
-            retryWork
+            workRequest
         )
     }
 }

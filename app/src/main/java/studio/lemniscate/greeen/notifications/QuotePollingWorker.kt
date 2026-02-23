@@ -17,8 +17,8 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
         //Hier kann auch direkt das Feedback zurückgesetzt werden
         //Erstmal ist dafür kein eigener Worker notwendig
 
-        if (database.getQuoteTryCounter() >= 16) {
-            database.resetQuoteTryCounter()
+        if (runAttemptCount >= 16) {
+            QuoteScheduler.schedule(applicationContext)
             return Result.success()
         }
 
@@ -33,13 +33,12 @@ class QuotePollingWorker(context: Context, parameters: WorkerParameters) : Corou
             database.resetFeedbackSent()
             database.resetQuoteTryCounter()
             notifier.sendQuoteNotification()
+
             DailyEvents.newQuote(true)
-        }
-        else {
-            database.incrementQuoteTryCounter()
-            QuoteScheduler.scheduleRetry(applicationContext)
+            QuoteScheduler.schedule(applicationContext)
+            return Result.success()
         }
 
-        return Result.success()
+        return Result.retry()
     }
 }

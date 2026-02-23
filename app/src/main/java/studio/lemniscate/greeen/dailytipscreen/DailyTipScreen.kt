@@ -2,7 +2,6 @@ package studio.lemniscate.greeen.dailytipscreen
 
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.network.DailyTip
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.badges.BadgesViewModel
 
 import android.content.Context

@@ -7,7 +7,6 @@ import studio.lemniscate.greeen.MainActivityViewModel
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 
 import studio.lemniscate.greeen.advertisement.AdSectionLargeBanner
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.advertisement.InterstitialAdManager
 import studio.lemniscate.greeen.badges.BadgeIdentifier
 import studio.lemniscate.greeen.badges.BadgesViewModel

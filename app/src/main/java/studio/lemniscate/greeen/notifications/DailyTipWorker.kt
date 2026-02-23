@@ -18,11 +18,11 @@ class DailyTipWorker (
     private val fileProvider = FileProvider(applicationContext)
     private val database = FinanceAppDatabase.getInstance(applicationContext)
     private val dailyTipRepository = DailyTipRepository.getInstance(database, fileProvider)
-    private  val notifier = Notifier(applicationContext)
+    private val notifier = Notifier(applicationContext)
 
     override suspend fun doWork(): Result {
         if (runAttemptCount >= 16) {
-            scheduleNextDay()
+            DailyTipScheduler.schedule(applicationContext)
             return Result.success()
         }
 
@@ -35,16 +35,12 @@ class DailyTipWorker (
             newDailyTip.title.hashCode() != oldDailyTip.title.hashCode()) {
 
             notifier.sendNewDailyTipAvailableNotification(newDailyTip)
-            DailyEvents.newDailyTip(true)
 
-            scheduleNextDay()
+            DailyEvents.newDailyTip(true)
+            DailyTipScheduler.schedule(applicationContext)
             return Result.success()
         }
 
         return Result.retry()
-    }
-
-    private fun scheduleNextDay() {
-        DailyTipScheduler.schedule(applicationContext)
     }
 }

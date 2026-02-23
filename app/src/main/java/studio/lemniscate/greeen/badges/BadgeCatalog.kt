@@ -37,7 +37,7 @@ object BadgeCatalog {
                 title = "Badge of Motivation",
                 text = "More motivation is waiting for you!",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "firstQuote.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.quote_one
             )
@@ -57,7 +57,7 @@ object BadgeCatalog {
                 title = "Gentle Continuity",
                 text = "You kept coming back, without pressure. Calm attention creates progress that feels safe and sustainable.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "fourteenQuotes.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.quote_fourteen
             )
@@ -67,7 +67,7 @@ object BadgeCatalog {
                 title = "Unstoppable Momentum",
                 text = "You didn’t slow down — you leveled up. This kind of consistency builds confidence, discipline, and real progress.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "fortyQuotes.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.quote_forty
             )
@@ -97,7 +97,7 @@ object BadgeCatalog {
                 title = "One Receipt at a Time",
                 text = "The first step to responsible financials.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "firstReceipt.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.receipt_one
             )
@@ -117,7 +117,7 @@ object BadgeCatalog {
                 title = "On Your Way",
                 text = "Your routine is taking shape. Small, consistent steps are turning into real progress.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "thirtyReceipts.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.receipt_thirty
             )
@@ -137,7 +137,7 @@ object BadgeCatalog {
                 title = "Habit Locked In",
                 text = "Logging receipts has become second nature. You’re mastering the system, step by step.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "hundredReceipts.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.receipt_hundred
             )
@@ -147,7 +147,7 @@ object BadgeCatalog {
                 title = "The Journey Starts",
                 text = "This is where progress turns into momentum. Keep going, one goal at a time.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "firstGoal.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.goal_one
             )
@@ -177,7 +177,7 @@ object BadgeCatalog {
                 title = "Hitting Your Flow",
                 text = "You’re finding your groove and following through. Consistency is becoming natural.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "tenGoals.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.goal_ten
             )
@@ -197,7 +197,7 @@ object BadgeCatalog {
                 title = "Peak Performance",
                 text = "You’ve proven that steady effort leads to real results.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "fiftyGoals.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.goal_fifty
             )
@@ -207,7 +207,7 @@ object BadgeCatalog {
                 title = "Investing in Knowledge",
                 text = "You liked your first tip — a small action that pays dividends over time. Smart financial journeys start with learning.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "firstTip.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.tip_one
             )
@@ -227,7 +227,7 @@ object BadgeCatalog {
                 title = "30 Days Ahead",
                 text = "Consistency beats intensity. You’ve built a learning streak that puts you ahead of the curve.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "thirtyTips.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.tip_thirty
             )
@@ -247,7 +247,7 @@ object BadgeCatalog {
                 title = "Habit Locked In",
                 text = "Three months of daily focus. Financial learning has shifted from effort to routine — and that’s where growth accelerates.",
                 theme = "",
-                pathToImage = "",
+                pathToImage = "ninetyTips.png",
                 isGranted = false,
                 badgeSymbol = R.drawable.tip_ninety
             )

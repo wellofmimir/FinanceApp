@@ -61,6 +61,7 @@ fun BadgeTile (
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
+                onSeeGift()
             }
     ) {
         Row (
@@ -85,7 +86,7 @@ fun BadgeTile (
                 Box (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(2f),
+                        .weight(3f),
                     contentAlignment = Alignment.TopStart
                 ) {
                     Text (
@@ -94,6 +95,21 @@ fun BadgeTile (
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center
                     )
+                }
+
+                if (showGiftText) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.6f),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = "Tap to see your gift.",
+                            color = colors.primary,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
 

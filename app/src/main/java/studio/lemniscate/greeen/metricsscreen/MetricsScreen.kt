@@ -54,7 +54,6 @@ import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 import studio.lemniscate.greeen.dailytipscreen.AdTeaserSection
 import kotlinx.coroutines.delay
-import studio.lemniscate.greeen.advertisement.AdvertisementViewModel
 import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 import java.math.RoundingMode
 
