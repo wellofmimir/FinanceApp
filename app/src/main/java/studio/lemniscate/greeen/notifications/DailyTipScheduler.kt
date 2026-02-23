@@ -29,8 +29,8 @@ object DailyTipScheduler {
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .setBackoffCriteria (
                 androidx.work.BackoffPolicy.LINEAR,
-                2,
-                TimeUnit.MINUTES
+                1,
+                TimeUnit.HOURS
             )
             .build()
 
