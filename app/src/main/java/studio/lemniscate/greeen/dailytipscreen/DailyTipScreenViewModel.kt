@@ -61,24 +61,19 @@ class DailyTipScreenViewModel (
             initialValue = null
         )
 
-    private val internNewDailyTipAvailable = MutableStateFlow(getNewDailyTipAvailable())
+    private val internNewDailyTipAvailable = MutableStateFlow(false)
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
     init {
         viewModelScope.launch {
             DailyEvents.newDailyTipAvailable.collect() {
-                internNewDailyTipAvailable.value = true
+                internNewDailyTipAvailable.value = it
             }
         }
     }
 
     fun resetNewDailyTipAvailable() {
-        repository.resetNewDailyTipAvailable()
         internNewDailyTipAvailable.value = false
-    }
-
-    fun getNewDailyTipAvailable(): Boolean {
-        return repository.newDailyTipAvailable()
     }
 
     fun isDailyTipLiked(dailyTip: DailyTip): Boolean {
@@ -106,12 +101,7 @@ class DailyTipScreenViewModel (
 
     fun fetchDailyTip() {
         viewModelScope.launch {
-            val imageFile = File(repository.getDailyTip().pathToImage)
-
-            if (repository.getDailyTip().tip.isEmpty() || internImageToDailyTip.value == null || !imageFile.exists()) {
-                repository.fetchDailyTipFromServer()
-                DailyEvents.newDailyTip(true)
-            }
+            repository.fetchDailyTipFromServer()
 
             internDailyTip.value = internDailyTip.value.copy (
                 dailyTip = repository.getDailyTip()

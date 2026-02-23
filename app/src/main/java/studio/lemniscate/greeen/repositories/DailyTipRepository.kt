@@ -9,6 +9,7 @@ import studio.lemniscate.greeen.commonutils.FileProvider
 import studio.lemniscate.greeen.network.SharedHttpClient
 
 import org.json.JSONObject
+import studio.lemniscate.greeen.notifications.DailyEvents
 
 
 class DailyTipRepository private constructor (private val database: FinanceAppDatabase, private val fileProvider: FileProvider) {
@@ -25,13 +26,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
     }
 
     private val client = DailyTipClient(SharedHttpClient.sharedClient)
-
-    fun resetNewDailyTipAvailable() {
-        database.resetNewDailyTipAvailable()
-    }
-    fun newDailyTipAvailable(): Boolean {
-        return database.newDailyTipAvailable()
-    }
 
     fun insertDailyTip(dailyTip: DailyTip) {
         database.insertTip(dailyTip)
@@ -55,17 +49,27 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     suspend fun fetchDailyTipFromServer(): DailyTip {
 
+        if (database.dailyTipObtained()) {
+            return database.getDailyTip()
+        }
+
         val result = client.fetchDailyTip()
         val imageToDailyTipResult = client.fetchImageToDailyTip()
 
-        if (isValidJson(result) == false)
+        if (isValidJson(result) == false) {
+            DailyEvents.newDailyTip(false)
             return DailyTip("", "", "", "", "")
+        }
 
-        if (!result.startsWith("{"))
+        if (!result.startsWith("{")) {
+            DailyEvents.newDailyTip(false)
             return DailyTip("", "", "", "", "")
+        }
 
-        if (imageToDailyTipResult == null)
+        if (imageToDailyTipResult == null) {
+            DailyEvents.newDailyTip(false)
             return DailyTip("", "", "", "", "")
+        }
 
         val imageToDailyTipFile = fileProvider.getPNG()
 
@@ -83,8 +87,11 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
             pathToImage = imageToDailyTipFile.absolutePath
         )
 
+        database.setDailyTipObtained()
+
         if (dailyTip.tip != database.getDailyTip().tip) {
             database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category, dailyTip.pathToImage)
+            DailyEvents.newDailyTip(true)
             return dailyTip
         }
 

@@ -26,6 +26,7 @@ class DailyTipWorker (
             return Result.success()
         }
 
+        database.resetDailyTipObtained()
         val oldDailyTip = database.getDailyTip()
         val newDailyTip = dailyTipRepository.fetchDailyTipFromServer()
 

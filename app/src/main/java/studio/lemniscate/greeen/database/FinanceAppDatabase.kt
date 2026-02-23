@@ -264,19 +264,19 @@ class FinanceAppDatabase private constructor(context: Context) {
         }
     }
 
-    fun newDailyTipAvailable(): Boolean {
-        return securePreferences.getBoolean("newDailyTipAvailable", false)
+    fun dailyTipObtained(): Boolean {
+        return securePreferences.getBoolean("dailyTipObtained", false)
     }
 
-    fun resetNewDailyTipAvailable() {
+    fun resetDailyTipObtained() {
         securePreferences.edit() {
-            putBoolean("newDailyTipAvailable", false)
+            putBoolean("dailyTipObtained", false)
         }
     }
 
-    fun setNewDailyTipAvailable() {
+    fun setDailyTipObtained() {
         securePreferences.edit {
-            putBoolean("newDailyTipAvailable", true)
+            putBoolean("dailyTipObtained", true)
         }
     }
 
