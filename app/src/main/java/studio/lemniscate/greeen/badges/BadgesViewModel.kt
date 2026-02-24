@@ -165,7 +165,7 @@ class BadgesViewModel (
             }
         }
     }
-    
+
     fun checkBadge(badgeIdentifier: BadgeIdentifier) {
         viewModelScope.launch {
             loadUserBadges()

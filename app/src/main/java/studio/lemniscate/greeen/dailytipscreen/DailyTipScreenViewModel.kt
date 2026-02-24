@@ -61,7 +61,7 @@ class DailyTipScreenViewModel (
             initialValue = null
         )
 
-    private val internNewDailyTipAvailable = MutableStateFlow(false)
+    private val internNewDailyTipAvailable = MutableStateFlow(repository.dailyTipAvailable())
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
     init {
@@ -154,6 +154,7 @@ class DailyTipScreenViewModel (
                 activity,
                 onReward = {
                     newDailyTipCanBeShown = true
+                    repository.resetDailyTipAvailable()
                 },
                 onClosed = {
                     rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")

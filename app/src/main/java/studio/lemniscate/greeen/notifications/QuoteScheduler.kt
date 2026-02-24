@@ -1,11 +1,13 @@
 package studio.lemniscate.greeen.notifications
 
+import studio.lemniscate.greeen.BuildConfig
+
+
 import android.content.Context
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -29,11 +31,21 @@ object QuoteScheduler {
 
         val workRequest = OneTimeWorkRequestBuilder<QuotePollingWorker>()
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .setBackoffCriteria (
+                androidx.work.BackoffPolicy.LINEAR,
+                1,
+                TimeUnit.HOURS
+            )
             .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork (
+        val workManager = WorkManager.getInstance(context)
+
+        if (BuildConfig.DEBUG)
+            workManager.cancelUniqueWork("dailyQuoteWorker")
+
+        workManager.enqueueUniqueWork (
             "dailyQuoteWorker",
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.KEEP,
             workRequest
         )
     }

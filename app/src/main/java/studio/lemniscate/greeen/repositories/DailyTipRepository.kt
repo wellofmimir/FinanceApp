@@ -27,6 +27,18 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     private val client = DailyTipClient(SharedHttpClient.sharedClient)
 
+    fun setDailyTipAvailable() {
+        database.setDailyTipAvailable()
+    }
+
+    fun resetDailyTipAvailable() {
+        database.resetDailyTipAvailable()
+    }
+
+    fun dailyTipAvailable(): Boolean {
+        return database.dailyTipAvailable()
+    }
+
     fun insertDailyTip(dailyTip: DailyTip) {
         database.insertTip(dailyTip)
     }

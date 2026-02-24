@@ -436,8 +436,10 @@ class MainActivity : ComponentActivity() {
 
                 if (dailyTipNotificationClicked) {
                     intent.putExtra("dailyTipNotificationClicked", false)
-                    DailyEvents.newDailyTip(true)
                 }
+
+                if (dailyTipScreenViewModel.newDailyTipAvailable.collectAsState().value)
+                    DailyEvents.newDailyTip(true)
 
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 

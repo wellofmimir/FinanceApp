@@ -32,12 +32,14 @@ class DailyTipWorker (
 
         if (newDailyTip.tip.isNotEmpty() &&
             newDailyTip.title.isNotEmpty() &&
-            newDailyTip.title.hashCode() != oldDailyTip.title.hashCode()) {
+            newDailyTip.tip != oldDailyTip.tip) {
 
             notifier.sendNewDailyTipAvailableNotification(newDailyTip)
 
             DailyEvents.newDailyTip(true)
             DailyTipScheduler.schedule(applicationContext)
+
+            database.setDailyTipAvailable()
             return Result.success()
         }
 

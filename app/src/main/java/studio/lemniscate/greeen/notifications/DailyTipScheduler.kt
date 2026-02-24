@@ -6,6 +6,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import studio.lemniscate.greeen.BuildConfig
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -34,9 +35,14 @@ object DailyTipScheduler {
             )
             .build()
 
+        val workManager = WorkManager.getInstance(context)
+
+        if (BuildConfig.DEBUG)
+            workManager.cancelUniqueWork("dailyTipWorker")
+
         WorkManager.getInstance(context).enqueueUniqueWork (
             "dailyTipWorker",
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.KEEP,
             workRequest
         )
     }
