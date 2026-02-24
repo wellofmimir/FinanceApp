@@ -109,6 +109,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.delay
+import studio.lemniscate.greeen.badges.BadgeIdentifier
 import studio.lemniscate.greeen.notifications.DailyEvents
 
 
@@ -412,11 +413,21 @@ class MainActivity : ComponentActivity() {
                 )
 
                 LaunchedEffect(Unit) {
-                    badgesViewModel.fetchWallpaperFirstQuote()
-                    badgesViewModel.fetchWallpaperFirstReceipt()
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FIRST_RECEIPT)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.THIRTY_RECEIPTS)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.HUNDRED_RECEIPTS)
 
-                    badgesViewModel.fetchWallpaperFirstGoal()
-                    badgesViewModel.fetchWallpaperTenGoals()
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FIRST_GOAL)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.TEN_GOALS)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FIFTY_GOALS)
+
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FIRST_QUOTE_LIKED)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FOURTEEN_QUOTES_LIKED)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FORTY_QUOTES_LIKED)
+
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.FIRST_DAILY_TIP_LIKED)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED)
+                    badgesViewModel.fetchWallpaper(BadgeIdentifier.NINETY_DAILY_TIPS_LIKED)
 
                     settingsViewModel.getCurrency()
                 }

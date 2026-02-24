@@ -38,9 +38,24 @@ class BadgesViewModel (
     }
 
     private val internFirstQuoteWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internFourteenQuotesWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internFortyQuotesWallpaper = MutableStateFlow<Bitmap?>(null)
+
+
     private val internFirstReceiptWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internThirtyReceiptsWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internHundredReceiptsWallpaper = MutableStateFlow<Bitmap?>(null)
+
     private val internFirstGoalWallpaper = MutableStateFlow<Bitmap?>(null)
     private val internTenGoalsWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internFiftyGoalsWallpaper = MutableStateFlow<Bitmap?>(null)
+
+    private val internFirstDailyTipWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internThirtyDailyTipsWallpaper = MutableStateFlow<Bitmap?>(null)
+    private val internNinetyDailyTipsWallpaper = MutableStateFlow<Bitmap?>(null)
+
+
+
 
 
     fun getImageBitmapFromBadge(badge: Badge): ImageBitmap? {
@@ -58,72 +73,99 @@ class BadgesViewModel (
         return imageBitmap
     }
 
-    fun fetchWallpaperTenGoals() {
+    fun fetchWallpaper(badgeIdentifier: BadgeIdentifier) {
         viewModelScope.launch {
-            repository.fetchWallpaper(BadgeIdentifier.TEN_GOALS)
+            repository.fetchWallpaper(badgeIdentifier)
 
             val badge = internUserBadges.value.firstOrNull {
-                it.identifier == BadgeIdentifier.TEN_GOALS.ordinal
+                it.identifier == badgeIdentifier.ordinal
             }
 
-            if (badge != null) {
-                internTenGoalsWallpaper.value = BitmapFactory
-                    .decodeFile(badge.pathToImage)
-                    .fixOrientation(badge.pathToImage)
+            if (badge == null)
+                return@launch
+
+            repository.setBadgeAvailable()
+
+            when (badgeIdentifier.ordinal) {
+                BadgeIdentifier.FIRST_GOAL.ordinal -> {
+                    internFirstGoalWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.TEN_GOALS.ordinal -> {
+                    internTenGoalsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FIFTY_GOALS.ordinal -> {
+                    internFiftyGoalsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FIRST_DAILY_TIP_LIKED.ordinal -> {
+                    internFirstDailyTipWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.THIRTY_DAILY_TIPS_LIKED.ordinal -> {
+                    internThirtyDailyTipsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.NINETY_DAILY_TIPS_LIKED.ordinal -> {
+                    internNinetyDailyTipsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FIRST_QUOTE_LIKED.ordinal -> {
+                    internFirstQuoteWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FOURTEEN_QUOTES_LIKED.ordinal -> {
+                    internFourteenQuotesWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FORTY_QUOTES_LIKED.ordinal -> {
+                    internFortyQuotesWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.FIRST_RECEIPT.ordinal -> {
+                    internFirstReceiptWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.THIRTY_RECEIPTS.ordinal -> {
+                    internThirtyReceiptsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                BadgeIdentifier.HUNDRED_RECEIPTS.ordinal -> {
+                    internHundredReceiptsWallpaper.value = BitmapFactory
+                        .decodeFile(badge.pathToImage)
+                        .fixOrientation(badge.pathToImage)
+                }
+
+                else -> {
+                    return@launch
+                }
             }
         }
     }
-
-    fun fetchWallpaperFirstGoal() {
-        viewModelScope.launch {
-            repository.fetchWallpaper(BadgeIdentifier.FIRST_GOAL)
-
-            val badge = internUserBadges.value.firstOrNull {
-                it.identifier == BadgeIdentifier.FIRST_GOAL.ordinal
-            }
-
-            if (badge != null) {
-                internFirstGoalWallpaper.value = BitmapFactory
-                    .decodeFile(badge.pathToImage)
-                    .fixOrientation(badge.pathToImage)
-            }
-        }
-    }
-
-    fun fetchWallpaperFirstQuote() {
-        viewModelScope.launch {
-            repository.fetchWallpaper(BadgeIdentifier.FIRST_QUOTE_LIKED)
-
-            val badge = internUserBadges.value.firstOrNull {
-                it.identifier == BadgeIdentifier.FIRST_QUOTE_LIKED.ordinal
-            }
-
-            if (badge != null) {
-                internFirstQuoteWallpaper.value = BitmapFactory
-                    .decodeFile(badge.pathToImage)
-                    .fixOrientation(badge.pathToImage)
-            }
-        }
-    }
-
-    fun fetchWallpaperFirstReceipt() {
-        viewModelScope.launch {
-            repository.fetchWallpaper(BadgeIdentifier.FIRST_RECEIPT)
-
-            val badge = internUserBadges.value.firstOrNull {
-                it.identifier == BadgeIdentifier.FIRST_RECEIPT.ordinal
-            }
-
-            if (badge != null) {
-                internFirstReceiptWallpaper.value = BitmapFactory
-                    .decodeFile(badge.pathToImage)
-                    .fixOrientation(badge.pathToImage)
-            }
-        }
-    }
-
-
-
+    
     fun checkBadge(badgeIdentifier: BadgeIdentifier) {
         viewModelScope.launch {
             loadUserBadges()
