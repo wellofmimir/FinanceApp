@@ -27,10 +27,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     private val client = DailyTipClient(SharedHttpClient.sharedClient)
 
-    fun setDailyTipAvailable() {
-        database.setDailyTipAvailable()
-    }
-
     fun resetDailyTipAvailable() {
         database.resetDailyTipAvailable()
     }
@@ -61,9 +57,8 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     suspend fun fetchDailyTipFromServer(): DailyTip {
 
-        if (database.dailyTipObtained()) {
+        if (database.dailyTipObtained())
             return database.getDailyTip()
-        }
 
         val result = client.fetchDailyTip()
         val imageToDailyTipResult = client.fetchImageToDailyTip()

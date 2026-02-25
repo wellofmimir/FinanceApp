@@ -2,9 +2,6 @@ package studio.lemniscate.greeen
 
 import com.google.android.gms.ads.MobileAds
 
-import studio.lemniscate.greeen.notifications.DailyTipScheduler
-import studio.lemniscate.greeen.notifications.QuoteScheduler
-import studio.lemniscate.greeen.notifications.RemindMeScheduler
 import studio.lemniscate.greeen.advertisement.InterstitialAdManager
 import studio.lemniscate.greeen.database.FinanceAppDatabase
 import studio.lemniscate.greeen.billingmanager.BillingManager
@@ -214,10 +211,6 @@ class MainActivity : ComponentActivity() {
                     MobileAds.initialize(context)
                     InterstitialAdManager.instance.initialize(context)
                     InterstitialAdManager.instance.loadInterstitial(context)
-
-                    RemindMeScheduler.schedule(context)
-                    QuoteScheduler.schedule(context)
-                    DailyTipScheduler.schedule(context)
                 }
 
                 val manager = getSystemService(NotificationManager::class.java)
