@@ -110,7 +110,6 @@ class Notifier(private val context: Context) {
             .setSmallIcon(R.mipmap.applogo_transparent_foreground)
             .setColor(ContextCompat.getColor(context, R.color.black))
             .setContentTitle("New financial tip available!")
-            .setContentText(dailyTip.title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

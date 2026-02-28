@@ -72,6 +72,11 @@ class DailyTipScreenViewModel (
         }
     }
 
+    fun resetDailyTipObtained() {
+        repository.resetDailyTipObtained()
+    }
+
+
     fun resetNewDailyTipAvailable() {
         internNewDailyTipAvailable.value = false
     }
@@ -101,7 +106,27 @@ class DailyTipScreenViewModel (
 
     fun fetchDailyTip() {
         viewModelScope.launch {
-            repository.fetchDailyTipFromServer()
+
+            if (dailyTipObtained()) {
+                internDailyTip.value = internDailyTip.value.copy (
+                    dailyTip = repository.getDailyTip()
+                )
+
+                internImageToDailyTip.value = BitmapFactory
+                    .decodeFile(repository.getDailyTip().pathToImage)
+                    ?.fixOrientation(repository.getDailyTip().pathToImage)
+
+                return@launch
+            }
+
+            val dailyTip = repository.fetchDailyTipFromServer()
+
+            if (dailyTip.title == "An error has occurred.")
+                return@launch
+
+            repository.setDailyTip(dailyTip)
+            repository.setDailyTipObtained()
+            DailyEvents.newDailyTip(true)
 
             internDailyTip.value = internDailyTip.value.copy (
                 dailyTip = repository.getDailyTip()
@@ -111,8 +136,8 @@ class DailyTipScreenViewModel (
                 return@launch
 
             internImageToDailyTip.value = BitmapFactory
-                    .decodeFile(repository.getDailyTip().pathToImage)
-                    ?.fixOrientation(repository.getDailyTip().pathToImage)
+                .decodeFile(repository.getDailyTip().pathToImage)
+                ?.fixOrientation(repository.getDailyTip().pathToImage)
 
             internCurrentlyLiked.value = isDailyTipLiked(internDailyTip.value.dailyTip)
         }
@@ -125,6 +150,10 @@ class DailyTipScreenViewModel (
             .asImageBitmap()
 
         return imageBitmap
+    }
+
+    fun dailyTipObtained(): Boolean {
+        return repository.dailyTipObtained()
     }
 
     fun insertDailyTip(dailyTip: DailyTip) {
@@ -153,8 +182,8 @@ class DailyTipScreenViewModel (
             rewardedAdManager.show (
                 activity,
                 onReward = {
-                    newDailyTipCanBeShown = true
                     repository.resetDailyTipAvailable()
+                    newDailyTipCanBeShown = true
                 },
                 onClosed = {
                     rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")

@@ -27,6 +27,21 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     private val client = DailyTipClient(SharedHttpClient.sharedClient)
 
+    fun setDailyTip(dailyTip: DailyTip) {
+        database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category, dailyTip.pathToImage)
+    }
+
+    fun setDailyTipObtained() {
+        database.setDailyTipObtained()
+    }
+
+    fun resetDailyTipObtained() {
+        database.resetDailyTipObtained()
+    }
+    fun dailyTipObtained(): Boolean {
+        return database.dailyTipObtained()
+    }
+
     fun resetDailyTipAvailable() {
         database.resetDailyTipAvailable()
     }
@@ -57,26 +72,11 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
 
     suspend fun fetchDailyTipFromServer(): DailyTip {
 
-        if (database.dailyTipObtained())
-            return database.getDailyTip()
-
         val result = client.fetchDailyTip()
         val imageToDailyTipResult = client.fetchImageToDailyTip()
 
-        if (isValidJson(result) == false) {
-            DailyEvents.newDailyTip(false)
-            return DailyTip("", "", "", "", "")
-        }
-
-        if (!result.startsWith("{")) {
-            DailyEvents.newDailyTip(false)
-            return DailyTip("", "", "", "", "")
-        }
-
-        if (imageToDailyTipResult == null) {
-            DailyEvents.newDailyTip(false)
-            return DailyTip("", "", "", "", "")
-        }
+        if (isValidJson(result) == false || !result.startsWith("{") || imageToDailyTipResult == null)
+            return DailyTip("An error has occurred.", "Unfortunately, an error has occurred.", "Unfortunately, an error has occurred.", "error", "")
 
         val imageToDailyTipFile = fileProvider.getPNG()
 
@@ -93,14 +93,6 @@ class DailyTipRepository private constructor (private val database: FinanceAppDa
             category = jsonObject.getString("category"),
             pathToImage = imageToDailyTipFile.absolutePath
         )
-
-        database.setDailyTipObtained()
-
-        if (dailyTip.tip != database.getDailyTip().tip) {
-            database.setDailyTip(dailyTip.title, dailyTip.tip, dailyTip.short, dailyTip.category, dailyTip.pathToImage)
-            DailyEvents.newDailyTip(true)
-            return dailyTip
-        }
 
         return dailyTip
     }

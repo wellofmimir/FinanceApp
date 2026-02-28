@@ -1,27 +1,45 @@
 package studio.lemniscate.greeen.notifications
 
 import studio.lemniscate.greeen.database.FinanceAppDatabase
+import studio.lemniscate.greeen.repositories.QuoteRepository
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
+import androidx.work.*
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
-class ReceiptReminderPollingWorker (
+class ReceiptWorker (
     context: Context,
-    parameters: WorkerParameters
-): CoroutineWorker (
-    appContext = context,
-    params = parameters
-) {
-    private val database = FinanceAppDatabase.getInstance(applicationContext)
-    private val notifier = Notifier(applicationContext)
+    workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams) {
 
-    override suspend fun doWork(): Result {
+    companion object {
+        fun enqueue(context: Context) {
+            val request = OneTimeWorkRequestBuilder<ReceiptWorker>()
+                .setConstraints (
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+
+            WorkManager.getInstance(context)
+                .enqueueUniqueWork (
+                    "receipt_remind_me_exact",
+                    ExistingWorkPolicy.KEEP,
+                    request
+                )
+        }
+    }
+
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+
+        val database = FinanceAppDatabase.getInstance(applicationContext)
+        val notifier = Notifier(applicationContext)
 
         //Es wird die receiptRemindDates-Tabelle der Datenbank durchsucht
         //und für jeden gefundenen Eintrag, der mit dem heutigen Eintrag übereinstimmt,
@@ -44,6 +62,6 @@ class ReceiptReminderPollingWorker (
             }
         }
 
-        return Result.success()
+        Result.success()
     }
 }

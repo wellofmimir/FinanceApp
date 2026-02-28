@@ -87,8 +87,8 @@ fun DailyTipScreen (
     val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(Unit) {
-        dailyTipScreenViewModel.fetchDailyTip()
         dailyTipScreenViewModel.getLikedTips()
+        dailyTipScreenViewModel.fetchDailyTip()
     }
 
     var rewardedAdCanBeShown by remember { mutableStateOf(false) }
@@ -99,7 +99,6 @@ fun DailyTipScreen (
 
     LaunchedEffect(rewardedAdCanBeShown) {
         activity?.let {
-            dailyTipScreenViewModel.fetchDailyTip()
 
             if (!rewardedAdCanBeShown)
                 return@LaunchedEffect
@@ -170,6 +169,9 @@ fun DailyTipScreen (
                 temporaryTip = null
             },
             onShowImage = {
+                if (dailyTip.dailyTip.title.contains("Breathe in...") || dailyTip.dailyTip.title.isEmpty() || dailyTip.dailyTip.category == "error")
+                    return@DailyTipDialog
+
                 showTip = false
                 showDialogWithImageToDailyTip = true
             }
@@ -185,6 +187,7 @@ fun DailyTipScreen (
     ) {
         if (newDailyTipAvailable) {
             if (dailyTipScreenViewModel.newDailyTipCanBeShown || adremoverActive) {
+                dailyTipScreenViewModel.resetNewDailyTipAvailable()
                 DailyEvents.newDailyTip(false)
 
                 DailyTipTile (
@@ -192,7 +195,7 @@ fun DailyTipScreen (
                     currentlyLiked = currentlyLiked,
                     dailyTip = dailyTip.dailyTip,
                     onLiked = {
-                        if (dailyTip.dailyTip.title.contains("Breathe in..."))
+                        if (dailyTip.dailyTip.title.contains("Breathe in...") || dailyTip.dailyTip.title.isEmpty() || dailyTip.dailyTip.category == "error")
                             return@DailyTipTile
 
                         dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
@@ -204,6 +207,9 @@ fun DailyTipScreen (
                         )
                     },
                     onSeeMoreClicked = {
+                        if (dailyTip.dailyTip.title.contains("Breathe in...") || dailyTip.dailyTip.title.isEmpty() || dailyTip.dailyTip.category == "error")
+                            return@DailyTipTile
+
                         showTip = true
                         temporaryTip = dailyTip.dailyTip
                     }
@@ -222,7 +228,7 @@ fun DailyTipScreen (
                 currentlyLiked = currentlyLiked,
                 dailyTip = dailyTip.dailyTip,
                 onLiked = {
-                    if (dailyTip.dailyTip.title.contains("Breathe in..."))
+                    if (dailyTip.dailyTip.title.contains("Breathe in...") || dailyTip.dailyTip.title.isEmpty() || dailyTip.dailyTip.category == "error")
                         return@DailyTipTile
 
                     dailyTipScreenViewModel.toggleDailyTipLiked(dailyTip.dailyTip)
@@ -234,6 +240,9 @@ fun DailyTipScreen (
                     )
                 },
                 onSeeMoreClicked = {
+                    if (dailyTip.dailyTip.title.contains("Breathe in...") || dailyTip.dailyTip.title.isEmpty())
+                        return@DailyTipTile
+
                     showTip = true
                     temporaryTip = dailyTip.dailyTip
                 }
@@ -278,6 +287,7 @@ fun DailyTipScreen (
             if (newDailyTipAvailable) {
                 if (dailyTipScreenViewModel.newDailyTipCanBeShown || adremoverActive) {
                     dailyTipScreenViewModel.resetNewDailyTipAvailable()
+                    DailyEvents.newDailyTip(false)
 
                     ImageSection (
                         imageBitmap = imageToDailyTip,
