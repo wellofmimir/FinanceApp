@@ -13,7 +13,6 @@ import android.app.PendingIntent
 object DailyTipAlarmScheduler {
     private const val REQUEST_CODE = 2001
     fun schedule(context: Context) {
-
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, DailyTipAlarmReceiver::class.java)
 

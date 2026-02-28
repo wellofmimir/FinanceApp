@@ -19,13 +19,12 @@ import java.util.Locale
 import java.io.File
 import java.math.RoundingMode
 
-import kotlin.math.roundToInt
-import kotlin.math.pow
 import kotlin.toBigDecimal
 
 import android.os.Build
 import androidx.core.content.FileProvider
 import android.Manifest
+import android.net.Uri
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -39,8 +38,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.text.font.FontVariation.Settings
 
 import android.content.Context
+import android.content.Intent
+
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -280,8 +282,9 @@ fun AddReceiptMenu (
 
     LaunchedEffect(selectedDate) {
         if (selectedDate.isNotEmpty()) {
-            if (Build.VERSION.SDK_INT >= 33)
+            if (Build.VERSION.SDK_INT >= 33) {
                 notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
     }
 

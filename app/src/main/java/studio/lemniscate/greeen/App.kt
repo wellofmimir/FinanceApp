@@ -11,6 +11,5 @@ class App : Application() {
         DailyTipAlarmScheduler.schedule(this)
         QuoteAlarmScheduler.schedule(this)
         ReceiptAlarmScheduler.schedule(this)
-
     }
 }
