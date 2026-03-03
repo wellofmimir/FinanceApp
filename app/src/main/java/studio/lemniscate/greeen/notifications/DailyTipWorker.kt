@@ -9,6 +9,7 @@ import androidx.work.*
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class DailyTipWorker (
     context: Context,
@@ -22,6 +23,11 @@ class DailyTipWorker (
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
+                )
+                .setBackoffCriteria (
+                    BackoffPolicy.LINEAR,
+                    5,
+                    TimeUnit.MINUTES
                 )
                 .build()
 
@@ -41,11 +47,18 @@ class DailyTipWorker (
             val repository = DailyTipRepository.getInstance(database, fileProvider)
             val notifier = Notifier(applicationContext)
 
+            database.resetDailyTipAvailable()
             database.resetDailyTipObtained()
+            DailyEvents.newDailyTip(false)
 
             val newTip = repository.fetchDailyTipFromServer()
 
-            if (!newTip.title.contains("error")) {
+            return@withContext if (newTip.title.contains("error") || newTip.tip.isEmpty()) {
+                if (runAttemptCount >= 60)
+                    Result.failure()
+                else
+                    Result.retry()
+            } else {
                 database.setDailyTipAvailable()
                 database.setDailyTipObtained()
                 database.setDailyTip (
@@ -58,12 +71,14 @@ class DailyTipWorker (
 
                 DailyEvents.newDailyTip(true)
                 notifier.sendNewDailyTipAvailableNotification(newTip)
+                Result.success()
             }
 
-            Result.success()
-
         } catch (e: Exception) {
-            Result.retry()
+            if (runAttemptCount >= 60)
+                Result.failure()
+            else
+                Result.retry()
         }
     }
 }

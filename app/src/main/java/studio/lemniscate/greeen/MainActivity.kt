@@ -570,7 +570,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         if (sectionIdentifier == Screen.SPLASH || sectionIdentifier == Screen.WELCOME) {
-                            AnimatedVisibility(
+                            AnimatedVisibility (
                                 visible = true,
                                 enter = fadeIn (
                                     animationSpec = tween (
@@ -614,9 +614,11 @@ class MainActivity : ComponentActivity() {
                                                     tutorialInformation = tutorialInformation,
                                                     onPunchCardFilled = {
                                                         goalAchieved = true
+                                                        isPagerBlocked = true
                                                     },
                                                     onWellDoneSectionDismissed = {
                                                         goalAchieved = false
+                                                        isPagerBlocked = false
                                                     }
                                                 )
                                             }
@@ -639,9 +641,11 @@ class MainActivity : ComponentActivity() {
                                                 settingsViewModel = settingsViewModel,
                                                 onGoalAchieved = {
                                                     goalAchieved = true
+                                                    isPagerBlocked = true
                                                 },
                                                 onWellDoneSectionDismissed = {
                                                     goalAchieved = false
+                                                    isPagerBlocked = false
                                                 },
                                                 shopSectionClicked = {
                                                     sectionIdentifier = Screen.SHOP

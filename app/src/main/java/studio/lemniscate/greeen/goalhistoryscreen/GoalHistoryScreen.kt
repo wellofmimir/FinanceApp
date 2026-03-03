@@ -58,10 +58,11 @@ fun GoalHistoryScreen (
 
         goalsSectionViewModel.insertGoal("Filled out the punch card", 0.0f, "PunchCard", 15)
         val newestGoalId = goalsSectionViewModel.getNewestGoalId()
+        onPunchCardFilled()
 
         WellDoneSection (
             modifier = Modifier
-                .fillMaxHeight(),
+                .fillMaxSize(),
             goalsSectionViewModel = goalsSectionViewModel,
             punchCardFilled = true,
             idGoal = newestGoalId,
@@ -71,7 +72,7 @@ fun GoalHistoryScreen (
             }
         )
 
-        onPunchCardFilled()
+        return
     }
 
     Column (

@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.io.File
+import kotlin.collections.filter
 
 
 class DailyTipScreenViewModel (
@@ -71,11 +72,6 @@ class DailyTipScreenViewModel (
             }
         }
     }
-
-    fun resetDailyTipObtained() {
-        repository.resetDailyTipObtained()
-    }
-
 
     fun resetNewDailyTipAvailable() {
         internNewDailyTipAvailable.value = false
@@ -165,6 +161,10 @@ class DailyTipScreenViewModel (
     }
     fun getLikedTips() {
         internLikedTips.value = repository.getLikedTips()
+        val currentDailyTip = repository.getDailyTip()
+        
+        if (isDailyTipLiked(currentDailyTip))
+            internCurrentlyLiked.value = true
     }
 
     fun getLikedTipsOrderedRandomly(): List<Tip> {
