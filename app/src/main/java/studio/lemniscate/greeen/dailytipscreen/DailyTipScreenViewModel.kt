@@ -73,8 +73,12 @@ class DailyTipScreenViewModel (
         }
     }
 
+    fun resetDailyTipAvailable() {
+    }
+
     fun resetNewDailyTipAvailable() {
         internNewDailyTipAvailable.value = false
+        repository.resetDailyTipAvailable()
     }
 
     fun isDailyTipLiked(dailyTip: DailyTip): Boolean {

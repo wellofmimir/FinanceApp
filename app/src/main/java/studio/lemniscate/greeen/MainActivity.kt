@@ -428,25 +428,19 @@ class MainActivity : ComponentActivity() {
                 mainActivityViewModel.loadUser()
                 val user by mainActivityViewModel.user.collectAsState()
 
-                var sectionIdentifier by remember { mutableStateOf(if (welcomeScreenViewModel.getFirstLaunchDone()) Screen.SPLASH else Screen.WELCOME)}
+                var sectionIdentifier by remember { mutableStateOf(Screen.SPLASH)}
                 var goalAchieved by remember { mutableStateOf(false) }
                 val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
 
                 val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
                 var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
-                val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
                 var isPagerBlocked by remember { mutableStateOf(false) }
 
                 val pagerState = rememberPagerState (
                     initialPage = 2,
                     pageCount = { 9 }
                 )
-
-                LaunchedEffect(newDailyTipAvailable) {
-                    if (newDailyTipAvailable)
-                        DailyEvents.newDailyTip(true)
-                }
 
                 LaunchedEffect(Unit) {
                     sectionIdentifier = when (user) {

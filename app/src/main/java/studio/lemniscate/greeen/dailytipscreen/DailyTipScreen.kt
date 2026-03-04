@@ -86,6 +86,10 @@ fun DailyTipScreen (
 
     val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
+    if (adremoverActive) {
+        dailyTipScreenViewModel.resetDailyTipAvailable()
+    }
+
     LaunchedEffect(Unit) {
         dailyTipScreenViewModel.getLikedTips()
         dailyTipScreenViewModel.fetchDailyTip()
