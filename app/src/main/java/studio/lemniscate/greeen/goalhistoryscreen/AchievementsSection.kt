@@ -13,7 +13,6 @@ import studio.lemniscate.greeen.homescreen.AchievementsSectionViewModel
 import studio.lemniscate.greeen.homescreen.ShareAchievementEvent
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
@@ -77,7 +76,7 @@ fun AchievementsSection (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
-    val goals by achievementsSectionViewModel.goals.collectAsStateWithLifecycle()
+    val goals by achievementsSectionViewModel.goals.collectAsState()
     achievementsSectionViewModel.getCompletedGoals(tutorialInformation.isActive)
 
     var showDialog by remember { mutableStateOf(false) }

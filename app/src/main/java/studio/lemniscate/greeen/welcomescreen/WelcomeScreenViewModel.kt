@@ -41,7 +41,9 @@ class WelcomeScreenViewModel (
             goal.tokenCount,
             ""
         )
+
         goalRepository.setCurrentGoal(newGoal)
+        setFirstLaunchDone()
     }
 
     fun updateUser(user: String) {

@@ -4,8 +4,6 @@ import studio.lemniscate.greeen.homescreen.TutorialInformation
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.SpanStyle
@@ -47,7 +47,7 @@ fun PunchCardSection (
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
     }
 
-    val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsStateWithLifecycle()
+    val tokenSoFar by punchCardSectionViewModel.tokenSoFar.collectAsState()
     val isPunchCardFull = tokenSoFar >= 15
 
     if (isPunchCardFull) { //15 token sind in der punchCardSection zu sehen

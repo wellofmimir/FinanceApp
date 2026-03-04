@@ -25,8 +25,7 @@ import androidx.compose.ui.Modifier
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -36,7 +35,7 @@ fun TokenBanner (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val currentGoal by goalsSectionViewModel.currentGoal.collectAsStateWithLifecycle()
+    val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
 
     LaunchedEffect(Unit) {
         goalsSectionViewModel.getCurrentGoal()

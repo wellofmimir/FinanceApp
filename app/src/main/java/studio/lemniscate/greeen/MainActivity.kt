@@ -63,8 +63,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
@@ -425,15 +423,6 @@ class MainActivity : ComponentActivity() {
                     settingsViewModel.getCurrency()
                 }
 
-                val dailyTipNotificationClicked = intent.getBooleanExtra("dailyTipNotificationClicked", false)
-
-                if (dailyTipNotificationClicked) {
-                    intent.putExtra("dailyTipNotificationClicked", false)
-                }
-
-                if (dailyTipScreenViewModel.newDailyTipAvailable.collectAsState().value)
-                    DailyEvents.newDailyTip(true)
-
                 var tutorialInformation by remember { mutableStateOf(value = TutorialInformation(false, TutorialStep.NONE))}
 
                 mainActivityViewModel.loadUser()
@@ -441,12 +430,12 @@ class MainActivity : ComponentActivity() {
 
                 var sectionIdentifier by remember { mutableStateOf(if (welcomeScreenViewModel.getFirstLaunchDone()) Screen.SPLASH else Screen.WELCOME)}
                 var goalAchieved by remember { mutableStateOf(false) }
-                val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsStateWithLifecycle()
+                val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
 
-                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
+                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
                 var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
-
+                val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
                 var isPagerBlocked by remember { mutableStateOf(false) }
 
                 val pagerState = rememberPagerState (
@@ -454,14 +443,12 @@ class MainActivity : ComponentActivity() {
                     pageCount = { 9 }
                 )
 
-                var startDestinationHandled by remember { mutableStateOf(false) }
+                LaunchedEffect(newDailyTipAvailable) {
+                    if (newDailyTipAvailable)
+                        DailyEvents.newDailyTip(true)
+                }
 
                 LaunchedEffect(Unit) {
-                    if (startDestinationHandled)
-                        return@LaunchedEffect
-
-                    startDestinationHandled = true
-
                     sectionIdentifier = when (user) {
                         "DUMMY", "" -> Screen.WELCOME
                         else -> Screen.SPLASH

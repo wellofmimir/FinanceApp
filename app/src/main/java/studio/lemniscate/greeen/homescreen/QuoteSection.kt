@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,7 +42,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.unit.TextUnit
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 private fun checkIfBadgeIsAvailable (
@@ -72,10 +72,10 @@ fun QuoteSection (
 ) {
     val colors = LocalAppColors.current
 
-    val quote by quoteViewModel.quote.collectAsStateWithLifecycle()
-    val quoteLiked by quoteViewModel.quoteLiked.collectAsStateWithLifecycle()
-    val isLoading by quoteViewModel.isLoading.collectAsStateWithLifecycle()
-    val likedQuotes by quoteViewModel.likedQuotes.collectAsStateWithLifecycle()
+    val quote by quoteViewModel.quote.collectAsState()
+    val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
+    val isLoading by quoteViewModel.isLoading.collectAsState()
+    val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
     val numberOfQuotesLiked = likedQuotes.size
 
     val maxFontSizeText: TextUnit = 20.sp
@@ -135,7 +135,25 @@ fun QuoteSection (
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .clickable (
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ){
+                    if (isLoading)
+                        return@clickable
+
+                    if (quoteViewModel.hasError())
+                        return@clickable
+
+                    quoteViewModel.toggleQuote(quote)
+
+                    checkIfBadgeIsAvailable (
+                        currentlyLiked = quoteLiked,
+                        numberOfQuotesLiked = numberOfQuotesLiked,
+                        badgesViewModel = badgesViewModel
+                    )
+                },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -146,24 +164,6 @@ fun QuoteSection (
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .size(44.dp)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ){
-                        if (isLoading)
-                            return@clickable
-
-                        if (quoteViewModel.hasError())
-                            return@clickable
-
-                        quoteViewModel.toggleQuote(quote)
-
-                        checkIfBadgeIsAvailable (
-                            currentlyLiked = quoteLiked,
-                            numberOfQuotesLiked = numberOfQuotesLiked,
-                            badgesViewModel = badgesViewModel
-                        )
-                    }
             )
 
             Spacer (

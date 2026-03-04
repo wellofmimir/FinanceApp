@@ -23,8 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +43,7 @@ fun GoalHistoryScreen (
 
     var punchCardFilled by remember { mutableStateOf(false) }
     var switchSections by remember { mutableStateOf(true) }
-    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(Unit) {
         totalGoalsAchievedSectionViewModel.getCompletedGoals()

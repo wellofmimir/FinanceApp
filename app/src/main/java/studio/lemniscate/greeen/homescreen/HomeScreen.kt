@@ -31,13 +31,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 
@@ -63,7 +63,7 @@ fun HomeScreen (
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
 
-    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsStateWithLifecycle()
+    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     Column (
         modifier = Modifier

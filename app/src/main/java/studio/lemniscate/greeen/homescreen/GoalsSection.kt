@@ -32,12 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.AnimatedVisibility
-
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
@@ -54,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,7 +59,7 @@ fun GoalsSection (
 {
     val colors = LocalAppColors.current
 
-    val goals by goalsSectionViewModel.goals.collectAsStateWithLifecycle()
+    val goals by goalsSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
     var menuOpen by remember { mutableStateOf(false) }

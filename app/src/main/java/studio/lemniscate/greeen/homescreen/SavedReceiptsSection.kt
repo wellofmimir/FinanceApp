@@ -34,8 +34,7 @@ import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
-
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -45,7 +44,7 @@ fun SavedReceiptsSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsStateWithLifecycle()
+    val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
 
     LaunchedEffect(Unit) {
         receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())

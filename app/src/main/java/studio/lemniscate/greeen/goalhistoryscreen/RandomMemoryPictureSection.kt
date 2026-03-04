@@ -28,8 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +50,7 @@ fun RandomMemoryPictureSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsStateWithLifecycle()
+    val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsState()
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 

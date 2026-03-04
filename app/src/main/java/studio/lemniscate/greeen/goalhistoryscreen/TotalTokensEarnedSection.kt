@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
@@ -38,7 +38,7 @@ fun TotalTokensEarnedSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val totalTokensEarned by totalGoalsAchievedSectionViewModel.totalTokensEarned.collectAsStateWithLifecycle()
+    val totalTokensEarned by totalGoalsAchievedSectionViewModel.totalTokensEarned.collectAsState()
 
     LaunchedEffect(Unit) {
         totalGoalsAchievedSectionViewModel.getTotalTokensEarned()

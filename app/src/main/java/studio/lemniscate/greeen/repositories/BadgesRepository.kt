@@ -26,12 +26,9 @@ class BadgesRepository private constructor (
     val wallpaperClient = WallpaperClient(SharedHttpClient.sharedClient)
 
     suspend fun fetchWallpaper(badgeIdentifier: BadgeIdentifier) {
-        val result = wallpaperClient.fetchWallpaper(badgeIdentifier)
+        val result = wallpaperClient.fetchWallpaper(badgeIdentifier) ?: return
 
-        if (result == null)
-            return
-
-        var badge = BadgeCatalog.getBadge(badgeIdentifier)
+        val badge = BadgeCatalog.getBadge(badgeIdentifier)
         val wallpaper = fileProvider.getWallpaper(badge.pathToImage)
 
         wallpaper.outputStream().use {
