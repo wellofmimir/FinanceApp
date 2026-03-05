@@ -51,6 +51,7 @@ class DailyTipWorker (
             database.resetDailyTipObtained()
             DailyEvents.newDailyTip(false)
 
+            val oldTip = repository.getDailyTip()
             val newTip = repository.fetchDailyTipFromServer()
 
             return@withContext if (newTip.title.contains("error") || newTip.tip.isEmpty()) {
@@ -59,18 +60,21 @@ class DailyTipWorker (
                 else
                     Result.retry()
             } else {
-                database.setDailyTipAvailable()
-                database.setDailyTipObtained()
-                database.setDailyTip (
-                    newTip.title,
-                    newTip.tip,
-                    newTip.short,
-                    newTip.category,
-                    newTip.pathToImage
-                )
+                if (newTip.tip != oldTip.tip) {
+                    database.setDailyTipAvailable()
+                    database.setDailyTipObtained()
+                    database.setDailyTip (
+                        newTip.title,
+                        newTip.tip,
+                        newTip.short,
+                        newTip.category,
+                        newTip.pathToImage
+                    )
 
-                DailyEvents.newDailyTip(true)
-                notifier.sendNewDailyTipAvailableNotification(newTip)
+                    DailyEvents.newDailyTip(true)
+                    notifier.sendNewDailyTipAvailableNotification(newTip)
+                }
+
                 Result.success()
             }
 
