@@ -2,9 +2,9 @@ package studio.lemniscate.greeen.homescreen
 
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.commonutils.*
 
 import kotlinx.coroutines.*
-import android.content.Context
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -35,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 
-import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
@@ -44,6 +43,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.DisposableEffect
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,30 +54,66 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 
-
 @Composable
 fun AddNewGoalMenu (
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onFinished: () -> Unit,
-    goalsSectionViewModel: GoalsSectionViewModel,
-    context: Context = LocalContext.current
+    goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var errorInInput by remember { mutableStateOf(false) }
+    var blockInput by remember { mutableStateOf(false) }
+    var blockFinish by remember { mutableStateOf(false) }
+
+    var titleText by remember { mutableStateOf("Add a New Goal") }
     var nameOfGoalText by remember { mutableStateOf("") }
+    var firstFocusOnGoalText by remember { mutableStateOf(true) }
+
     var amount by remember { mutableStateOf(0.0f) }
     var feedbackTrigger by remember { mutableStateOf(0) } // für den LaunchedEffect weiter unten
     var amountText by remember { mutableStateOf("") }
+    var firstFocusOnAmountText by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(expanded) {
+        if (expanded) {
+            nameOfGoalText = ""
+            amountText = ""
+            amount = 0.0f
+            firstFocusOnAmountText = true
+            firstFocusOnGoalText = true
+            errorMessage = null
+
+            blockInput = true
+            delay(500)
+
+            var text = "Enter your goal here ..."
+            text.forEach {
+                nameOfGoalText += it
+                delay(50)
+            }
+
+            delay(500)
+
+            text = "Enter the amount here ..."
+            text.forEach {
+                amountText += it
+                delay(50)
+            }
+
+            blockInput = false
+            blockFinish = true
+        }
+    }
 
     Column (
         verticalArrangement = Arrangement.Top,
@@ -119,7 +155,7 @@ fun AddNewGoalMenu (
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text (
-                    text = "New Goal",
+                    text = titleText,
                     color = colors.secondary,
                     fontSize = 24.sp
                 )
@@ -156,8 +192,23 @@ fun AddNewGoalMenu (
                     )
 
                     TextField (
+                        modifier = Modifier
+                            .onFocusChanged {
+                                if (blockInput)
+                                    return@onFocusChanged
+
+                                if (it.isFocused && firstFocusOnGoalText) {
+                                    nameOfGoalText = ""
+                                    firstFocusOnGoalText = false
+                                }
+
+                                blockFinish = false
+                            },
                         value = nameOfGoalText,
                         onValueChange = { newText ->
+                            if (blockInput)
+                                return@TextField
+
                             nameOfGoalText = newText
                         },
                         singleLine = true,
@@ -193,18 +244,27 @@ fun AddNewGoalMenu (
                     )
 
                     TextField (
+                        modifier = Modifier
+                            .onFocusChanged {
+                                if (blockInput)
+                                    return@onFocusChanged
+
+                                if (it.isFocused && firstFocusOnAmountText) {
+                                    amountText = ""
+                                    firstFocusOnAmountText = false
+                                }
+
+                                blockFinish = false
+                            },
                         value = amountText,
                         onValueChange = { newText ->
+                            if (blockInput)
+                                return@TextField
 
-                            val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
+                            if (!moneyRegex.matches(newText) && !newText.isBlank())
+                                return@TextField
 
-                            if (moneyRegex.matches(newText)) {
-                                amountText = newText
-                                amount = newText.toFloatOrNull() ?: 0f
-                            }
-
-                            if (newText.isEmpty())
-                                amountText = ""
+                            amountText = newText
                         },
                         singleLine = true,
                         colors = TextFieldDefaults.colors (
@@ -240,6 +300,12 @@ fun AddNewGoalMenu (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                tokenIdentifier = 0
+                            }
                     ) {
                         drawCircle (
                             color = colors.secondary,
@@ -251,6 +317,12 @@ fun AddNewGoalMenu (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                tokenIdentifier = 1
+                            }
                     ) {
                         drawCircle (
                             color = colors.secondary,
@@ -262,6 +334,12 @@ fun AddNewGoalMenu (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                tokenIdentifier = 2
+                            }
                     ) {
                         drawCircle (
                             color = colors.secondary,
@@ -273,6 +351,12 @@ fun AddNewGoalMenu (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                tokenIdentifier = 3
+                            }
                     ) {
                         drawCircle (
                             color = colors.secondary,
@@ -284,6 +368,12 @@ fun AddNewGoalMenu (
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                tokenIdentifier = 4
+                            }
                     ) {
                         drawCircle (
                             color = colors.secondary,
@@ -346,7 +436,7 @@ fun AddNewGoalMenu (
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    if (tokenIdentifier in 0..<4)
+                                    if (tokenIdentifier in 0..< 4)
                                         ++tokenIdentifier
                                 },
                             colorFilter = ColorFilter.tint(colors.secondary)
@@ -367,45 +457,38 @@ fun AddNewGoalMenu (
                 ) {
                     Button (
                         onClick = {
+                            if (blockInput) {
+                                errorMessage = "Steady your horses..."
+                                return@Button
+                            }
 
-                            if (amountText.isEmpty()) {
+                            if (blockFinish || firstFocusOnGoalText || firstFocusOnAmountText) {
                                 errorMessage = "Please fill in all fields."
-                                amount = 0.0f
-
-                                errorInInput = true
-
-                            } else if (amountText.toFloat() <= 0.0f) {
-                                errorMessage = "Please choose an amount greater than zero."
-                                amount = 0.0f
-
-                                errorInInput = true
-                            } else if (nameOfGoalText.length > 30) {
-                                errorMessage = "Goal name too long (max. 30 characters)."
-                                errorInInput = true
+                                return@Button
                             }
 
-                            if (!nameOfGoalText.isEmpty() && amount > 0.0f && !errorInInput) {
+                            val inputErrorMessage = validateInput("RandomUsername", nameOfGoalText, amountText)
 
-                                keyboardController?.hide()
-
-                                val amountOfTokens: Int = when (tokenIdentifier) {
-                                    0 -> 1
-                                    1 -> 2
-                                    2 -> 3
-                                    3 -> 4
-                                    4 -> 5
-                                    else -> 1
-                                }
-
-                                confirmed = true
-                                goalsSectionViewModel.insertGoal(nameOfGoalText, amount, "InProgress", amountOfTokens = amountOfTokens)
-                                goalsSectionViewModel.getCurrentGoal() //update für die GoalProgressSection
-                                goalsSectionViewModel.reloadGoals()
-
-                                amount = 0.0f
-                                nameOfGoalText = ""
-                                amountText = ""
+                            if (inputErrorMessage != null) {
+                                errorMessage = inputErrorMessage.message
+                                return@Button
                             }
+
+                            keyboardController?.hide()
+
+                            val amountOfTokens: Int = when (tokenIdentifier) {
+                                0 -> 1
+                                1 -> 2
+                                2 -> 3
+                                3 -> 4
+                                4 -> 5
+                                else -> 1
+                            }
+
+                            confirmed = true
+                            goalsSectionViewModel.insertGoal(nameOfGoalText, amount, "InProgress", amountOfTokens = amountOfTokens)
+                            goalsSectionViewModel.getCurrentGoal() //update für die GoalProgressSection
+                            goalsSectionViewModel.reloadGoals()
 
                             feedbackTrigger++
                         },
@@ -422,7 +505,7 @@ fun AddNewGoalMenu (
                     ) {
                         Text (
                             text = when {
-                                errorInInput -> "X"
+                                errorMessage != null -> "X"
                                 confirmed -> "✓"
                                 else -> "Add"
                             }
@@ -433,7 +516,6 @@ fun AddNewGoalMenu (
                         keyboardController?.hide()
 
                         delay (1000)
-                        errorInInput = false
                         errorMessage = null
 
                         if (confirmed) {
@@ -443,7 +525,6 @@ fun AddNewGoalMenu (
                         }
                     }
                 }
-
 
                 Row (
                     horizontalArrangement = Arrangement.Center,
