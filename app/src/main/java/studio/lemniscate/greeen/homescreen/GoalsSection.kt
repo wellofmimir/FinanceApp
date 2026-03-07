@@ -74,6 +74,7 @@ fun GoalsSection (
             expanded = false
             newGoalEntered = true
             goalsSectionViewModel.reloadGoals()
+            goalsSectionViewModel.setFirstGoalAddedDone()
         },
         goalsSectionViewModel = goalsSectionViewModel
     )

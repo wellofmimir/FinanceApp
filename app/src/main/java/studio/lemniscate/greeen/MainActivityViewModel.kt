@@ -29,10 +29,6 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
         return repository.getHomeScreenTutorialDone()
     }
 
-    fun resetHomeScreenTutorialDone() {
-        repository.resetHomeScreenTutorialDone()
-    }
-
     fun loadUser() {
         internUser.value = repository.getUser()
     }
@@ -45,19 +41,11 @@ class MainActivityViewModel(private val repository: UserRepository): ViewModel()
         repository.setReceiptsTutorialDone()
     }
 
-    fun resetReceiptsTutorialDone() {
-        repository.resetReceiptsTutorialDone()
-    }
-
     fun getGoalHistoryTutorialDone(): Boolean {
         return repository.getGoalHistoryTutorialDone()
     }
 
     fun setGoalHistoryTutorialDone() {
         repository.setGoalHistoryTutorialDone()
-    }
-
-    fun resetGoalHistoryTutorialDone() {
-        repository.resetGoalHistoryTutorialDone()
     }
 }

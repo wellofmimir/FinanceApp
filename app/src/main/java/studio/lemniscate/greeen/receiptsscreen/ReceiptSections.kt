@@ -168,7 +168,7 @@ fun AddReceiptMenu (
     )
 
     LaunchedEffect(expanded) {
-        if (!expanded)
+        if (receiptSectionsViewModel.addReceiptSectionTutorialDone())
             return@LaunchedEffect
 
         blockInput = true

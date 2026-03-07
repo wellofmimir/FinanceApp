@@ -150,4 +150,20 @@ class GoalRepository private constructor (private val database: FinanceAppDataba
     fun getTotalTokensEarned(): Int {
         return database.getTotalTokensEarned()
     }
+
+    fun firstGoalAddedDone(): Boolean {
+        return database.firstGoalAddedDone()
+    }
+
+    fun setFirstGoalAddedDone() {
+        database.setFirstGoalAddedDone()
+    }
+
+    fun firstGoalEditingDone(): Boolean {
+        return database.firstGoalEditingDone()
+    }
+
+    fun setFirstGoalEditingDone() {
+        database.setFirstGoalEditingDone()
+    }
 }

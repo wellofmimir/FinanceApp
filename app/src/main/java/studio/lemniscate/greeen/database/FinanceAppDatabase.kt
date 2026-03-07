@@ -164,7 +164,6 @@ class FinanceAppDatabase private constructor(context: Context) {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     }
-
     private val tutorialPreferences by lazy {
         context.getSharedPreferences("tutorialPreferences", Context.MODE_PRIVATE)
     }
@@ -179,6 +178,35 @@ class FinanceAppDatabase private constructor(context: Context) {
 
     private val currencyPreferences by lazy {
         context.getSharedPreferences("currencyPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun firstGoalEditingDone(): Boolean {
+        return securePreferences.getBoolean("firstGoalEditingDone", false)
+    }
+
+    fun setFirstGoalEditingDone() {
+        securePreferences.edit {
+            putBoolean("firstGoalEditingDone", true)
+        }
+    }
+    fun firstGoalAddedDone(): Boolean {
+        return securePreferences.getBoolean("firstGoalAddedDone", false)
+    }
+
+    fun setFirstGoalAddedDone() {
+        securePreferences.edit {
+            putBoolean("firstGoalAddedDone", true)
+        }
+    }
+
+    fun addReceiptSectionTutorialDone(): Boolean {
+        return securePreferences.getBoolean("addReceiptSectionTutorialDone", false)
+    }
+
+    fun setAddReceiptSectionTutorialDone() {
+        securePreferences.edit {
+            putBoolean("addReceiptSectionTutorialDone", true)
+        }
     }
 
     fun setFirstLaunchDone() {
@@ -199,13 +227,6 @@ class FinanceAppDatabase private constructor(context: Context) {
         securePreferences.edit {
             putBoolean("DailyTrendSeen", true)
             putString("DailyTrend", trendText)
-        }
-    }
-
-    fun resetRewardedAdAfterDailyTrendSeen() {
-        securePreferences.edit {
-            putBoolean("DailyTrendSeen", false)
-            putString("DailyTrend", "")
         }
     }
 

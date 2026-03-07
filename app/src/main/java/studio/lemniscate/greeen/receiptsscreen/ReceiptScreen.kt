@@ -50,7 +50,6 @@ fun ReceiptScreen (
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
     val activity = context as? Activity
     var receiptAdded by remember { mutableStateOf(false) }
-    var addReceiptMenuExpanded by remember { mutableStateOf(false) }
     val metricsScreenIsShown by metricsScreenViewModel.metricsScreenIsShown.collectAsState()
     val showAddReceiptSection by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
     val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
@@ -81,18 +80,20 @@ fun ReceiptScreen (
         }
     }
 
-    if (addReceiptMenuExpanded || showAddReceiptSection) {
+    if (showAddReceiptSection) {
         AddReceiptMenu (
-            expanded = addReceiptMenuExpanded,
+            expanded = true,
             onDismissRequest = {
-                addReceiptMenuExpanded = false
                 receiptSectionsViewModel.getReceipts()
                 receiptSectionsViewModel.closeAddReceiptSection()
+
                 onAddReceiptMenuClosed()
             },
             onReceiptSaved = {
-                receiptAdded = true
+                receiptSectionsViewModel.setAddReceiptSectionTutorialDone()
                 badgesViewModel.checkBadge(BadgeIdentifier.FIRST_RECEIPT)
+
+                receiptAdded = true
                 onReceiptAdded()
             },
             receiptSectionsViewModel = receiptSectionsViewModel
@@ -135,7 +136,6 @@ fun ReceiptScreen (
                     .weight(1f),
                 tutorialInformation = tutorialInformation,
                 onLogReceiptButtonClicked = {
-                    addReceiptMenuExpanded = true
                     receiptSectionsViewModel.showAddReceiptSection()
                 }
             )
@@ -146,7 +146,7 @@ fun ReceiptScreen (
                 tutorialInformation = tutorialInformation,
                 onSeeYourMetricsSectionButtonClicked = {
                     metricsScreenViewModel.setMetricsScreenIsShown()
-                    addReceiptMenuExpanded = false
+                    receiptSectionsViewModel.closeAddReceiptSection()
                 }
             )
         }

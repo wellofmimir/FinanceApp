@@ -124,4 +124,20 @@ class GoalsSectionViewModel(private val repository: GoalRepository) : ViewModel(
     fun reloadGoals() {
         internGoals.value = repository.getInProgressGoals()
     }
+
+    fun firstGoalAddedDone(): Boolean {
+        return repository.firstGoalAddedDone()
+    }
+
+    fun setFirstGoalAddedDone() {
+        repository.setFirstGoalAddedDone()
+    }
+
+    fun firstGoalEditingDone(): Boolean {
+        return repository.firstGoalEditingDone()
+    }
+
+    fun setFirstGoalEditingDone() {
+        repository.setFirstGoalEditingDone()
+    }
 }

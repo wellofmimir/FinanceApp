@@ -91,6 +91,9 @@ fun AddNewGoalMenu (
             firstFocusOnGoalText = true
             errorMessage = null
 
+            if (goalsSectionViewModel.firstGoalAddedDone())
+                return@LaunchedEffect
+
             blockInput = true
             delay(250)
 

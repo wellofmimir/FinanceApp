@@ -56,6 +56,7 @@ import java.math.RoundingMode
 fun EditGoalMenu (
     expanded: Boolean,
     goal: Goal?,
+    firstGoalEditingDone: Boolean,
     onDismissRequest: () -> Unit,
     onNewAmount: (String) -> Unit,
     onSaved: (String) -> Unit,
@@ -66,7 +67,6 @@ fun EditGoalMenu (
     val colors = LocalAppColors.current
 
     var blockInput by remember { mutableStateOf(false) }
-    var blockFinish by remember { mutableStateOf(false) }
 
     var isEditingInitialAmount by remember { mutableStateOf(false) }
     var isEditingSavedAmount by remember { mutableStateOf(false) }
@@ -89,6 +89,9 @@ fun EditGoalMenu (
 
     LaunchedEffect(expanded) {
         if (!expanded)
+            return@LaunchedEffect
+
+        if (firstGoalEditingDone)
             return@LaunchedEffect
 
         blockInput = true

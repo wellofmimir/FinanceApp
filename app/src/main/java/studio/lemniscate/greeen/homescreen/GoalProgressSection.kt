@@ -114,6 +114,7 @@ fun GoalProgressSection (
                 EditGoalMenu (
                     expandedEditMenu,
                     goal = currentGoal,
+                    firstGoalEditingDone = goalsSectionViewModel.firstGoalEditingDone(),
                     onDismissRequest = { expandedEditMenu = false },
                     onNewAmount = { amount ->
 
@@ -124,6 +125,7 @@ fun GoalProgressSection (
                         goalsSectionViewModel.updateGoal(updatedCurrentGoal)
                     },
                     onSaved = { savedAmount ->
+                        goalsSectionViewModel.setFirstGoalEditingDone()
 
                         val newSavedAmount = savedAmount.toFloat()
                         val updatedCurrentGoal = currentGoal

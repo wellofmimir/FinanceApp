@@ -109,4 +109,12 @@ class ReceiptRepository private constructor (private val database: FinanceAppDat
     fun getCurrency(): String {
         return database.getCurrency()
     }
+
+    fun addReceiptSectionTutorialDone(): Boolean {
+        return database.addReceiptSectionTutorialDone()
+    }
+
+    fun setAddReceiptSectionTutorialDone() {
+        database.setAddReceiptSectionTutorialDone()
+    }
 }

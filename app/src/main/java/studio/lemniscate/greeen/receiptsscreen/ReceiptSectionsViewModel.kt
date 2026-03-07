@@ -302,4 +302,12 @@ class ReceiptSectionsViewModel (
     fun closeAddReceiptSection() {
         internShowAddReceiptSection.value = false
     }
+
+    fun addReceiptSectionTutorialDone(): Boolean {
+        return repository.addReceiptSectionTutorialDone()
+    }
+
+    fun setAddReceiptSectionTutorialDone() {
+        repository.setAddReceiptSectionTutorialDone()
+    }
 }
