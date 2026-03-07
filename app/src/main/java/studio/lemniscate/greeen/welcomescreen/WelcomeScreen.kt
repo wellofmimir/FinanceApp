@@ -1,81 +1,253 @@
 package studio.lemniscate.greeen.welcomescreen
 
-import androidx.compose.runtime.Composable
+import studio.lemniscate.greeen.ui.theme.Emerald
+import studio.lemniscate.greeen.ui.theme.Pistachio
+import studio.lemniscate.greeen.database.Goal
+import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+
+import kotlinx.coroutines.delay
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.runtime.remember
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
-import studio.lemniscate.greeen.ui.theme.Pistachio
 import androidx.compose.foundation.layout.fillMaxWidth
+
+import android.content.Context
+import android.content.res.Resources
+
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.Arrangement
+
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.IntSize
-import studio.lemniscate.greeen.ui.theme.Emerald
-import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModel
-import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
-import android.content.res.Resources
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+import kotlin.math.exp
 
-import studio.lemniscate.greeen.database.FinanceAppDatabase
-import studio.lemniscate.greeen.database.Goal
-import studio.lemniscate.greeen.repositories.GoalRepository
-import studio.lemniscate.greeen.R
-import studio.lemniscate.greeen.repositories.UserRepository
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import java.math.RoundingMode
+
+data class ValidationError (
+    val title: String,
+    val message: String
+)
+
+private val usernameRegex = Regex("^[\\p{L}]+([ _-][\\p{L}]+)*$")
+private val noEmojis = Regex("^[\\p{L}0-9_-]+$")
+private val goalRegex = Regex("^[\\p{L}]+([ _-][\\p{L}]+)*$")
+val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
+
+fun validateInput (
+    username: String,
+    goal: String,
+    amountText: String
+): ValidationError? {
+
+    val name = username.trim()
+    val goalText = goal.trim()
+
+    return when {
+
+        name.isBlank() ->
+            ValidationError (
+                "Almost there...",
+                "Please enter your name to continue."
+            )
+
+        name.length < 2 ->
+            ValidationError (
+                "A bit longer.",
+                "Your name should have at least 2 characters."
+            )
+
+        name.length > 20 ->
+            ValidationError (
+                "A bit shorter...",
+                "Please enter a shorter name ... maybe your nickname?"
+            )
+
+        !name.matches(noEmojis) ->
+            ValidationError (
+                "No emojis...",
+                "Please use only letters, numbers, _ or - in your name"
+            )
+
+        !name.matches(usernameRegex) ->
+            ValidationError (
+                "Invalid name...",
+                "Please use only letters, numbers, _ or -."
+            )
+
+        goalText.isBlank() ->
+            ValidationError (
+                "No goal set...",
+                "Please add a goal to continue."
+            )
+
+        goalText.length < 3 ->
+            ValidationError (
+                "A bit longer...",
+                "Please enter a goal with at least 3 characters."
+            )
+
+        goalText.length > 35 ->
+            ValidationError (
+                "A bit shorter...",
+                "Please enter a shorter goal."
+            )
+
+        goalText.all { it.isDigit() } ->
+            ValidationError (
+                "Add some words...",
+                "Your goal should describe something, not just numbers."
+            )
+
+        !goalText.matches(goalRegex) ->
+            ValidationError (
+                "Invalid characters...",
+                "Please avoid special symbols in your goal."
+            )
+
+        goalText.equals(name, ignoreCase = true) ->
+            ValidationError (
+                "Be more specific...",
+                "Your goal should describe something you want to achieve."
+            )
+
+        amountText.isBlank() -> {
+            ValidationError (
+                "No amount set...",
+                "Please enter an amount to continue."
+            )
+        }
+
+        amountText.toFloat() <= 0f ->
+            ValidationError (
+                "Just one more thing...",
+                "Please enter an amount above zero."
+            )
+
+        amountText.toFloat() > 100_000_000f ->
+            ValidationError (
+                "Step by step...",
+                "You're thinking big ... please enter a smaller amount."
+            )
+
+        !amountText.matches(moneyRegex) ->
+            ValidationError (
+                "Please be positive...",
+                "Please enter a value that represents money. (e.g. 2400, 15.99, 950.50)"
+            )
+
+        else -> null
+    }
+}
 
 @Composable
 fun FirstGoalMenu (
     expanded: Boolean,
     onDismissRequested: (errorMessage: Pair<String, String>) -> Unit,
-    onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit) {
+    onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit
+) {
+    var blockInput by remember { mutableStateOf(true) }
+
+    var createTheFirstGoalText by remember { mutableStateOf("") }
+    var enterYourNameText by remember { mutableStateOf("") }
+    var enterYourGoalText by remember { mutableStateOf("") }
+    var enterAmountText by remember { mutableStateOf("") }
+
+    LaunchedEffect(expanded) {
+        if (!expanded)
+            return@LaunchedEffect
+
+        blockInput = true
+        createTheFirstGoalText = ""
+        enterYourNameText = ""
+        enterYourGoalText = ""
+        enterAmountText = ""
+
+        var text = "Let's create your first goal!"
+
+        text.forEach {
+            createTheFirstGoalText += it
+            delay(50)
+        }
+
+        delay(1000)
+
+        text = "Enter your name here ..."
+
+        text.forEach {
+            enterYourNameText += it
+            delay(50)
+        }
+
+        delay(500)
+
+        text = "Enter your goal here ..."
+
+        text.forEach {
+            enterYourGoalText += it
+            delay(50)
+        }
+
+        delay(500)
+
+        text = "Enter the amount here ..."
+
+        text.forEach {
+            enterAmountText += it
+            delay(50)
+        }
+
+        blockInput = false
+    }
 
     var username by remember { mutableStateOf("") }
     var goal by remember {mutableStateOf("")}
     var amountText by remember { mutableStateOf("") }
-    var amount by remember { mutableStateOf(0.0f) }
     var chosenCurrency by remember {mutableStateOf("$")}
     var differentCurrency by remember {mutableStateOf("")}
 
@@ -85,22 +257,11 @@ fun FirstGoalMenu (
     DropdownMenu (
         expanded = expanded,
         onDismissRequest = {
-            username = ""
-            goal = ""
-            amountText = ""
-            amount = 0.0f
 
-            var errorMessage: Pair<String, String> = "" to ""
+            val errorMessage = validateInput(username, goal, amountText)
 
-            if (username.isEmpty()) {
-                errorMessage = "Almost there..." to "Please enter your name to continue."
-            } else if (goal.isEmpty()) {
-                errorMessage = "No goal set..." to "Please add a goal to continue."
-            } else if (amount == 0.0f) {
-                errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
-            }
-
-            onDismissRequested(errorMessage)
+            if (errorMessage != null)
+                onDismissRequested(errorMessage.title to errorMessage.message)
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -133,11 +294,14 @@ fun FirstGoalMenu (
                 TextField (
                     value = username,
                     onValueChange = {
+                        if (blockInput)
+                            return@TextField
+
                         username = it
                     },
                     placeholder = {
                         Text (
-                            text = "Your name...",
+                            text = enterYourNameText,
                             color = Emerald,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold,
@@ -195,7 +359,7 @@ fun FirstGoalMenu (
                 )
 
                 Text (
-                    text = "Let's Create Your First Goal!",
+                    text = createTheFirstGoalText,
                     color = Emerald,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
@@ -238,11 +402,14 @@ fun FirstGoalMenu (
                 TextField (
                     value = goal,
                     onValueChange = {
+                        if (blockInput)
+                            return@TextField
+
                         goal = it
                     },
                     placeholder = {
                         Text (
-                            text = "Goal Name...",
+                            text = enterYourGoalText,
                             color = Emerald,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.fillMaxWidth()
@@ -304,18 +471,24 @@ fun FirstGoalMenu (
                 TextField (
                     value = amountText,
                     onValueChange = {
+                        if (blockInput)
+                            return@TextField
+
+                        if (!it.matches(moneyRegex) && it.isNotEmpty())
+                            return@TextField
+
                         amountText = it
                     },
                     placeholder = {
                         Text (
-                            text = "How much cash are you saving?",
+                            text = enterAmountText,
                             color = Emerald,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.fillMaxWidth()
                         )
                     },
                     singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(
+                    textStyle = LocalTextStyle.current.copy (
                         textAlign = TextAlign.Start,
                         color = Emerald,
                     ),
@@ -333,11 +506,6 @@ fun FirstGoalMenu (
                         keyboardType = KeyboardType.Number
                     ),
                     modifier = Modifier
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                        }
                         .padding(start = 10.dp, end = 10.dp)
                 )
             }
@@ -627,39 +795,14 @@ fun FirstGoalMenu (
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    var errorMessage: Pair<String, String> = "" to ""
+                                    val errorMessage = validateInput(username, goal, amountText)
 
-                                    if (username.isEmpty()) {
-                                        errorMessage = "Almost there..." to "Please enter your name to continue."
-                                    } else if (goal.isEmpty()) {
-                                        errorMessage = "No goal set..." to "Please add a goal to continue."
-                                    } else if (amountText.isEmpty()) {
-                                        errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
-                                    }
-
-                                    if (errorMessage.first.isNotEmpty() && errorMessage.second.isNotEmpty()) {
-                                        onDismissRequested(errorMessage)
+                                    if (errorMessage != null) {
+                                        onDismissRequested(errorMessage.title to errorMessage.message)
                                         return@clickable
                                     }
 
-                                    val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
-
-                                    if (moneyRegex.matches(amountText)) {
-                                        amount = amountText.toFloatOrNull() ?: 0f
-                                        onFinished(username, goal, amount, chosenCurrency)
-                                    } else {
-
-                                        if (amount == 0.0f) {
-                                            errorMessage = "Just one more thing..." to "Please enter a valid amount to your goal."
-                                        } else if (amount < 0.0f) {
-                                            errorMessage = "Please be positive..." to "Please enter an amount above 0. :)"
-                                        }
-
-                                        if (errorMessage.first.isNotEmpty() && errorMessage.second.isNotEmpty()) {
-                                            onDismissRequested(errorMessage)
-                                            return@clickable
-                                        }
-                                    }
+                                    onFinished(username, goal, amountText.toFloat(), chosenCurrency)
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
                             contentDescription = "Ring1_5"
@@ -1088,8 +1231,7 @@ fun WelcomeScreen (
                 .background (
                     color = colors.primary,
                     shape = RoundedCornerShape(12.dp)
-                )
-                .height(185.dp),
+                ),
             onDismissRequest = {
                 showErrorMessage = false
             },
@@ -1454,36 +1596,16 @@ fun WelcomeScreen (
                 FirstGoalMenu (
                     expanded = firstGoalMenuExpanded,
                     onDismissRequested = {
-
                         errorMessage = it
                         showErrorMessage = true
                     },
                     onFinished = { newUsername, firstGoal, savingAmount, currency  ->
-
                         username = newUsername
                         goal = firstGoal
                         amount = savingAmount
                         firstGoalMenuExpanded = false
                         firstTokenMenuExpanded = true
                         chosenCurrency = currency
-
-                        if (username.isEmpty()) {
-                            errorMessage = "Almost there..." to "Please enter your name to continue."
-                            showErrorMessage = true
-                            return@FirstGoalMenu
-                        }
-
-                        if (goal.isEmpty()) {
-                            errorMessage = "No goal set..." to "Please add a goal to continue."
-                            showErrorMessage = true
-                            return@FirstGoalMenu
-                        }
-
-                        if (amount == 0.0f) {
-                            errorMessage = "Just one more thing..." to "Please enter an amount to your goal."
-                            showErrorMessage = true
-                            return@FirstGoalMenu
-                        }
                     }
                 )
             }
