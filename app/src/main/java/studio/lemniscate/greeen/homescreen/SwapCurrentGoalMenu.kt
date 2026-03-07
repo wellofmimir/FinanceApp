@@ -1,14 +1,18 @@
 package studio.lemniscate.greeen.homescreen
 
-import android.widget.Toast
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+
+import kotlinx.coroutines.delay
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,41 +21,44 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+
+import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.DropdownMenuItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwapCurrentGoalMenu (
     expanded: Boolean,
     onDismissRequest: () -> Unit,
-    goalsSectionViewModel: GoalsSectionViewModel,
-    context: Context = LocalContext.current
+    goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
     val goals by goalsSectionViewModel.goals.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
     var menuOpen by remember { mutableStateOf(false) }
     var goalIdToDelete: Int = 0
+
+    val titleText = when(goals.isEmpty()) {
+        true -> "No Goals Available"
+        false -> "Swap Your Current Goal"
+    }
 
     DropdownMenu (
         expanded = expanded,
@@ -81,7 +88,7 @@ fun SwapCurrentGoalMenu (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text (
-                text = "Swap current goal",
+                text = titleText,
                 color = colors.secondary,
                 fontSize = 24.sp
             )

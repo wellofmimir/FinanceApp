@@ -35,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 
-
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,7 +42,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.DisposableEffect
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +58,8 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 
 @Composable
 fun AddNewGoalMenu (
@@ -78,7 +78,6 @@ fun AddNewGoalMenu (
     var nameOfGoalText by remember { mutableStateOf("") }
     var firstFocusOnGoalText by remember { mutableStateOf(true) }
 
-    var amount by remember { mutableStateOf(0.0f) }
     var feedbackTrigger by remember { mutableStateOf(0) } // für den LaunchedEffect weiter unten
     var amountText by remember { mutableStateOf("") }
     var firstFocusOnAmountText by remember { mutableStateOf(true) }
@@ -88,13 +87,12 @@ fun AddNewGoalMenu (
         if (expanded) {
             nameOfGoalText = ""
             amountText = ""
-            amount = 0.0f
             firstFocusOnAmountText = true
             firstFocusOnGoalText = true
             errorMessage = null
 
             blockInput = true
-            delay(500)
+            delay(250)
 
             var text = "Enter your goal here ..."
             text.forEach {
@@ -191,11 +189,16 @@ fun AddNewGoalMenu (
                             .fillMaxWidth(0.3f)
                     )
 
+                    val focusRequester = remember { FocusRequester() }
+
                     TextField (
                         modifier = Modifier
+                            .focusRequester(focusRequester)
                             .onFocusChanged {
-                                if (blockInput)
+                                if (blockInput) {
+                                    focusRequester.freeFocus()
                                     return@onFocusChanged
+                                }
 
                                 if (it.isFocused && firstFocusOnGoalText) {
                                     nameOfGoalText = ""
@@ -243,11 +246,16 @@ fun AddNewGoalMenu (
                             .fillMaxWidth(0.3f)
                     )
 
+                    val focusRequester = remember { FocusRequester() }
+
                     TextField (
                         modifier = Modifier
+                            .focusRequester(focusRequester)
                             .onFocusChanged {
-                                if (blockInput)
+                                if (blockInput) {
+                                    focusRequester.freeFocus()
                                     return@onFocusChanged
+                                }
 
                                 if (it.isFocused && firstFocusOnAmountText) {
                                     amountText = ""
@@ -486,7 +494,7 @@ fun AddNewGoalMenu (
                             }
 
                             confirmed = true
-                            goalsSectionViewModel.insertGoal(nameOfGoalText, amount, "InProgress", amountOfTokens = amountOfTokens)
+                            goalsSectionViewModel.insertGoal(nameOfGoalText, amountText.toFloat(), "InProgress", amountOfTokens = amountOfTokens)
                             goalsSectionViewModel.getCurrentGoal() //update für die GoalProgressSection
                             goalsSectionViewModel.reloadGoals()
 
@@ -514,15 +522,10 @@ fun AddNewGoalMenu (
 
                     LaunchedEffect (feedbackTrigger) {
                         keyboardController?.hide()
+                        delay(1000)
 
-                        delay (1000)
-                        errorMessage = null
-
-                        if (confirmed) {
-                            amountText = ""
-                            nameOfGoalText = ""
+                        if (confirmed)
                             onFinished()
-                        }
                     }
                 }
 

@@ -47,6 +47,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
+import kotlinx.coroutines.delay
 import java.math.RoundingMode
 
 @Composable
@@ -57,21 +59,27 @@ fun EditGoalMenu (
     onDismissRequest: () -> Unit,
     onNewAmount: (String) -> Unit,
     onSaved: (String) -> Unit,
+    onDelete: (Goal) -> Unit,
     currentGoalText: String,
     currency: String
 ) {
     val colors = LocalAppColors.current
 
+    var blockInput by remember { mutableStateOf(false) }
+    var blockFinish by remember { mutableStateOf(false) }
+
     var isEditingInitialAmount by remember { mutableStateOf(false) }
     var isEditingSavedAmount by remember { mutableStateOf(false) }
 
     var amountText by remember { mutableStateOf("") }
+    var amountTextFontSize by remember { mutableStateOf(24.sp) }
     var originalAmountText by remember { mutableStateOf(amountText) } //einfach nur der Erinnerungswert, falls das Editieren verworfen wird
     var amountTextAsTextFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalAmountText))
     }
 
     var savedAmountText by remember { mutableStateOf("" ) }
+    var savedAmountTextFontSize by remember { mutableStateOf(24.sp) }
     var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
     var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalSavedAmountText))
@@ -80,13 +88,48 @@ fun EditGoalMenu (
     var hasChanged by remember { mutableStateOf(false) }
 
     LaunchedEffect(expanded) {
+        if (!expanded)
+            return@LaunchedEffect
+
+        blockInput = true
+
+        amountText = ""
+        originalAmountText = ""
+        amountTextFontSize = 16.sp
+
+        savedAmountText = ""
+        originalSavedAmountText = ""
+        savedAmountTextFontSize = 16.sp
+
+        delay(250)
+
+        var text = "Tap to change the amount..."
+        text.forEach {
+            amountText += it
+            delay(50)
+        }
+
+        delay(250)
+
+        text = "Tap to change how much you saved..."
+        text.forEach {
+            savedAmountText += it
+            delay(50)
+        }
+
+        delay(1000)
+
         goal?.let {
             amountText = goal.amount.toString()
             originalAmountText = amountText
+            amountTextFontSize = 24.sp
 
             savedAmountText = goal.saved.toString()
             originalSavedAmountText = savedAmountText
+            savedAmountTextFontSize = 24.sp
         }
+
+        blockInput = false
     }
 
     LaunchedEffect(goal) {
@@ -244,6 +287,10 @@ fun EditGoalMenu (
                         modifier = Modifier
                             .focusRequester(focusRequester)
                             .onFocusChanged { focusState ->
+                                if (blockInput) {
+                                    focusRequester.freeFocus()
+                                    return@onFocusChanged
+                                }
 
                                 if (focusState.hasFocus) {
                                     isEditingSavedAmount = false
@@ -267,13 +314,16 @@ fun EditGoalMenu (
                     Text (
                         text = amountText,
                         color = colors.secondary,
-                        fontSize = 24.sp,
+                        fontSize = amountTextFontSize,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
+                                if (blockInput)
+                                    return@clickable
+
                                 isEditingInitialAmount = true
                                 isEditingSavedAmount = false
                             }
@@ -335,6 +385,10 @@ fun EditGoalMenu (
                         modifier = Modifier
                             .focusRequester(focusRequester)
                             .onFocusChanged { focusState ->
+                                if (blockInput) {
+                                    focusRequester.freeFocus()
+                                    return@onFocusChanged
+                                }
 
                                 if (focusState.hasFocus) {
                                     isEditingInitialAmount = false
@@ -360,13 +414,16 @@ fun EditGoalMenu (
                     Text (
                         text = savedAmountText,
                         color = colors.secondary,
-                        fontSize = 24.sp,
+                        fontSize = savedAmountTextFontSize,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clickable (
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
+                                if (blockInput)
+                                    return@clickable
+
                                 isEditingSavedAmount = true
                                 isEditingInitialAmount = false
                             }
@@ -434,6 +491,19 @@ fun EditGoalMenu (
                     )
                 }
             }
+
+            Text (
+                text = "Delete",
+                fontSize = 9.sp,
+                color = colors.secondary,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clickable() {
+                        goal?.let {
+                            onDelete(goal)
+                        }
+                    }
+            )
 
             Spacer (
                 modifier = Modifier

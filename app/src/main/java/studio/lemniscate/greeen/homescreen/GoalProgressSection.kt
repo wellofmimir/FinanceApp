@@ -142,6 +142,10 @@ fun GoalProgressSection (
                             badgesViewModel.checkBadge(BadgeIdentifier.FIRST_GOAL)
                         }
                     },
+                    onDelete = {
+                        goalsSectionViewModel.deleteGoal(it.id)
+                        expandedEditMenu = false
+                    },
                     currentGoalText,
                     currency = settingsViewModel.currency.collectAsState().value
                 )
