@@ -1011,6 +1011,12 @@ fun FirstTokenMenu (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    tokenIdentifier = 0
+                                }
                         ) {
                             drawCircle (
                                 color = Emerald,
@@ -1022,6 +1028,12 @@ fun FirstTokenMenu (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
+                                .clickable (
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    tokenIdentifier = 1
+                                }
                         ) {
                             drawCircle (
                                 color = Emerald,
@@ -1033,6 +1045,12 @@ fun FirstTokenMenu (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    tokenIdentifier = 2
+                                }
                         ) {
                             drawCircle (
                                 color = Emerald,
@@ -1044,6 +1062,12 @@ fun FirstTokenMenu (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    tokenIdentifier = 3
+                                }
                         ) {
                             drawCircle (
                                 color = Emerald,
@@ -1055,6 +1079,12 @@ fun FirstTokenMenu (
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    tokenIdentifier = 4
+                                }
                         ) {
                             drawCircle (
                                 color = Emerald,
@@ -1204,8 +1234,7 @@ fun FirstTokenMenu (
 fun WelcomeScreen (
     onFinished: () -> Unit,
     splashMode: Boolean,
-    welcomeScreenViewModel: WelcomeScreenViewModel,
-    context: Context = LocalContext.current
+    welcomeScreenViewModel: WelcomeScreenViewModel
 ) {
     val colors = LocalAppColors.current
 
