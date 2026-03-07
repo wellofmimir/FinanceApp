@@ -170,8 +170,4 @@ fun GoalHistoryScreen (
             tutorialInformation = tutorialInformation
         )
     }
-
-
-
-
 }

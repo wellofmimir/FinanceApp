@@ -5,20 +5,27 @@ import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.collectAsState
+
 
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.text.SpanStyle
@@ -32,7 +39,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.Color
+
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import studio.lemniscate.greeen.R
 
 @Composable
 fun PunchCardSection (
@@ -42,6 +56,15 @@ fun PunchCardSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp
+
+    val fontSize = when {
+        screenWidth <= 320 -> 12.sp
+        screenWidth <= 360 -> 14.sp
+        screenWidth <= 400 -> 16.sp
+        else -> 16.sp
+    }
 
     LaunchedEffect(Unit) {
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
@@ -56,9 +79,7 @@ fun PunchCardSection (
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
 
         onPunchCardFilled()
-
     } else {
-
         Column (
             modifier = modifier
                 .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_PUNCHCARD) 0.1f else 1.0f)
@@ -66,61 +87,72 @@ fun PunchCardSection (
                     color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .padding(4.dp)
+                .padding(4.dp),
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             var index = 0
 
-            for (i in 1..5) {
+            Spacer (
+                modifier = Modifier
+                    .padding(4.dp)
+            )
 
+            repeat(5) {
                 Row (
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    for (j in 1 .. 3) {
-
+                    repeat(3) {
                         val filled = index < tokenSoFar
 
-                        Canvas (
+                        Image (
                             modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                        ) {
-                            drawCircle (
-                                color = colors.background,
-                                style = if (filled) Fill else Stroke(4f)
-                            )
-                        }
+                                .background (
+                                    shape = CircleShape,
+                                    color = Color.Transparent
+                                )
+                                .border (
+                                    width = if (filled) 0.dp else 1.dp,
+                                    shape = CircleShape,
+                                    color = if (filled) colors.secondary else colors.primary
+                                )
+                                .clip(CircleShape),
+                            painter = painterResource(R.drawable.ringmitduennemrand_foreground),
+                            colorFilter = ColorFilter.tint(if (filled) colors.primary else colors.secondary),
+                            contentDescription = "RingBild"
+                        )
 
                         ++index
                     }
+
                 }
             }
 
-            Column (
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Spacer (
                 modifier = Modifier
-                    .padding(start = 4.dp)
-            ) {
-                Spacer (
-                    modifier = Modifier
-                        .padding(4.dp)
-                )
+                    .padding(2.dp)
+            )
 
-                Text (
-                    text = buildAnnotatedString {
-                        withStyle (
-                            style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.primary)
-                        ) {
-                            append("Treat yourself ")
-                        }
-                        append("once this card is completed.")
-                    },
-                    fontSize = 16.sp,
-                    color = colors.background,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                text = buildAnnotatedString {
+                    withStyle (
+                        style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.primary)
+                    ) {
+                        append("Treat yourself ")
+                    }
+                    append("once this card is completed.")
+                },
+                fontSize = fontSize,
+                color = colors.background,
+                textAlign = TextAlign.Center,
+                maxLines = 2
+            )
         }
     }
 }

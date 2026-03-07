@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 
 import androidx.compose.material3.Text
@@ -46,7 +47,7 @@ fun TotalGoalsAchievedSection (
         totalGoalsAchievedSectionViewModel.getCompletedGoals()
     }
 
-    Box (
+    Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_TOTAL_GOALS) 0.1f else 1.0f)
             .fillMaxWidth()
@@ -54,50 +55,35 @@ fun TotalGoalsAchievedSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.spacedBy (
+            space = 4.dp,
+            alignment = Alignment.CenterVertically
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column (
-            modifier = Modifier
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val textSize = when (goals.size) {
-                in 0..9 -> 128.sp
-                in 10..99 -> 128.sp
-                in 100..999 -> 92.sp
-                in 1000..9999 -> 64.sp
-                in 10000..99999 -> 32.sp
-                else -> 16.sp
-            }
-
-            if (goals.size.toString().length < 2) {
-                Spacer (
-                    modifier = Modifier
-                        .weight(1f)
-                )
-            }
-
-            Text (
-                text = if (goals.isEmpty()) "0" else goals.size.toString(),
-                textAlign = TextAlign.Center,
-                fontSize = textSize,
-                fontWeight = FontWeight.Bold,
-                color = colors.textPrimary
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .weight(1f)
-            )
-
-            Text (
-                text = "total goals achieved",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors.textPrimary
-            )
+        val textSize = when (goals.size) {
+            in 0..9 -> 100.sp
+            in 10..99 -> 100.sp
+            in 100..999 -> 80.sp
+            in 1000..9999 -> 64.sp
+            in 10000..99999 -> 32.sp
+            else -> 16.sp
         }
+
+        Text (
+            text = if (goals.isEmpty()) "0" else goals.size.toString(),
+            textAlign = TextAlign.Center,
+            fontSize = textSize,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary
+        )
+
+        Text (
+            text = "total goals achieved",
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary
+        )
     }
 }

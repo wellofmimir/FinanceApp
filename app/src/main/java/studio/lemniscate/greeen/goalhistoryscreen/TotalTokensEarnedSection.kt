@@ -44,7 +44,7 @@ fun TotalTokensEarnedSection (
         totalGoalsAchievedSectionViewModel.getTotalTokensEarned()
     }
 
-    Box (
+    Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.GOALS_TOTAL_TOKENS) 0.1f else 1.0f)
             .fillMaxWidth()
@@ -52,51 +52,36 @@ fun TotalTokensEarnedSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.spacedBy (
+            space = 4.dp,
+            alignment = Alignment.CenterVertically
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column (
-            modifier = Modifier
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val textSize = when (totalTokensEarned.toString().length) {
-                1 -> 128.sp
-                2 -> 128.sp
-                3 -> 92.sp
-                4 -> 64.sp
-                5 -> 32.sp
-                6 -> 16.sp
-                else -> 16.sp
-            }
-
-            if (totalTokensEarned.toString().length < 2) {
-                Spacer (
-                    modifier = Modifier
-                        .weight(1f)
-                )
-            }
-
-            Text (
-                text = totalTokensEarned.toString(),
-                textAlign = TextAlign.Center,
-                fontSize = textSize,
-                fontWeight = FontWeight.Bold,
-                color = colors.textPrimary
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .weight(1f)
-            )
-
-            Text (
-                text = "lifetime tokens",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors.textPrimary
-            )
+        val textSize = when (totalTokensEarned.toString().length) {
+            1 -> 100.sp
+            2 -> 100.sp
+            3 -> 80.sp
+            4 -> 64.sp
+            5 -> 32.sp
+            6 -> 16.sp
+            else -> 16.sp
         }
+
+        Text (
+            text = totalTokensEarned.toString(),
+            textAlign = TextAlign.Center,
+            fontSize = textSize,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary
+        )
+
+        Text (
+            text = "lifetime tokens",
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary
+        )
     }
 }
