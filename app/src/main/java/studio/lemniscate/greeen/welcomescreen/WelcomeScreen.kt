@@ -138,7 +138,7 @@ fun FirstGoalMenu (
         expanded = expanded,
         onDismissRequest = {
 
-            val errorMessage = validateInput(username, goal, amountText)
+            val errorMessage = validateInput(username, goal, amountText, "RandomReceipt")
 
             if (errorMessage != null)
                 onDismissRequested(errorMessage.title to errorMessage.message)
@@ -675,7 +675,7 @@ fun FirstGoalMenu (
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() }
                                 ) {
-                                    val errorMessage = validateInput(username, goal, amountText)
+                                    val errorMessage = validateInput(username, goal, amountText, "RandomReceipt")
 
                                     if (errorMessage != null) {
                                         onDismissRequested(errorMessage.title to errorMessage.message)

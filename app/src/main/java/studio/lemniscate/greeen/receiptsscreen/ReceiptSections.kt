@@ -10,7 +10,6 @@ import studio.lemniscate.greeen.commonutils.shareToFacebookMessenger
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import studio.lemniscate.greeen.commonutils.FileProvider.*
 
 import java.time.format.DateTimeFormatter
 import java.time.Instant
@@ -20,11 +19,11 @@ import java.io.File
 import java.math.RoundingMode
 
 import kotlin.toBigDecimal
+import kotlinx.coroutines.delay
 
 import android.os.Build
 import androidx.core.content.FileProvider
 import android.Manifest
-import android.net.Uri
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -38,10 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.text.font.FontVariation.Settings
 
 import android.content.Context
-import android.content.Intent
 
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
@@ -110,6 +107,11 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.AlertDialog
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import studio.lemniscate.greeen.commonutils.moneyRegex
+import studio.lemniscate.greeen.commonutils.validateInput
 
 enum class Timespan (id: Int) {
 
@@ -125,12 +127,19 @@ enum class Timespan (id: Int) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddReceiptMenu (
+    expanded: Boolean,
     onDismissRequest: () -> Unit,
     onReceiptSaved:() -> Unit,
     receiptSectionsViewModel: ReceiptSectionsViewModel,
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+
+    var blockInput by remember { mutableStateOf(false) }
+    var blockFinish by remember { mutableStateOf(false) }
+
+    var firstFocusOnReceiptName by remember { mutableStateOf(true) }
+    var firstFocusOnAmount by remember { mutableStateOf(true) }
 
     val expenses by receiptSectionsViewModel.expenses.collectAsState()
     var expenseCategory by remember { mutableStateOf("") }
@@ -157,6 +166,32 @@ fun AddReceiptMenu (
             }
         }
     )
+
+    LaunchedEffect(expanded) {
+        if (!expanded)
+            return@LaunchedEffect
+
+        blockInput = true
+        blockFinish = true
+        delay(250)
+
+        var text = "Enter the receipt name here..."
+        text.forEach {
+            nameOfReceipt += it
+            delay(50)
+        }
+
+        delay(500)
+
+        text = "Enter the receipt sum here..."
+        text.forEach {
+            amountText += it
+            delay(50)
+        }
+
+        blockInput = false
+        blockFinish = true
+    }
 
     val resetAndDismiss = {
         amountText = ""
@@ -343,7 +378,25 @@ fun AddReceiptMenu (
                     .padding(start = 2.dp)
             )
 
+            val focusRequester = remember { FocusRequester() }
+
             TextField (
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        if (blockInput) {
+                            focusRequester.freeFocus()
+                            return@onFocusChanged
+                        }
+
+                        if (it.isFocused && firstFocusOnReceiptName) {
+                            firstFocusOnReceiptName = false
+                            nameOfReceipt = ""
+                            focusRequester.requestFocus()
+                        }
+
+                        blockFinish = false
+                    },
                 value = nameOfReceipt,
                 onValueChange = { newText ->
                     nameOfReceipt = newText
@@ -381,18 +434,31 @@ fun AddReceiptMenu (
                     .padding(start = 2.dp)
             )
 
+            val focusRequester = remember { FocusRequester() }
+
             TextField (
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        if (blockInput) {
+                            focusRequester.freeFocus()
+                            return@onFocusChanged
+                        }
+
+                        if (it.isFocused && firstFocusOnAmount) {
+                            firstFocusOnAmount = false
+                            amountText = ""
+                            focusRequester.requestFocus()
+                        }
+
+                        blockFinish = false
+                    },
                 value = amountText,
                 onValueChange = { newText ->
+                    if (!newText.matches(moneyRegex) && newText.isNotBlank())
+                        return@TextField
 
-                    val moneyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
-
-                    if (moneyRegex.matches(newText)) {
-                        amountText = newText
-                    }
-
-                    if (newText.isEmpty())
-                        amountText = ""
+                    amountText = newText
                 },
                 singleLine = true,
                 colors = TextFieldDefaults.colors (
@@ -543,23 +609,39 @@ fun AddReceiptMenu (
         ) {
             Button (
                 onClick = {
+                    if (blockInput)
+                        return@Button
+
+                    if (blockFinish)
+                        return@Button
+
                     if (!photoCanBeTaken) {
 
-                        if (nameOfReceipt.isEmpty()) {
-                            errorTitle = "Give it a name!"
-                            errorMessage = "Photo can not be taken yet - give your receipt a name."
+                        if (firstFocusOnReceiptName) {
+                            errorTitle = "Name your receipt..."
+                            errorMessage = "Please enter a name for your receipt."
                             return@Button
                         }
 
-                        if (nameOfReceipt.length > 40) {
-                            errorTitle = "A bit shorter."
-                            errorMessage = "Choose a name a bit shorter."
+                        if (firstFocusOnAmount) {
+                            errorTitle = "Insert an amount..."
+                            errorMessage = "Please enter an amount to your receipt."
                             return@Button
                         }
 
-                        if (amountText.isEmpty()) {
-                            errorTitle = "How much?"
-                            errorMessage = "Photo can not be taken yet - insert the amount on the receipt."
+                        val errorInReceiptName = validateInput("RandomUserName", "RandomGoal", amountText, nameOfReceipt)
+
+                        if (errorInReceiptName != null) {
+                            errorTitle = errorInReceiptName.title
+                            errorMessage = errorInReceiptName.message
+                            return@Button
+                        }
+
+                        val errorInAmount = validateInput("RandomUserName", "RandomGoal", amountText, "RandomReceipt")
+
+                        if (errorInAmount != null) {
+                            errorTitle = errorInAmount.title
+                            errorMessage = errorInAmount.message
                             return@Button
                         }
 

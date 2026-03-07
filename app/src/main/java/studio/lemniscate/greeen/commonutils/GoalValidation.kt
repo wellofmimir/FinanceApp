@@ -8,7 +8,8 @@ data class ValidationError (
 fun validateInput (
     username: String,
     goal: String,
-    amountText: String
+    amountText: String,
+    receipt: String
 ): ValidationError? {
 
     val name = username.trim()
@@ -105,6 +106,24 @@ fun validateInput (
             ValidationError (
                 "Please be positive...",
                 "Please enter a value that represents money. (e.g. 2400, 15.99, 950.50)"
+            )
+
+        receipt.isBlank() ->
+            ValidationError (
+                "Almost there...",
+                "Please enter your name for your receipt to continue."
+            )
+
+        receipt.length < 2 ->
+            ValidationError (
+                "A bit longer.",
+                "Your receipt name should have at least 2 characters."
+            )
+
+        receipt.length > 40 ->
+            ValidationError (
+                "A bit shorter...",
+                "Please enter a shorter name for your receipt."
             )
 
         else -> null

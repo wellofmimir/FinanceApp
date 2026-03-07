@@ -475,7 +475,7 @@ fun AddNewGoalMenu (
                                 return@Button
                             }
 
-                            val inputErrorMessage = validateInput("RandomUsername", nameOfGoalText, amountText)
+                            val inputErrorMessage = validateInput("RandomUsername", nameOfGoalText, amountText, "RandomReceipt")
 
                             if (inputErrorMessage != null) {
                                 errorMessage = inputErrorMessage.message

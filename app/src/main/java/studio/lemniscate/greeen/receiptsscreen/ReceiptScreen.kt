@@ -52,6 +52,7 @@ fun ReceiptScreen (
     var receiptAdded by remember { mutableStateOf(false) }
     var addReceiptMenuExpanded by remember { mutableStateOf(false) }
     val metricsScreenIsShown by metricsScreenViewModel.metricsScreenIsShown.collectAsState()
+    val showAddReceiptSection by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
     val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     LaunchedEffect(receiptAdded) {
@@ -80,8 +81,9 @@ fun ReceiptScreen (
         }
     }
 
-    if (addReceiptMenuExpanded || receiptSectionsViewModel.showAddReceiptSection.collectAsState().value) {
+    if (addReceiptMenuExpanded || showAddReceiptSection) {
         AddReceiptMenu (
+            expanded = addReceiptMenuExpanded,
             onDismissRequest = {
                 addReceiptMenuExpanded = false
                 receiptSectionsViewModel.getReceipts()
