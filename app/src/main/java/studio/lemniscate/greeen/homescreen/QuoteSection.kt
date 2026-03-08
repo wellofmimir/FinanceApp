@@ -27,6 +27,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.TextUnit
 
 
@@ -82,8 +85,8 @@ fun QuoteSection (
     val minFontSizeText: TextUnit = 18.sp
     var fontSizeText by remember { mutableStateOf(maxFontSizeText) }
 
-    val maxFontSizeName: TextUnit = 18.sp
-    val minFontSizeName: TextUnit = 16.sp
+    val maxFontSizeName: TextUnit = 16.sp
+    val minFontSizeName: TextUnit = 14.sp
     var fontSizeName by remember { mutableStateOf(maxFontSizeName) }
 
     var readyToDrawText by remember { mutableStateOf(false) }
@@ -96,46 +99,44 @@ fun QuoteSection (
     Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_QUOTE) 0.1f else 1.0f)
-            .fillMaxWidth()
+            .aspectRatio(1f)
+            .fillMaxSize()
             .background (
                 shape = RoundedCornerShape(12.dp),
                 color = colors.secondary
-            )
-            .aspectRatio(1f),
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box (
+        val verticalScroll = rememberScrollState()
+
+        Text (
+            text = quote.quote,
+            fontSize = fontSizeText,
+            textAlign = TextAlign.Left,
+            fontStyle = FontStyle.Italic,
+            fontWeight = FontWeight.ExtraBold,
+            color = colors.primary,
             modifier = Modifier
-                .weight(3f),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Text (
-                text = quote.quote,
-                fontSize = fontSizeText,
-                textAlign = TextAlign.Left,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.ExtraBold,
-                color = colors.primary,
-                modifier = Modifier
-                    .padding(start = 16.dp, top  = 16.dp, end = 16.dp)
-                    .drawWithContent {
-                        if (readyToDrawText)
-                            drawContent()
-                    },
-                onTextLayout = { result ->
-                    if (result.didOverflowHeight && fontSizeText > minFontSizeText)
-                        fontSizeText *= 0.8f
-                    else
-                        readyToDrawText = true
-                }
-            )
-        }
+                .weight(3f)
+                .verticalScroll(verticalScroll)
+                .padding(start = 16.dp, top  = 16.dp, end = 16.dp)
+                .drawWithContent {
+                    if (readyToDrawText)
+                        drawContent()
+                },
+            onTextLayout = { result ->
+                if (result.didOverflowHeight && fontSizeText > minFontSizeText)
+                    fontSizeText *= 0.8f
+                else
+                    readyToDrawText = true
+            }
+        )
 
         Row (
             modifier = Modifier
-                .fillMaxWidth()
                 .weight(1f)
+                .padding(bottom = 4.dp)
                 .clickable (
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -154,7 +155,6 @@ fun QuoteSection (
                         badgesViewModel = badgesViewModel
                     )
                 },
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image (
@@ -162,23 +162,19 @@ fun QuoteSection (
                 contentDescription = "HerzZumLiken",
                 colorFilter = ColorFilter.tint(if (quoteLiked) Color.Red else colors.textPrimary),
                 modifier = Modifier
-                    .padding(start = 8.dp)
                     .size(44.dp)
-            )
-
-            Spacer (
-                modifier = Modifier
-                    .height(8.dp)
+                    .padding(start = 8.dp)
+                    .weight(1f)
             )
 
             Text (
                 text = quote.name,
                 fontSize = fontSizeName,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Left,
                 fontStyle = FontStyle.Italic,
                 color = colors.primary,
                 modifier = Modifier
-                    .padding(end = 16.dp)
+                    .weight(3f)
                     .drawWithContent {
                         if (readyToDrawName)
                             drawContent()
