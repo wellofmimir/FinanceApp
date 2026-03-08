@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.TextUnit
 
@@ -70,10 +71,18 @@ fun QuoteSection (
     modifier: Modifier = Modifier,
     quoteViewModel: QuoteViewModel,
     badgesViewModel: BadgesViewModel,
-    tutorialInformation: TutorialInformation,
-    context: Context = LocalContext.current
+    tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val fontSize = when {
+        screenHeight <= 640 -> 14.sp
+        screenHeight <= 720 -> 16.sp
+        screenHeight <= 800 -> 20.sp
+        else -> 22.sp
+    }
 
     val quote by quoteViewModel.quote.collectAsState()
     val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
@@ -112,7 +121,7 @@ fun QuoteSection (
 
         Text (
             text = quote.quote,
-            fontSize = fontSizeText,
+            fontSize = fontSize,
             textAlign = TextAlign.Left,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.ExtraBold,
@@ -169,7 +178,7 @@ fun QuoteSection (
 
             Text (
                 text = quote.name,
-                fontSize = fontSizeName,
+                fontSize = fontSize * 0.75,
                 textAlign = TextAlign.End,
                 fontStyle = FontStyle.Italic,
                 color = colors.primary,

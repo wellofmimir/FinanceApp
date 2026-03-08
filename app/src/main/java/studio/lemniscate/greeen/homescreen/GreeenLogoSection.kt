@@ -78,7 +78,7 @@ fun GreeenLogoSection (
                 .height(2.dp)
         )
 
-        Text(
+        Text (
             text = buildAnnotatedString {
                 withStyle (
                     SpanStyle (

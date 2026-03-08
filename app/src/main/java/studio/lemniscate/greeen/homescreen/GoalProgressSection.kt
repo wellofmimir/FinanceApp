@@ -30,8 +30,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 
@@ -40,6 +43,7 @@ import studio.lemniscate.greeen.badges.BadgeIdentifier
 import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.Pistachio
 
 @Composable
 fun GoalProgressSection (
@@ -48,8 +52,7 @@ fun GoalProgressSection (
     goalsSectionViewModel: GoalsSectionViewModel,
     badgesViewModel: BadgesViewModel,
     settingsViewModel: SettingsViewModel,
-    tutorialInformation: TutorialInformation,
-    context: Context = LocalContext.current
+    tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
     val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
@@ -152,37 +155,39 @@ fun GoalProgressSection (
                     currency = settingsViewModel.currency.collectAsState().value
                 )
 
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                ) {
-                    Text (
-                        text = "Your goal:",
-                        color = colors.textPrimary,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    )
+                Text (
+                    text = buildAnnotatedString {
+                        withStyle (
+                            SpanStyle (
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = colors.primary
+                            )
+                        ) {
+                            append("Your goal:")
+                        }
 
-                    Text (
-                        text = currentGoalText,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colors.textPrimary,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 2.dp, end = 2.dp)
-                    )
-                }
+                        append("\n")
+
+                        withStyle (
+                            SpanStyle (
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.primary
+                            )
+                        ) {
+                            append(currentGoalText)
+                        }
+                    },
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier
+                        .padding(start = 12.dp, top = 8.dp)
+                )
             }
 
             Box (
                 modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
+                    .sizeIn(48.dp, 48.dp, 64.dp, 64.dp)
                     .background (
                         color = colors.background,
                         shape = CircleShape
@@ -198,7 +203,7 @@ fun GoalProgressSection (
                     painter = painterResource(R.drawable.doppelpfeileruntersymbol_foreground),
                     contentDescription = "Doppelpfeile",
                     modifier = Modifier
-                        .size(32.dp)
+                        .sizeIn(16.dp, 16.dp, 22.dp, 22.dp)
                         .background (
                             color = colors.background,
                             shape = CircleShape
@@ -220,26 +225,28 @@ fun GoalProgressSection (
 
             SwapCurrentGoalMenu (
                 expanded = expanded,
-                onDismissRequest = { expanded = false },
+                onDismissRequest = {
+                    expanded = false
+                },
                 goalsSectionViewModel = goalsSectionViewModel
             )
         }
 
         Box (
             modifier = Modifier
-                .weight(1f)
                 .padding(end = 8.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             if (currentGoal != null) {
                 Text (
                     text = "${currentGoalPercentage.toInt()}%",
-                    fontSize = 64.sp,
+                    fontSize = 56.sp,
                     textAlign = TextAlign.End,
                     fontWeight = FontWeight.Bold,
                     color = colors.primary,
                     modifier = modifier
                         .fillMaxWidth()
+                        .sizeIn(48.dp, 48.dp, 56.dp, 56.dp)
                         .clickable (
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
@@ -252,6 +259,5 @@ fun GoalProgressSection (
                 )
             }
         }
-
     }
 }

@@ -207,10 +207,18 @@ fun HomeScreen (
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    GreeenLogoSection (
+                    RecentlyCompletedGoalsSection (
+                        tutorialInformation = tutorialInformation,
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1.7f)
+                            .aspectRatio(1.25f)
+                            .clickable() {
+                                if (tutorialInformation.isActive)
+                                    return@clickable
+
+                                recentlyCompletedGoalsSectionClicked()
+                            },
+                        goalsSectionViewModel = goalsSectionViewModel
                     )
 
                     Spacer (
@@ -221,7 +229,7 @@ fun HomeScreen (
                     SavedReceiptsSection (
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1.7f)
+                            .aspectRatio(1.25f)
                             .clickable() {
                                 if (tutorialInformation.isActive)
                                     return@clickable

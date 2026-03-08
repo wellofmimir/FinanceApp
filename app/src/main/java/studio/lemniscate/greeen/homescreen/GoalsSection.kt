@@ -112,7 +112,7 @@ fun GoalsSection (
                         color = colors.surface
                     )
                     .padding(start = 18.dp)
-                    .weight(7f)
+                    .weight(6f)
             )
 
             Image (
@@ -120,6 +120,7 @@ fun GoalsSection (
                 contentDescription = "Pluszeichen",
                 modifier = Modifier
                     .weight(1f)
+                    .sizeIn(48.dp, 48.dp, 64.dp, 64.dp)
                     .background (
                         color = colors.background,
                         shape = CircleShape
@@ -148,7 +149,7 @@ fun GoalsSection (
             LazyColumn (
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 36.dp)
+                    .padding(horizontal = 24.dp)
                     .background (
                         color = colors.surface,
                         shape = RoundedCornerShape(12.dp)
@@ -180,7 +181,7 @@ fun GoalsSection (
                                 .background (
                                     color = colors.surface
                                 )
-                                .size(24.dp),
+                                .size(20.dp),
                             colorFilter = ColorFilter.tint(colors.background)
                         )
 

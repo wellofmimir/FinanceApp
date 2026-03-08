@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.Text
@@ -26,13 +28,29 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, goalsSectionViewModel: GoalsSectionViewModel) {
 
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val fontSize = when {
+        screenHeight <= 640 -> 22.sp
+        screenHeight <= 720 -> 36.sp
+        screenHeight <= 800 -> 48.sp
+        else -> 48.sp
+    }
+
     val goals by goalsSectionViewModel.completedGoals.collectAsState()
 
     if (tutorialInformation.isActive)
@@ -43,62 +61,69 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
     Column (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_RECENTLY_COMPLETED_GOALS) 0.1f else 1.0f)
+            .fillMaxWidth()
             .background (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+            )
+            .padding(start = 12.dp, top = 8.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
     ) {
         Text (
             text = "Recently Completed:",
             color = colors.primary,
-            fontSize = 18.sp,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier
-                .padding(top = 16.dp)
+            fontSize = fontSize * 0.35f,
+            fontStyle = FontStyle.Italic
         )
 
         Spacer (
             modifier = Modifier
-                .padding(horizontal = 4.dp)
+                .height(8.dp)
         )
 
-        goals.take(3).forEach { item ->
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        shape = RoundedCornerShape (
-                            bottomStart = if (item == goals.last()) 12.dp else 0.dp,
-                            bottomEnd = if (item == goals.last()) 12.dp else 0.dp
-                        ),
-                        color = Color.Transparent
+        val listState = rememberLazyListState()
+
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 12.dp)
+                .background (
+                    color = colors.surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = listState
+        ) {
+            items(goals.take(goals.size)) {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                ) {
+                    Image (
+                        painter = painterResource(R.drawable.bulletpointfilled_foreground),
+                        contentDescription = "Bulletpoint",
+                        modifier = Modifier
+                            .background (
+                                color = colors.surface
+                            )
+                            .size(16.dp),
+                        colorFilter = ColorFilter.tint(colors.background)
                     )
-                    .padding(start = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image (
-                    painter = painterResource(R.drawable.bulletpointfilled_foreground),
-                    contentDescription = "Bulletpoint",
-                    modifier = Modifier
-                        .background (
-                            color = colors.surface
-                        )
-                        .size(16.dp),
-                    colorFilter = ColorFilter.tint(colors.background)
-                )
 
-                Spacer (
-                    modifier = Modifier
-                        .width(16.dp)
-                )
+                    Spacer (
+                        modifier = Modifier
+                            .width(16.dp)
+                    )
 
-                Text (
-                    fontSize = 16.sp,
-                    text = item.goal,
-                    color = colors.textPrimary
-                )
+                    Text (
+                        fontSize = 16.sp,
+                        text = it.goal,
+                        color = colors.textPrimary
+                    )
+                }
             }
         }
     }
