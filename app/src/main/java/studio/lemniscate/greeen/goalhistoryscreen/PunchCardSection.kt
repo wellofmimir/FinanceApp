@@ -57,13 +57,13 @@ fun PunchCardSection (
 ) {
     val colors = LocalAppColors.current
     val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp
+    val screenHeight = configuration.screenHeightDp
 
     val fontSize = when {
-        screenWidth <= 320 -> 12.sp
-        screenWidth <= 360 -> 14.sp
-        screenWidth <= 400 -> 16.sp
-        else -> 16.sp
+        screenHeight <= 640 -> 16.sp
+        screenHeight <= 720 -> 18.sp
+        screenHeight <= 800 -> 20.sp
+        else -> 22.sp
     }
 
     LaunchedEffect(Unit) {

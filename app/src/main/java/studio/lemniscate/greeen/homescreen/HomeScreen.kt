@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,7 +62,6 @@ fun HomeScreen (
     goalsSectionViewModel: GoalsSectionViewModel,
     dailyTipScreenViewModel: DailyTipScreenViewModel,
     quoteViewModel: QuoteViewModel,
-    shopViewModel: ThemeShopViewModel,
     badgesViewModel: BadgesViewModel,
     settingsViewModel: SettingsViewModel,
     onGoalAchieved: () -> Unit,
@@ -72,6 +72,8 @@ fun HomeScreen (
     dailyTipsSectionClicked: () -> Unit) {
 
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
 
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
@@ -207,11 +209,18 @@ fun HomeScreen (
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    val ratio = when {
+                        screenHeight <= 640 -> 1.7f
+                        screenHeight <= 720 -> 1.5f
+                        screenHeight <= 800 -> 1f
+                        else -> 1f
+                    }
+
                     RecentlyCompletedGoalsSection (
                         tutorialInformation = tutorialInformation,
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1.25f)
+                            .aspectRatio(ratio)
                             .clickable() {
                                 if (tutorialInformation.isActive)
                                     return@clickable
@@ -229,7 +238,7 @@ fun HomeScreen (
                     SavedReceiptsSection (
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1.25f)
+                            .aspectRatio(ratio)
                             .clickable() {
                                 if (tutorialInformation.isActive)
                                     return@clickable

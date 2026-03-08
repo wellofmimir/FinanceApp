@@ -617,7 +617,6 @@ class MainActivity : ComponentActivity() {
                                                 dailyTipScreenViewModel = dailyTipScreenViewModel,
                                                 goalsSectionViewModel = goalSectionViewModel,
                                                 quoteViewModel = quoteViewModel,
-                                                shopViewModel = themeShopViewModel,
                                                 badgesViewModel = badgesViewModel,
                                                 settingsViewModel = settingsViewModel,
                                                 onGoalAchieved = {
