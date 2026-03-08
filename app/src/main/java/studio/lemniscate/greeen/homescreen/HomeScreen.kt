@@ -1,5 +1,6 @@
 package studio.lemniscate.greeen.homescreen
 
+import androidx.compose.foundation.Image
 import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
@@ -11,6 +12,7 @@ import studio.lemniscate.greeen.welldone.WellDoneSection
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +24,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.sizeIn
+
+import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,9 +44,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 
-
+import studio.lemniscate.greeen.R
 
 
 @Composable
@@ -62,8 +75,6 @@ fun HomeScreen (
 
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
-
-    val adremoverActive by shopViewModel.adRemoverPurchased.collectAsState()
 
     Column (
         modifier = Modifier
@@ -124,7 +135,6 @@ fun HomeScreen (
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight()
                     .background (
                         color = Color.Transparent,
                         shape = RoundedCornerShape(12.dp)
@@ -134,7 +144,7 @@ fun HomeScreen (
             ) {
                 GoalsSection (
                     modifier = Modifier
-                        .weight(1f),
+                        .weight(4f),
                     tutorialInformation = tutorialInformation,
                     goalsSectionViewModel = goalsSectionViewModel
                 )
@@ -144,47 +154,42 @@ fun HomeScreen (
                         .padding(2.dp)
                 )
 
-                Box (
+                Row (
                     modifier = Modifier
+                        .weight(1f)
                         .fillMaxWidth()
-                        .height(72.dp)
                         .background (
-                            color = colors.primary,
+                            color = Color.Transparent,
                             shape = RoundedCornerShape(12.dp)
-                        )
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Row (
+                    DailyTipSection (
                         modifier = Modifier
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        DailyTipSection (
-                            modifier = Modifier
-                                .weight(3f)
-                                .fillMaxHeight(),
-                            dailyTipScreenViewModel = dailyTipScreenViewModel,
-                            tutorialInformation = tutorialInformation,
-                            dailyTipSectionClicked = {
-                                dailyTipsSectionClicked()
-                            }
-                        )
+                            .weight(3f)
+                            .fillMaxHeight(),
+                        dailyTipScreenViewModel = dailyTipScreenViewModel,
+                        tutorialInformation = tutorialInformation,
+                        dailyTipSectionClicked = {
+                            dailyTipsSectionClicked()
+                        }
+                    )
 
-                        Spacer (
-                            modifier = Modifier
-                                .width(4.dp)
-                        )
+                    Spacer (
+                        modifier = Modifier
+                            .width(4.dp)
+                    )
 
-                        ShopSection (
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
-                            tutorialInformation = tutorialInformation,
-                            shopSectionClicked = {
-                                shopSectionClicked()
-                            }
-                        )
-                    }
+                    ShopSection (
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        tutorialInformation = tutorialInformation,
+                        shopSectionClicked = {
+                            shopSectionClicked()
+                        }
+                    )
                 }
 
                 Spacer (
@@ -194,29 +199,29 @@ fun HomeScreen (
 
                 Row (
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .background (
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    RecentlyCompletedGoalsSection (
+                    GreeenLogoSection (
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f)
-                            .clickable () {
-                                if (tutorialInformation.isActive)
-                                    return@clickable
-
-                                recentlyCompletedGoalsSectionClicked()
-                            },
-                        tutorialInformation = tutorialInformation,
-                        goalsSectionViewModel = goalsSectionViewModel
+                            .aspectRatio(1.7f)
                     )
 
+                    Spacer (
+                        modifier = Modifier
+                            .width(4.dp)
+                    )
+                    
                     SavedReceiptsSection (
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f)
-                            .fillMaxHeight()
+                            .aspectRatio(1.7f)
                             .clickable() {
                                 if (tutorialInformation.isActive)
                                     return@clickable
@@ -235,20 +240,8 @@ fun HomeScreen (
 
                 TokenBanner (
                     modifier = Modifier
-                        .weight(0.5f),
+                        .weight(1f),
                     goalsSectionViewModel = goalsSectionViewModel,
-                    tutorialInformation = tutorialInformation
-                )
-
-                Spacer (
-                    modifier = Modifier
-                        .height(4.dp)
-                )
-
-                AdSectionMiddleBanner (
-                    modifier = Modifier
-                        .weight(0.3f),
-                    suppressAd = adremoverActive,
                     tutorialInformation = tutorialInformation
                 )
             }

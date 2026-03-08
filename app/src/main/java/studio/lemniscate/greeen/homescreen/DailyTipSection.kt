@@ -57,7 +57,7 @@ fun DailyTipSection (
     ) {
         Text (
             text = buttonText,
-            fontSize = 22.sp,
+            fontSize = 20.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             color = colors.primary,

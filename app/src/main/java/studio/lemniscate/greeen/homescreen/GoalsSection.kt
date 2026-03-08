@@ -8,6 +8,7 @@ import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 import android.content.Context
 import android.widget.Toast
+import android.R.attr.maxWidth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.BoxWithConstraints
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,15 +50,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.ui.UiComposable
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GoalsSection (
     modifier: Modifier = Modifier,
     tutorialInformation: TutorialInformation,
-    goalsSectionViewModel: GoalsSectionViewModel,
-    context: Context = LocalContext.current)
-{
+    goalsSectionViewModel: GoalsSectionViewModel
+) {
     val colors = LocalAppColors.current
 
     val goals by goalsSectionViewModel.goals.collectAsState()
@@ -93,65 +94,47 @@ fun GoalsSection (
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, end = 8.dp)
-                .background (
+                .background(
                     color = colors.surface,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text (
                 text = "Stuff you're working on:",
                 color = colors.textPrimary,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = colors.surface
                     )
-                    .padding(start = 18.dp, end = 0.dp, bottom = 0.dp)
-                    .weight(2f)
+                    .padding(start = 18.dp)
+                    .weight(7f)
             )
 
-            Box (
+            Image (
+                painter = painterResource(R.drawable.pluszeichen_standard_pistachio_foreground),
+                contentDescription = "Pluszeichen",
                 modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
+                    .weight(1f)
                     .background (
                         color = colors.background,
                         shape = CircleShape
                     )
-                    .border (
-                        width = 1.dp,
-                        color = colors.background,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Image (
-                    painter = painterResource(R.drawable.pluszeichen_standard_pistachio_foreground),
-                    contentDescription = "Pluszeichen",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background (
-                            color = colors.background,
-                            shape = CircleShape
-                        )
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            if (tutorialInformation.isActive)
-                                return@clickable
-
+                    .clickable (
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        if (!tutorialInformation.isActive)
                             expanded = true
-                        },
-                    contentScale = ContentScale.Fit,
-                    alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(colors.surface)
-                )
-            }
+                    },
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center,
+                colorFilter = ColorFilter.tint(colors.surface)
+            )
         }
 
         LaunchedEffect(Unit) {
@@ -209,7 +192,7 @@ fun GoalsSection (
                         Text (
                             text = it.goal,
                             color = colors.textPrimary,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier

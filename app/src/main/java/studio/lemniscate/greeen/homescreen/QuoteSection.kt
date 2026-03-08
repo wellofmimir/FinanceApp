@@ -170,10 +170,11 @@ fun QuoteSection (
             Text (
                 text = quote.name,
                 fontSize = fontSizeName,
-                textAlign = TextAlign.Left,
+                textAlign = TextAlign.End,
                 fontStyle = FontStyle.Italic,
                 color = colors.primary,
                 modifier = Modifier
+                    .padding(end = 8.dp)
                     .weight(3f)
                     .drawWithContent {
                         if (readyToDrawName)

@@ -31,6 +31,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
@@ -58,85 +60,42 @@ fun SavedReceiptsSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy (
+            space = 0.dp,
+            alignment = Alignment.CenterVertically
+        ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text (
-                text = "This Month:",
-                fontSize = 18.sp,
-                fontStyle = FontStyle.Italic,
-                color = colors.primary,
-                modifier = Modifier
-                    .padding(start = 8.dp, top = 16.dp)
-            )
-
-            Box (
-                modifier = Modifier
-                    .padding(top = 8.dp, end = 8.dp)
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background (
-                        color = colors.background,
-                        shape = CircleShape
-                    )
-                    .border (
-                        width = 1.dp,
-                        color = colors.background,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Image (
-                    painter = painterResource(R.drawable.receiptsymbol_foreground),
-                    contentDescription = "ReceiptLogo",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 4.dp, start = 4.dp)
-                        .background (
-                            color = colors.background,
-                            shape = CircleShape
-                        ),
-                    colorFilter = ColorFilter.tint(colors.surface),
-                    contentScale = ContentScale.Fit,
-                    alignment = Alignment.BottomEnd
-                )
-            }
+        val fontSize = when (receiptsThisMonth.value.size) {
+            in 0..9 -> 72.sp
+            in 9 .. 99 -> 72.sp
+            in 100 .. 999 -> 72.sp
+            in 1000 .. 9999 -> 60.sp
+            in 10000 .. 99999 -> 52.sp
+            in 100000 .. 999999 -> 44.sp
+            else -> 36.sp
         }
 
-        Column (
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Text (
+            text = receiptsThisMonth.value.size.toString(),
+            fontSize = fontSize,
+            color = colors.textPrimary,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .weight(2f)
-        ) {
-            val fontSize = when (receiptsThisMonth.value.size) {
-                in 0..9 -> 72.sp
-                in 9 .. 99 -> 72.sp
-                in 100 .. 999 -> 72.sp
-                in 1000 .. 9999 -> 60.sp
-                in 10000 .. 99999 -> 52.sp
-                in 100000 .. 999999 -> 44.sp
-                else -> 36.sp
-            }
+                .weight(3f)
+        )
 
-            Text (
-                text = receiptsThisMonth.value.size.toString(),
-                fontSize = fontSize,
-                color = colors.textPrimary,
-                fontWeight = FontWeight.Bold
-            )
+        Text (
+            text = "Saved Receipts",
+            fontSize = 20.sp,
+            color = colors.textPrimary,
+            modifier = Modifier
+                .weight(1f)
+        )
 
-            Text (
-                text = "Saved Receipts",
-                fontSize = 20.sp,
-                color = colors.textPrimary
-            )
-        }
+        Spacer (
+            modifier = Modifier
+                .height(4.dp)
+        )
     }
 }

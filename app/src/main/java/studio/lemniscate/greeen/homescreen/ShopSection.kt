@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -22,6 +21,7 @@ import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.alpha
@@ -29,6 +29,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import studio.lemniscate.greeen.homescreen.TutorialInformation
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
 
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
@@ -44,11 +48,11 @@ fun ShopSection (
     Box (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_SHOP) 0.1f else 1.0f)
-            .background (
+            .background(
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable (
+            .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
@@ -56,53 +60,32 @@ fun ShopSection (
                     return@clickable
 
                 shopSectionClicked()
-            },
-        contentAlignment = Alignment.TopEnd
+            }
     ) {
-        Box (
+        Image (
+            painter = painterResource(R.drawable.dollarsign_foreground),
+            contentDescription = "Dollar",
             modifier = Modifier
-                .padding(top = 8.dp, end = 8.dp)
-                .size(20.dp)
-                .clip(CircleShape)
-                .background (
-                    color = colors.background,
-                    shape = CircleShape
-                )
-                .border (
-                    width = 1.dp,
+                .align(Alignment.TopEnd)
+                .padding(end = 8.dp, top = 8.dp)
+                .sizeIn(18.dp, 18.dp, 20.dp, 20.dp)
+                .background(
                     color = colors.background,
                     shape = CircleShape
                 ),
-            contentAlignment = Alignment.Center
-        ) {
-            Image (
-                painter = painterResource(R.drawable.dollarsign_foreground),
-                contentDescription = "Dollar",
-                modifier = Modifier
-                    .size(16.dp)
-                    .background (
-                        color = colors.background,
-                        shape = CircleShape
-                    )
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                    },
-                colorFilter = ColorFilter.tint(colors.surface),
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.BottomEnd
-            )
-        }
+            colorFilter = ColorFilter.tint(colors.surface),
+            contentScale = ContentScale.Fit
+        )
 
         Text (
             text = "Shop",
             color = colors.textPrimary,
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Start,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 8.dp, bottom = 4.dp)
+                .padding(start = 8.dp, bottom = 2.dp)
         )
     }
 }
