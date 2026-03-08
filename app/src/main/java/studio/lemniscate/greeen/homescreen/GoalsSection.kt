@@ -51,6 +51,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.UiComposable
+import androidx.compose.ui.platform.LocalConfiguration
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GoalsSection (
@@ -59,6 +61,22 @@ fun GoalsSection (
     goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val fontSize = when {
+        screenHeight <= 640 -> 16.sp
+        screenHeight <= 720 -> 18.sp
+        screenHeight <= 800 -> 20.sp
+        else -> 22.sp
+    }
+
+    val bulletPointSize = when {
+        screenHeight <= 640 -> 16.dp
+        screenHeight <= 720 -> 18.dp
+        screenHeight <= 800 -> 20.dp
+        else -> 22.dp
+    }
 
     val goals by goalsSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
@@ -104,7 +122,7 @@ fun GoalsSection (
             Text (
                 text = "Stuff you're working on:",
                 color = colors.textPrimary,
-                fontSize = 20.sp,
+                fontSize = fontSize,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
@@ -181,7 +199,7 @@ fun GoalsSection (
                                 .background (
                                     color = colors.surface
                                 )
-                                .size(20.dp),
+                                .size(bulletPointSize),
                             colorFilter = ColorFilter.tint(colors.background)
                         )
 
@@ -193,7 +211,7 @@ fun GoalsSection (
                         Text (
                             text = it.goal,
                             color = colors.textPrimary,
-                            fontSize = 16.sp,
+                            fontSize = fontSize * 0.8,
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier

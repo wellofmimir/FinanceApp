@@ -38,8 +38,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
-fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInformation: TutorialInformation, goalsSectionViewModel: GoalsSectionViewModel) {
-
+fun RecentlyCompletedGoalsSection (
+    modifier: Modifier = Modifier,
+    tutorialInformation: TutorialInformation,
+    goalsSectionViewModel: GoalsSectionViewModel
+) {
     val colors = LocalAppColors.current
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
@@ -49,6 +52,13 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
         screenHeight <= 720 -> 36.sp
         screenHeight <= 800 -> 48.sp
         else -> 48.sp
+    }
+
+    val bulletPointSize = when {
+        screenHeight <= 640 -> 22.dp
+        screenHeight <= 720 -> 36.dp
+        screenHeight <= 800 -> 48.dp
+        else -> 48.dp
     }
 
     val goals by goalsSectionViewModel.completedGoals.collectAsState()
@@ -109,17 +119,17 @@ fun RecentlyCompletedGoalsSection(modifier: Modifier = Modifier, tutorialInforma
                             .background (
                                 color = colors.surface
                             )
-                            .size(16.dp),
+                            .size(bulletPointSize * 0.35f),
                         colorFilter = ColorFilter.tint(colors.background)
                     )
 
                     Spacer (
                         modifier = Modifier
-                            .width(16.dp)
+                            .width(12.dp)
                     )
 
                     Text (
-                        fontSize = 16.sp,
+                        fontSize = fontSize * 0.35,
                         text = it.goal,
                         color = colors.textPrimary
                     )
