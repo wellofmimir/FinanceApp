@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 
 @Composable
 fun AdSectionLargeBanner (
@@ -104,6 +105,7 @@ fun AdSectionSmallBanner (
                     .only(WindowInsetsSides.Bottom)
                     .asPaddingValues()
             )
+            .fillMaxSize()
     ) {
         AndroidView (
             modifier = modifier

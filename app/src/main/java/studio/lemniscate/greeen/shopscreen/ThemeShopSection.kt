@@ -9,22 +9,22 @@ import studio.lemniscate.greeen.ui.theme.ElectricPurple
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.ui.theme.AppColors
 import studio.lemniscate.greeen.ui.theme.Bordeaux
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
-import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.material3.Text
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.Alignment
 
 import android.content.Context
 
@@ -37,66 +37,49 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
 fun ThemeShopIntroSection (
     modifier: Modifier = Modifier,
-    colors: AppColors = LocalAppColors.current,
-    context: Context = LocalContext.current
+    colors: AppColors = LocalAppColors.current
 ) {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 12.sp
-        screenHeight <= 720 -> 14.sp
-        screenHeight <= 800 -> 16.sp
-        else -> 16.sp
-    }
+    val typography = LocalAppTypography.current
 
     Column (
-        modifier = modifier
-            .fillMaxWidth()
-            .background (
-                color = colors.primary,
-                shape = RoundedCornerShape(12.dp)
-            ),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .padding(start = 12.dp, bottom = 12.dp, end = 12.dp)
     ) {
         Text (
             text = "We get it! Green isn't for everyone!",
             color = colors.secondary,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.SemiBold,
-            fontSize = fontSize,
+            fontSize = typography.body,
             modifier = Modifier
-                .padding(top = 12.dp, start = 12.dp)
         )
 
         Spacer (
             modifier = Modifier
-                .padding (6.dp)
+                .height(6.dp)
         )
 
         Text (
             text = "Check out our purchasable content here. Purchasing themes from us also helps us make cool products for you, and keep our apps free.",
             color = colors.secondary,
             fontWeight = FontWeight.Normal,
-            fontSize = fontSize,
+            fontSize = typography.medium,
             modifier = Modifier
-                .padding(start = 12.dp, bottom = 4.dp)
         )
     }
 }
@@ -112,33 +95,36 @@ fun ThemeShopEntry (
     applyThemeRequested: () -> Unit,
     purchaseRequested: () -> Unit
 ) {
+    val typography = LocalAppTypography.current
+
     Column (
         modifier = modifier
-            .fillMaxSize()
-            .padding()
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             ),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text (
-            text = if (alreadyBought) title else "$title $price",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = colors.textPrimary
-        )
-
         Spacer (
             modifier = Modifier
-                .height(12.dp)
+                .weight(0.5f)
+        )
+
+        Text (
+            text = if (alreadyBought) title else "$title $price",
+            fontSize = typography.body,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary,
+            modifier = Modifier
+                .weight(1f)
         )
 
         Box (
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .aspectRatio(1f)
+                .weight(3f)
+                .fillMaxWidth(0.75f)
+                .fillMaxHeight(0.8f)
                 .border (
                     width = 1.dp,
                     color = Color.White,
@@ -154,12 +140,13 @@ fun ThemeShopEntry (
 
         Spacer (
             modifier = Modifier
-                .height(12.dp)
+                .weight(0.25f)
         )
 
         Row (
             modifier = Modifier
-                .fillMaxWidth(0.8f),
+                .weight(1f)
+                .fillMaxWidth(0.75f),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -167,7 +154,7 @@ fun ThemeShopEntry (
                 Box (
                     modifier = Modifier
                         .weight(1f)
-                        .height(40.dp)
+                        .heightIn(35.dp, 50.dp)
                         .border (
                             width = 1.dp,
                             color = Pistachio,
@@ -188,7 +175,7 @@ fun ThemeShopEntry (
                     Text (
                         text = "Apply",
                         color = Color.White,
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Bold
                     )
@@ -198,7 +185,7 @@ fun ThemeShopEntry (
                 Box (
                     modifier = Modifier
                         .weight(1f)
-                        .height(40.dp)
+                        .heightIn(35.dp, 50.dp)
                         .border (
                             width = 1.dp,
                             color = Pistachio,
@@ -219,22 +206,20 @@ fun ThemeShopEntry (
                     Text (
                         text = "Preview",
                         color = Color.Gray,
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         fontStyle = FontStyle.Italic
                     )
                 }
 
                 Spacer (
                     modifier = Modifier
-                        .width (
-                            12.dp
-                        )
+                        .weight(0.1f)
                 )
 
                 Box (
                     modifier = Modifier
                         .weight(1f)
-                        .height(40.dp)
+                        .heightIn(35.dp, 50.dp)
                         .border (
                             width = 1.dp,
                             color = Pistachio,
@@ -255,12 +240,17 @@ fun ThemeShopEntry (
                     Text (
                         text = "Buy",
                         color = Color.White,
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         fontStyle = FontStyle.Italic
                     )
                 }
             }
         }
+
+        Spacer (
+            modifier = Modifier
+                .weight(0.25f)
+        )
     }
 }
 
@@ -278,7 +268,6 @@ fun ThemeShopSection (
 
     Column (
         modifier = modifier
-            .fillMaxSize()
             .background (
                 color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
@@ -338,9 +327,7 @@ fun ThemeShopSection (
 
             Spacer (
                 modifier = Modifier
-                    .width (
-                        4.dp
-                    )
+                    .width (4.dp)
             )
 
             if (isElectricApplied) {
@@ -480,29 +467,6 @@ fun ThemeShopSection (
                     }
                 )
             }
-        }
-
-        if (!adremoverActive) {
-
-            Spacer (
-                modifier = Modifier
-                    .height(4.dp)
-            )
-
-            RemoveAdsSection (
-                modifier = Modifier
-                    .weight(0.35f),
-                purchaseRequested = {
-                    val activity = context as Activity
-                    themeShopViewModel.purchaseRemoveAllAds(activity = activity)
-                }
-            )
-
-            AdSectionSmallBanner (
-                modifier = Modifier
-                    .weight(0.2f),
-                suppressAd = adremoverActive
-            )
         }
     }
 }

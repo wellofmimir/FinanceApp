@@ -2,6 +2,7 @@ package studio.lemniscate.greeen.shopscreen
 
 import studio.lemniscate.greeen.ui.theme.Emerald
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
@@ -16,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +24,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
-fun RemoveAdsSection(modifier: Modifier = Modifier, purchaseRequested: () -> Unit) {
-
+fun RemoveAdsSection (
+    modifier: Modifier = Modifier,
+    purchaseRequested: () -> Unit
+) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Column (
         modifier = modifier
@@ -36,13 +39,13 @@ fun RemoveAdsSection(modifier: Modifier = Modifier, purchaseRequested: () -> Uni
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(top = 4.dp, bottom = 8.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text (
             text = "$3.99",
             color = colors.primary,
-            fontSize = 24.sp,
+            fontSize = typography.subtitle,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .weight(2f)
@@ -74,7 +77,7 @@ fun RemoveAdsSection(modifier: Modifier = Modifier, purchaseRequested: () -> Uni
             Text (
                 text = "Remove all ads",
                 color = Color.White,
-                fontSize = 24.sp
+                fontSize = typography.subtitle
             )
         }
     }
