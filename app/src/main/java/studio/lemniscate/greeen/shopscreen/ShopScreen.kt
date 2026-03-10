@@ -41,7 +41,6 @@ fun ShopScreen (
     applyThemeRequested: (theme: String) -> Unit
 ) {
     val colors = LocalAppColors.current
-    val typography = LocalAppTypography.current
     val context = LocalContext.current
 
     val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()

@@ -11,7 +11,6 @@ import studio.lemniscate.greeen.ui.theme.AppColors
 import studio.lemniscate.greeen.ui.theme.Bordeaux
 import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
@@ -38,14 +37,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 
 @Composable
 fun ThemeShopIntroSection (
@@ -86,7 +84,6 @@ fun ThemeShopIntroSection (
 @Composable
 fun ThemeShopEntry (
     modifier: Modifier = Modifier,
-    colors: AppColors = LocalAppColors.current,
     alreadyBought: Boolean,
     title: String,
     price: String,
@@ -95,6 +92,7 @@ fun ThemeShopEntry (
     applyThemeRequested: () -> Unit,
     purchaseRequested: () -> Unit
 ) {
+    val colors = LocalAppColors.current
     val typography = LocalAppTypography.current
 
     Column (
@@ -268,6 +266,7 @@ fun ThemeShopSection (
 
     Column (
         modifier = modifier
+            .safeDrawingPadding()
             .background (
                 color = colors.primary,
                 shape = RoundedCornerShape(12.dp)

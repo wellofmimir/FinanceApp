@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.layout.safeDrawingPadding
 
 @Composable
 fun RemoveAdsSection (
@@ -34,6 +35,7 @@ fun RemoveAdsSection (
     Column (
         modifier = modifier
             .fillMaxWidth()
+            .safeDrawingPadding()
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)

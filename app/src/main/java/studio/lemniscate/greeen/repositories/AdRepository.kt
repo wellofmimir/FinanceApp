@@ -16,14 +16,6 @@ class AdRepository private constructor (
         }
     }
 
-    fun setRemoveAllAds() {
-        database.setRemoveAllAds()
-    }
-
-    fun getRemoveAllAds(): Boolean {
-        return database.getRemoveAllAds()
-    }
-
     fun setInterstitialAdAfterReceiptSeen() {
         database.setInterstitialAdAfterReceiptSeen()
     }
