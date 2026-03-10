@@ -1,37 +1,24 @@
 package studio.lemniscate.greeen.homescreen
 
-import androidx.compose.foundation.Image
-import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.dailytipscreen.DailyTipScreenViewModel
 import studio.lemniscate.greeen.receiptsscreen.ReceiptSectionsViewModel
 import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
-import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.welldone.WellDoneSection
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.sizeIn
-
-import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,20 +26,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.style.TextAlign
 
-import studio.lemniscate.greeen.R
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -65,18 +45,22 @@ fun HomeScreen (
     badgesViewModel: BadgesViewModel,
     settingsViewModel: SettingsViewModel,
     onGoalAchieved: () -> Unit,
+    onAddNewGoalMenuRequested: () -> Unit,
+    onAddNewGoalMenuDismissed: () -> Unit,
     onWellDoneSectionDismissed: () -> Unit,
     shopSectionClicked: () -> Unit,
     receiptsSectionClicked: () -> Unit,
     recentlyCompletedGoalsSectionClicked: () -> Unit,
-    dailyTipsSectionClicked: () -> Unit) {
-
+    dailyTipsSectionClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
 
     var goalAchieved by remember { mutableStateOf(false) }
     var idGoalAchieved by remember { mutableIntStateOf(0)}
+
+    var addNewGoalMenuRequested by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
@@ -100,6 +84,26 @@ fun HomeScreen (
                 }
             )
 
+        } else if (addNewGoalMenuRequested) {
+            onAddNewGoalMenuRequested()
+
+            AddNewGoalMenu (
+                modifier = Modifier
+                    .fillMaxHeight(),
+                onDismissRequest = {
+                    onAddNewGoalMenuDismissed()
+                    addNewGoalMenuRequested = false
+                },
+                onFinished = {
+                    onAddNewGoalMenuDismissed()
+                    addNewGoalMenuRequested = false
+                    goalsSectionViewModel.reloadGoals()
+                    goalsSectionViewModel.setFirstGoalAddedDone()
+                },
+                goalsSectionViewModel = goalsSectionViewModel
+            )
+
+            return
         } else {
             Row (
                 modifier = Modifier
@@ -148,7 +152,10 @@ fun HomeScreen (
                     modifier = Modifier
                         .weight(4f),
                     tutorialInformation = tutorialInformation,
-                    goalsSectionViewModel = goalsSectionViewModel
+                    goalsSectionViewModel = goalsSectionViewModel,
+                    onAddNewGoalMenuRequested = {
+                        addNewGoalMenuRequested = true
+                    }
                 )
 
                 Spacer (

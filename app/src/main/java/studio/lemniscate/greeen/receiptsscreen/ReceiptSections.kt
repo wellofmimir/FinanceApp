@@ -48,7 +48,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
@@ -110,8 +109,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextStyle
 import studio.lemniscate.greeen.commonutils.moneyRegex
 import studio.lemniscate.greeen.commonutils.validateInput
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 enum class Timespan (id: Int) {
 
@@ -127,6 +128,7 @@ enum class Timespan (id: Int) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddReceiptMenu (
+    modifier: Modifier = Modifier,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onReceiptSaved:() -> Unit,
@@ -134,6 +136,7 @@ fun AddReceiptMenu (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     var blockInput by remember { mutableStateOf(false) }
     var blockFinish by remember { mutableStateOf(false) }
@@ -325,25 +328,29 @@ fun AddReceiptMenu (
 
 
     Column (
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
+            .background (
+                shape = RoundedCornerShape(12.dp),
+                color = colors.primary
+            )
             .border (
                 width = 1.dp,
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
-            ),
-        verticalArrangement = Arrangement.Top,
+            )
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer (
             modifier = Modifier
-                .height(100.dp)
+                .weight(0.5f)
         )
 
         Text (
             text = "Add a receipt",
             color = colors.textSecondary,
-            fontSize = 24.sp
+            fontSize = typography.subtitle
         )
 
         Spacer (
@@ -372,10 +379,9 @@ fun AddReceiptMenu (
             Text (
                 text = "Name",
                 color = colors.textSecondary,
-                fontSize = 24.sp,
+                fontSize = typography.subtitle,
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
-                    .padding(start = 2.dp)
             )
 
             val focusRequester = remember { FocusRequester() }
@@ -401,6 +407,9 @@ fun AddReceiptMenu (
                 onValueChange = { newText ->
                     nameOfReceipt = newText
                 },
+                textStyle = TextStyle (
+                    fontSize = typography.medium
+                ),
                 singleLine = true,
                 colors = TextFieldDefaults.colors (
                     unfocusedContainerColor = Color.Transparent,
@@ -428,10 +437,9 @@ fun AddReceiptMenu (
                 text = "Amount",
                 textAlign = TextAlign.Justify,
                 color = colors.textSecondary,
-                fontSize = 24.sp,
+                fontSize = typography.subtitle,
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
-                    .padding(start = 2.dp)
             )
 
             val focusRequester = remember { FocusRequester() }
@@ -460,6 +468,9 @@ fun AddReceiptMenu (
 
                     amountText = newText
                 },
+                textStyle = TextStyle (
+                    fontSize = typography.medium
+                ),
                 singleLine = true,
                 colors = TextFieldDefaults.colors (
                     unfocusedContainerColor = Color.Transparent,
@@ -492,10 +503,9 @@ fun AddReceiptMenu (
                 text = "Remind me",
                 textAlign = TextAlign.Justify,
                 color = colors.textSecondary,
-                fontSize = 24.sp,
+                fontSize = typography.subtitle,
                 modifier = Modifier
-                    .padding(start = 4.dp)
-                    .weight(1f)
+                    .weight(1.5f)
             )
 
             Checkbox (
@@ -515,7 +525,7 @@ fun AddReceiptMenu (
 
                 DatePickerDialog (
                     modifier = Modifier
-                        .height(400.dp),
+                        .fillMaxHeight(0.5f),
                     onDismissRequest = {
                         showDatepickerDialog = false
                     },
@@ -537,6 +547,7 @@ fun AddReceiptMenu (
                             }
                         ) {
                             Text (
+                                fontSize = typography.button,
                                 text = "Ok"
                             )
                         }
@@ -548,6 +559,7 @@ fun AddReceiptMenu (
                             }
                         ) {
                             Text (
+                                fontSize = typography.button,
                                 text = "Cancel"
                             )
                         }
@@ -592,7 +604,7 @@ fun AddReceiptMenu (
                     Text (
                         text = expense.category,
                         color = if (expenseCategory == expense.category) colors.primary else colors.secondary,
-                        fontSize = 15.sp
+                        fontSize = typography.small
                     )
                 }
             }
@@ -679,36 +691,31 @@ fun AddReceiptMenu (
                     text = takePhotoButtonText,
                     textAlign = TextAlign.Center,
                     color = colors.background,
-                    fontSize = 18.sp
+                    fontSize = typography.button
                 )
             }
         }
 
-        Column (
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer (
-                modifier = Modifier
-                    .height(36.dp)
-            )
+        Spacer (
+            modifier = Modifier
+                .height(36.dp)
+        )
 
-            Image (
-                painter = painterResource(R.drawable.pfeilnachrechts_foreground),
-                contentDescription = "PfeilNachRechts",
-                colorFilter = ColorFilter.tint(colors.secondary),
-                modifier = Modifier
-                    .rotate(-180f)
-                    .size(64.dp)
-                    .weight(1f)
-                    .clickable (
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onDismissRequest()
-                    }
-            )
-        }
+        Image (
+            painter = painterResource(R.drawable.pfeilnachrechts_foreground),
+            contentDescription = "PfeilNachRechts",
+            colorFilter = ColorFilter.tint(colors.secondary),
+            modifier = Modifier
+                .rotate(-180f)
+                .size(64.dp)
+                .weight(1f)
+                .clickable (
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    onDismissRequest()
+                }
+        )
     }
 }
 
@@ -720,6 +727,7 @@ fun SinceWhenSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
     val currentMonth by receiptSectionsViewModel.currentMonth.collectAsState()
     var clickedEntry by remember { mutableIntStateOf(0) }
 
@@ -779,7 +787,7 @@ fun SinceWhenSection (
                 ) {
                     Text (
                         text = entry,
-                        fontSize = 22.sp,
+                        fontSize = typography.body,
                         fontWeight = FontWeight.ExtraBold,
                         fontStyle = FontStyle.Normal,
                         color = if (entries.indexOf(entry) == clickedEntry) colors.surface else colors.textPrimary
@@ -798,6 +806,7 @@ fun AverageSpentSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -862,7 +871,7 @@ fun AverageSpentSection (
                 .padding(start = 12.dp, top = 18.dp),
             text = averageAmountText,
             color = colors.textPrimary,
-            fontSize = 24.sp,
+            fontSize = typography.body,
             fontWeight = FontWeight.Bold
         )
 
@@ -872,7 +881,7 @@ fun AverageSpentSection (
                 .padding(start = 12.dp, top = 2.dp),
             text = "Average Spent Per Transaction",
             color = colors.textPrimary,
-            fontSize = 16.sp,
+            fontSize = typography.body * 0.75,
             fontWeight = FontWeight.Normal
         )
 
@@ -891,6 +900,7 @@ fun ExpensesOverviewSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -963,7 +973,7 @@ fun ExpensesOverviewSection (
                     style = SpanStyle (
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Normal,
-                        fontSize = 24.sp
+                        fontSize = typography.body,
                     )
                 ) {
                     append(sumOfExpensesText)
@@ -971,7 +981,7 @@ fun ExpensesOverviewSection (
             },
             color = colors.textPrimary,
             textAlign = TextAlign.Start,
-            fontSize = 20.sp,
+            fontSize = typography.body * 0.9,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Italic
         )
@@ -988,20 +998,20 @@ fun ExpensesOverviewSection (
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End
         ) {
-            val fontSize = when (receipts.size) {
-                in 1..9 -> 72.sp
-                in 9 .. 99 -> 64.sp
-                in 100 .. 999 -> 60.sp
-                in 1000 .. 9999 -> 56.sp
-                in 10000 .. 99999 -> 52.sp
-                in 100000 .. 999999 -> 44.sp
-                else -> 36.sp
+            val fontSizeMultiplicator = when (receipts.size) {
+                in 0..9 -> 2.5f
+                in 9 .. 99 -> 2f
+                in 100 .. 999 -> 2f
+                in 1000 .. 9999 -> 1.75f
+                in 10000 .. 99999 -> 1.75f
+                in 100000 .. 999999 -> 1.5f
+                else -> 1f
             }
 
             Text (
                 text = receipts.size.toString(),
                 color = colors.textPrimary,
-                fontSize = fontSize,
+                fontSize = typography.title * fontSizeMultiplicator,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.End)
@@ -1011,7 +1021,7 @@ fun ExpensesOverviewSection (
             Text (
                 text = "Purchases Recorded",
                 color = colors.textPrimary,
-                fontSize = 16.sp,
+                fontSize = typography.medium,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -1032,6 +1042,7 @@ fun ReceiptLogSection (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     when (timespan) {
         Timespan.THIS_MONTH -> receiptSectionsViewModel.getReceiptsForACertainTimespan(receiptSectionsViewModel.getFirstDayOfCurrentMonth(), receiptSectionsViewModel.getLastDayOfCurrentMonth())
@@ -1160,23 +1171,26 @@ fun ReceiptLogSection (
                             Text (
                                 text = currentReceipt.description,
                                 color = colors.secondary,
-                                fontSize = 24.sp
+                                fontSize = typography.subtitle
                             )
 
                             Text (
                                 text = if (currency.length == 1) currency + " " + currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-                                color = colors.secondary
+                                color = colors.secondary,
+                                fontSize = typography.medium
                             )
 
                             Text (
                                 text = currentReceipt.category,
-                                color = colors.secondary
+                                color = colors.secondary,
+                                fontSize = typography.small
                             )
 
                             if (currentReceipt.remindMeDate.isNotEmpty()) {
                                 Text (
                                     text = "When to remind you:\n" + currentReceipt.remindMeDate,
-                                    color = colors.secondary
+                                    color = colors.secondary,
+                                    fontSize = typography.body
                                 )
                             }
 
@@ -1289,7 +1303,7 @@ fun ReceiptLogSection (
             text = "Receipt log",
             color = colors.textPrimary,
             textAlign = TextAlign.Start,
-            fontSize = 22.sp,
+            fontSize = typography.subtitle,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic
         )
@@ -1345,7 +1359,7 @@ fun ReceiptLogSection (
                     Text (
                         text = receipt.description,
                         color = colors.textPrimary,
-                        fontSize = 16.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
                             .weight(1.5f)
@@ -1355,7 +1369,7 @@ fun ReceiptLogSection (
                     Text (
                         text = receipt.date,
                         color = colors.textPrimary,
-                        fontSize = 16.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier
                             .weight(1f)
@@ -1393,7 +1407,7 @@ fun ReceiptLogSection (
                     Text (
                         text = receiptAmountText,
                         color = colors.textPrimary,
-                        fontSize = 16.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .weight(1f)

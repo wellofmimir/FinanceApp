@@ -41,7 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.unit.sp
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import java.io.File
 
@@ -52,6 +52,8 @@ fun RandomMemoryPictureSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     val firstGoal by achievementsSectionViewModel.randomFirstGoal.collectAsState()
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var showDialog by remember { mutableStateOf(false) }
@@ -155,7 +157,7 @@ fun RandomMemoryPictureSection (
                 text = "Create memories by achieving your goals!",
                 color = colors.secondary,
                 textAlign = TextAlign.Center,
-                fontSize = 16.sp,
+                fontSize = typography.medium,
                 modifier = Modifier
                     .padding(8.dp)
             )

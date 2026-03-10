@@ -82,6 +82,8 @@ fun ReceiptScreen (
 
     if (showAddReceiptSection) {
         AddReceiptMenu (
+            modifier = Modifier
+                .fillMaxHeight(),
             expanded = true,
             onDismissRequest = {
                 receiptSectionsViewModel.getReceipts()

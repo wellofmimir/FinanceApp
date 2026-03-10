@@ -435,6 +435,7 @@ class MainActivity : ComponentActivity() {
                 var sectionIdentifier by remember { mutableStateOf(Screen.SPLASH)}
                 var goalAchieved by remember { mutableStateOf(false) }
                 val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
+                var addNewGoalMenuRequested by remember { mutableStateOf(false) }
 
                 val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
@@ -539,7 +540,7 @@ class MainActivity : ComponentActivity() {
                             }
                     ) {
                         if (listOf(Screen.HOME, Screen.LIKEDQUOTES, Screen.GOALHISTORY, Screen.RECEIPTS, Screen.ABOUT_US, Screen.USER_SETTINGS, Screen.SHOP, Screen.DAILY_TIPS).contains(sectionIdentifier)) {
-                            if (!goalAchieved && !addReceiptMenuOpen) {
+                            if (!goalAchieved && !addReceiptMenuOpen && !addNewGoalMenuRequested) {
                                 HeaderSection (
                                     onNewSectionIdentifier = {
                                         sectionIdentifier = it
@@ -630,6 +631,14 @@ class MainActivity : ComponentActivity() {
                                                 onGoalAchieved = {
                                                     goalAchieved = true
                                                     isPagerBlocked = true
+                                                },
+                                                onAddNewGoalMenuRequested = {
+                                                    isPagerBlocked = true
+                                                    addNewGoalMenuRequested = true
+                                                },
+                                                onAddNewGoalMenuDismissed = {
+                                                    isPagerBlocked = false
+                                                    addNewGoalMenuRequested = false
                                                 },
                                                 onWellDoneSectionDismissed = {
                                                     goalAchieved = false

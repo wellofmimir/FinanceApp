@@ -1,5 +1,11 @@
 package studio.lemniscate.greeen.receiptsscreen
 
+import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.homescreen.TutorialInformation
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -27,10 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import studio.lemniscate.greeen.R
-import studio.lemniscate.greeen.TutorialStep
-import studio.lemniscate.greeen.homescreen.TutorialInformation
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
 @Composable
 fun SeeYourMetricsSection (
@@ -39,6 +42,8 @@ fun SeeYourMetricsSection (
     onSeeYourMetricsSectionButtonClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
 
     Row (
         modifier = modifier
@@ -61,6 +66,7 @@ fun SeeYourMetricsSection (
             Box (
                 modifier = Modifier
                     .padding()
+                    .sizeIn(64.dp, 64.dp, 75.dp, 75.dp)
                     .size(64.dp)
                     .clip(CircleShape)
                     .background (
@@ -78,7 +84,7 @@ fun SeeYourMetricsSection (
                     painter = painterResource(R.drawable.metricslogo_foreground),
                     contentDescription = "MetricsLogo",
                     modifier = Modifier
-                        .size(75.dp)
+                        .sizeIn(64.dp, 64.dp, 75.dp, 75.dp)
                         .clickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
@@ -101,7 +107,7 @@ fun SeeYourMetricsSection (
             Text (
                 text = "See Metrics",
                 color = colors.primary,
-                fontSize = 18.sp
+                fontSize = typography.medium
             )
         }
     }

@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 
@@ -36,6 +38,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.homescreen.TutorialInformation
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 
 @Composable
@@ -45,12 +48,13 @@ fun LogReceiptSection (
     onLogReceiptButtonClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Row (
         modifier = modifier
             .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.RECEIPTS_TAKE_PICTURE) 0.1f else 1.0f)
             .fillMaxWidth()
-            .height(100.dp)
+            .heightIn(50.dp, 100.dp)
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
@@ -67,7 +71,7 @@ fun LogReceiptSection (
             Box (
                 modifier = Modifier
                     .padding()
-                    .size(64.dp)
+                    .sizeIn(64.dp, 64.dp, 75.dp, 75.dp)
                     .clip(CircleShape)
                     .background (
                         color = colors.background,
@@ -84,7 +88,7 @@ fun LogReceiptSection (
                     painter = painterResource(R.drawable.kamera_foreground),
                     contentDescription = "Kamerasymbol",
                     modifier = Modifier
-                        .size(48.dp)
+                        .sizeIn(41.dp, 41.dp, 48.dp, 48.dp)
                         .padding(bottom = 2.dp)
                         .clickable (
                             indication = null,
@@ -108,7 +112,7 @@ fun LogReceiptSection (
             Text (
                 text = "Log Receipt",
                 color = colors.primary,
-                fontSize = 18.sp
+                fontSize = typography.medium
             )
         }
     }

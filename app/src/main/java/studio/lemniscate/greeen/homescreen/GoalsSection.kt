@@ -1,14 +1,10 @@
 package studio.lemniscate.greeen.homescreen
 
 import studio.lemniscate.greeen.R
-import studio.lemniscate.greeen.homescreen.TutorialInformation
 
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
-
-import android.content.Context
-import android.widget.Toast
-import android.R.attr.maxWidth
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
@@ -16,7 +12,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.layout.BoxWithConstraints
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,49 +35,28 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.UiComposable
-import androidx.compose.ui.platform.LocalConfiguration
-import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GoalsSection (
     modifier: Modifier = Modifier,
     tutorialInformation: TutorialInformation,
-    goalsSectionViewModel: GoalsSectionViewModel
+    goalsSectionViewModel: GoalsSectionViewModel,
+    onAddNewGoalMenuRequested: () -> Unit
 ) {
     val colors = LocalAppColors.current
     val typography = LocalAppTypography.current
 
     val goals by goalsSectionViewModel.goals.collectAsState()
-    var newGoalEntered by remember { mutableStateOf(true) }
-    var expanded by remember { mutableStateOf(false) }
     var menuOpen by remember { mutableStateOf(false) }
     var goalIdToDelete by remember { mutableStateOf(0) }
-
-    AddNewGoalMenu (
-        expanded = expanded,
-        onDismissRequest = {
-            expanded = false
-        },
-        onFinished = {
-            expanded = false
-            newGoalEntered = true
-            goalsSectionViewModel.reloadGoals()
-            goalsSectionViewModel.setFirstGoalAddedDone()
-        },
-        goalsSectionViewModel = goalsSectionViewModel
-    )
 
     Column (
         modifier = modifier
@@ -135,7 +108,7 @@ fun GoalsSection (
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
                         if (!tutorialInformation.isActive)
-                            expanded = true
+                            onAddNewGoalMenuRequested()
                     },
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
@@ -147,27 +120,25 @@ fun GoalsSection (
             goalsSectionViewModel.reloadGoals()
         }
 
-        if (newGoalEntered) {
+        val listState = rememberLazyListState()
 
-            val listState = rememberLazyListState()
-
-            LazyColumn (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .background (
-                        color = colors.surface,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = listState
-            ) {
-                items(goals.take(goals.size)) {
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .background (
+                    color = colors.surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = listState
+        ) {
+            items(goals.take(goals.size)) {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
                         .combinedClickable (
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
@@ -177,68 +148,67 @@ fun GoalsSection (
                                 menuOpen = true
                                 goalIdToDelete = it.id
                             }
-                    )
-                    ) {
-                        val bulletPointSize = with(LocalDensity.current) {
-                            typography.body.toDp() * 0.8f
-                        }
-
-                        Image (
-                            painter = painterResource(R.drawable.bulletpoint_foreground),
-                            contentDescription = "Bulletpoint",
-                            modifier = Modifier
-                                .background (
-                                    color = colors.surface
-                                )
-                                .size(bulletPointSize),
-                            colorFilter = ColorFilter.tint(colors.background)
                         )
-
-                        Spacer (
-                            modifier = Modifier
-                                .width(20.dp)
-                        )
-
-                        Text (
-                            text = it.goal,
-                            color = colors.textPrimary,
-                            fontSize = typography.body * 0.9f,
-                            fontStyle = FontStyle.Normal,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier
-                                .weight(1f)
-                        )
+                ) {
+                    val bulletPointSize = with(LocalDensity.current) {
+                        typography.body.toDp() * 0.8f
                     }
+
+                    Image (
+                        painter = painterResource(R.drawable.bulletpoint_foreground),
+                        contentDescription = "Bulletpoint",
+                        modifier = Modifier
+                            .background (
+                                color = colors.surface
+                            )
+                            .size(bulletPointSize),
+                        colorFilter = ColorFilter.tint(colors.background)
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .width(20.dp)
+                    )
+
+                    Text (
+                        text = it.goal,
+                        color = colors.textPrimary,
+                        fontSize = typography.body * 0.9f,
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
                 }
             }
+        }
 
-            DropdownMenu (
+        DropdownMenu (
+            modifier = Modifier
+                .background (
+                    color = colors.primary
+                ),
+            expanded = menuOpen,
+            onDismissRequest = {
+                menuOpen = false
+            },
+        ) {
+            DropdownMenuItem (
                 modifier = Modifier
                     .background (
-                        color = colors.primary
+                        color = colors.primary,
                     ),
-                expanded = menuOpen,
-                onDismissRequest = {
-                    menuOpen = false
+                text = {
+                    Text (
+                        text = "Delete",
+                        color = colors.secondary
+                    )
                 },
-            ) {
-                DropdownMenuItem (
-                    modifier = Modifier
-                        .background (
-                            color = colors.primary,
-                        ),
-                    text = {
-                        Text (
-                            text = "Delete",
-                            color = colors.secondary
-                        )
-                    },
-                    onClick = {
-                        menuOpen = false
-                        goalsSectionViewModel.deleteGoal(goalIdToDelete)
-                    }
-                )
-            }
+                onClick = {
+                    menuOpen = false
+                    goalsSectionViewModel.deleteGoal(goalIdToDelete)
+                }
+            )
         }
     }
 }
