@@ -21,6 +21,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun DailyTipDialog (
@@ -45,6 +47,7 @@ fun DailyTipDialog (
     onShowImage: () -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Dialog (
         onDismissRequest = {
@@ -76,7 +79,7 @@ fun DailyTipDialog (
                     text = dailyTip.title,
                     fontWeight = FontWeight.Bold,
                     color = colors.primary,
-                    fontSize = 24.sp
+                    fontSize = typography.subtitle
                 )
 
                 Box (
@@ -100,13 +103,13 @@ fun DailyTipDialog (
             Text (
                 text = "Today's category:",
                 color = colors.primary,
-                fontSize = 16.sp
+                fontSize = typography.medium
             )
 
             Text (
                 text = dailyTip.category,
                 color = colors.primary,
-                fontSize = 18.sp,
+                fontSize = typography.medium,
                 fontWeight = FontWeight.Bold
             )
 
@@ -120,20 +123,24 @@ fun DailyTipDialog (
             Text (
                 text = dailyTip.tip,
                 color = colors.primary,
-                fontSize = 16.sp,
+                fontSize = typography.medium,
                 modifier = Modifier
                     .verticalScroll(verticalScrollState)
-                    .weight(0.9f)
+                    .weight(12f)
+            )
+
+            Spacer (
+                modifier = Modifier
+                    .height(4.dp)
             )
 
             Row (
                 modifier = Modifier
-                    .weight(0.05f)
+                    .weight(1f)
                     .fillMaxWidth()
                     .clickable() {
                         onDismissRequest()
-                    }
-                    .padding(top = 4.dp),
+                    },
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -148,17 +155,21 @@ fun DailyTipDialog (
                             color = colors.primary,
                             shape = RoundedCornerShape(12.dp)
                         )
-                        .padding (horizontal = 2.dp)
+                        .padding (horizontal = 2.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text (
                         text = "Show Image",
                         color = colors.secondary,
-                        fontSize = 16.sp,
+                        fontSize = typography.button,
                         modifier = Modifier
                             .clickable () {
                                 onShowImage()
                             }
                             .padding (horizontal = 4.dp)
+                            .align (
+                                alignment = Alignment.Center
+                            )
                     )
                 }
 
@@ -177,17 +188,21 @@ fun DailyTipDialog (
                         .background (
                             color = colors.primary,
                             shape = RoundedCornerShape(12.dp)
-                        )
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text (
                         text = "Close",
                         color = colors.secondary,
-                        fontSize = 16.sp,
+                        fontSize = typography.button,
                         modifier = Modifier
                             .clickable () {
                                 onDismissRequest()
                             }
                             .padding (horizontal = 4.dp)
+                            .align (
+                                alignment = Alignment.Center
+                            )
                     )
                 }
             }

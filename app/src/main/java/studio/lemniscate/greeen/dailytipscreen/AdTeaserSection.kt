@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun AdTeaserSection (
@@ -42,6 +43,7 @@ fun AdTeaserSection (
     onConfirmButtonClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Row (
         verticalAlignment = Alignment.CenterVertically,
@@ -64,7 +66,7 @@ fun AdTeaserSection (
             Text (
                 text = teaserText,
                 color = colors.primary,
-                fontSize = 18.sp,
+                fontSize = typography.medium,
                 fontWeight = FontWeight.Bold
             )
 
@@ -76,7 +78,7 @@ fun AdTeaserSection (
             Text (
                 text = "Ads help us keep Greeen free!",
                 color = colors.primary,
-                fontSize = 18.sp,
+                fontSize = typography.medium,
                 fontWeight = FontWeight.Normal
             )
         }

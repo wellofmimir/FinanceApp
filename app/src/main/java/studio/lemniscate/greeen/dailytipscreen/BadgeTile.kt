@@ -1,6 +1,7 @@
 package studio.lemniscate.greeen.dailytipscreen
 
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -23,6 +24,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.heightIn
 
 import androidx.compose.material3.Text
 
@@ -45,12 +48,13 @@ fun BadgeTile (
     showGiftText: Boolean
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .height(175.dp)
+            .heightIn(175.dp, 190.dp)
             .fillMaxWidth()
             .background (
                 color = colors.secondary,
@@ -78,7 +82,7 @@ fun BadgeTile (
                     text = title,
                     fontWeight = FontWeight.Bold,
                     color = colors.primary,
-                    fontSize = 18.sp,
+                    fontSize = typography.medium,
                     modifier = Modifier
                         .weight(1f)
                 )
@@ -92,7 +96,7 @@ fun BadgeTile (
                     Text (
                         text = text,
                         color = colors.primary,
-                        fontSize = 16.sp,
+                        fontSize = typography.small,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -107,7 +111,7 @@ fun BadgeTile (
                         Text(
                             text = "Tap to see your gift.",
                             color = colors.primary,
-                            fontSize = 12.sp
+                            fontSize = typography.small * 0.8f
                         )
                     }
                 }
@@ -124,7 +128,7 @@ fun BadgeTile (
                     painter = painterResource(badgeImageID),
                     contentDescription = "Herz",
                     modifier = Modifier
-                        .size(100.dp)
+                        .sizeIn(50.dp, 50.dp, 100.dp, 100.dp)
                         .aspectRatio(1f)
                 )
             }

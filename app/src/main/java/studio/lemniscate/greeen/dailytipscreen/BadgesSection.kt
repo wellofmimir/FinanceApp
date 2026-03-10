@@ -47,12 +47,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 import studio.lemniscate.greeen.commonutils.fixOrientation
 import studio.lemniscate.greeen.commonutils.setWallpaperWithChooser
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -63,6 +63,7 @@ fun BadgesSection (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
     val scrollState = rememberScrollState()
     val userBadges by badgesViewModel.userBadges.collectAsState()
 
@@ -101,13 +102,15 @@ fun BadgesSection (
                     title = {
                         Text (
                             text = "An error has occurred.",
-                            color = colors.secondary
+                            color = colors.secondary,
+                            fontSize = typography.medium
                         )
                     },
                     text = {
                         Text (
                             text = "Unfortunately the wallpaper could not be loaded.\nPlease write an eMail to our support: greeen.development.team@gmail.com",
-                            color = colors.secondary
+                            color = colors.secondary,
+                            fontSize = typography.medium
                         )
                     },
                     confirmButton = {
@@ -129,7 +132,8 @@ fun BadgesSection (
                         ) {
                             Text (
                                 text = "Okay",
-                                color = colors.primary
+                                color = colors.primary,
+                                fontSize = typography.small
                             )
                         }
                     },
@@ -162,7 +166,8 @@ fun BadgesSection (
                     text = {
                         Text (
                             text = "Set As Wallpaper",
-                            color = colors.secondary
+                            color = colors.secondary,
+                            fontSize = typography.small
                         )
                     },
                     onClick = {
@@ -217,7 +222,7 @@ fun BadgesSection (
             ) {
                 Text (
                     text = "No Badges Yet",
-                    fontSize = 20.sp,
+                    fontSize = typography.body,
                     textAlign = TextAlign.Center,
                     color = colors.secondary
                 )

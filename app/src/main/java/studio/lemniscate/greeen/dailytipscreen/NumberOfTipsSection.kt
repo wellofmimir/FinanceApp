@@ -10,13 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun NumberOfTipsSection (
@@ -31,41 +33,52 @@ fun NumberOfTipsSection (
     numberOfThingsLearned: Int
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
+    val fontSizeMultiplicator = when (numberOfThingsLearned) {
+        in 0..9 -> 2f
+        in 10..99 -> 2f
+        in 100..999 -> 2f
+        in 1000..9999 -> 1.5f
+        in 10000..99999 -> 1f
+        else -> 0.75f
+    }
 
     Column (
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .aspectRatio(1f)
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(12.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text (
             text = "Total Things You've\nLearned:",
-            fontSize = 16.sp,
+            fontSize = typography.medium,
             color = colors.primary,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
+                .weight(2f)
+                .align (
+                    alignment = Alignment.Start
+                )
         )
 
-        Spacer (
-            modifier = Modifier
-                .padding(24.dp)
-        )
 
         Text (
             text = numberOfThingsLearned.toString(),
-            fontSize = 80.sp,
+            fontSize = typography.title * fontSizeMultiplicator,
             color = colors.primary,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align (
                     alignment = Alignment.End
                 )
+                .weight(1f)
         )
     }
 }

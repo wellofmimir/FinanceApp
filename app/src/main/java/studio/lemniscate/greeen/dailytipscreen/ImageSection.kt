@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ fun ImageSection (
     Column (
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .aspectRatio(1f)
             .border (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp),

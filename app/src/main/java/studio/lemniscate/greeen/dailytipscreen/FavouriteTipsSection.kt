@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import studio.lemniscate.greeen.database.Tip
 import studio.lemniscate.greeen.network.DailyTip
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun FavouriteTipsSection (
@@ -36,6 +37,7 @@ fun FavouriteTipsSection (
     onFavouriteTipClicked: (DailyTip) -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,7 +62,7 @@ fun FavouriteTipsSection (
             Text (
                 text = "Your Favourite Tips:",
                 color = colors.primary,
-                fontSize = 24.sp,
+                fontSize = typography.subtitle,
                 fontWeight = FontWeight.Bold
             )
         }
