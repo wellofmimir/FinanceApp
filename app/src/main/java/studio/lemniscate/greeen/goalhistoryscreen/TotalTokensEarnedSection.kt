@@ -24,11 +24,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 
 @Composable
@@ -38,6 +41,7 @@ fun TotalTokensEarnedSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
     val totalTokensEarned by totalGoalsAchievedSectionViewModel.totalTokensEarned.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -52,36 +56,43 @@ fun TotalTokensEarnedSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        verticalArrangement = Arrangement.spacedBy (
-            space = 4.dp,
-            alignment = Alignment.CenterVertically
-        ),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val textSize = when (totalTokensEarned.toString().length) {
-            1 -> 100.sp
-            2 -> 100.sp
-            3 -> 80.sp
-            4 -> 64.sp
-            5 -> 32.sp
-            6 -> 16.sp
-            else -> 16.sp
+        val fontSizeMultiplicator = when (totalTokensEarned.toString().length) {
+            1 -> 5f
+            2 -> 5f
+            3 -> 4f
+            4 -> 3f
+            5 -> 2.5f
+            6 -> 1f
+            else -> 0.75f
         }
 
         Text (
-            text = totalTokensEarned.toString(),
-            textAlign = TextAlign.Center,
-            fontSize = textSize,
-            fontWeight = FontWeight.Bold,
-            color = colors.textPrimary
-        )
+            text = buildAnnotatedString {
+                withStyle (
+                    SpanStyle (
+                        fontSize = typography.subtitle * fontSizeMultiplicator,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.primary
+                    )
+                ) {
+                    append(totalTokensEarned.toString())
+                }
 
-        Text (
-            text = "lifetime tokens",
+                append("\n")
+
+                withStyle (
+                    SpanStyle (
+                        fontSize = typography.medium,
+                        color = colors.primary
+                    )
+                ) {
+                    append("lifetime tokens")
+                }
+            },
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = colors.textPrimary
         )
     }
 }

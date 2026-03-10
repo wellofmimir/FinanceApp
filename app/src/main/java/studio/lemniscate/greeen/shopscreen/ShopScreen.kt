@@ -14,8 +14,9 @@ import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -25,6 +26,15 @@ fun ShopScreen (
     applyThemeRequested: (theme: String) -> Unit
 ) {
     val colors = LocalAppColors.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val weightRatio = when {
+        screenHeight <= 640 -> 2f
+        screenHeight <= 720 -> 2.5f
+        screenHeight <= 800 -> 3.5f
+        else -> 4.5f
+    }
 
     Column (
         modifier = Modifier
@@ -50,7 +60,7 @@ fun ShopScreen (
 
         ThemeShopSection (
             modifier = Modifier
-                .weight(5f),
+                .weight(weightRatio),
             themeShopViewModel = themeShopViewModel,
             previewRequested = { theme ->
                 previewRequested(theme)

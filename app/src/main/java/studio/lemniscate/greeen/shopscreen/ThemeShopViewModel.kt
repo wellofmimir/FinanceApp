@@ -54,8 +54,8 @@ class ThemeShopViewModel (
         }
 
         viewModelScope.launch {
-            ShopEvents.adRemoverPurchased.collect() {
-                internAdRemoverPurchased.value = true
+            ShopEvents.adRemoverPurchased.collect() { it
+                internAdRemoverPurchased.value = it
             }
         }
     }

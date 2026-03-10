@@ -33,14 +33,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: Int, tutorialInformation: TutorialInformation, headerSectionViewModel: HeaderSectionViewModel, context: Context = LocalContext.current) {
-
+fun HeaderSection (
+    onNewSectionIdentifier: (Screen) -> Unit,
+    sectionIdentifier: Int,
+    tutorialInformation: TutorialInformation,
+    headerSectionViewModel: HeaderSectionViewModel,
+) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     //Das hier erzeugt einfach nur das QuoteViewModel und übergibt dem direkt ein Datenbank-Objekt.
     //Das Datenbank-Objekt braucht dringend den Context, um die SQLite-Datei irgendwo anzulegen.
@@ -86,7 +92,7 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
         Text (
             text = formattedDate,
             color = colors.primary,
-            fontSize = 16.sp,
+            fontSize = typography.small,
             fontFamily = FontFamily.SansSerif
         )
 
@@ -101,18 +107,18 @@ fun HeaderSection(onNewSectionIdentifier: (Screen) -> Unit, sectionIdentifier: I
                 modifier = Modifier
                     .weight(0.9f)
             ) {
-                val fontSize = when (username.value.length) {
-                    in 1..7 -> 30.sp
-                    in 8 .. 12 -> 28.sp
-                    in 13 .. 18 -> 26.sp
-                    in 19 .. 23 -> 24.sp
-                    else -> 18.sp
+                val fontMultiplicator = when (username.value.length) {
+                    in 1..7 -> 1f
+                    in 8 .. 12 -> 0.8f
+                    in 13 .. 18 ->  0.6f
+                    in 19 .. 23 -> 0.4f
+                    else ->  0.3f
                 }
 
                 Text (
                     text = headerText,
                     color = colors.primary,
-                    fontSize = fontSize,
+                    fontSize = typography.title * fontMultiplicator,
                     fontWeight = FontWeight.Bold
                 )
             }

@@ -1,33 +1,31 @@
 package studio.lemniscate.greeen.homescreen
 
-import android.content.Context
+import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.badges.BadgeIdentifier
+import studio.lemniscate.greeen.badges.BadgesViewModel
+import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -35,15 +33,15 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import studio.lemniscate.greeen.R
-import studio.lemniscate.greeen.homescreen.TutorialInformation
 
-import studio.lemniscate.greeen.TutorialStep
-import studio.lemniscate.greeen.badges.BadgeIdentifier
-import studio.lemniscate.greeen.badges.BadgesViewModel
-import studio.lemniscate.greeen.settingsscreen.SettingsViewModel
-import studio.lemniscate.greeen.ui.theme.LocalAppColors
-import studio.lemniscate.greeen.ui.theme.Pistachio
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.Composable
 
 @Composable
 fun GoalProgressSection (
@@ -55,6 +53,8 @@ fun GoalProgressSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     val currentGoalPercentage by goalsSectionViewModel.percentageOfCurrentGoal.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
 
@@ -102,7 +102,7 @@ fun GoalProgressSection (
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, end = 8.dp),
+                .padding(start = 16.dp, top = 12.dp, end = 8.dp),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -159,7 +159,7 @@ fun GoalProgressSection (
                     text = buildAnnotatedString {
                         withStyle (
                             SpanStyle (
-                                fontSize = 18.sp,
+                                fontSize = typography.medium,
                                 fontWeight = FontWeight.Normal,
                                 color = colors.primary
                             )
@@ -171,7 +171,7 @@ fun GoalProgressSection (
 
                         withStyle (
                             SpanStyle (
-                                fontSize = 20.sp,
+                                fontSize = typography.subtitle,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.primary
                             )
@@ -181,12 +181,12 @@ fun GoalProgressSection (
                     },
                     textAlign = TextAlign.Start,
                     modifier = Modifier
-                        .padding(start = 12.dp, top = 8.dp)
                 )
             }
 
             Box (
                 modifier = Modifier
+                    .padding(start = 4.dp)
                     .sizeIn(48.dp, 48.dp, 64.dp, 64.dp)
                     .background (
                         color = colors.background,
@@ -240,13 +240,12 @@ fun GoalProgressSection (
             if (currentGoal != null) {
                 Text (
                     text = "${currentGoalPercentage.toInt()}%",
-                    fontSize = 56.sp,
+                    fontSize = typography.title * 2.2,
                     textAlign = TextAlign.End,
                     fontWeight = FontWeight.Bold,
                     color = colors.primary,
                     modifier = modifier
                         .fillMaxWidth()
-                        .sizeIn(48.dp, 48.dp, 56.dp, 56.dp)
                         .clickable (
                             indication = null,
                             interactionSource = remember {MutableInteractionSource()}
@@ -256,6 +255,11 @@ fun GoalProgressSection (
 
                             expandedEditMenu = true
                         }
+                )
+
+                Spacer (
+                    modifier = Modifier
+                        .height(4.dp)
                 )
             }
         }

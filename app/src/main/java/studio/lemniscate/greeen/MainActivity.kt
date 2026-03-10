@@ -53,6 +53,9 @@ import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
 import studio.lemniscate.greeen.repositories.MetricsRepository
 import studio.lemniscate.greeen.ui.theme.BordeauxAppColors
 import studio.lemniscate.greeen.welcomescreen.WelcomeScreenViewModel
+import studio.lemniscate.greeen.badges.BadgeIdentifier
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
+import studio.lemniscate.greeen.ui.theme.getTypography
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -62,6 +65,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.compose.LocalActivityResultRegistryOwner.provides
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
@@ -93,6 +97,7 @@ import androidx.compose.runtime.mutableStateOf
 
 import androidx.compose.material3.Text
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.ui.platform.LocalConfiguration
 
 import androidx.compose.ui.text.style.TextDecoration
 
@@ -104,8 +109,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.delay
-import studio.lemniscate.greeen.badges.BadgeIdentifier
-import studio.lemniscate.greeen.notifications.DailyEvents
 
 
 enum class Screen (id: Int) {
@@ -203,6 +206,7 @@ class MainActivity : ComponentActivity() {
             GreeenAppTheme (
                 appColors = appColorsState
             ) {
+                val configuration = LocalConfiguration.current
                 val context = LocalContext.current
 
                 LaunchedEffect(Unit) {
@@ -437,6 +441,9 @@ class MainActivity : ComponentActivity() {
                 var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
                 var isPagerBlocked by remember { mutableStateOf(false) }
 
+                var appTypography by remember { mutableStateOf(getTypography(configuration)) }
+
+
                 val pagerState = rememberPagerState (
                     initialPage = 2,
                     pageCount = { 9 }
@@ -506,7 +513,8 @@ class MainActivity : ComponentActivity() {
                 }
 
                 CompositionLocalProvider (
-                    LocalAppColors provides (previewColors ?: appColorsState.value)
+                    LocalAppColors provides (previewColors ?: appColorsState.value),
+                            LocalAppTypography provides (appTypography)
                 ) {
                     Column (
                         modifier = Modifier

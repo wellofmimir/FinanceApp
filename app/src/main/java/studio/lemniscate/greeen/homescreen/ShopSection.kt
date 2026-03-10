@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun ShopSection (
@@ -44,6 +45,7 @@ fun ShopSection (
     shopSectionClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Box (
         modifier = modifier
@@ -69,7 +71,7 @@ fun ShopSection (
                 .align(Alignment.TopEnd)
                 .padding(end = 8.dp, top = 8.dp)
                 .sizeIn(18.dp, 18.dp, 20.dp, 20.dp)
-                .background(
+                .background (
                     color = colors.background,
                     shape = CircleShape
                 ),
@@ -80,7 +82,7 @@ fun ShopSection (
         Text (
             text = "Shop",
             color = colors.textPrimary,
-            fontSize = 20.sp,
+            fontSize = typography.button,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Start,
             modifier = Modifier

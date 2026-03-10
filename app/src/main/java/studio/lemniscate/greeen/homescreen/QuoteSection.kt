@@ -5,8 +5,7 @@ import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.badges.BadgesViewModel
 import studio.lemniscate.greeen.badges.BadgeIdentifier
-
-import android.content.Context
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.material3.Text
 
@@ -15,9 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.collectAsState
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,28 +21,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.unit.TextUnit
-
 
 private fun checkIfBadgeIsAvailable (
     currentlyLiked: Boolean,
@@ -75,31 +64,13 @@ fun QuoteSection (
 ) {
     val colors = LocalAppColors.current
     val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 14.sp
-        screenHeight <= 720 -> 16.sp
-        screenHeight <= 800 -> 20.sp
-        else -> 22.sp
-    }
+    val typography = LocalAppTypography.current
 
     val quote by quoteViewModel.quote.collectAsState()
     val quoteLiked by quoteViewModel.quoteLiked.collectAsState()
     val isLoading by quoteViewModel.isLoading.collectAsState()
     val likedQuotes by quoteViewModel.likedQuotes.collectAsState()
     val numberOfQuotesLiked = likedQuotes.size
-
-    val maxFontSizeText: TextUnit = 20.sp
-    val minFontSizeText: TextUnit = 18.sp
-    var fontSizeText by remember { mutableStateOf(maxFontSizeText) }
-
-    val maxFontSizeName: TextUnit = 16.sp
-    val minFontSizeName: TextUnit = 14.sp
-    var fontSizeName by remember { mutableStateOf(maxFontSizeName) }
-
-    var readyToDrawText by remember { mutableStateOf(false) }
-    var readyToDrawName by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         quoteViewModel.loadQuoteWithDelay()
@@ -121,31 +92,20 @@ fun QuoteSection (
 
         Text (
             text = quote.quote,
-            fontSize = fontSize,
+            fontSize = typography.body,
             textAlign = TextAlign.Left,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.ExtraBold,
             color = colors.primary,
             modifier = Modifier
-                .weight(3f)
+                .weight(4f)
                 .verticalScroll(verticalScroll)
-                .padding(start = 16.dp, top  = 16.dp, end = 16.dp)
-                .drawWithContent {
-                    if (readyToDrawText)
-                        drawContent()
-                },
-            onTextLayout = { result ->
-                if (result.didOverflowHeight && fontSizeText > minFontSizeText)
-                    fontSizeText *= 0.8f
-                else
-                    readyToDrawText = true
-            }
+                .padding(start = 16.dp, top = 12.dp, end = 16.dp)
         )
 
         Row (
             modifier = Modifier
-                .weight(1f)
-                .padding(bottom = 4.dp)
+                .weight(1.5f)
                 .clickable (
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -178,23 +138,13 @@ fun QuoteSection (
 
             Text (
                 text = quote.name,
-                fontSize = fontSize * 0.75,
-                textAlign = TextAlign.End,
+                fontSize = typography.small,
+                textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
                 color = colors.primary,
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(end = 4.dp)
                     .weight(3f)
-                    .drawWithContent {
-                        if (readyToDrawName)
-                            drawContent()
-                    },
-                onTextLayout = { result ->
-                    if (result.didOverflowHeight && fontSizeName > minFontSizeName)
-                        fontSizeName *= 0.8f
-                    else
-                        readyToDrawName = true
-                }
             )
         }
     }

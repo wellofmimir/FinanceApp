@@ -1,8 +1,7 @@
 package studio.lemniscate.greeen.homescreen
 
 import studio.lemniscate.greeen.R
-import studio.lemniscate.greeen.homescreen.TutorialInformation
-
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
@@ -35,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
@@ -44,22 +44,7 @@ fun RecentlyCompletedGoalsSection (
     goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 22.sp
-        screenHeight <= 720 -> 36.sp
-        screenHeight <= 800 -> 48.sp
-        else -> 48.sp
-    }
-
-    val bulletPointSize = when {
-        screenHeight <= 640 -> 22.dp
-        screenHeight <= 720 -> 36.dp
-        screenHeight <= 800 -> 48.dp
-        else -> 48.dp
-    }
+    val typography = LocalAppTypography.current
 
     val goals by goalsSectionViewModel.completedGoals.collectAsState()
 
@@ -76,20 +61,20 @@ fun RecentlyCompletedGoalsSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding(start = 12.dp, top = 8.dp),
+            .padding(start = 16.dp, top = 8.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         Text (
             text = "Recently Completed:",
             color = colors.primary,
-            fontSize = fontSize * 0.35f,
+            fontSize = typography.medium,
             fontStyle = FontStyle.Italic
         )
 
         Spacer (
             modifier = Modifier
-                .height(8.dp)
+                .height(4.dp)
         )
 
         val listState = rememberLazyListState()
@@ -97,13 +82,13 @@ fun RecentlyCompletedGoalsSection (
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 12.dp)
+                .padding(start = 6.dp)
                 .background (
                     color = colors.surface,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
             state = listState
         ) {
             items(goals.take(goals.size)) {
@@ -112,6 +97,10 @@ fun RecentlyCompletedGoalsSection (
                     horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
                 ) {
+                    val bulletPointSize = with(LocalDensity.current) {
+                        typography.small.toDp() * 0.8f
+                    }
+
                     Image (
                         painter = painterResource(R.drawable.bulletpointfilled_foreground),
                         contentDescription = "Bulletpoint",
@@ -119,7 +108,7 @@ fun RecentlyCompletedGoalsSection (
                             .background (
                                 color = colors.surface
                             )
-                            .size(bulletPointSize * 0.35f),
+                            .size(bulletPointSize),
                         colorFilter = ColorFilter.tint(colors.background)
                     )
 
@@ -129,12 +118,22 @@ fun RecentlyCompletedGoalsSection (
                     )
 
                     Text (
-                        fontSize = fontSize * 0.35,
+                        fontSize = typography.small,
                         text = it.goal,
                         color = colors.textPrimary
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .width(4.dp)
                     )
                 }
             }
         }
+
+        Spacer (
+            modifier = Modifier
+                .height(4.dp)
+        )
     }
 }

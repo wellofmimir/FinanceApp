@@ -56,8 +56,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,6 +68,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import java.io.File
 
@@ -76,6 +81,8 @@ fun AchievementsSection (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     val goals by achievementsSectionViewModel.goals.collectAsState()
     achievementsSectionViewModel.getCompletedGoals(tutorialInformation.isActive)
 
@@ -188,7 +195,7 @@ fun AchievementsSection (
                         Text (
                             text = openedGoal?.goal.toString(),
                             color = colors.secondary,
-                            fontSize = 24.sp
+                            fontSize = typography.subtitle
                         )
 
                         Spacer (
@@ -311,6 +318,7 @@ fun AchievementsSection (
         Row (
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = 8.dp, end = 8.dp)
                 .background (
                     color = colors.secondary,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
@@ -319,36 +327,53 @@ fun AchievementsSection (
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text (
-                text = "What You've Achieved:",
+                text = "What you've achieved:",
                 color = colors.primary,
-                fontSize = 24.sp,
+                fontSize = typography.subtitle,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
                         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         color = colors.secondary
                     )
-                    .padding(start = 24.dp, top = 24.dp, end = 0.dp, bottom = 24.dp)
+                    .padding(start = 18.dp)
+                    .weight(6f)
+            )
+
+            Box ( //diese Box ist einfach nur hier, um die Verhältnisse der GoalsSection nachzuahmen
+                modifier = Modifier
+                    .weight(1f)
+                    .sizeIn(48.dp, 48.dp, 64.dp, 64.dp)
+                    .background (
+                        color = colors.secondary,
+                        shape = CircleShape
+                    )
             )
         }
+
+        Spacer (
+            modifier = Modifier
+                .height(6.dp)
+        )
 
         val listState = rememberLazyListState()
 
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 36.dp)
                 .background (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .weight(1f),
-            state = listState
-        ) {
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
             items(goals.take(goals.size)) {goal ->
-
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
                         .clickable (
                             indication = null,
@@ -369,21 +394,24 @@ fun AchievementsSection (
                     Text (
                         text = goal.goal,
                         color = colors.primary,
-                        fontSize = 18.sp,
+                        fontSize = typography.body * 0.9f,
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
-                            .padding(start = 40.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
-                            .weight(1f)
+                            .weight(1.5f)
+                    )
+
+                    Spacer (
+                        modifier = Modifier
+                            .width(20.dp)
                     )
 
                     Text (
                         text = goal.dateWhenFinished,
                         color = colors.primary,
-                        fontSize = 18.sp,
+                        fontSize = typography.body * 0.8f,
                         fontStyle = FontStyle.Italic,
                         modifier = Modifier
-                            .padding(start = 24.dp, top = 12.dp, end = 0.dp, bottom = 0.dp)
                             .weight(1f)
                     )
                 }

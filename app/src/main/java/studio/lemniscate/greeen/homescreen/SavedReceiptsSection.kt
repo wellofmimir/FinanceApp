@@ -38,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
@@ -49,6 +50,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
+import studio.lemniscate.greeen.ui.theme.NormalTypography
+import studio.lemniscate.greeen.ui.theme.SmallTypography
 
 @Composable
 fun SavedReceiptsSection (
@@ -57,16 +61,67 @@ fun SavedReceiptsSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val receiptsThisMonth = receiptSectionsViewModel.receipts.collectAsState()
+    val typography = LocalAppTypography.current
+    val receiptsThisMonth by receiptSectionsViewModel.receipts.collectAsState()
 
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
+    if (typography == NormalTypography || typography == SmallTypography) {
+        val fontSizeMultiplicator = when (receiptsThisMonth.size) {
+            in 0..9 -> 3f
+            in 10..99 -> 3f
+            in 100..999 -> 2f
+            in 1000..9999 -> 1.5f
+            in 10000..99999 ->1f
+            else -> 0.75f
+        }
 
-    val fontSize = when {
-        screenHeight <= 640 -> 22.sp
-        screenHeight <= 720 -> 36.sp
-        screenHeight <= 800 -> 48.sp
-        else -> 48.sp
+        Box (
+            modifier = modifier
+                .alpha(if (tutorialInformation.isActive && tutorialInformation.tutorialStep != TutorialStep.HOMESCREEN_SAVED_RECEIPTS) 0.1f else 1.0f)
+                .fillMaxWidth()
+                .background (
+                    color = colors.surface,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(start = 12.dp, top = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text (
+                text = buildAnnotatedString {
+                    withStyle (
+                        SpanStyle (
+                            fontSize = typography.title * fontSizeMultiplicator,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.primary
+                        )
+                    ) {
+                        append(receiptsThisMonth.size.toString())
+                    }
+
+                    append("\n")
+
+                    withStyle (
+                        SpanStyle (
+                            fontSize = typography.medium,
+                            color = colors.primary
+                        )
+                    ) {
+                        append("Saved Receipts")
+                    }
+                },
+                textAlign = TextAlign.Center,
+            )
+        }
+
+        return
+    }
+
+    val fontSizeMultiplicator = when (receiptsThisMonth.size) {
+        in 0..9 -> 2.5f
+        in 10..99 -> 2f
+        in 100..999 -> 1.5f
+        in 1000..9999 -> 1f
+        in 10000..99999 ->0.75f
+        else -> 0.75f
     }
 
     LaunchedEffect(Unit) {
@@ -87,7 +142,7 @@ fun SavedReceiptsSection (
     ) {
         Row (
             modifier = Modifier
-                .weight(1f)
+                .weight(2.5f)
                 .fillMaxWidth()
                 .background (
                     color = colors.surface,
@@ -98,17 +153,17 @@ fun SavedReceiptsSection (
         ) {
             Text (
                 modifier = Modifier
-                    .weight(3f),
+                    .weight(4f),
                 text = "This Month:",
-                fontSize = fontSize * 0.35f,
+                fontSize = typography.medium,
                 color = colors.primary
             )
 
             Box (
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(2f)
                     .padding(top = 2.dp, end = 8.dp)
-                    .sizeIn(16.dp, 16.dp,48.dp, 48.dp)
+                    .sizeIn(32.dp, 32.dp,64.dp, 64.dp)
                     .clip(CircleShape)
                     .background (
                         color = colors.background,
@@ -125,7 +180,7 @@ fun SavedReceiptsSection (
                     painter = painterResource(R.drawable.receiptsymbol_foreground),
                     contentDescription = "ReceiptLogo",
                     modifier = Modifier
-                        .padding(top = 4.dp, start = 4.dp)
+                        .padding(top = 8.dp, start = 6.dp)
                         .background (
                             color = colors.background,
                             shape = CircleShape
@@ -139,26 +194,26 @@ fun SavedReceiptsSection (
 
         Box (
             modifier = Modifier
-                .weight(2f),
+                .weight(3f),
             contentAlignment = Alignment.BottomStart
         ) {
             Text (
                 text = buildAnnotatedString {
                     withStyle (
                         SpanStyle (
-                            fontSize = fontSize,
+                            fontSize = typography.title * fontSizeMultiplicator,
                             fontWeight = FontWeight.Bold,
                             color = colors.primary
                         )
                     ) {
-                        append(receiptsThisMonth.value.size.toString())
+                        append(receiptsThisMonth.size.toString())
                     }
 
                     append("\n")
 
                     withStyle (
                         SpanStyle (
-                            fontSize = fontSize / 2,
+                            fontSize = typography.medium,
                             color = colors.primary
                         )
                     ) {

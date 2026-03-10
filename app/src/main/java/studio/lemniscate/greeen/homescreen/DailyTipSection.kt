@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalConfiguration
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun DailyTipSection (
@@ -34,16 +35,7 @@ fun DailyTipSection (
     dailyTipSectionClicked: () -> Unit
 ) {
     val colors = LocalAppColors.current
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 16.sp
-        screenHeight <= 720 -> 18.sp
-        screenHeight <= 800 -> 22.sp
-        else -> 24.sp
-    }
-
+    val typography = LocalAppTypography.current
     val newDailyTipAvailable by dailyTipScreenViewModel.newDailyTipAvailable.collectAsState()
 
     val buttonText = if (newDailyTipAvailable)
@@ -68,7 +60,7 @@ fun DailyTipSection (
     ) {
         Text (
             text = buttonText,
-            fontSize = fontSize,
+            fontSize = typography.body,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             color = colors.primary,

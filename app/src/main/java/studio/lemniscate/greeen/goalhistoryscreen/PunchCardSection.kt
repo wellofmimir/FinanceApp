@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun PunchCardSection (
@@ -56,15 +57,7 @@ fun PunchCardSection (
     tutorialInformation: TutorialInformation
 ) {
     val colors = LocalAppColors.current
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 16.sp
-        screenHeight <= 720 -> 18.sp
-        screenHeight <= 800 -> 20.sp
-        else -> 22.sp
-    }
+    val typography = LocalAppTypography.current
 
     LaunchedEffect(Unit) {
         punchCardSectionViewModel.getTokenSoFarForPunchcard()
@@ -142,13 +135,16 @@ fun PunchCardSection (
                     .weight(1f),
                 text = buildAnnotatedString {
                     withStyle (
-                        style = SpanStyle(fontWeight = FontWeight.Bold, color = colors.primary)
+                        style = SpanStyle (
+                            fontWeight = FontWeight.Bold,
+                            color = colors.primary
+                        )
                     ) {
                         append("Treat yourself ")
                     }
                     append("once this card is completed.")
                 },
-                fontSize = fontSize,
+                fontSize = typography.medium,
                 color = colors.background,
                 textAlign = TextAlign.Center,
                 maxLines = 2

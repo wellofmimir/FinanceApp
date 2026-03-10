@@ -38,6 +38,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.UiComposable
 import androidx.compose.ui.platform.LocalConfiguration
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,22 +63,7 @@ fun GoalsSection (
     goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    val fontSize = when {
-        screenHeight <= 640 -> 16.sp
-        screenHeight <= 720 -> 18.sp
-        screenHeight <= 800 -> 20.sp
-        else -> 22.sp
-    }
-
-    val bulletPointSize = when {
-        screenHeight <= 640 -> 16.dp
-        screenHeight <= 720 -> 18.dp
-        screenHeight <= 800 -> 20.dp
-        else -> 22.dp
-    }
+    val typography = LocalAppTypography.current
 
     val goals by goalsSectionViewModel.goals.collectAsState()
     var newGoalEntered by remember { mutableStateOf(true) }
@@ -105,14 +92,14 @@ fun GoalsSection (
                 color = colors.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, end = 8.dp)
-                .background(
+                .background (
                     color = colors.surface,
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 ),
@@ -122,7 +109,7 @@ fun GoalsSection (
             Text (
                 text = "Stuff you're working on:",
                 color = colors.textPrimary,
-                fontSize = fontSize,
+                fontSize = typography.subtitle,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .background (
@@ -192,6 +179,10 @@ fun GoalsSection (
                             }
                     )
                     ) {
+                        val bulletPointSize = with(LocalDensity.current) {
+                            typography.body.toDp() * 0.8f
+                        }
+
                         Image (
                             painter = painterResource(R.drawable.bulletpoint_foreground),
                             contentDescription = "Bulletpoint",
@@ -205,13 +196,13 @@ fun GoalsSection (
 
                         Spacer (
                             modifier = Modifier
-                                .width(24.dp)
+                                .width(20.dp)
                         )
 
                         Text (
                             text = it.goal,
                             color = colors.textPrimary,
-                            fontSize = fontSize * 0.8,
+                            fontSize = typography.body * 0.9f,
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier

@@ -47,9 +47,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
-fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = LocalAppColors.current, context: Context = LocalContext.current) {
+fun ThemeShopIntroSection (
+    modifier: Modifier = Modifier,
+    colors: AppColors = LocalAppColors.current,
+    context: Context = LocalContext.current
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val fontSize = when {
+        screenHeight <= 640 -> 12.sp
+        screenHeight <= 720 -> 14.sp
+        screenHeight <= 800 -> 16.sp
+        else -> 16.sp
+    }
 
     Column (
         modifier = modifier
@@ -66,7 +80,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
             color = colors.secondary,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp,
+            fontSize = fontSize,
             modifier = Modifier
                 .padding(top = 12.dp, start = 12.dp)
         )
@@ -80,7 +94,7 @@ fun ThemeShopIntroSection(modifier: Modifier = Modifier, colors: AppColors = Loc
             text = "Check out our purchasable content here. Purchasing themes from us also helps us make cool products for you, and keep our apps free.",
             color = colors.secondary,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
+            fontSize = fontSize,
             modifier = Modifier
                 .padding(start = 12.dp, bottom = 4.dp)
         )
