@@ -1029,7 +1029,7 @@ fun ExpensesOverviewSection (
             Text (
                 text = "Purchases Recorded",
                 color = colors.textPrimary,
-                fontSize = typography.medium,
+                fontSize = typography.medium * 0.9f,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
