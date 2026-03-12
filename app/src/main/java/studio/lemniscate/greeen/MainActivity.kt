@@ -881,6 +881,11 @@ class MainActivity : ComponentActivity() {
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
+                                    Spacer (
+                                        modifier = Modifier
+                                            .height(150.dp)
+                                    )
+
                                     Text (
                                         text = "This is the goal you’re working on at the moment.\n\nTap the percentage to update your progress.",
                                         fontSize = appTypography.subtitle,

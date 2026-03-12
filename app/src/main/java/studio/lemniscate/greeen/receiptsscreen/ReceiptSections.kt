@@ -681,8 +681,13 @@ fun AddReceiptMenu (
                         }
                     }
 
-                    if (Build.VERSION.SDK_INT >= 33)
-                        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+
+                    if (Build.VERSION.SDK_INT < 33) {
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors (
                     containerColor = colors.surface,
