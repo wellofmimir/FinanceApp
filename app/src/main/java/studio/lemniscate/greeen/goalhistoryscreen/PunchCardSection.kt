@@ -144,7 +144,7 @@ fun PunchCardSection (
                     }
                     append("once this card is completed.")
                 },
-                fontSize = typography.medium,
+                fontSize = typography.small,
                 color = colors.background,
                 textAlign = TextAlign.Center,
                 maxLines = 2

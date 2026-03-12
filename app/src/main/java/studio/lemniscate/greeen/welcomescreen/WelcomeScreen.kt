@@ -1537,7 +1537,7 @@ fun WelcomeScreen (
                         .padding(start = 25.dp),
                     text = if (splashMode) "Greeen." else "Welcome to Greeen.",
                     color = Pistachio,
-                    fontSize = typography.title,
+                    fontSize = typography.title * 1.3f,
                     fontWeight = FontWeight.Bold
                 )
             }

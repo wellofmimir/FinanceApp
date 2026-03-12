@@ -68,7 +68,7 @@ fun RecentlyCompletedGoalsSection (
         Text (
             text = "Recently Completed:",
             color = colors.primary,
-            fontSize = typography.medium,
+            fontSize = typography.button,
             fontStyle = FontStyle.Italic
         )
 

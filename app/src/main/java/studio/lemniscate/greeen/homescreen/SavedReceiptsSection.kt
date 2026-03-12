@@ -155,7 +155,7 @@ fun SavedReceiptsSection (
                 modifier = Modifier
                     .weight(4f),
                 text = "This Month:",
-                fontSize = typography.medium,
+                fontSize = typography.button,
                 color = colors.primary
             )
 
