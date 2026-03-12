@@ -46,21 +46,21 @@ val LargeTypography = AppTypography (
 )
 
 val ExtraLargeTypography = AppTypography (
-    title = 28.sp,
-    subtitle = 24.sp,
-    body = 22.sp,
-    button = 18.sp,
-    medium = 20.sp,
-    small = 16.sp
+    title = 24.sp,
+    subtitle = 22.sp,
+    body = 20.sp,
+    button = 16.sp,
+    medium = 18.sp,
+    small = 14.sp
 )
 
 val ExtraExtraLargeTypography = AppTypography (
-    title = 30.sp,
-    subtitle = 26.sp,
-    body = 22.sp,
-    button = 18.sp,
-    medium = 20.sp,
-    small = 16.sp
+    title = 25.sp,
+    subtitle = 23.sp,
+    body = 21.sp,
+    button = 17.sp,
+    medium = 19.sp,
+    small = 15.sp
 )
 val LocalAppTypography = staticCompositionLocalOf {
     NormalTypography

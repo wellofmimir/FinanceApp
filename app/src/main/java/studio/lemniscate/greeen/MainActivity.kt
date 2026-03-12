@@ -434,7 +434,6 @@ class MainActivity : ComponentActivity() {
                 val addReceiptMenuOpen by receiptSectionsViewModel.showAddReceiptSection.collectAsState()
                 var addNewGoalMenuRequested by remember { mutableStateOf(false) }
 
-                val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
                 val appliedTheme by themeShopViewModel.appliedTheme.collectAsState()
                 var previewColors by remember { mutableStateOf<AppColors?>(null) } //um ein Preview eines Themes anzuzeigen
                 var isPagerBlocked by remember { mutableStateOf(false) }

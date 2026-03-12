@@ -54,7 +54,7 @@ fun BadgeTile (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .heightIn(175.dp, 190.dp)
+            .heightIn(175.dp, 225.dp)
             .fillMaxWidth()
             .background (
                 color = colors.secondary,
