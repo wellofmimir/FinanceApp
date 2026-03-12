@@ -10,6 +10,9 @@ import studio.lemniscate.greeen.commonutils.shareToFacebookMessenger
 import studio.lemniscate.greeen.homescreen.TutorialInformation
 import studio.lemniscate.greeen.TutorialStep
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.commonutils.moneyRegex
+import studio.lemniscate.greeen.commonutils.validateInput
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import java.time.format.DateTimeFormatter
 import java.time.Instant
@@ -60,6 +63,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
@@ -85,6 +89,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.sizeIn
 
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -110,9 +115,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.TextStyle
-import studio.lemniscate.greeen.commonutils.moneyRegex
-import studio.lemniscate.greeen.commonutils.validateInput
-import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 enum class Timespan (id: Int) {
 
@@ -123,7 +125,6 @@ enum class Timespan (id: Int) {
     WHOLE_YEAR (3),
     ALL (4)
 }
-
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1040,8 +1041,6 @@ fun ExpensesOverviewSection (
                     .align(Alignment.CenterHorizontally)
             )
         }
-
-
     }
 }
 
@@ -1117,181 +1116,136 @@ fun ReceiptLogSection (
 
     if (showDialog && bitmap != null) {
         Dialog (
-            onDismissRequest = {
-                showDialog = false
-            },
-            properties = DialogProperties (
-                usePlatformDefaultWidth = false
-            )
+            onDismissRequest = { showDialog = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.9f)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxSize()
+                    .background (
+                        color = colors.primary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
             ) {
-                Image (
-                    bitmap = bitmap!!.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(4f)
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable (
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            if (showDialog) {
-                                showDialog = false
-                            }
-                        }
-                )
-
-                Spacer (
-                    modifier = Modifier
-                        .padding(4.dp)
-                )
-
                 Box (
                     modifier = Modifier
+                        .weight(3f)
                         .fillMaxWidth()
+                ) {
+                    Image (
+                        bitmap = bitmap!!.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                showDialog = false
+                            }
+                    )
+                }
+
+                Column (
+                    modifier = Modifier
                         .weight(1f)
+                        .fillMaxWidth()
+                        .padding(12.dp)
                         .border (
                             width = 1.dp,
                             shape = RoundedCornerShape(12.dp),
-                            color = colors.secondary
-                        )
-                        .background (
-                            shape = RoundedCornerShape(12.dp),
-                            color = colors.background
+                            color = colors.primary
                         ),
-                    contentAlignment = Alignment.Center
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 12.dp)
-                            .background (
-                                color = colors.primary,
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        currentReceipt?.let { currentReceipt ->
-                            Text (
-                                text = currentReceipt.description,
-                                color = colors.secondary,
-                                fontSize = typography.subtitle
-                            )
+                    currentReceipt?.let { currentReceipt ->
+                        Text (
+                            text = currentReceipt.description,
+                            color = colors.secondary,
+                            fontSize = typography.subtitle
+                        )
 
-                            Text (
-                                text = if (currency.length == 1) currency + " " + currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() else currentReceipt.amount.toBigDecimal().setScale(2, RoundingMode.DOWN).toPlainString() + " " + currency,
-                                color = colors.secondary,
-                                fontSize = typography.medium
-                            )
+                        Text (
+                            text = if (currency.length == 1)
+                                "$currency ${
+                                    currentReceipt.amount.toBigDecimal()
+                                        .setScale(2, RoundingMode.DOWN)
+                                        .toPlainString()
+                                }"
+                            else
+                                "${
+                                    currentReceipt.amount.toBigDecimal()
+                                        .setScale(2, RoundingMode.DOWN)
+                                        .toPlainString()
+                                } $currency",
+                            color = colors.secondary,
+                            fontSize = typography.medium
+                        )
 
-                            Text (
-                                text = currentReceipt.category,
-                                color = colors.secondary,
-                                fontSize = typography.small
-                            )
+                        Text (
+                            text = currentReceipt.category,
+                            color = colors.secondary,
+                            fontSize = typography.subtitle
+                        )
 
-                            if (currentReceipt.remindMeDate.isNotEmpty()) {
-                                Text (
-                                    text = "When to remind you:\n" + currentReceipt.remindMeDate,
-                                    color = colors.secondary,
-                                    fontSize = typography.body
-                                )
-                            }
-
-                            Spacer (
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Image (
+                                painter = painterResource(R.drawable.whatsapp_foreground),
+                                contentDescription = "Whatsapp",
+                                colorFilter = ColorFilter.tint(colors.secondary),
                                 modifier = Modifier
-                                    .height(6.dp)
+                                    .size(64.dp)
+                                    .clickable {
+                                        if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                            return@clickable
+
+                                        receiptSectionsViewModel.shareReceiptOnWhatsApp(currentReceipt)
+                                        whatsAppClicked = true
+                                    }
                             )
 
-                            Row (
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
+                            Image (
+                                painter = painterResource(R.drawable.facebook_foreground),
+                                contentDescription = "Facebook",
+                                colorFilter = ColorFilter.tint(colors.secondary),
                                 modifier = Modifier
-                                    .fillMaxWidth(0.5f)
-                                    .size(200.dp)
-                            ) {
-                                Box (
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .size(200.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image (
-                                        painter = painterResource(R.drawable.whatsapp_foreground),
-                                        contentDescription = "Whatsapp-Logo",
-                                        colorFilter = ColorFilter.tint(colors.secondary),
-                                        modifier = Modifier
-                                            .clickable (
-                                                indication = null,
-                                                interactionSource = remember { MutableInteractionSource() }
-                                            ) {
-                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
-                                                    return@clickable
+                                    .size(64.dp)
+                                    .clickable {
+                                        if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                            return@clickable
 
-                                                receiptSectionsViewModel.shareReceiptOnWhatsApp(currentReceipt)
-                                                whatsAppClicked = true
-                                            }
-                                    )
-                                }
+                                        receiptSectionsViewModel.shareReceiptOnFacebook(currentReceipt)
+                                        facebookClicked = true
+                                    }
+                            )
 
-                                Box (
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .size(200.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image (
-                                        painter = painterResource(R.drawable.facebook_foreground),
-                                        contentDescription = "Facebook-Logo",
-                                        colorFilter = ColorFilter.tint(colors.secondary),
-                                        modifier = Modifier
-                                            .clickable (
-                                                indication = null,
-                                                interactionSource = remember { MutableInteractionSource() }
-                                            ) {
-                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
-                                                    return@clickable
+                            Image (
+                                painter = painterResource(R.drawable.facebookmessenger_foreground),
+                                contentDescription = "Messenger",
+                                colorFilter = ColorFilter.tint(colors.secondary),
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .clickable {
+                                        if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
+                                            return@clickable
 
-                                                receiptSectionsViewModel.shareReceiptOnFacebook(currentReceipt)
-                                                facebookClicked = true
-                                            }
-                                    )
-                                }
-
-                                Box (
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .size(200.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image (
-                                        painter = painterResource(R.drawable.facebookmessenger_foreground),
-                                        contentDescription = "Facebook-Messenger",
-                                        colorFilter = ColorFilter.tint(colors.secondary),
-                                        modifier = Modifier
-                                            .clickable (
-                                                indication = null,
-                                                interactionSource = remember { MutableInteractionSource() }
-                                            ) {
-                                                if (whatsAppClicked || facebookClicked || facebookMessengerClicked)
-                                                    return@clickable
-
-                                                receiptSectionsViewModel.shareReceiptOnFacebookMessenger(currentReceipt)
-                                                facebookMessengerClicked = true
-                                            }
-                                    )
-                                }
-                            }
+                                        receiptSectionsViewModel.shareReceiptOnFacebookMessenger(currentReceipt)
+                                        facebookMessengerClicked = true
+                                    }
+                            )
                         }
+
+                        Spacer (
+                            modifier = Modifier
+                                .weight(0.1f)
+                        )
                     }
                 }
             }
