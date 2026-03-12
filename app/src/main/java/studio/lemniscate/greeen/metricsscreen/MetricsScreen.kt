@@ -145,7 +145,7 @@ fun MetricsScreen (
                         color = colors.primary,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .height(225.dp),
+                    .height(200.dp),
                 onDismissRequest = {
                     showExpense = false
                 },
