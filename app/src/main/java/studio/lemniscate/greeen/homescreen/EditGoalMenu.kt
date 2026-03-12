@@ -49,6 +49,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import kotlinx.coroutines.delay
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import java.math.RoundingMode
 
 @Composable
@@ -65,6 +66,7 @@ fun EditGoalMenu (
     currency: String
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     var blockInput by remember { mutableStateOf(false) }
 
@@ -72,14 +74,14 @@ fun EditGoalMenu (
     var isEditingSavedAmount by remember { mutableStateOf(false) }
 
     var amountText by remember { mutableStateOf("") }
-    var amountTextFontSize by remember { mutableStateOf(24.sp) }
+    var amountTextFontSize by remember { mutableStateOf(typography.title) }
     var originalAmountText by remember { mutableStateOf(amountText) } //einfach nur der Erinnerungswert, falls das Editieren verworfen wird
     var amountTextAsTextFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalAmountText))
     }
 
     var savedAmountText by remember { mutableStateOf("" ) }
-    var savedAmountTextFontSize by remember { mutableStateOf(24.sp) }
+    var savedAmountTextFontSize by remember { mutableStateOf(typography.title) }
     var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
     var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
         mutableStateOf(TextFieldValue(originalSavedAmountText))
@@ -98,11 +100,11 @@ fun EditGoalMenu (
 
         amountText = ""
         originalAmountText = ""
-        amountTextFontSize = 16.sp
+        amountTextFontSize = typography.button
 
         savedAmountText = ""
         originalSavedAmountText = ""
-        savedAmountTextFontSize = 16.sp
+        savedAmountTextFontSize = typography.button
 
         delay(250)
 
@@ -125,11 +127,11 @@ fun EditGoalMenu (
         goal?.let {
             amountText = goal.amount.toString()
             originalAmountText = amountText
-            amountTextFontSize = 24.sp
+            amountTextFontSize = typography.title
 
             savedAmountText = goal.saved.toString()
             originalSavedAmountText = savedAmountText
-            savedAmountTextFontSize = 24.sp
+            savedAmountTextFontSize = typography.title
         }
 
         blockInput = false
@@ -198,7 +200,7 @@ fun EditGoalMenu (
             Text (
                 text = currentGoalText,
                 color = colors.secondary,
-                fontSize = 24.sp
+                fontSize = typography.title
             )
 
             Spacer (
@@ -251,7 +253,7 @@ fun EditGoalMenu (
                 Text (
                     text = "Amount: $currency ",
                     color = colors.secondary,
-                    fontSize = 24.sp
+                    fontSize = typography.title
                 )
 
                 val focusRequester = remember { FocusRequester() }
@@ -349,7 +351,7 @@ fun EditGoalMenu (
                 Text (
                     text = "Already saved: $currency ",
                     color = colors.secondary,
-                    fontSize = 24.sp,
+                    fontSize = typography.title,
                 )
 
                 val focusRequester = remember { FocusRequester() }
@@ -497,7 +499,7 @@ fun EditGoalMenu (
 
             Text (
                 text = "Delete",
-                fontSize = 9.sp,
+                fontSize = typography.small,
                 color = colors.secondary,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier

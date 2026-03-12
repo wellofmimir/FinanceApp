@@ -9,9 +9,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.sizeIn
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -38,7 +38,7 @@ fun AppLogoSection (
             painter = painterResource(R.mipmap.applogo_foreground),
             contentDescription = "AppLogo-Mission",
             modifier = Modifier
-                .size(192.dp)
+                .sizeIn(125.dp, 125.dp, 192.dp, 192.dp)
                 .background (
                     color = Color.Transparent,
                     shape = RoundedCornerShape(12.dp)

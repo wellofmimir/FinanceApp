@@ -138,6 +138,9 @@ fun AddReceiptMenu (
     val colors = LocalAppColors.current
     val typography = LocalAppTypography.current
 
+    var fontSizeReceiptName by remember { mutableStateOf(typography.medium) }
+    var fontSizeReceiptAmount by remember { mutableStateOf(typography.medium) }
+
     var blockInput by remember { mutableStateOf(false) }
     var blockFinish by remember { mutableStateOf(false) }
 
@@ -177,6 +180,9 @@ fun AddReceiptMenu (
         blockInput = true
         blockFinish = true
         delay(250)
+
+        fontSizeReceiptName = typography.small
+        fontSizeReceiptAmount = typography.small
 
         var text = "Enter the receipt name here..."
         text.forEach {
@@ -396,6 +402,7 @@ fun AddReceiptMenu (
                         }
 
                         if (it.isFocused && firstFocusOnReceiptName) {
+                            fontSizeReceiptName = typography.medium
                             firstFocusOnReceiptName = false
                             nameOfReceipt = ""
                             focusRequester.requestFocus()
@@ -408,7 +415,7 @@ fun AddReceiptMenu (
                     nameOfReceipt = newText
                 },
                 textStyle = TextStyle (
-                    fontSize = typography.medium
+                    fontSize = fontSizeReceiptName
                 ),
                 singleLine = true,
                 colors = TextFieldDefaults.colors (
@@ -454,6 +461,7 @@ fun AddReceiptMenu (
                         }
 
                         if (it.isFocused && firstFocusOnAmount) {
+                            fontSizeReceiptAmount = typography.medium
                             firstFocusOnAmount = false
                             amountText = ""
                             focusRequester.requestFocus()
@@ -469,7 +477,7 @@ fun AddReceiptMenu (
                     amountText = newText
                 },
                 textStyle = TextStyle (
-                    fontSize = typography.medium
+                    fontSize = fontSizeReceiptAmount
                 ),
                 singleLine = true,
                 colors = TextFieldDefaults.colors (

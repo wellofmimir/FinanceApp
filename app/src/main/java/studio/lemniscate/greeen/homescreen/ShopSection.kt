@@ -82,7 +82,7 @@ fun ShopSection (
         Text (
             text = "Shop",
             color = colors.textPrimary,
-            fontSize = typography.button,
+            fontSize = typography.medium,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Start,
             modifier = Modifier

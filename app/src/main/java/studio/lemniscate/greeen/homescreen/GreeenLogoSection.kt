@@ -2,6 +2,7 @@ package studio.lemniscate.greeen.homescreen
 
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +39,8 @@ import studio.lemniscate.greeen.ui.theme.Pistachio
 fun GreeenLogoSection (
     modifier: Modifier = Modifier
 ) {
+    val typography = LocalAppTypography.current
+
     Column (
         modifier = modifier
             .border (
@@ -82,7 +85,7 @@ fun GreeenLogoSection (
             text = buildAnnotatedString {
                 withStyle (
                     SpanStyle (
-                        fontSize = 18.sp
+                        fontSize = typography.medium
                     )
                 ) {
                     append("Greeen")
@@ -90,9 +93,9 @@ fun GreeenLogoSection (
 
                 append("\n")
 
-                withStyle(
+                withStyle (
                     SpanStyle (
-                        fontSize = 13.sp,
+                        fontSize = typography.small,
                         fontWeight = FontWeight.Light,
                         color = Pistachio.copy(alpha = 0.7f)
                     )

@@ -43,6 +43,7 @@ import androidx.compose.ui.window.DialogProperties
 import studio.lemniscate.greeen.badges.BadgeIdentifier
 import studio.lemniscate.greeen.notifications.DailyEvents
 import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 private fun checkIfBadgeIsAvailable (
     currentlyLiked: Boolean,
@@ -70,6 +71,8 @@ fun DailyTipScreen (
     context: Context = LocalContext.current
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     val activity = context as? Activity
 
     val isBadgeAvailable by badgesViewModel.isBadgeAvailable.collectAsState()
@@ -321,6 +324,7 @@ fun DailyTipScreen (
                     ) {
                         Text (
                             text = "Your next tip is forming...\nCan you make it appear?",
+                            fontSize = typography.medium,
                             color = colors.secondary,
                             textAlign = TextAlign.Center,
                             modifier = Modifier

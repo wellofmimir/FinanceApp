@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 
 @Composable
@@ -27,6 +28,7 @@ fun TrendSection (
     trend: String
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     Box (
         modifier = modifier
@@ -45,7 +47,7 @@ fun TrendSection (
                 .verticalScroll(verticalScroll),
             text = trend,
             color = colors.secondary,
-            fontSize = 16.sp,
+            fontSize = typography.medium,
             textAlign = TextAlign.Center
         )
     }

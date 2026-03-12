@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.DropdownMenuItem
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,6 +51,8 @@ fun SwapCurrentGoalMenu (
     goalsSectionViewModel: GoalsSectionViewModel
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     val goals by goalsSectionViewModel.goals.collectAsState()
     val currentGoal by goalsSectionViewModel.currentGoal.collectAsState()
     var menuOpen by remember { mutableStateOf(false) }
@@ -90,7 +93,7 @@ fun SwapCurrentGoalMenu (
             Text (
                 text = titleText,
                 color = colors.secondary,
-                fontSize = 24.sp
+                fontSize = typography.title
             )
 
             Spacer (
@@ -160,7 +163,7 @@ fun SwapCurrentGoalMenu (
                     )
 
                     Text (
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         color = colors.secondary,
                         text = item.goal
                     )

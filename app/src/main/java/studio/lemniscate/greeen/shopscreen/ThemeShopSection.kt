@@ -53,11 +53,16 @@ fun ThemeShopIntroSection (
     val typography = LocalAppTypography.current
 
     Column (
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
         modifier = modifier
-            .padding(start = 12.dp, bottom = 12.dp, end = 12.dp)
+            .padding(start = 12.dp, end = 12.dp)
     ) {
+        Spacer (
+            modifier = Modifier
+                .height(12.dp)
+        )
+
         Text (
             text = "We get it! Green isn't for everyone!",
             color = colors.secondary,
@@ -69,7 +74,7 @@ fun ThemeShopIntroSection (
 
         Spacer (
             modifier = Modifier
-                .height(6.dp)
+                .height(12.dp)
         )
 
         Text (

@@ -3,7 +3,7 @@ package studio.lemniscate.greeen.metricsscreen
 import android.app.Activity
 import studio.lemniscate.greeen.receiptsscreen.ReceiptSectionsViewModel
 import studio.lemniscate.greeen.homescreen.TutorialInformation
-
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import studio.lemniscate.greeen.receiptsscreen.SinceWhenSection
 import studio.lemniscate.greeen.receiptsscreen.Timespan
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
@@ -70,6 +70,8 @@ fun MetricsScreen (
     val activity = context as? Activity
 
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     var timespan by remember { mutableStateOf(Timespan.THIS_MONTH) }
 
     val expenses by receiptSectionsViewModel.expenses.collectAsState()
@@ -203,7 +205,7 @@ fun MetricsScreen (
             ) {
                 Text (
                     text = "No Expenses Yet",
-                    fontSize = 24.sp,
+                    fontSize = typography.title,
                     color = colors.primary
                 )
             }
@@ -231,7 +233,7 @@ fun MetricsScreen (
                                     receiptSectionsViewModel.getExpense(it.category)
                                     showExpense = true
                                 },
-                            fontSize = 16.sp,
+                            fontSize = typography.small,
                             textAlign = TextAlign.Start
                         )
                     }

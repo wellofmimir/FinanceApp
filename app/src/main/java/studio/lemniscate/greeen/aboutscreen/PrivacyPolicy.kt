@@ -16,12 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun PrivacyPolicy (
     modifier: Modifier = Modifier
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
     val verticalScrollState = rememberScrollState()
 
     Box (
@@ -33,6 +35,7 @@ fun PrivacyPolicy (
             )
     ) {
         Text (
+            fontSize = typography.medium,
             text = buildAnnotatedString {
                 withStyle (
                     style = SpanStyle (

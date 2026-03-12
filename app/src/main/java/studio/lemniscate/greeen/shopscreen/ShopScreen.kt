@@ -54,7 +54,7 @@ fun ShopScreen (
             ),
         verticalArrangement = Arrangement.spacedBy (
             4.dp,
-            alignment = Alignment.Top
+            alignment = Alignment.CenterVertically
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

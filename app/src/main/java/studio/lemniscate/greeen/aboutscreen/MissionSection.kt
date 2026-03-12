@@ -1,6 +1,7 @@
 package studio.lemniscate.greeen.aboutscreen
 
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -34,16 +39,13 @@ fun MissionSection (
     modifier: Modifier = Modifier
 ) {
     val colors = LocalAppColors.current
-    val maxFontSize: TextUnit = 24.sp
-    val minFontSize: TextUnit = 18.sp
+    val typography = LocalAppTypography.current
 
-    var readyToDraw by remember { mutableStateOf(false) }
-    var fontSize by remember { mutableStateOf(maxFontSize) }
+    val verticalScroll = rememberScrollState()
 
     Box (
         modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
@@ -52,11 +54,8 @@ fun MissionSection (
     ) {
         Text (
             modifier = Modifier
-                .padding(start = 12.dp, end = 12.dp, top = 12.dp)
-                .drawWithContent {
-                    if (readyToDraw)
-                        drawContent()
-                },
+                .verticalScroll(verticalScroll)
+                .padding(start = 12.dp, end = 12.dp, top = 12.dp),
             text = buildAnnotatedString {
                 withStyle (
                     style = SpanStyle (
@@ -107,16 +106,9 @@ fun MissionSection (
                     append("The Greeen Team")
                 }
             },
-            fontSize = fontSize,
+            fontSize = typography.medium,
             color = colors.primary,
-            textAlign = TextAlign.Left,
-            onTextLayout = { result ->
-                if (result.didOverflowHeight  && fontSize > minFontSize) {
-                    fontSize *= 0.8f
-                } else {
-                    readyToDraw = true
-                }
-            }
+            textAlign = TextAlign.Left
         )
     }
 }

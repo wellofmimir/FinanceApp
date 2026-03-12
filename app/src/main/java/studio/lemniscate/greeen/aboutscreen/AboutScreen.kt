@@ -1,4 +1,4 @@
-package studio.lemniscate.greeen.aboutscreen
+ package studio.lemniscate.greeen.aboutscreen
 
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 
@@ -67,12 +67,12 @@ fun AboutScreen (
     ) {
         AppLogoSection (
             modifier = modifier
-                .weight(0.3f)
+                .weight(0.25f)
         )
 
         MissionSection (
             modifier = modifier
-                .weight(0.7f)
+                .weight(0.8f)
         )
 
         Text (

@@ -3,22 +3,9 @@ package studio.lemniscate.greeen.settingsscreen
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.header.HeaderSectionViewModel
 import studio.lemniscate.greeen.R
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
-import androidx.compose.ui.graphics.Color
-import android.content.Context
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,40 +14,59 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.sizeIn
+
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Text
+
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.material3.TextButton
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.focus.focusRequester
-
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 @Composable
-fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: HeaderSectionViewModel, settingsViewModel: SettingsViewModel, focusManager: FocusManager = LocalFocusManager.current) {
-
+fun SettingsSection (
+    modifier: Modifier = Modifier,
+    headerSectionViewModel: HeaderSectionViewModel,
+    settingsViewModel: SettingsViewModel
+) {
+    val focusManager = LocalFocusManager.current
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     val user by headerSectionViewModel.user.collectAsState()
     var newUsername by remember { mutableStateOf(user) }
@@ -80,14 +86,13 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
     val currency by settingsViewModel.currency.collectAsState()
     settingsViewModel.getCurrency()
-    var newCurrency by remember { mutableStateOf(currency) }
 
+    var newCurrency by remember { mutableStateOf(currency) }
     var isEditingTheCurrency by remember { mutableStateOf(false) }
 
     LaunchedEffect(feedbackTextFieldIsFocused) {
-        if (feedbackTextFieldIsFocused) {
+        if (feedbackTextFieldIsFocused)
             focusRequester.requestFocus()
-        }
     }
 
     Column (
@@ -120,18 +125,17 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "Name:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 26.sp
+                    fontSize = typography.title
                 )
             }
 
             Box (
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(1f)
                     .padding(start = 4.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 if (isEditingTheName) {
-
                     TextField (
                         value = newUsername,
                         onValueChange = {
@@ -149,7 +153,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = user,
                         color = colors.primary,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 26.sp,
+                        fontSize = typography.title,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .clickable (
@@ -166,7 +170,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             if (isEditingTheName) {
                 Box (
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(0.5f)
                         .padding(end = 8.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
@@ -175,7 +179,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         contentDescription = "CheckHook",
                         colorFilter = ColorFilter.tint(colors.secondary),
                         modifier = Modifier
-                            .size(56.dp)
+                            .sizeIn(48.dp, 48.dp,  56.dp, 56.dp)
                             .background (
                                 color = colors.primary,
                                 shape = CircleShape
@@ -185,10 +189,8 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 if (isEditingTheName) {
-                                    if (newUsername.isEmpty()) {
-
+                                    if (newUsername.isEmpty())
                                         return@clickable
-                                    }
 
                                     isEditingTheName = false
                                     headerSectionViewModel.updateUser(newUsername)
@@ -219,20 +221,20 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
         ) {
             Box (
                 modifier = Modifier
-                    .weight(0.75f)
+                    .weight(1f)
             ) {
                 Text (
                     text = "Currency:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 26.sp
+                    fontSize = typography.title
                 )
             }
 
             Box (
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .weight(0.5f)
+                    .weight(1f)
                     .clickable (
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
@@ -251,7 +253,6 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         },
                         singleLine = true,
                         modifier = Modifier
-                            .width(200.dp)
                             .padding(10.dp)
                             .background (
                                 color = Color.White
@@ -262,7 +263,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = currency,
                         color = colors.primary,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 26.sp,
+                        fontSize = typography.title,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .clickable(
@@ -277,18 +278,18 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             }
 
             if (isEditingTheCurrency) {
-                Box(
+                Box (
                     modifier = Modifier
-                        .weight(0.8f)
+                        .weight(0.5f)
                         .padding(end = 8.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    Image(
+                    Image (
                         painter = painterResource(R.drawable.checkhooksymbol_foreground),
                         contentDescription = "CheckHook",
                         colorFilter = ColorFilter.tint(colors.secondary),
                         modifier = Modifier
-                            .size(56.dp)
+                            .sizeIn(48.dp, 48.dp,  56.dp, 56.dp)
                             .background (
                                 color = colors.primary,
                                 shape = CircleShape
@@ -337,7 +338,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "Version Info:",
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 26.sp
+                    fontSize = typography.title
                 )
             }
 
@@ -351,7 +352,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     text = "1.0.0.0",
                     color = colors.primary,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 26.sp
+                    fontSize = typography.title
                 )
             }
         }
@@ -430,7 +431,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                         text = "Feedback",
                         color = colors.primary,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 26.sp
+                        fontSize = typography.title
                     )
                 }
 
@@ -490,7 +491,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
                     ) {
                         Text (
                             text = "Dismiss",
-                            fontSize = 18.sp,
+                            fontSize = typography.button,
                             color = colors.secondary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
@@ -524,7 +525,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
 
                         Text (
                             text = sendButtonText,
-                            fontSize = 18.sp,
+                            fontSize = typography.button,
                             color = colors.secondary,
                             fontStyle = FontStyle.Italic,
                             modifier = Modifier
@@ -559,7 +560,7 @@ fun SettingsSection(modifier: Modifier = Modifier, headerSectionViewModel: Heade
             ) {
                 Text (
                     text = textAfterFeedbackButtonClicked,
-                    fontSize = 26.sp,
+                    fontSize = typography.title,
                     color = colors.primary,
                     textAlign = TextAlign.Center
                 )

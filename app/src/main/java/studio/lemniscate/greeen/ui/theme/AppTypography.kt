@@ -28,21 +28,21 @@ val SmallTypography = AppTypography (
 )
 
 val NormalTypography = AppTypography (
-    title = 26.sp,
-    subtitle = 18.sp,
+    title = 22.sp,
+    subtitle = 20.sp,
     body = 18.sp,
     button = 14.sp,
-    medium = 14.sp,
-    small = 11.sp
+    medium = 16.sp,
+    small = 12.sp
 )
 
 val LargeTypography = AppTypography (
-    title = 28.sp,
-    subtitle = 20.sp,
-    body = 22.sp,
-    button = 14.sp,
-    medium = 14.sp,
-    small = 12.sp
+    title = 24.sp,
+    subtitle = 22.sp,
+    body = 20.sp,
+    button = 16.sp,
+    medium = 18.sp,
+    small = 14.sp
 )
 
 val ExtraLargeTypography = AppTypography (

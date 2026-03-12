@@ -5,6 +5,7 @@ import studio.lemniscate.greeen.ui.theme.Pistachio
 import studio.lemniscate.greeen.database.Goal
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import studio.lemniscate.greeen.commonutils.*
 
 import kotlinx.coroutines.delay
@@ -71,6 +72,8 @@ fun FirstGoalMenu (
     onDismissRequested: (errorMessage: Pair<String, String>) -> Unit,
     onFinished: (username: String, goal: String, amount: Float, currencySymbol: String) -> Unit
 ) {
+    val typography = LocalAppTypography.current
+
     var blockInput by remember { mutableStateOf(true) }
 
     var createTheFirstGoalText by remember { mutableStateOf("") }
@@ -183,17 +186,17 @@ fun FirstGoalMenu (
                         Text (
                             text = enterYourNameText,
                             color = Emerald,
-                            fontSize = 26.sp,
+                            fontSize = typography.subtitle,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
                     },
                     singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(
+                    textStyle = LocalTextStyle.current.copy (
                         textAlign = TextAlign.Center,
                         color = Emerald,
-                        fontSize = 26.sp,
+                        fontSize = typography.subtitle,
                         fontWeight = FontWeight.Bold
                     ),
                     colors = TextFieldDefaults.colors (
@@ -241,7 +244,7 @@ fun FirstGoalMenu (
                 Text (
                     text = createTheFirstGoalText,
                     color = Emerald,
-                    fontSize = 26.sp,
+                    fontSize = typography.subtitle,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -418,7 +421,7 @@ fun FirstGoalMenu (
                     ) {
                         Text (
                             text = it,
-                            fontSize = 30.sp,
+                            fontSize = typography.title,
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold,
                             color = if (it == chosenCurrency) Color.White else Emerald
@@ -446,7 +449,7 @@ fun FirstGoalMenu (
 
                     Text(
                         text = "choose another currency",
-                        fontSize = 14.sp,
+                        fontSize = typography.small,
                         color = Emerald,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
@@ -545,7 +548,7 @@ fun FirstGoalMenu (
                     ) {
                         Text (
                             text = chosenCurrency,
-                            fontSize = 30.sp,
+                            fontSize = typography.title,
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -700,6 +703,7 @@ fun FirstTokenMenu (
     onDismissRequested: () -> Unit,
     onFinished: (tokenCount: Int) -> Unit
 ) {
+    val typography = LocalAppTypography.current
 
     DropdownMenu (
         expanded = expanded,
@@ -743,7 +747,7 @@ fun FirstTokenMenu (
                 Text (
                     text = "Greeen makes goal setting worth-while with tokens.",
                     color = Emerald,
-                    fontSize = 26.sp,
+                    fontSize = typography.subtitle,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -789,7 +793,7 @@ fun FirstTokenMenu (
                     Text (
                         text = "Every goal you create is worth tokens. You decide how much your goals are worth - up to five tokens.",
                         color = Emerald,
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Normal,
                         textAlign = TextAlign.Justify
                     )
@@ -836,7 +840,7 @@ fun FirstTokenMenu (
                     Text (
                         text = "How much is this goal worth?",
                         color = Emerald,
-                        fontSize = 26.sp,
+                        fontSize = typography.subtitle,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Justify
                     )
@@ -1052,7 +1056,7 @@ fun FirstTokenMenu (
                     Text (
                         text = tokenText,
                         textAlign = TextAlign.Center,
-                        fontSize = 18.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Normal
                     )
 
@@ -1081,7 +1085,7 @@ fun FirstTokenMenu (
                 ) {
                     Text (
                         text = "Start your journey.",
-                        fontSize = 24.sp,
+                        fontSize = typography.subtitle,
                         fontWeight = FontWeight.Bold,
                         color = Emerald
                     )
@@ -1117,6 +1121,7 @@ fun WelcomeScreen (
     welcomeScreenViewModel: WelcomeScreenViewModel
 ) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     var username by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
@@ -1532,7 +1537,7 @@ fun WelcomeScreen (
                         .padding(start = 25.dp),
                     text = if (splashMode) "Greeen." else "Welcome to Greeen.",
                     color = Pistachio,
-                    fontSize = if (splashMode) 48.sp else 35.sp,
+                    fontSize = typography.title,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -1552,7 +1557,7 @@ fun WelcomeScreen (
                             .padding(start = 25.dp, end = 25.dp),
                         text = "To get started, please tell us a few details about you...",
                         color = Pistachio,
-                        fontSize = 20.sp,
+                        fontSize = typography.medium,
                         fontWeight = FontWeight.Light
                     )
                 }
@@ -1596,7 +1601,7 @@ fun WelcomeScreen (
                                     .padding(start = 25.dp, end = 25.dp),
                                 text = "Let's go!",
                                 color = Emerald,
-                                fontSize = 36.sp,
+                                fontSize = typography.title,
                                 fontWeight = FontWeight.Bold
                             )
 

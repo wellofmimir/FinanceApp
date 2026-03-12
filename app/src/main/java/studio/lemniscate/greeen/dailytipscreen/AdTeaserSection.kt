@@ -2,6 +2,7 @@ package studio.lemniscate.greeen.dailytipscreen
 
 import studio.lemniscate.greeen.R
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,7 +19,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
@@ -32,9 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
-import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 
 @Composable
 fun AdTeaserSection (
@@ -85,7 +84,7 @@ fun AdTeaserSection (
 
         Box (
             modifier = Modifier
-                .size(64.dp)
+                .sizeIn(32.dp, 32.dp, 64.dp, 64.dp)
                 .fillMaxWidth(0.25f)
                 .clip(CircleShape)
                 .background (
@@ -103,7 +102,7 @@ fun AdTeaserSection (
                 painter = painterResource(R.drawable.doppelpfeileruntersymbol_foreground),
                 contentDescription = "Doppelpfeile",
                 modifier = Modifier
-                    .size(32.dp)
+                    .sizeIn(24.dp, 24.dp, 32.dp, 32.dp)
                     .background (
                         color = colors.background,
                         shape = CircleShape

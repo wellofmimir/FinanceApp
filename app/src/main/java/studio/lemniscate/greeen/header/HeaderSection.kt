@@ -56,9 +56,17 @@ fun HeaderSection (
     val username = headerSectionViewModel.user.collectAsState()
     var headerText by remember { mutableStateOf("Test") }
 
+    val fontMultiplicator = when (username.value.length) {
+        in 1..7 -> 1f
+        in 8 .. 12 -> 1f
+        in 13 .. 18 ->  0.8f
+        in 19 .. 23 -> 0.65f
+        else ->  0.5f
+    }
+
     headerText = when (sectionIdentifier) {
 
-        0 -> "Hey ${username.value}, what's up?"
+        0 -> if (fontMultiplicator < 1f) "Hey ${username.value},\nwhat's up?" else "Hey ${username.value}, what's up?"
         1 -> "Your Liked Quotes"
         2 -> "Goals Completed"
         3 -> "Goals Completed"
@@ -107,18 +115,17 @@ fun HeaderSection (
                 modifier = Modifier
                     .weight(0.9f)
             ) {
-                val fontMultiplicator = when (username.value.length) {
-                    in 1..7 -> 1f
-                    in 8 .. 12 -> 0.8f
-                    in 13 .. 18 ->  0.6f
-                    in 19 .. 23 -> 0.4f
-                    else ->  0.3f
-                }
+
+
+                val fontSize = if (sectionIdentifier == 0)
+                        typography.title * fontMultiplicator
+                    else
+                        typography.title
 
                 Text (
                     text = headerText,
                     color = colors.primary,
-                    fontSize = typography.title * fontMultiplicator,
+                    fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )
             }

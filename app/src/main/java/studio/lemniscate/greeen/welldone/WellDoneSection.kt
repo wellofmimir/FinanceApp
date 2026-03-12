@@ -46,13 +46,17 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.FileProvider
 import studio.lemniscate.greeen.homescreen.GoalsSectionViewModel
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import java.io.File
 
 
 @Composable
-fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
-
+fun QuestionDialog (
+    onConfirm:() -> Unit,
+    onDismissRequest: () -> Unit
+) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     AlertDialog (
         modifier = Modifier
@@ -99,8 +103,7 @@ fun QuestionDialog(onConfirm:() -> Unit, onDismissRequest: () -> Unit) {
             ) {
                 Text (
                     text = "Yes, take a photo",
-                    color = colors.primary,
-
+                    color = colors.primary
                 )
             }
         },
@@ -133,9 +136,11 @@ fun WellDoneSection (
     idGoal: Int,
     punchCardFilled: Boolean,
     onFinished: () -> Unit,
-    context: Context = LocalContext.current) {
-
+    context: Context = LocalContext.current
+) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
+
     var showDialog by remember { mutableStateOf(false) }
     val photos = remember { mutableStateListOf<File>() }
 
@@ -191,7 +196,7 @@ fun WellDoneSection (
 
         Text (
             text = "Well done!",
-            fontSize = 40.sp,
+            fontSize = typography.title * 1.5f,
             color = colors.secondary
         )
 
@@ -234,7 +239,7 @@ fun WellDoneSection (
                         append ("You've accomplished a goal!")
                 }
             },
-            fontSize = 16.sp,
+            fontSize = typography.body,
             color = colors.secondary,
             textAlign = TextAlign.Center
         )
@@ -246,7 +251,7 @@ fun WellDoneSection (
 
         Text (
             text = if (punchCardFilled) "Give yourself a BIG treat. You are on a good streak - you've earned it!" else "Now give yourself a little treat. Or a big one. The world is your oyster.",
-            fontSize = 16.sp,
+            fontSize = typography.medium,
             color = colors.secondary,
             textAlign = TextAlign.Center
         )
@@ -280,7 +285,7 @@ fun WellDoneSection (
         ) {
             Text (
                 text = "I've treated myself!",
-                fontSize = 18.sp,
+                fontSize = typography.button,
                 color = colors.secondary,
                 modifier = Modifier
                     .padding(horizontal = 2.dp)

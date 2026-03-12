@@ -19,20 +19,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.border
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
 import studio.lemniscate.greeen.ui.theme.Pistachio
 
 
 @Composable
-fun DreiPunkteMenu(expanded: Boolean,
-                   onDismissRequested: () -> Unit,
-                   onOverviewClicked: () -> Unit,
-                   onGoalHistoryClicked: () -> Unit,
-                   onYourQuotesClicked: () -> Unit,
-                   onReceiptsClicked: () -> Unit,
-                   onSettingsClicked: () -> Unit,
-                   onAboutClicked: () -> Unit) {
-
+fun DreiPunkteMenu (
+    expanded: Boolean,
+    onDismissRequested: () -> Unit,
+    onOverviewClicked: () -> Unit,
+    onGoalHistoryClicked: () -> Unit,
+    onYourQuotesClicked: () -> Unit,
+    onReceiptsClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
+    onAboutClicked: () -> Unit
+) {
     val colors = LocalAppColors.current
+    val typography = LocalAppTypography.current
 
     DropdownMenu (
         expanded = expanded,
@@ -67,7 +70,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "Overview",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
@@ -94,7 +97,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "Receipts",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
@@ -121,7 +124,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "Goal History",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
@@ -148,7 +151,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "Your Quotes",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
@@ -175,7 +178,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "Settings",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
@@ -202,7 +205,7 @@ fun DreiPunkteMenu(expanded: Boolean,
                         Text (
                             text = "About",
                             color = Color.White,
-                            fontSize = 18.sp
+                            fontSize = typography.button
                         )
                     }
                 },
