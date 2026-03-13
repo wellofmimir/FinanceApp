@@ -80,7 +80,7 @@ fun EditGoalMenu (
         mutableStateOf(TextFieldValue(originalAmountText))
     }
 
-    var savedAmountText by remember { mutableStateOf("" ) }
+    var savedAmountText by remember { mutableStateOf(goal?.saved.toString()) }
     var savedAmountTextFontSize by remember { mutableStateOf(typography.title) }
     var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
     var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken

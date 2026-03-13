@@ -14,8 +14,8 @@ android {
         applicationId = "studio.lemniscate.greeen"
         minSdk = 26
         targetSdk = 36
-        versionCode = 45
-        versionName = "1.45"
+        versionCode = 47
+        versionName = "1.47"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +29,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
