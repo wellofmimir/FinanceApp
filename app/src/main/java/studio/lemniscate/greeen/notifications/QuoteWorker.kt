@@ -38,17 +38,18 @@ class QuoteWorker (
         val database = FinanceAppDatabase.getInstance(applicationContext)
         val notifier = Notifier(applicationContext)
 
-        database.resetDailyQuoteFetched()
         val oldQuote = database.dailyQuote()
         val newQuote = QuoteRepository.getInstance(database).fetchQuoteFromServer()
+        database.resetDailyQuoteFetched()
 
         if (newQuote.quote != oldQuote.first) {
             database.resetFeedbackSent()
             notifier.sendQuoteNotification()
 
             DailyEvents.newQuote(true)
+            Result.success()
         }
 
-        Result.success()
+        Result.failure()
     }
 }
