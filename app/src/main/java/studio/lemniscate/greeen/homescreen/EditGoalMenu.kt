@@ -2,6 +2,10 @@ package studio.lemniscate.greeen.homescreen
 
 import studio.lemniscate.greeen.database.Goal
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
+import studio.lemniscate.greeen.ui.theme.LocalAppTypography
+
+import java.text.DecimalFormat
+import kotlinx.coroutines.delay
 
 import androidx.compose.animation.animateContentSize
 
@@ -37,7 +41,6 @@ import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
@@ -48,12 +51,21 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
-import kotlinx.coroutines.delay
-import studio.lemniscate.greeen.ui.theme.LocalAppTypography
-import java.math.RoundingMode
+import studio.lemniscate.greeen.commonutils.moneyRegex
+import kotlin.text.isBlank
+
+fun Double.formatMoney(): String {
+    val formatted = DecimalFormat("0.00").format(this)
+
+    val returnValue =
+        if (formatted.endsWith(".00"))
+            formatted.dropLast(3)
+        else formatted
+
+    return returnValue.replace(",", ".")
+}
 
 @Composable
-
 fun EditGoalMenu (
     expanded: Boolean,
     goal: Goal?,
@@ -80,7 +92,7 @@ fun EditGoalMenu (
         mutableStateOf(TextFieldValue(originalAmountText))
     }
 
-    var savedAmountText by remember { mutableStateOf(goal?.saved.toString()) }
+    var savedAmountText by remember { mutableStateOf("") }
     var savedAmountTextFontSize by remember { mutableStateOf(typography.title) }
     var originalSavedAmountText by remember { mutableStateOf(savedAmountText) }
     var savedAmountTextAsFieldValue by remember { //wird benötigt, um den Cursor ans Ende des TextFields zu setzen bei anclicken
@@ -90,6 +102,16 @@ fun EditGoalMenu (
     var hasChanged by remember { mutableStateOf(false) }
 
     LaunchedEffect(expanded) {
+        goal?.let {
+            amountText = goal.amount.toDouble().formatMoney()
+            originalAmountText = amountText
+            amountTextFontSize = typography.title
+
+            savedAmountText = goal.saved.toDouble().formatMoney()
+            originalSavedAmountText = savedAmountText
+            savedAmountTextFontSize = typography.title
+        }
+
         if (!expanded)
             return@LaunchedEffect
 
@@ -123,28 +145,7 @@ fun EditGoalMenu (
         }
 
         delay(1000)
-
-        goal?.let {
-            amountText = goal.amount.toString()
-            originalAmountText = amountText
-            amountTextFontSize = typography.title
-
-            savedAmountText = goal.saved.toString()
-            originalSavedAmountText = savedAmountText
-            savedAmountTextFontSize = typography.title
-        }
-
         blockInput = false
-    }
-
-    LaunchedEffect(goal) {
-        goal?.let {
-            amountText = goal.amount.toString()
-            originalAmountText = amountText
-
-            savedAmountText = goal.saved.toString()
-            originalSavedAmountText = savedAmountText
-        }
     }
 
     DropdownMenu (
@@ -271,6 +272,9 @@ fun EditGoalMenu (
                     TextField (
                         value = amountTextAsTextFieldValue,
                         onValueChange = { newText ->
+                            if (!newText.text.matches(moneyRegex))
+                                return@TextField
+
                             amountTextAsTextFieldValue = newText
                             amountText = amountTextAsTextFieldValue.text
                             hasChanged = true
@@ -369,6 +373,9 @@ fun EditGoalMenu (
                     TextField (
                         value = savedAmountTextAsFieldValue,
                         onValueChange = { newText ->
+                            if (!newText.text.matches(moneyRegex))
+                                return@TextField
+
                             savedAmountTextAsFieldValue = newText
                             savedAmountText = savedAmountTextAsFieldValue.text
                             hasChanged = true
@@ -462,10 +469,10 @@ fun EditGoalMenu (
                             if (amountText.isEmpty())
                                 return@Button
 
-                            if (savedAmountText.toFloat() <= 0.0f)
+                            if (savedAmountText.toFloat() < 0.0f)
                                 return@Button
 
-                            if (amountText.toFloat() <= 0.0f)
+                            if (amountText.toFloat() < 0.0f)
                                 return@Button
 
                             isEditingSavedAmount = false
