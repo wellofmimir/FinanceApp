@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 
 import androidx.compose.material3.Text
 
@@ -46,7 +49,7 @@ fun AdTeaserSection (
 
     Row (
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .height(125.dp)
             .fillMaxWidth()
@@ -57,15 +60,16 @@ fun AdTeaserSection (
     ) {
         Column (
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             modifier = Modifier
+                .padding(start = 12.dp, top = 16.dp)
+                .weight(3f)
                 .fillMaxHeight()
-                .fillMaxWidth(0.75f)
         ) {
             Text (
                 text = teaserText,
                 color = colors.primary,
-                fontSize = typography.medium,
+                fontSize = typography.button,
                 fontWeight = FontWeight.Bold
             )
 
@@ -77,15 +81,15 @@ fun AdTeaserSection (
             Text (
                 text = "Ads help us keep Greeen free!",
                 color = colors.primary,
-                fontSize = typography.medium,
+                fontSize = typography.button,
                 fontWeight = FontWeight.Normal
             )
         }
 
         Box (
             modifier = Modifier
-                .sizeIn(32.dp, 32.dp, 64.dp, 64.dp)
-                .fillMaxWidth(0.25f)
+                .sizeIn(64.dp, 64.dp)
+                .weight(1f, fill = false)
                 .clip(CircleShape)
                 .background (
                     color = colors.background,
@@ -102,7 +106,7 @@ fun AdTeaserSection (
                 painter = painterResource(R.drawable.doppelpfeileruntersymbol_foreground),
                 contentDescription = "Doppelpfeile",
                 modifier = Modifier
-                    .sizeIn(24.dp, 24.dp, 32.dp, 32.dp)
+                    .sizeIn(16.dp, 16.dp, 32.dp, 32.dp)
                     .background (
                         color = colors.background,
                         shape = CircleShape
@@ -118,5 +122,10 @@ fun AdTeaserSection (
                 colorFilter = ColorFilter.tint(colors.surface)
             )
         }
+
+        Spacer (
+            modifier = Modifier
+                .width(12.dp)
+        )
     }
 }

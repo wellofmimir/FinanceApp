@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -35,15 +37,20 @@ fun RemoveAdsSection (
     Column (
         modifier = modifier
             .fillMaxWidth()
-            .safeDrawingPadding()
+            .fillMaxHeight()
             .background (
                 color = colors.secondary,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(top = 4.dp, bottom = 8.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer (
+            modifier = Modifier
+                .weight(1f)
+        )
+
         Text (
             text = "$3.99",
             color = colors.primary,
@@ -69,8 +76,9 @@ fun RemoveAdsSection (
                     color = Emerald,
                     shape = RoundedCornerShape(12.dp)
                 )
+                .weight(2f)
                 .fillMaxWidth(0.5f)
-                .weight(3f)
+                .aspectRatio(2f)
                 .clickable () {
                     purchaseRequested()
                 },
@@ -82,5 +90,10 @@ fun RemoveAdsSection (
                 fontSize = typography.subtitle
             )
         }
+
+        Spacer (
+            modifier = Modifier
+                .weight(1f)
+        )
     }
 }

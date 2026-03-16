@@ -3,6 +3,7 @@ package studio.lemniscate.greeen.shopscreen
 import android.app.Activity
 import studio.lemniscate.greeen.ui.theme.LocalAppColors
 import studio.lemniscate.greeen.advertisement.AdSectionSmallBanner
+import studio.lemniscate.greeen.homescreen.TutorialInformation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,13 +27,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import studio.lemniscate.greeen.ui.theme.ExtraExtraLargeTypography
-import studio.lemniscate.greeen.ui.theme.ExtraLargeTypography
-import studio.lemniscate.greeen.ui.theme.LargeTypography
-import studio.lemniscate.greeen.ui.theme.LocalAppTypography
-import studio.lemniscate.greeen.ui.theme.NormalTypography
-import studio.lemniscate.greeen.ui.theme.SmallTypography
+import studio.lemniscate.greeen.TutorialStep
+import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 
 
 @Composable
@@ -64,7 +61,7 @@ fun ShopScreen (
 
         ThemeShopSection (
             modifier = Modifier
-                .weight(5f),
+                .weight(4f),
             themeShopViewModel = themeShopViewModel,
             previewRequested = { theme ->
                 previewRequested(theme)
@@ -83,13 +80,6 @@ fun ShopScreen (
                     themeShopViewModel.purchaseRemoveAllAds(activity = activity)
                 }
             )
-
-            AdSectionSmallBanner (
-                modifier = Modifier
-                    .weight(0.5f),
-                suppressAd = false
-            )
         }
-
     }
 }

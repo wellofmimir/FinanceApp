@@ -15,9 +15,11 @@ import studio.lemniscate.greeen.metricsscreen.MetricsScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 import studio.lemniscate.greeen.metricsscreen.MetricsScreenViewModel
 import studio.lemniscate.greeen.shopscreen.ThemeShopViewModel
 
@@ -187,18 +190,22 @@ fun ReceiptScreen (
 
         ReceiptLogSection (
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(4f),
+                .weight(1f),
             timespan = timespan,
             receiptSectionsViewModel = receiptSectionsViewModel,
             tutorialInformation = tutorialInformation
         )
 
-        AdSectionLargeBanner (
+        AdSectionMiddleBanner (
             modifier = Modifier
-                .weight(1f),
+                .height(50.dp),
             suppressAd = adremoverActive,
             tutorialInformation = tutorialInformation
+        )
+
+        Spacer (
+            modifier = Modifier
+                .height(2.dp)
         )
     }
 }

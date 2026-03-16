@@ -24,7 +24,7 @@ class ThemeShopViewModel (
             override fun onPurchaseSuccess(idProduct: String) {
                 if (idProduct == "adremover") {
                     internAdRemoverPurchased.update { currentState ->
-                        true
+                        false
                     }
                 } else {
                     internPurchasedThemes.update { current ->
@@ -82,13 +82,6 @@ class ThemeShopViewModel (
 
     fun getAppliedTheme() {
         internAppliedTheme.value = shopRepository.getAppliedTheme()
-    }
-
-    fun hasThemeBeenPurchased(theme: String): Boolean {
-        if (theme == "charcoaltheme")
-            return true
-
-        return shopRepository.getThemePurchased(theme)
     }
 
     fun purchaseRemoveAllAds(activity: Activity) {

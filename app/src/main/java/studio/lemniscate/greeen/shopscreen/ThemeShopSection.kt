@@ -68,7 +68,7 @@ fun ThemeShopIntroSection (
             color = colors.secondary,
             fontStyle = FontStyle.Italic,
             fontWeight = FontWeight.SemiBold,
-            fontSize = typography.body,
+            fontSize = typography.medium,
             modifier = Modifier
         )
 
@@ -81,7 +81,7 @@ fun ThemeShopIntroSection (
             text = "Check out our purchasable content here. Purchasing themes from us also helps us make cool products for you, and keep our apps free.",
             color = colors.secondary,
             fontWeight = FontWeight.Normal,
-            fontSize = typography.medium,
+            fontSize = typography.button,
             modifier = Modifier
         )
     }
@@ -267,18 +267,22 @@ fun ThemeShopSection (
     applyThemeRequested: (theme: String) -> Unit
 ) {
     val purchasedThemes by themeShopViewModel.purchasedThemes.collectAsState()
-    val adremoverActive by themeShopViewModel.adRemoverPurchased.collectAsState()
 
     Column (
         modifier = modifier
-            .safeDrawingPadding()
+            .fillMaxHeight()
             .background (
                 color = colors.primary,
                 shape = RoundedCornerShape(12.dp)
             ),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer (
+            modifier = Modifier
+                .height(12.dp)
+        )
+
         Row (
             modifier = Modifier
                 .fillMaxWidth()

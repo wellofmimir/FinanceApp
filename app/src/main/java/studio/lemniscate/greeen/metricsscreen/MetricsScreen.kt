@@ -293,7 +293,7 @@ fun MetricsScreen (
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .height(50.dp)
                 .background (
                     color = colors.primary,
                     shape = RoundedCornerShape(12.dp)

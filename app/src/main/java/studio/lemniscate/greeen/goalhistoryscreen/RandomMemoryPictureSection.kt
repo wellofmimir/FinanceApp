@@ -157,7 +157,7 @@ fun RandomMemoryPictureSection (
                 text = "Create memories by achieving your goals!",
                 color = colors.secondary,
                 textAlign = TextAlign.Center,
-                fontSize = typography.medium,
+                fontSize = typography.button,
                 modifier = Modifier
                     .padding(8.dp)
             )

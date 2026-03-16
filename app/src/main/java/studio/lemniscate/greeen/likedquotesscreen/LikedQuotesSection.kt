@@ -68,7 +68,7 @@ fun LikedQuotesSection (
     ) {
         LazyColumn (
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             itemsIndexed(likedQuotes) { index, quote ->
 

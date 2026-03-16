@@ -45,9 +45,6 @@ class DailyTipScreenViewModel (
     private var internLikedTips = MutableStateFlow<List<Tip>>(emptyList())
     var likedTips = internLikedTips.asStateFlow()
 
-    private var internLikedTipsRandomlyOrdered = MutableStateFlow<List<Tip>>(emptyList())
-    var likedTipsRandomlyOrdered = internLikedTipsRandomlyOrdered.asStateFlow()
-
     private var internCurrentlyLiked = MutableStateFlow(false)
     val currentlyLiked = internCurrentlyLiked.asStateFlow()
 
@@ -62,7 +59,7 @@ class DailyTipScreenViewModel (
             initialValue = null
         )
 
-    private val internNewDailyTipAvailable = MutableStateFlow(repository.dailyTipAvailable())
+    private val internNewDailyTipAvailable = MutableStateFlow(true)
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
     init {
@@ -169,11 +166,6 @@ class DailyTipScreenViewModel (
         
         if (isDailyTipLiked(currentDailyTip))
             internCurrentlyLiked.value = true
-    }
-
-    fun getLikedTipsOrderedRandomly(): List<Tip> {
-        internLikedTipsRandomlyOrdered.value = repository.getLikedTipsRandomlyOrdered()
-        return internLikedTipsRandomlyOrdered.value
     }
 
     var newDailyTipCanBeShown by mutableStateOf(false)

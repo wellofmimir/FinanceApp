@@ -35,11 +35,6 @@ fun AdSectionLargeBanner (
 
     Box (
         modifier = modifier
-            .padding (
-                WindowInsets.systemBars
-                    .only(WindowInsetsSides.Bottom)
-                    .asPaddingValues()
-            )
     ) {
         AndroidView (
             modifier = Modifier
@@ -68,11 +63,6 @@ fun AdSectionMiddleBanner (
 
     Box (
         modifier = modifier
-            .padding (
-                WindowInsets.systemBars
-                    .only(WindowInsetsSides.Bottom)
-                    .asPaddingValues()
-            )
     ) {
         AndroidView (
             modifier = modifier
@@ -100,11 +90,6 @@ fun AdSectionSmallBanner (
 
     Box (
         modifier = modifier
-            .padding (
-                WindowInsets.systemBars
-                    .only(WindowInsetsSides.Bottom)
-                    .asPaddingValues()
-            )
             .fillMaxSize()
     ) {
         AndroidView (

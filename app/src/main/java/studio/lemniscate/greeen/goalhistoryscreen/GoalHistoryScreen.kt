@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import studio.lemniscate.greeen.advertisement.AdSectionMiddleBanner
 
 
 @Composable
@@ -153,21 +155,26 @@ fun GoalHistoryScreen (
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .weight(3f),
+                .weight(1f),
             achievementsSectionViewModel = achievementsSectionViewModel,
             tutorialInformation = tutorialInformation
         )
 
         Spacer (
             modifier = Modifier
-                .padding(2.dp)
+                .height(2.dp)
         )
 
-        AdSectionLargeBanner (
+        AdSectionMiddleBanner (
             modifier = Modifier
-                .weight(1f),
+                .height(50.dp),
             suppressAd = adremoverActive,
             tutorialInformation = tutorialInformation
+        )
+
+        Spacer (
+            modifier = Modifier
+                .height(2.dp)
         )
     }
 }

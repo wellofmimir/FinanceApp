@@ -112,7 +112,7 @@ fun SettingsSection (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 75.dp)
                 .padding(start = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -214,7 +214,7 @@ fun SettingsSection (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 75.dp)
                 .padding(start = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -325,7 +325,7 @@ fun SettingsSection (
                     color = colors.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
-                .height(if (feedbackTextFieldIsFocused) 0.dp else 100.dp)
+                .height(if (feedbackTextFieldIsFocused) 0.dp else 75.dp)
                 .padding(start = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
