@@ -24,7 +24,7 @@ class ThemeShopViewModel (
             override fun onPurchaseSuccess(idProduct: String) {
                 if (idProduct == "adremover") {
                     internAdRemoverPurchased.update { currentState ->
-                        false
+                        true
                     }
                 } else {
                     internPurchasedThemes.update { current ->
