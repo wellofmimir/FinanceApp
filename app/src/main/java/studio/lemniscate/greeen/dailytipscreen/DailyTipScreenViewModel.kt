@@ -59,7 +59,7 @@ class DailyTipScreenViewModel (
             initialValue = null
         )
 
-    private val internNewDailyTipAvailable = MutableStateFlow(true)
+    private val internNewDailyTipAvailable = MutableStateFlow(repository.dailyTipAvailable())
     val newDailyTipAvailable = internNewDailyTipAvailable.asStateFlow()
 
     init {
