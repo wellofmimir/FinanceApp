@@ -55,6 +55,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import studio.lemniscate.greeen.BuildConfig
+
 @Composable
 fun SettingsSection (
     modifier: Modifier = Modifier,
@@ -349,7 +351,7 @@ fun SettingsSection (
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Text(
-                    text = "1.0.0.0",
+                    text = BuildConfig.VERSION_NAME,
                     color = colors.primary,
                     fontWeight = FontWeight.Normal,
                     fontSize = typography.title

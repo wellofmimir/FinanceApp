@@ -41,6 +41,9 @@ class ReceiptWorker (
         val database = FinanceAppDatabase.getInstance(applicationContext)
         val notifier = Notifier(applicationContext)
 
+        //Hier können wir auch die Interstitial-Ad nach dem ersten Receipt eines jeden Tages zurücksetzen
+        database.resetInterstitialAdAfterReceiptSeen()
+
         //Es wird die receiptRemindDates-Tabelle der Datenbank durchsucht
         //und für jeden gefundenen Eintrag, der mit dem heutigen Eintrag übereinstimmt,
         //eine Notification abgesendet.

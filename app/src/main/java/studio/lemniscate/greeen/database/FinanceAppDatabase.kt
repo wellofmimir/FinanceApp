@@ -454,7 +454,7 @@ class FinanceAppDatabase private constructor(context: Context) {
     }
 
     fun interstitialAdAfterReceiptSeen(): Boolean {
-        return securePreferences.getBoolean("interstitialAdAfterReceiptSeen", true)
+        return securePreferences.getBoolean("interstitialAdAfterReceiptSeen", false)
     }
 
     //PREFERENCES - END
