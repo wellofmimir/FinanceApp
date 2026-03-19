@@ -685,7 +685,7 @@ fun FirstGoalMenu (
                                         return@clickable
                                     }
 
-                                    onFinished(username, goal, amountText.toFloat(), chosenCurrency)
+                                    onFinished(username.trim(), goal, amountText.toFloat(), chosenCurrency)
                                 },
                             painter = painterResource(R.drawable.pfeilnachrechtspistachio_foreground),
                             contentDescription = "Ring1_5"

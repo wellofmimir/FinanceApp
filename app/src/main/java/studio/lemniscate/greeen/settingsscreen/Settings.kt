@@ -191,11 +191,11 @@ fun SettingsSection (
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
                                 if (isEditingTheName) {
-                                    if (newUsername.isEmpty())
+                                    if (newUsername.isBlank())
                                         return@clickable
 
                                     isEditingTheName = false
-                                    headerSectionViewModel.updateUser(newUsername)
+                                    headerSectionViewModel.updateUser(newUsername.trim())
                                     headerSectionViewModel.getUser()
                                 }
                             }

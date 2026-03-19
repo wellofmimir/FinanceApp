@@ -145,6 +145,17 @@ fun EditGoalMenu (
         }
 
         delay(1000)
+
+        goal?.let {
+            amountText = goal.amount.toDouble().formatMoney()
+            originalAmountText = amountText
+            amountTextFontSize = typography.title
+
+            savedAmountText = goal.saved.toDouble().formatMoney()
+            originalSavedAmountText = savedAmountText
+            savedAmountTextFontSize = typography.title
+        }
+
         blockInput = false
     }
 
@@ -272,7 +283,7 @@ fun EditGoalMenu (
                     TextField (
                         value = amountTextAsTextFieldValue,
                         onValueChange = { newText ->
-                            if (!newText.text.matches(moneyRegex))
+                            if (!newText.text.matches(moneyRegex) && newText.text.isNotEmpty())
                                 return@TextField
 
                             amountTextAsTextFieldValue = newText
@@ -373,7 +384,7 @@ fun EditGoalMenu (
                     TextField (
                         value = savedAmountTextAsFieldValue,
                         onValueChange = { newText ->
-                            if (!newText.text.matches(moneyRegex))
+                            if (!newText.text.matches(moneyRegex) && newText.text.isNotEmpty())
                                 return@TextField
 
                             savedAmountTextAsFieldValue = newText
