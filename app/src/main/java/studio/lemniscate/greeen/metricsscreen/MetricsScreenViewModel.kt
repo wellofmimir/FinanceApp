@@ -102,11 +102,11 @@ class MetricsScreenViewModel (
                         return@show
 
                     trendCanBeShown = true
-                    rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+                    rewardedAdManager.load("ca-app-pub-8967992746965159/9493848883")
                 }
             )
         } else {
-            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+            rewardedAdManager.load("ca-app-pub-8967992746965159/9493848883")
         }
     }
 }

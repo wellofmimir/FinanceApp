@@ -23,7 +23,7 @@ class InterstitialAdManager private constructor() {
         }
 
         private const val TAG = "Interstitial AdManager"
-        private const val TEST_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712"
+        private const val TEST_INTERSTITIAL_ID = "ca-app-pub-8967992746965159/4924483252"
     }
 
     fun initialize(context: Context) {

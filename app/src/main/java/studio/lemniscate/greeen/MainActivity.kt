@@ -320,7 +320,7 @@ class MainActivity : ComponentActivity() {
 
                             val fileProvider = FileProvider(context)
                             val rewardedAdManager = RewardedAdManager(context)
-                            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+                            rewardedAdManager.load("ca-app-pub-8967992746965159/9493848883")
 
                             val database = FinanceAppDatabase.getInstance(context)
                             val repository = DailyTipRepository.getInstance(database, fileProvider)
@@ -387,7 +387,7 @@ class MainActivity : ComponentActivity() {
                         override fun<T: ViewModel> create(modelClass: Class<T>): T {
 
                             val rewardedAdManager = RewardedAdManager(context)
-                            rewardedAdManager.load("ca-app-pub-3940256099942544/5224354917")
+                            rewardedAdManager.load("ca-app-pub-8967992746965159/9493848883")
 
                             val database = FinanceAppDatabase.getInstance(context)
                             val metricsRepository = MetricsRepository.getInstance(database)

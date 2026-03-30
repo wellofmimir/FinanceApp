@@ -44,7 +44,7 @@ fun AdSectionLargeBanner (
             factory = { context ->
                 AdView(context).apply {
                     setAdSize(AdSize.LARGE_BANNER)
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                    adUnitId = "ca-app-pub-8967992746965159/8045470615" // Test-ID
                     loadAd(AdRequest.Builder().build())
                 }
             }
@@ -72,7 +72,7 @@ fun AdSectionMiddleBanner (
             factory = { context ->
                 AdView(context).apply {
                     setAdSize(AdSize.BANNER)
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                    adUnitId = "ca-app-pub-8967992746965159/4046515859" // Test-ID
                     loadAd(AdRequest.Builder().build())
                 }
             }
@@ -99,7 +99,7 @@ fun AdSectionSmallBanner (
             factory = { context ->
                 AdView(context).apply {
                     setAdSize(AdSize.BANNER)
-                    adUnitId = "ca-app-pub-3940256099942544/6300978111" // Test-ID
+                    adUnitId = "ca-app-pub-8967992746965159/8181201983" // Test-ID
                     loadAd(AdRequest.Builder().build())
                 }
             }
